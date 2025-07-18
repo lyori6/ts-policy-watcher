@@ -31,12 +31,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Step 3: Install our Python and browser dependencies
       - name: 'Install Dependencies'
         run: |
           pip install -r requirements.txt
-          # This is a crucial step to install the browser binaries for Playwright
-          playwright install
+          # This is the corrected line. We use python's module flag "-m"
+          # to ensure the command is found regardless of the system's PATH.
+          python -m playwright install
 
       # Step 4: Run the fetcher script
       # This is the core action: executing our Python script to get the HTML snapshots.
