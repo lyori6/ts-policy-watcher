@@ -17,6 +17,8 @@ jobs:
   watch-and-report:
     # We will run our job on the latest version of Ubuntu provided by GitHub.
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       # Step 1: Check out the repository code
