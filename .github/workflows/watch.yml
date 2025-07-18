@@ -1,0 +1,73 @@
+# .github/workflows/watch.yml
+
+name: 'T&S Policy Watcher'
+
+on:
+  # This allows us to run the workflow manually from the Actions tab in GitHub.
+  # Essential for testing and on-demand checks.
+  workflow_dispatch:
+
+  # This is the automated schedule. It uses a cron expression.
+  # '0 */6 * * *' means "at minute 0, every 6th hour".
+  # It will run at 00:00, 06:00, 12:00, 18:00 UTC.
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  watch-and-report:
+    # We will run our job on the latest version of Ubuntu provided by GitHub.
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Check out the repository code
+      # This downloads our repository onto the runner so we can work with it.
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python environment
+      # We specify a version to ensure our script runs in a consistent environment.
+      - name: 'Set up Python 3.11'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install our Python and browser dependencies
+      - name: 'Install Dependencies'
+        run: |
+          pip install -r requirements.txt
+          # This is a crucial step to install the browser binaries for Playwright
+          playwright install
+
+      # Step 4: Run the fetcher script
+      # This is the core action: executing our Python script to get the HTML snapshots.
+      - name: 'Run Fetcher Script'
+        run: python scripts/fetch.py
+
+      # Step 5: Commit the new snapshots back to the repository
+      - name: 'Commit Snapshots'
+        run: |
+          # Configure git with a bot user identity
+          git config user.name "Policy Watch Bot"
+          git config user.email "bot@github.com"
+          # Add all new files in the snapshots directory
+          git add snapshots/
+          # The next line is clever:
+          # It checks if there are any staged changes. If there are (exit code 1),
+          # it proceeds to commit them. If not (exit code 0), it does nothing.
+          # This prevents creating empty commits if no pages have changed.
+          git diff --staged --quiet || git commit -m "CHORE: Update T&S policy snapshots"
+
+      # Step 6: Push the changes back to the main branch
+      # This uses a dedicated action to handle pushing the commits.
+      - name: 'Push changes'
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          # The GITHUB_TOKEN is a secret automatically provided by GitHub Actions
+          # that grants permission to push to the repository.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      # --- PLACEHOLDER FOR NEXT STEPS ---
+      # In our next iteration, we will add steps here to:
+      # 1. Run the `create_github_issue.py` script if `failures.log` exists.
+      # 2. Run the `diff_and_notify.py` script to analyze the commit we just made.
