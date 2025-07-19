@@ -36,9 +36,12 @@ jobs:
       - name: 'Install Dependencies'
         run: |
           pip install -r requirements.txt
-          # This is the corrected line. We use python's module flag "-m"
-          # to ensure the command is found regardless of the system's PATH.
-          python -m playwright install
+          # This is the new, crucial line. It uses the system's package manager
+          # to install all the missing libraries from that long table.
+          # We use "sudo" because it requires administrator permissions.
+            sudo python -m playwright install-deps
+            # Now that the system is ready, this line can run successfully.
+            python -m playwright install
 
       # Step 4: Run the fetcher script
       # This is the core action: executing our Python script to get the HTML snapshots.
