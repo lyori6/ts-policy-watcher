@@ -39,7 +39,7 @@ jobs:
           pip install -r requirements.txt
           # The -E flag tells sudo to preserve the existing environment variables,
           # ensuring it uses the correct Python that setup-python configured.
-          sudo -E python -m playwright install-deps
+          sudo -E $(which python) -m playwright install-deps
           python -m playwright install
 
       # Step 4: Run the fetcher script
