@@ -69,7 +69,7 @@ class PolicyWatcherDashboard {
             case 'matrix':
                 this.renderMatrixTable();
                 break;
-        };
+        }
     }
 
     async loadAllData() {
@@ -110,7 +110,7 @@ class PolicyWatcherDashboard {
     renderDashboard() {
         this.updateHeaderStats();
         this.renderOverview(); // This will render the intelligence panel too
-    };
+    }
 
     updateHeaderStats() {
         document.getElementById('total-policies').textContent = this.platformData.length;
@@ -130,7 +130,7 @@ class PolicyWatcherDashboard {
     renderOverview() {
         this.renderRecentChanges();
         this.renderIntelligencePanel();
-    };
+    }
 
     renderRecentChanges() {
         const container = document.getElementById('recent-changes-list');
@@ -166,7 +166,7 @@ class PolicyWatcherDashboard {
     renderPolicyExplorer() {
         this.renderPlatformTabs();
         this.renderPoliciesByPlatform(this.currentPlatform);
-    };
+    }
 
     renderPlatformTabs() {
         const tabsContainer = document.getElementById('platform-tabs');
@@ -266,7 +266,7 @@ class PolicyWatcherDashboard {
 
     renderHistory() {
         this.renderHistoryTable('all');
-    };
+    }
 
     renderHistoryTable(filter) {
         const tbody = document.getElementById('history-tbody');
@@ -312,7 +312,7 @@ class PolicyWatcherDashboard {
     renderAnalytics() {
         this.renderPlatformActivity();
         this.renderPerformanceTrends();
-    };
+    }
 
     renderMatrix() {
         // Matrix is static HTML, no additional rendering needed
@@ -468,7 +468,7 @@ class PolicyWatcherDashboard {
             avgDuration: '~2 min', // This would need actual timing data
             successRate,
             totalChanges
-        };
+        }
     }
 
     findPlatformForPolicy(policyName) {
@@ -558,7 +558,7 @@ class PolicyWatcherDashboard {
             .join('');
 
         return html;
-    };
+    }
 
     updateElement(id, content, className = '', isHtml = false) {
         const element = document.getElementById(id);
@@ -572,7 +572,7 @@ class PolicyWatcherDashboard {
                 element.className = className;
             }
         }
-    };
+    }
 
     showErrorState() {
         // Show error state when data loading fails
@@ -587,7 +587,7 @@ class PolicyWatcherDashboard {
         `;
         
         document.querySelector('main').innerHTML = errorMessage;
-    };
+    }
 }
 
 // Global function for summary toggling
@@ -730,7 +730,7 @@ function exportMatrix() {
         }).join('');
 
         container.innerHTML = `<div class="run-log-list">${logHtml}</div>`;
-    };
+    }
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
