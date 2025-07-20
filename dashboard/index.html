@@ -3,28 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&S Policy Watcher Dashboard</title>
+    <title>T&S Policy Watcher - Intelligence Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>T&S Policy Watcher</h1>
-        <p>Intelligence Dashboard</p>
+        <div class="header-content">
+            <h1><i class="fas fa-shield-alt"></i> T&S Policy Watcher</h1>
+            <p>Competitive Intelligence Dashboard</p>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-policies">-</span>
+                    <span class="stat-label">Policies Tracked</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="last-check">-</span>
+                    <span class="stat-label">Hours Since Check</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="uptime-metric">-</span>
+                    <span class="stat-label">System Uptime</span>
+                </div>
+            </div>
+        </div>
     </header>
 
+    <nav class="main-nav">
+        <button class="nav-tab active" data-tab="overview">
+            <i class="fas fa-tachometer-alt"></i> Overview
+        </button>
+        <button class="nav-tab" data-tab="platforms">
+            <i class="fas fa-building"></i> Policy Explorer
+        </button>
+        <button class="nav-tab" data-tab="history">
+            <i class="fas fa-history"></i> Run History
+        </button>
+        <button class="nav-tab" data-tab="analytics">
+            <i class="fas fa-chart-line"></i> Analytics
+        </button>
+    </nav>
+
     <main>
-        <section id="system-health">
-            <h2>System Health</h2>
-            <div id="health-status-container">
-                <p><strong>Last Run Status:</strong> <span id="last-run-status">Loading...</span></p>
-                <p><strong>Last Run Timestamp:</strong> <span id="last-run-timestamp">Loading...</span></p>
-                <div id="last-run-errors"></div>
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content active">
+            <div class="overview-grid">
+                <div class="card system-health-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-heartbeat"></i> System Health</h2>
+                        <span class="health-badge" id="overall-health-badge">Loading...</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="health-metric">
+                            <span class="metric-label">Last Run Status:</span>
+                            <span id="last-run-status" class="status-badge">Loading...</span>
+                        </div>
+                        <div class="health-metric">
+                            <span class="metric-label">Last Run Time:</span>
+                            <span id="last-run-timestamp">Loading...</span>
+                        </div>
+                        <div class="health-metric">
+                            <span class="metric-label">Pages Checked:</span>
+                            <span id="pages-checked">-</span>
+                        </div>
+                        <div class="health-metric">
+                            <span class="metric-label">Changes Found:</span>
+                            <span id="changes-found">-</span>
+                        </div>
+                        <div id="last-run-errors"></div>
+                    </div>
+                </div>
+
+                <div class="card recent-changes-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-bell"></i> Recent Policy Changes</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="recent-changes-list">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="card quick-stats-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Quick Stats</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-row">
+                            <span>Total Platforms:</span>
+                            <span id="platform-count">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Avg Changes/Day:</span>
+                            <span id="avg-changes">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Success Rate:</span>
+                            <span id="success-rate">-</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="policy-explorer">
-            <h2>Policy Explorer</h2>
-            <div id="policy-grid-container"></div>
+        <!-- Policy Explorer Tab -->
+        <section id="platforms" class="tab-content">
+            <div class="platform-selector">
+                <div class="platform-tabs" id="platform-tabs">
+                    <!-- Platform tabs will be populated by JS -->
+                </div>
+            </div>
+            <div class="platform-content" id="platform-content">
+                <!-- Platform-specific policies will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Run History Tab -->
+        <section id="history" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-history"></i> Historical Runs</h2>
+                    <div class="filter-controls">
+                        <select id="history-filter">
+                            <option value="all">All Runs</option>
+                            <option value="success">Successful Only</option>
+                            <option value="failure">Failures Only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="history-table-container">
+                        <table id="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Status</th>
+                                    <th>Pages Checked</th>
+                                    <th>Changes Found</th>
+                                    <th>Errors</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-tbody">
+                                <!-- History rows will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Tab -->
+        <section id="analytics" class="tab-content">
+            <div class="analytics-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line"></i> Change Frequency by Platform</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="platform-activity-chart"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock"></i> Run Performance Trends</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="performance-timeline"></div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
