@@ -120,58 +120,79 @@ def log_run_status(status, pages_checked, changes_found, errors):
 
 def main():
     print("--- Starting Differ and Notifier Script ---")
+    status = "success"
+    pages_checked = 0
+    changes_found = 0
+    errors = []
 
-    commit_sha = os.environ.get("COMMIT_SHA")
-    if not commit_sha:
-        print("No snapshot commit SHA found. Exiting gracefully.")
-        log_run_status(status="success", pages_checked=0, changes_found=0, errors=[])
-        return
-
-    # Load existing summaries or create a new dictionary
     try:
-        with open(SUMMARIES_FILE, 'r') as f:
-            summaries_data = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        summaries_data = {}
+        commit_sha = os.environ.get("COMMIT_SHA")
+        if not commit_sha:
+            print("No snapshot commit SHA found. Exiting gracefully.")
+            return
 
-    changed_files = get_changed_files(commit_sha)
-    
-    if not changed_files:
-        print("No policy changes detected.")
-        log_run_status(status="success", pages_checked=0, changes_found=0, errors=[])
-        return
+        try:
+            with open(SUMMARIES_FILE, 'r') as f:
+                summaries_data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            summaries_data = {}
 
-    print(f"Detected {len(changed_files)} changed policy files.")
-    
-    update_count = 0
-    for file_path in changed_files:
-        slug = os.path.basename(os.path.dirname(file_path))
-        is_new_policy = slug not in summaries_data
+        changed_files = get_changed_files(commit_sha)
+        pages_checked = len(changed_files)
+        if not changed_files:
+            print("No policy changes detected.")
+            return
 
-        summary_text = process_changed_file(file_path, is_new_policy)
+        print(f"Detected {pages_checked} changed policy files.")
+        update_count = 0
+
+        for file_path in changed_files:
+            try:
+                slug = os.path.basename(os.path.dirname(file_path))
+                is_new_policy = slug not in summaries_data
+                summary_text = process_changed_file(file_path, is_new_policy)
+                
+                if summary_text:
+                    if is_new_policy:
+                        summaries_data[slug] = {
+                            "policy_name": slug.replace('-', ' ').title(),
+                            "initial_summary": summary_text,
+                            "last_update_summary": "Initial version.",
+                            "last_updated": datetime.utcnow().isoformat() + 'Z'
+                        }
+                        print(f"Generated initial summary for new policy: {slug}")
+                    else:
+                        summaries_data[slug]['last_update_summary'] = summary_text
+                        summaries_data[slug]['last_updated'] = datetime.utcnow().isoformat() + 'Z'
+                        print(f"Generated update summary for existing policy: {slug}")
+                    update_count += 1
+            except Exception as e:
+                error_message = f"Failed to process {file_path}: {e}"
+                print(error_message, file=sys.stderr)
+                errors.append({"file": file_path, "error": str(e)})
+
+        changes_found = update_count
+        if changes_found > 0:
+            with open(SUMMARIES_FILE, 'w') as f:
+                json.dump(summaries_data, f, indent=2)
+            print(f"Successfully updated {SUMMARIES_FILE}.")
+
+    except Exception as e:
+        print(f"An unhandled error occurred: {e}", file=sys.stderr)
+        errors.append({"file": "N/A", "error": f"Unhandled exception: {e}"})
+        status = "failure"
+
+    finally:
+        if errors and status == "success":
+            status = "partial_failure"
         
-        if summary_text:
-            if is_new_policy:
-                # Create a new entry for a policy seen for the first time
-                summaries_data[slug] = {
-                    "initial_summary": summary_text,
-                    "last_update_summary": "", # No updates yet
-                    "last_update_timestamp_utc": datetime.utcnow().isoformat() + 'Z'
-                }
-                print(f"Generated initial summary for new policy: {slug}")
-            else:
-                # Update the entry for an existing policy
-                summaries_data[slug]['last_update_summary'] = summary_text
-                summaries_data[slug]['last_update_timestamp_utc'] = datetime.utcnow().isoformat() + 'Z'
-                print(f"Generated update summary for existing policy: {slug}")
-            update_count += 1
-
-    # Save the updated summaries back to the file
-    with open(SUMMARIES_FILE, 'w') as f:
-        json.dump(summaries_data, f, indent=2)
-    print(f"Successfully updated {SUMMARIES_FILE}.")
-
-    log_run_status(status="success", pages_checked=len(changed_files), changes_found=update_count, errors=[])
+        log_run_status(
+            status=status,
+            pages_checked=pages_checked,
+            changes_found=changes_found,
+            errors=errors
+        )
+        print("--- Differ and Notifier Script Finished ---")
 
 if __name__ == "__main__":
     main()
