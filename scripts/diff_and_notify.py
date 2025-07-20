@@ -3,8 +3,13 @@
 import os
 import subprocess
 import google.generativeai as genai
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning, XMLParsedAsHTMLWarning
 import html2text
+import warnings
+
+# Suppress BeautifulSoup warnings that are not relevant to our use case
+warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
 # --- Configuration ---
 # Your Gemini API key will be read from GitHub Secrets
