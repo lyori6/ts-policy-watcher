@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Use a relative path to fetch from the repo root
-    const LOG_FILE_PATH = '../run_log.json';
-    const SUMMARIES_PATH = '../summaries.json';
-    const PLATFORM_URLS_PATH = '../platform_urls.json';
+    // Fetch data directly from GitHub repository
+    const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main';
+    const LOG_FILE_PATH = `${GITHUB_RAW_BASE}/run_log.json`;
+    const SUMMARIES_PATH = `${GITHUB_RAW_BASE}/summaries.json`;
+    const PLATFORM_URLS_PATH = `${GITHUB_RAW_BASE}/platform_urls.json`;
 
     loadSystemHealth();
     loadPolicyExplorer();
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (lastRun.errors && lastRun.errors.length > 0) {
                     let errorHtml = '<h4>Errors from last run:</h4><ul>';
                     lastRun.errors.forEach(err => {
-                        errorHtml += `<li><strong>${err.url}</strong>: ${err.reason}</li>`;
+                        errorHtml += `<li><strong>${err.file}</strong>: ${err.error}</li>`;
                     });
                     errorHtml += '</ul>';
                     errorsContainer.innerHTML = errorHtml;
@@ -86,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h4>${policy.name}</h4>
                         <p class="summary initial-summary"><strong>Initial Summary:</strong> ${summaryData.initial_summary || 'Not yet generated.'}</p>
                         <p class="summary update-summary"><strong>Last Update:</strong> ${summaryData.last_update_summary || 'No updates detected.'}</p>
-                        <p class="timestamp"><strong>Updated On:</strong> ${summaryData.last_update_timestamp_utc ? new Date(summaryData.last_update_timestamp_utc).toLocaleDateString() : 'N/A'}</p>
-                        <a href="../snapshots/${policy.slug}/" target="_blank">View History</a> | 
+                        <p class="timestamp"><strong>Updated On:</strong> ${summaryData.last_updated ? new Date(summaryData.last_updated).toLocaleDateString() : 'N/A'}</p>
+                        <a href="https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${policy.slug}" target="_blank">View History</a> | 
                         <a href="${policy.url}" target="_blank">View Live Page</a>
                     `;
                     platformGrid.appendChild(card);
