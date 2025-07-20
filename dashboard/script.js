@@ -202,58 +202,68 @@ class PolicyWatcherDashboard {
 
     renderPoliciesByPlatform(selectedPlatform) {
         const container = document.getElementById('platform-content');
-        const filteredPolicies = selectedPlatform === 'all' ? 
+        let filteredPolicies = selectedPlatform === 'all' ? 
             this.platformData : 
             this.platformData.filter(p => p.platform === selectedPlatform);
 
+        // Filter out policies without summaries to keep the view clean
+        filteredPolicies = filteredPolicies.filter(policy => {
+            const summaryData = this.summariesData[policy.slug];
+            return summaryData && summaryData.initial_summary;
+        });
+
         if (filteredPolicies.length === 0) {
-            container.innerHTML = '<p class="text-center">No policies found for this platform.</p>';
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No Policy Summaries Available</h3>
+                    <p>Summaries will appear here once the AI analysis pipeline processes new policy changes.</p>
+                </div>
+            `;
             return;
         }
 
         const policiesHtml = filteredPolicies.map(policy => {
             const summaryData = this.summariesData[policy.slug] || {};
             const lastUpdated = summaryData.last_updated ? 
-                this.formatDateTime(summaryData.last_updated) : 'Never';
+                this.formatRelativeTime(summaryData.last_updated) : 'Never';
             
             return `
                 <div class="policy-card">
-                    <h4>${policy.name}</h4>
+                    <div class="policy-header">
+                        <h4>${policy.name}</h4>
+                        <span class="update-badge">${lastUpdated}</span>
+                    </div>
                     
-                    ${summaryData.initial_summary ? `
-                        <div class="summary initial-summary">
-                            <strong>Overview:</strong><br>
-                            <div class="summary-content" data-full="${policy.slug}-full">
-                                ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 400))}
-                                ${summaryData.initial_summary.length > 400 ? `
-                                    <button class="read-more-btn" onclick="toggleSummary('${policy.slug}-full', this)">
-                                        <i class="fas fa-chevron-down"></i> Read More
-                                    </button>
-                                    <div class="full-content" style="display: none;">
-                                        ${this.renderMarkdown(summaryData.initial_summary)}
-                                    </div>
-                                ` : ''}
-                            </div>
+                    <div class="summary initial-summary">
+                        <div class="summary-content" data-full="${policy.slug}-full">
+                            ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 300))}
+                            ${summaryData.initial_summary.length > 300 ? `
+                                <button class="read-more-btn" onclick="toggleSummary('${policy.slug}-full', this)">
+                                    <i class="fas fa-chevron-down"></i> Read More
+                                </button>
+                                <div class="full-content" style="display: none;">
+                                    ${this.renderMarkdown(summaryData.initial_summary)}
+                                </div>
+                            ` : ''}
                         </div>
-                    ` : '<p><em>No summary generated yet</em></p>'}
+                    </div>
                     
                     ${summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.' ? `
                         <div class="summary update-summary">
-                            <strong>Latest Change:</strong><br>
-                            ${this.renderMarkdown(summaryData.last_update_summary)}
+                            <div class="update-label">
+                                <i class="fas fa-exclamation-circle"></i> Latest Change
+                            </div>
+                            ${this.renderMarkdown(this.truncateText(summaryData.last_update_summary, 200))}
                         </div>
                     ` : ''}
                     
-                    <div class="timestamp">
-                        <strong>Last Updated:</strong> ${lastUpdated}
-                    </div>
-                    
                     <div class="policy-actions">
                         <a href="https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${policy.slug}" 
-                           target="_blank">
-                            <i class="fas fa-history"></i> View History
+                           target="_blank" class="action-btn history-btn">
+                            <i class="fas fa-history"></i> History
                         </a>
-                        <a href="${policy.url}" target="_blank">
+                        <a href="${policy.url}" target="_blank" class="action-btn live-btn">
                             <i class="fas fa-external-link-alt"></i> Live Page
                         </a>
                     </div>
