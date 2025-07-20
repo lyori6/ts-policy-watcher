@@ -79,7 +79,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
-      # Step 7: Detect changes, generate summary, and set outputs
+      # Step 8: Detect changes, generate summary, and set outputs
       - name: 'Detect Changes and Notify'
         id: diff
         env:
