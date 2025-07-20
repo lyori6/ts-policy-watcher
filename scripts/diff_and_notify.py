@@ -9,6 +9,7 @@ import google.generativeai as genai
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 import html2text
 import warnings
+import resend
 
 # Suppress BeautifulSoup warnings
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
@@ -23,6 +24,8 @@ PROMPT_TEMPLATE = """You are a Trust & Safety analyst. Below is text from a comp
 # Track which API key we're currently using
 current_api_key = GEMINI_API_KEY
 using_backup_key = False
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
 
 def get_changed_files(commit_sha):
     """Gets a list of snapshot files from a specific commit SHA."""
@@ -68,7 +71,7 @@ def get_ai_summary(text_content, is_new_policy):
         return "Error: No GEMINI_API_KEY configured."
     
     genai.configure(api_key=current_api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     
     instruction = (
         "Summarize the key points of this entire policy document." if is_new_policy 
@@ -152,12 +155,49 @@ def log_run_status(status, pages_checked, changes_found, errors):
     
     print(f"Successfully logged run status to {RUN_LOG_FILE}")
 
+def send_email_notification(changes):
+    """Sends an email notification with a summary of all changes."""
+    if not RESEND_API_KEY or not RECIPIENT_EMAIL:
+        print("ERROR: Resend API Key or Recipient Email not configured. Skipping email.", file=sys.stderr)
+        return
+
+    resend.api_key = RESEND_API_KEY
+
+    subject = f"Policy Watcher Alert: {len(changes)} Policy Change(s) Detected"
+    
+    # Convert markdown to HTML for the email body
+    h = html2text.HTML2Text()
+    h.body_width = 0 # Don't wrap lines
+
+    html_body = f"<h1>Policy Watcher Report</h1>"
+    html_body += f"<p>Detected {len(changes)} policy change(s) on {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC.</p>"
+    
+    for change in changes:
+        change_type = "New Policy" if change['is_new'] else "Policy Update"
+        # Simple markdown to HTML conversion
+        summary_html = change['summary'].replace('\n', '<br>')
+        html_body += f"<h2>{change['policy_name']} ({change_type})</h2>"
+        html_body += f"<div>{summary_html}</div><hr>"
+
+    try:
+        params = {
+            "from": "Policy Watcher <onboarding@resend.dev>",
+            "to": [RECIPIENT_EMAIL],
+            "subject": subject,
+            "html": html_body,
+        }
+        email = resend.Emails.send(params)
+        print(f"Successfully sent email notification. Message ID: {email['id']}")
+    except Exception as e:
+        print(f"ERROR: Failed to send email notification: {e}", file=sys.stderr)
+
 def main():
     print("--- Starting Differ and Notifier Script ---")
     status = "success"
     pages_checked = 0
     changes_found = 0
     errors = []
+    email_notifications = []
 
     try:
         commit_sha = os.environ.get("COMMIT_SHA")
@@ -200,6 +240,11 @@ def main():
                         summaries_data[slug]['last_updated'] = datetime.utcnow().isoformat() + 'Z'
                         print(f"Generated update summary for existing policy: {slug}")
                     update_count += 1
+                    email_notifications.append({
+                        "policy_name": slug.replace('-', ' ').title(),
+                        "summary": summary_text,
+                        "is_new": is_new_policy
+                    })
             except Exception as e:
                 error_message = f"Failed to process {file_path}: {e}"
                 print(error_message, file=sys.stderr)
@@ -210,6 +255,10 @@ def main():
             with open(SUMMARIES_FILE, 'w') as f:
                 json.dump(summaries_data, f, indent=2)
             print(f"Successfully updated {SUMMARIES_FILE}.")
+
+            # Send a single email with all the updates
+            if email_notifications:
+                send_email_notification(email_notifications)
 
     except Exception as e:
         print(f"An unhandled error occurred: {e}", file=sys.stderr)
