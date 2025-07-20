@@ -119,3 +119,36 @@ This is our strategy for tracking system health without creating noise.
         *   **If an issue already exists,** it will do nothing. This prevents a new notification for a known, ongoing problem.
     3.  **Dashboard Integration:** The `run_log.json` will capture all errors from a run. The dashboard will read this log and prominently display a "System Status" indicator. If the last run had errors, it will be flagged (e.g., a yellow or red icon) and the details of the failed pages will be listed.
     4.  **Email Fallback:** For simplicity in the MVP, we will *not* send an email for system failures. The GitHub Issue *is* the notification for the maintainer. This cleanly separates content-change alerts (email) from system-health alerts (GitHub Issues).
+
+#### **NEW - 2.6. Debugging Common Errors**
+
+*   **Interpreting Fetch Logs:** The `fetch.py` script provides verbose output. If a snapshot is not created, check the workflow logs for entries like:
+    *   `Client error '403 Forbidden'`: This indicates the target server is blocking our simple `httpx` request. The fix is to switch the URL's `"renderer"` in `platform_urls.json` from `"httpx"` to `"playwright"`.
+    *   `[Errno -5] No address associated with hostname`: This is a DNS or network-level issue, often a side-effect of anti-bot measures. Using the `"playwright"` renderer is also the correct mitigation here.
+
+---
+
+### **3. Phase 2: UI, Notifications, and Testing**
+
+Once the core data pipeline is stable, we will proceed with the user-facing components.
+
+*   **3.1. Frontend Dashboard:**
+    *   **Goal:** Create a simple, clean web interface to display the monitoring results.
+    *   **Technology:** A simple static site generated with a framework like Eleventy or just plain HTML/CSS/JS.
+    *   **Features:**
+        *   Display the list of all tracked policies.
+        *   Show the latest snapshot for each policy.
+        *   Highlight policies that have changed recently.
+        *   Display the `run_log.json` data to show system status and recent errors.
+
+*   **3.2. Email Notifications:**
+    *   **Goal:** Send an email alert when a policy change is detected and summarized.
+    *   **Technology:** Integrate with an email API service (e.g., SendGrid, Resend). The API key will be stored as a GitHub Secret.
+    *   **Logic:** A new script (`send_email.py`) will be triggered by the `diff_and_notify.py` step if changes are found. It will take the summary and send it to a predefined list of recipients.
+
+*   **3.3. Internal Test Page:**
+    *   **Goal:** Create a reliable way to test the end-to-end change detection and notification pipeline without relying on external sites.
+    *   **Implementation:**
+        *   A simple HTML file (`test-page/index.html`) will be created within this repository.
+        *   This file will be added to `platform_urls.json` to be tracked like any other competitor page.
+        *   To trigger a change, we can simply edit this file, commit, and push. The workflow will run, detect the "change," generate a summary, and (once implemented) send a test email.
