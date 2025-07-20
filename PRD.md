@@ -175,6 +175,6 @@ The dashboard will be a single-page application with two distinct sections.
 #### **3.3. Technical Implementation**
 
 *   **Frontend:** A simple, static site generated using modern HTML, CSS, and JavaScript. We will not need a complex framework like React for the MVP.
-*   **Data Access:** The dashboard will be hosted as a static site (e.g., on GitHub Pages). On page load, it will use JavaScript's `fetch` API to read the `run_log.json`, `summaries.json`, and the individual policy snapshots directly from the GitHub repository.
+*   **Data Access:** The dashboard will be hosted as a static site on Vercel, which integrates directly with our GitHub repository. On page load, it will use JavaScript's `fetch` API to read the `run_log.json`, `summaries.json`, and the individual policy snapshots directly from the GitHub repository.
 *   **Email Notifications:** The `send_email.py` script will now read from `summaries.json` to get the `last_update_summary` to include in the alert.
 *   **Testing:** The `test-page/index.html` remains critical for triggering the entire pipeline, which will now include updates to `summaries.json` and the dashboard.
