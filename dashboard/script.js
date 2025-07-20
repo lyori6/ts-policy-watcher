@@ -9,7 +9,7 @@ class PolicyWatcherDashboard {
         this.PLATFORM_URLS_PATH = `${this.GITHUB_RAW_BASE}/platform_urls.json`;
 
         // Data containers
-        this.runData = [];
+        this.runLogData = [];
         this.summariesData = {};
         this.platformData = [];
         this.currentPlatform = 'all';
@@ -21,6 +21,7 @@ class PolicyWatcherDashboard {
         this.setupEventListeners();
         await this.loadAllData();
         this.renderDashboard();
+        this.setupModal(); // Setup modal after initial render
     }
 
     setupEventListeners() {
@@ -66,25 +67,25 @@ class PolicyWatcherDashboard {
                 this.renderAnalytics();
                 break;
             case 'matrix':
-                this.renderMatrix();
+                this.renderMatrixTable();
                 break;
-        }
+        };
     }
 
     async loadAllData() {
         try {
-            const [runDataResponse, summariesResponse, platformsResponse] = await Promise.all([
+            const [runLogResponse, summariesResponse, platformsResponse] = await Promise.all([
                 this.fetchData(this.LOG_FILE_PATH),
                 this.fetchData(this.SUMMARIES_PATH),
                 this.fetchData(this.PLATFORM_URLS_PATH)
             ]);
 
-            this.runData = runDataResponse || [];
+            this.runLogData = runLogResponse || [];
             this.summariesData = summariesResponse || {};
             this.platformData = platformsResponse || [];
 
             console.log('Data loaded successfully:', {
-                runs: this.runData.length,
+                runs: this.runLogData.length,
                 summaries: Object.keys(this.summariesData).length,
                 platforms: this.platformData.length
             });
@@ -108,43 +109,28 @@ class PolicyWatcherDashboard {
 
     renderDashboard() {
         this.updateHeaderStats();
-        this.renderIntelligencePanel(); // New panel
-        this.renderOverview();
-    }
+        this.renderOverview(); // This will render the intelligence panel too
+    };
 
     updateHeaderStats() {
-        const totalPolicies = this.platformData.length;
-        const lastRun = this.runData[0];
-        const hoursAgo = lastRun ? this.getHoursAgo(new Date(lastRun.timestamp_utc)) : '-';
-        const uptime = this.calculateUptime();
+        document.getElementById('total-policies').textContent = this.platformData.length;
 
-        this.updateElement('total-policies', totalPolicies);
-        this.updateElement('last-check', hoursAgo);
-        this.updateElement('uptime-metric', uptime);
+        if (this.runLogData.length > 0) {
+            const lastRun = new Date(this.runLogData[0].timestamp_utc);
+            const now = new Date();
+            const hoursSince = Math.round((now - lastRun) / (1000 * 60 * 60));
+            document.getElementById('last-check').textContent = `${hoursSince}`;
+            this.updateSystemStatus();
+        } else {
+            document.getElementById('last-check').textContent = '-';
+            this.updateSystemStatus(); // Show unknown status
+        }
     }
 
     renderOverview() {
-        const lastRun = this.runData[0];
-        
-        // System Health
-        if (lastRun) {
-            const statusClass = this.getStatusClass(lastRun.status);
-            this.updateElement('overall-health-badge', this.capitalizeStatus(lastRun.status), statusClass);
-            this.updateElement('last-run-status', this.capitalizeStatus(lastRun.status), `status-badge ${statusClass}`);
-            this.updateElement('last-run-timestamp', this.formatDateTime(lastRun.timestamp_utc));
-            this.updateElement('pages-checked', lastRun.pages_checked);
-            this.updateElement('changes-found', lastRun.changes_found);
-
-            // Handle errors
-            this.renderErrors(lastRun.errors || []);
-        }
-
-        // Recent Changes
         this.renderRecentChanges();
-
-        // Quick Stats
-        this.renderQuickStats();
-    }
+        this.renderIntelligencePanel();
+    };
 
     renderRecentChanges() {
         const container = document.getElementById('recent-changes-list');
@@ -180,7 +166,7 @@ class PolicyWatcherDashboard {
     renderPolicyExplorer() {
         this.renderPlatformTabs();
         this.renderPoliciesByPlatform(this.currentPlatform);
-    }
+    };
 
     renderPlatformTabs() {
         const tabsContainer = document.getElementById('platform-tabs');
@@ -280,7 +266,7 @@ class PolicyWatcherDashboard {
 
     renderHistory() {
         this.renderHistoryTable('all');
-    }
+    };
 
     renderHistoryTable(filter) {
         const tbody = document.getElementById('history-tbody');
@@ -326,7 +312,7 @@ class PolicyWatcherDashboard {
     renderAnalytics() {
         this.renderPlatformActivity();
         this.renderPerformanceTrends();
-    }
+    };
 
     renderMatrix() {
         // Matrix is static HTML, no additional rendering needed
@@ -572,7 +558,7 @@ class PolicyWatcherDashboard {
             .join('');
 
         return html;
-    }
+    };
 
     updateElement(id, content, className = '', isHtml = false) {
         const element = document.getElementById(id);
@@ -586,7 +572,7 @@ class PolicyWatcherDashboard {
                 element.className = className;
             }
         }
-    }
+    };
 
     showErrorState() {
         // Show error state when data loading fails
@@ -601,7 +587,7 @@ class PolicyWatcherDashboard {
         `;
         
         document.querySelector('main').innerHTML = errorMessage;
-    }
+    };
 }
 
 // Global function for summary toggling
@@ -658,6 +644,93 @@ function exportMatrix() {
     link.click();
     document.body.removeChild(link);
 }
+
+    updateSystemStatus() {
+        const indicator = document.getElementById('system-status-indicator');
+        const icon = document.getElementById('status-icon');
+        const text = document.getElementById('status-text');
+
+        if (!indicator || !icon || !text) return;
+
+        if (!this.runLogData || this.runLogData.length === 0) {
+            indicator.className = 'stat-card';
+            icon.innerHTML = '<i class="fas fa-question-circle"></i>';
+            text.textContent = 'Unknown';
+            return;
+        }
+
+        const lastRun = this.runLogData[0];
+        const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
+
+        if (isSuccess) {
+            indicator.className = 'stat-card status-success';
+            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+            text.textContent = 'Operational';
+        } else {
+            indicator.className = 'stat-card status-error';
+            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            text.textContent = 'Issues Detected';
+        }
+    }
+
+    setupModal() {
+        const modal = document.getElementById('run-log-modal');
+        const statusIndicator = document.getElementById('system-status-indicator');
+        const closeButton = document.querySelector('.modal .close-button');
+
+        if (!modal || !statusIndicator || !closeButton) return;
+
+        statusIndicator.onclick = () => {
+            modal.style.display = 'block';
+            this.renderRunLogModal();
+        }
+
+        closeButton.onclick = () => {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = (event) => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    }
+
+    renderRunLogModal() {
+        const container = document.getElementById('run-log-container');
+        if (!this.runLogData || this.runLogData.length === 0) {
+            container.innerHTML = '<p>No run log data available.</p>';
+            return;
+        }
+
+        const logHtml = this.runLogData.slice(0, 20).map(run => {
+            const isSuccess = run.status === 'success' && (!run.errors || run.errors.length === 0);
+            const statusClass = isSuccess ? 'success' : 'error';
+            const statusIcon = isSuccess ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-exclamation-triangle text-error"></i>';
+            const errorsHtml = run.errors && run.errors.length > 0
+                ? `<div class="error-log"><strong>Errors:</strong><ul>${run.errors.map(e => `<li><b>${e.slug}:</b> ${e.error}</li>`).join('')}</ul></div>`
+                : '';
+
+            return `
+                <div class="log-entry log-${statusClass}">
+                    <div class="log-entry-header">
+                        <span class="log-status">${statusIcon} ${this.capitalizeStatus(run.status)}</span>
+                        <span class="log-timestamp">${this.formatDateTime(run.timestamp_utc)}</span>
+                    </div>
+                    <div class="log-entry-body">
+                        <span>Checked: <b>${run.pages_checked}</b></span>
+                        <span>|</span>
+                        <span>Found: <b>${run.changes_found}</b></span>
+                        <span>|</span>
+                        <span>Commit: <a href="https://github.com/lyori6/ts-policy-watcher/commit/${run.commit_sha}" target="_blank" rel="noopener noreferrer">${run.commit_sha.substring(0, 7)}</a></span>
+                    </div>
+                    ${errorsHtml}
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = `<div class="run-log-list">${logHtml}</div>`;
+    };
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

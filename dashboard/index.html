@@ -21,9 +21,9 @@
                     <span class="stat-number" id="last-check">-</span>
                     <span class="stat-label">Hours Since Check</span>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="uptime-metric">-</span>
-                    <span class="stat-label">System Uptime</span>
+                <div class="stat-card" id="system-status-indicator" title="Click to view run log">
+                    <span class="stat-icon" id="status-icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="stat-label" id="status-text">System Status</span>
                 </div>
             </div>
         </div>
@@ -81,32 +81,6 @@
         <!-- Overview Tab -->
         <section id="overview" class="tab-content active">
             <div class="overview-grid">
-                <div class="card system-health-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-heartbeat"></i> System Health</h2>
-                        <span class="health-badge" id="overall-health-badge">Loading...</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="health-metric">
-                            <span class="metric-label">Last Run Status:</span>
-                            <span id="last-run-status" class="status-badge">Loading...</span>
-                        </div>
-                        <div class="health-metric">
-                            <span class="metric-label">Last Run Time:</span>
-                            <span id="last-run-timestamp">Loading...</span>
-                        </div>
-                        <div class="health-metric">
-                            <span class="metric-label">Pages Checked:</span>
-                            <span id="pages-checked">-</span>
-                        </div>
-                        <div class="health-metric">
-                            <span class="metric-label">Changes Found:</span>
-                            <span id="changes-found">-</span>
-                        </div>
-                        <div id="last-run-errors"></div>
-                    </div>
-                </div>
-
                 <div class="card recent-changes-card">
                     <div class="card-header">
                         <h2><i class="fas fa-bell"></i> Recent Policy Changes</h2>
@@ -421,5 +395,18 @@
     </main>
 
     <script src="script.js"></script>
+
+    <!-- Run Log Modal -->
+    <div id="run-log-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-history"></i> System Run Log</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="run-log-container">Loading log...</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

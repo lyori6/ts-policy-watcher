@@ -84,6 +84,30 @@ header p {
     opacity: 0.8;
 }
 
+/* System Status Indicator */
+#system-status-indicator {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#system-status-indicator:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+#system-status-indicator.status-success .stat-icon {
+    color: var(--success-color);
+}
+
+#system-status-indicator.status-error .stat-icon {
+    color: var(--danger-color);
+}
+
 /* Navigation Styles */
 .main-nav {
     background: white;
@@ -592,6 +616,149 @@ main {
 }
 
 .error-item strong {
+    color: var(--danger-color);
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: var(--background-color);
+    margin: 10% auto;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    width: 80%;
+    max-width: 900px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.6em;
+    color: var(--primary-text-color);
+}
+
+.close-button {
+    color: var(--secondary-text-color);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--primary-text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#run-log-container {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px; /* For scrollbar */
+}
+
+.run-log-list .log-entry {
+    background-color: var(--light-gray);
+    border: 1px solid var(--border-color);
+    border-left-width: 5px;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s ease;
+}
+
+.run-log-list .log-entry:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.log-entry.log-success {
+    border-left-color: var(--success-color);
+}
+
+.log-entry.log-error {
+    border-left-color: var(--danger-color);
+}
+
+.log-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.log-status {
+    font-weight: 600;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.log-timestamp {
+    font-size: 0.9em;
+    color: var(--secondary-text-color);
+}
+
+.log-entry-body {
+    font-size: 0.95em;
+    color: var(--primary-text-color);
+    padding-left: 5px;
+    border-left: 2px solid var(--border-color);
+    padding: 10px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 4px;
+}
+
+.log-entry-body span {
+    margin-right: 15px;
+}
+
+.error-log {
+    margin-top: 10px;
+    background-color: #fff0f0;
+    border: 1px solid var(--danger-color);
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+.error-log ul {
+    margin: 5px 0 0 20px;
+    padding: 0;
+}
+
+.error-log li {
+    margin-bottom: 5px;
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-error {
     color: var(--danger-color);
 }
 
