@@ -48,17 +48,19 @@ jobs:
 
       # Step 5: Commit the new snapshots back to the repository
       - name: 'Commit Snapshots'
+        id: commit
         run: |
-          # Configure git with a bot user identity
           git config user.name "Policy Watch Bot"
           git config user.email "bot@github.com"
-          # Add all new files in the snapshots directory
           git add snapshots/
-          # The next line is clever:
-          # It checks if there are any staged changes. If there are (exit code 1),
-          # it proceeds to commit them. If not (exit code 0), it does nothing.
-          # This prevents creating empty commits if no pages have changed.
-          git diff --staged --quiet || git commit -m "CHORE: Update T&S policy snapshots"
+          # If there are changes, commit them and output the SHA
+          if ! git diff --staged --quiet; then
+            git commit -m "CHORE: Update T&S policy snapshots"
+            echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          else
+            echo "No changes to commit."
+            echo "commit_sha=" >> "$GITHUB_OUTPUT"
+          fi
 
       # Step 6: Pull latest changes to avoid race conditions
       # This ensures our local branch is up-to-date before pushing.
@@ -78,6 +80,7 @@ jobs:
         id: diff
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          COMMIT_SHA: ${{ steps.commit.outputs.commit_sha }}
         run: python scripts/diff_and_notify.py
 
       # --- PLACEHOLDER FOR NEXT STEPS ---

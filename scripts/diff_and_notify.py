@@ -19,13 +19,11 @@ RUN_LOG_FILE = "run_log.json"
 SUMMARIES_FILE = "summaries.json"
 PROMPT_TEMPLATE = """You are a Trust & Safety analyst. Below is text from a competitor's policy page. Analyze it and provide a concise summary in markdown format for a product manager. {instruction}\n\nText:\n---\n{policy_text}\n---\n\nSummary:"""
 
-def get_changed_files():
-    """Gets a list of snapshot files changed in the last commit."""
+def get_changed_files(commit_sha):
+    """Gets a list of snapshot files from a specific commit SHA."""
     try:
-        # In the GitHub workflow, the checkout action might create a detached HEAD.
-        # Using 'git show' is a more reliable way to get files from the last commit.
         result = subprocess.run(
-            ["git", "show", "--pretty=", "--name-only", "HEAD"],
+            ["git", "show", "--pretty=", "--name-only", commit_sha],
             capture_output=True, text=True, check=True
         )
         files = result.stdout.strip().split("\n")
@@ -37,10 +35,11 @@ def get_changed_files():
         print(f"An unexpected error occurred while getting changed files: {e}.", file=sys.stderr)
         return []
 
-def get_git_diff(file_path):
-    """Gets the raw diff for a single file from the last commit."""
+def get_git_diff(file_path, commit_sha):
+    """Gets the raw diff for a single file from a specific commit."""
+    # This compares the commit with its direct parent
     return subprocess.run(
-        ["git", "diff", "HEAD~1", "HEAD", "--", file_path],
+        ["git", "diff", f"{commit_sha}~1", commit_sha, "--", file_path],
         capture_output=True, text=True, check=True
     ).stdout
 
@@ -81,7 +80,7 @@ def process_changed_file(file_path, is_new_policy):
                 content = f.read()
             text_to_summarize = clean_html(content)
         else:
-            diff_content = get_git_diff(file_path)
+            diff_content = get_git_diff(file_path, commit_sha)
             text_to_summarize = html2text.html2text(diff_content)
 
         if len(text_to_summarize.split()) < 10:
@@ -122,6 +121,12 @@ def log_run_status(status, pages_checked, changes_found, errors):
 def main():
     print("--- Starting Differ and Notifier Script ---")
 
+    commit_sha = os.environ.get("COMMIT_SHA")
+    if not commit_sha:
+        print("No snapshot commit SHA found. Exiting gracefully.")
+        log_run_status(status="success", pages_checked=0, changes_found=0, errors=[])
+        return
+
     # Load existing summaries or create a new dictionary
     try:
         with open(SUMMARIES_FILE, 'r') as f:
@@ -129,7 +134,7 @@ def main():
     except (FileNotFoundError, json.JSONDecodeError):
         summaries_data = {}
 
-    changed_files = get_changed_files()
+    changed_files = get_changed_files(commit_sha)
     
     if not changed_files:
         print("No policy changes detected.")
