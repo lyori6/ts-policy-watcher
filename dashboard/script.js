@@ -173,7 +173,7 @@ class PolicyWatcherDashboard {
 
     renderPolicyExplorer() {
         this.renderPlatformTabs();
-        this.renderBlockMuteSection();
+        // this.renderBlockMuteSection(); // Hidden for now - needs better design
         this.renderPoliciesByPlatform(this.currentPlatform);
     }
 
@@ -314,13 +314,13 @@ class PolicyWatcherDashboard {
                         <span class="update-badge">${lastUpdated}</span>
                     </div>
                     
-                    <div class="summary-preview">
+                    <div class="summary-preview" onclick="openPolicyModal('${policy.slug}')" style="cursor: pointer;">
                         <div class="summary-excerpt">
                             ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 150))}
                         </div>
-                        <button class="view-summary-btn" onclick="openPolicyModal('${policy.slug}')">
-                            <i class="fas fa-expand"></i> View Full Summary
-                        </button>
+                        <div class="summary-hover-hint">
+                            <i class="fas fa-eye"></i> Click to view full summary
+                        </div>
                     </div>
                     
                     ${summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.' ? `
@@ -898,6 +898,34 @@ class PolicyWatcherDashboard {
             if (className) {
                 element.className = className;
             }
+        }
+    }
+
+    updateSystemStatus() {
+        const indicator = document.getElementById('system-status-indicator');
+        const icon = document.getElementById('status-icon');
+        const text = document.getElementById('status-text');
+
+        if (!indicator || !icon || !text) return;
+
+        if (!this.runLogData || this.runLogData.length === 0) {
+            indicator.className = 'stat-card';
+            icon.innerHTML = '<i class="fas fa-question-circle"></i>';
+            text.textContent = 'Unknown';
+            return;
+        }
+
+        const lastRun = this.runLogData[0];
+        const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
+
+        if (isSuccess) {
+            indicator.className = 'stat-card status-success';
+            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+            text.textContent = 'Operational';
+        } else {
+            indicator.className = 'stat-card status-error';
+            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            text.textContent = 'Issues Detected';
         }
     }
 
