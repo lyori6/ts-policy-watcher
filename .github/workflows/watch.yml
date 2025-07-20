@@ -60,7 +60,12 @@ jobs:
           # This prevents creating empty commits if no pages have changed.
           git diff --staged --quiet || git commit -m "CHORE: Update T&S policy snapshots"
 
-      # Step 6: Push the changes back to the main branch
+      # Step 6: Pull latest changes to avoid race conditions
+      # This ensures our local branch is up-to-date before pushing.
+      - name: 'Pull Latest Changes'
+        run: git pull origin main --rebase
+
+      # Step 7: Push the changes back to the main branch
       # This uses a dedicated action to handle pushing the commits.
       - name: 'Push Changes'
         uses: ad-m/github-push-action@master
