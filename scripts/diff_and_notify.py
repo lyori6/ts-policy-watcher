@@ -1,14 +1,31 @@
 # scripts/diff_and_notify.py
 
-import os
-import sys
-import json
-import subprocess
-from datetime import datetime
-import google.generativeai as genai
-from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
-import html2text
-import warnings
+print("=== DIFF_AND_NOTIFY STARTING ===", flush=True)
+print("Attempting imports...", flush=True)
+
+try:
+    import os
+    print("✓ os imported", flush=True)
+    import sys
+    print("✓ sys imported", flush=True)
+    import json
+    print("✓ json imported", flush=True)
+    import subprocess
+    print("✓ subprocess imported", flush=True)
+    from datetime import datetime
+    print("✓ datetime imported", flush=True)
+    import google.generativeai as genai
+    print("✓ google.generativeai imported", flush=True)
+    from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
+    print("✓ BeautifulSoup imported", flush=True)
+    import html2text
+    print("✓ html2text imported", flush=True)
+    import warnings
+    print("✓ warnings imported", flush=True)
+    print("All imports successful!", flush=True)
+except Exception as e:
+    print(f"FATAL IMPORT ERROR: {e}", flush=True, file=sys.stderr)
+    sys.exit(1)
 
 # Suppress BeautifulSoup warnings
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
@@ -126,13 +143,15 @@ def log_run_status(status, pages_checked, changes_found, errors):
     print(f"Successfully logged run status to {RUN_LOG_FILE}")
 
 def main():
-    print("--- Starting Differ and Notifier Script ---")
+    print("--- Starting Differ and Notifier Script ---", flush=True)
+    print("Initializing variables...", flush=True)
     status = "success"
     pages_checked = 0
     changes_found = 0
     errors = []
 
     try:
+        print("Entered main try block", flush=True)
         commit_sha = os.environ.get("COMMIT_SHA")
         if not commit_sha:
             print("No snapshot commit SHA found. Exiting gracefully.")
@@ -190,16 +209,23 @@ def main():
         status = "failure"
 
     finally:
+        print("Entered finally block", flush=True)
         if errors and status == "success":
             status = "partial_failure"
         
-        log_run_status(
-            status=status,
-            pages_checked=pages_checked,
-            changes_found=changes_found,
-            errors=errors
-        )
-        print("--- Differ and Notifier Script Finished ---")
+        print("About to call log_run_status...", flush=True)
+        try:
+            log_run_status(
+                status=status,
+                pages_checked=pages_checked,
+                changes_found=changes_found,
+                errors=errors
+            )
+            print("log_run_status completed successfully", flush=True)
+        except Exception as log_error:
+            print(f"FATAL: log_run_status failed: {log_error}", flush=True, file=sys.stderr)
+        
+        print("--- Differ and Notifier Script Finished ---", flush=True)
 
 if __name__ == "__main__":
     main()
