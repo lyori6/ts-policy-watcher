@@ -22,8 +22,10 @@ PROMPT_TEMPLATE = """You are a Trust & Safety analyst. Below is text from a comp
 def get_changed_files():
     """Gets a list of snapshot files changed in the last commit."""
     try:
+        # In the GitHub workflow, the checkout action might create a detached HEAD.
+        # Using 'git show' is a more reliable way to get files from the last commit.
         result = subprocess.run(
-            ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+            ["git", "show", "--pretty=", "--name-only", "HEAD"],
             capture_output=True, text=True, check=True
         )
         files = result.stdout.strip().split("\n")
