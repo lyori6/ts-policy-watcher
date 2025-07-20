@@ -62,13 +62,18 @@ jobs:
 
       # Step 6: Push the changes back to the main branch
       # This uses a dedicated action to handle pushing the commits.
-      - name: 'Push changes'
-        uses: ad-m/github-push-action@v0.8.0
+      - name: 'Push Changes'
+        uses: ad-m/github-push-action@master
         with:
-          # The GITHUB_TOKEN is a secret automatically provided by GitHub Actions
-          # that grants permission to push to the repository.
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: main
+
+      # Step 7: Detect changes, generate summary, and set outputs
+      - name: 'Detect Changes and Notify'
+        id: diff
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/diff_and_notify.py
 
       # --- PLACEHOLDER FOR NEXT STEPS ---
       # In our next iteration, we will add steps here to:
