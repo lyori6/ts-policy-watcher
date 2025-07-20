@@ -318,9 +318,6 @@ class PolicyWatcherDashboard {
                         <div class="summary-excerpt">
                             ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 150))}
                         </div>
-                        <div class="summary-hover-hint">
-                            <i class="fas fa-eye"></i> Click to view full summary
-                        </div>
                     </div>
                     
                     ${summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.' ? `

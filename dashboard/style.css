@@ -375,6 +375,13 @@ main {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     border-color: var(--secondary-color);
+    background-color: rgba(173, 216, 230, 0.1);
+}
+
+.policy-card:hover .summary-preview {
+    background-color: rgba(173, 216, 230, 0.15);
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
 }
 
 .policy-header {
@@ -642,6 +649,8 @@ main {
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     animation: fadeIn 0.3s;
+    position: relative;
+    z-index: 1001;
 }
 
 .modal-header {

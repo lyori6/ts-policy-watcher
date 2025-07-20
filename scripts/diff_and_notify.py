@@ -107,7 +107,7 @@ def get_ai_summary(text_content, is_new_policy):
         
         return None
 
-def process_changed_file(file_path, is_new_policy):
+def process_changed_file(file_path, is_new_policy, commit_sha):
     """Processes a single changed file to generate a summary."""
     print(f"\nProcessing: {file_path} {'(new policy)' if is_new_policy else '(existing policy)'}")
     
@@ -224,7 +224,7 @@ def main():
             try:
                 slug = os.path.basename(os.path.dirname(file_path))
                 is_new_policy = slug not in summaries_data
-                summary_text = process_changed_file(file_path, is_new_policy)
+                summary_text = process_changed_file(file_path, is_new_policy, commit_sha)
                 
                 if summary_text:
                     if is_new_policy:
