@@ -9,7 +9,7 @@ Let's integrate this directly into the PRD. I'll highlight the new additions and
 *   **Project:** T&S Policy Watcher
 *   **Version:** 1.1 (Revised MVP with Error Handling)
 *   **Author/Owner:** You (PM) & Gemini (Tech)
-*   **Stakeholders:** eBay Live T&S Team
+*   **Stakeholders:** The T&S Team
 *   **Status:** Approved for Scrappy Build
 
 ---
@@ -128,27 +128,53 @@ This is our strategy for tracking system health without creating noise.
 
 ---
 
-### **3. Phase 2: UI, Notifications, and Testing**
+### **3. Phase 2: The Intelligence Dashboard**
 
-Once the core data pipeline is stable, we will proceed with the user-facing components.
+With the data pipeline stabilized, we will build the primary user-facing component: a web-based intelligence dashboard. This moves beyond simple logging to provide actionable insights.
 
-*   **3.1. Frontend Dashboard:**
-    *   **Goal:** Create a simple, clean web interface to display the monitoring results.
-    *   **Technology:** A simple static site generated with a framework like Eleventy or just plain HTML/CSS/JS.
-    *   **Features:**
-        *   Display the list of all tracked policies.
-        *   Show the latest snapshot for each policy.
-        *   Highlight policies that have changed recently.
-        *   Display the `run_log.json` data to show system status and recent errors.
+#### **3.1. Core Concepts & Data Models**
 
-*   **3.2. Email Notifications:**
-    *   **Goal:** Send an email alert when a policy change is detected and summarized.
-    *   **Technology:** Integrate with an email API service (e.g., SendGrid, Resend). The API key will be stored as a GitHub Secret.
-    *   **Logic:** A new script (`send_email.py`) will be triggered by the `diff_and_notify.py` step if changes are found. It will take the summary and send it to a predefined list of recipients.
+1.  **Smart Summaries:** The AI's role will be more nuanced. We need a persistent way to store and manage summaries.
+    *   **New Data Model: `summaries.json`**: This file will be the single source of truth for all AI-generated content. It will store a record for each tracked policy, identified by its unique slug.
+        ```json
+        {
+          "whatnot-community-guidelines": {
+            "platform": "Whatnot",
+            "name": "Community Guidelines",
+            "url": "https://...",
+            "initial_summary": "This document outlines the rules for user behavior on Whatnot, focusing on respect, safety, and prohibited items...",
+            "last_update_summary": "The policy was updated to include a new section on AI-generated content.",
+            "last_update_timestamp_utc": "2025-07-20T10:00:00Z"
+          }
+        }
+        ```
+    *   **Logic Flow:**
+        *   **First Run:** When `diff_and_notify.py` sees a policy for the first time, it will generate a comprehensive `initial_summary` of the entire document and store it in `summaries.json`.
+        *   **On Change:** On subsequent changes, it will generate a `last_update_summary` (based on the diff) and update the timestamp. The `initial_summary` will remain unchanged.
 
-*   **3.3. Internal Test Page:**
-    *   **Goal:** Create a reliable way to test the end-to-end change detection and notification pipeline without relying on external sites.
-    *   **Implementation:**
-        *   A simple HTML file (`test-page/index.html`) will be created within this repository.
-        *   This file will be added to `platform_urls.json` to be tracked like any other competitor page.
-        *   To trigger a change, we can simply edit this file, commit, and push. The workflow will run, detect the "change," generate a summary, and (once implemented) send a test email.
+#### **3.2. Dashboard Features & Layout**
+
+The dashboard will be a single-page application with two distinct sections.
+
+1.  **System Health View:**
+    *   **Goal:** Provide an at-a-glance view of the system's operational status.
+    *   **Data Source:** `run_log.json`.
+    *   **Display:**
+        *   A prominent status indicator for the last run (e.g., "Success," "Partial Failure").
+        *   Timestamp of the last successful run.
+        *   A list of any errors from the most recent run, including the failed URL and reason.
+
+2.  **Policy Explorer View:**
+    *   **Goal:** Allow the team to explore and understand the full content of all tracked policies.
+    *   **Data Sources:** `snapshots/` directory and `summaries.json`.
+    *   **Display:**
+        *   Policies grouped by platform (e.g., Whatnot, TikTok).
+        *   For each policy, display its name, the `initial_summary`, the `last_update_summary`, and the date of the last update.
+        *   A button or link to view the full, raw HTML of the latest snapshot.
+
+#### **3.3. Technical Implementation**
+
+*   **Frontend:** A simple, static site generated using modern HTML, CSS, and JavaScript. We will not need a complex framework like React for the MVP.
+*   **Data Access:** The dashboard will be hosted as a static site (e.g., on GitHub Pages). On page load, it will use JavaScript's `fetch` API to read the `run_log.json`, `summaries.json`, and the individual policy snapshots directly from the GitHub repository.
+*   **Email Notifications:** The `send_email.py` script will now read from `summaries.json` to get the `last_update_summary` to include in the alert.
+*   **Testing:** The `test-page/index.html` remains critical for triggering the entire pipeline, which will now include updates to `summaries.json` and the dashboard.
