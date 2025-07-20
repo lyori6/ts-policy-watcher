@@ -60,7 +60,10 @@
     </section>
 
     <nav class="main-nav">
-        <button class="nav-tab active" data-tab="overview">
+        <button class="nav-tab active" data-tab="matrix">
+            <i class="fas fa-table"></i> Policy Matrix
+        </button>
+        <button class="nav-tab" data-tab="overview">
             <i class="fas fa-tachometer-alt"></i> Overview
         </button>
         <button class="nav-tab" data-tab="platforms">
@@ -72,14 +75,46 @@
         <button class="nav-tab" data-tab="analytics">
             <i class="fas fa-chart-line"></i> Analytics
         </button>
-        <button class="nav-tab" data-tab="matrix">
-            <i class="fas fa-table"></i> Policy Matrix
-        </button>
     </nav>
 
     <main>
+        <!-- Policy Matrix Tab -->
+        <section id="matrix" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-table"></i> Policy Matrix</h2>
+                    <div class="matrix-controls">
+                        <button class="export-btn" onclick="exportMatrix()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="matrix-table-container">
+                        <table id="policy-matrix-table" class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Policy Name</th>
+                                    <th>Status</th>
+                                    <th>Coverage Areas</th>
+                                    <th>Key Features</th>
+                                    <th>Enforcement Actions</th>
+                                    <th>Last Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matrix-tbody">
+                                <!-- Matrix content will be dynamically populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Overview Tab -->
-        <section id="overview" class="tab-content active">
+        <section id="overview" class="tab-content">
             <div class="overview-grid">
                 <div class="card recent-changes-card">
                     <div class="card-header">
@@ -114,6 +149,11 @@
 
         <!-- Policy Explorer Tab -->
         <section id="platforms" class="tab-content">
+            <!-- Block/Mute Focus Section -->
+            <div class="block-mute-section" id="block-mute-section">
+                <!-- Block/Mute content will be populated by JS -->
+            </div>
+
             <div class="platform-selector">
                 <div class="platform-tabs" id="platform-tabs">
                     <!-- Platform tabs will be populated by JS -->
@@ -182,40 +222,6 @@
             </div>
         </section>
 
-        <!-- Policy Matrix Tab -->
-        <section id="matrix" class="tab-content">
-            <div class="card">
-                <div class="card-header">
-                    <h2><i class="fas fa-table"></i> Static Policy Matrix</h2>
-                    <div class="matrix-controls">
-                        <button class="export-btn" onclick="exportMatrix()">
-                            <i class="fas fa-download"></i> Export CSV
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="matrix-table-container">
-                        <table id="policy-matrix-table" class="matrix-table">
-                            <thead>
-                                <tr>
-                                    <th>Platform</th>
-                                    <th>Policy Name</th>
-                                    <th>Status</th>
-                                    <th>Coverage Areas</th>
-                                    <th>Key Features</th>
-                                    <th>Enforcement Actions</th>
-                                    <th>Last Updated</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="matrix-tbody">
-                                <!-- Matrix content will be dynamically populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <script src="script.js"></script>
@@ -229,6 +235,27 @@
             </div>
             <div class="modal-body">
                 <div id="run-log-container">Loading log...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Policy Summary Modal -->
+    <div id="policy-summary-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="policy-modal-title"><i class="fas fa-file-text"></i> Policy Summary</h2>
+                <span class="close-button" onclick="closePolicyModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="policy-modal-content">Loading...</div>
+                <div class="modal-actions">
+                    <a id="policy-modal-visit" href="#" target="_blank" class="action-btn primary-btn">
+                        <i class="fas fa-external-link-alt"></i> Visit Policy Page
+                    </a>
+                    <a id="policy-modal-history" href="#" target="_blank" class="action-btn secondary-btn">
+                        <i class="fas fa-clock"></i> View History
+                    </a>
+                </div>
             </div>
         </div>
     </div>

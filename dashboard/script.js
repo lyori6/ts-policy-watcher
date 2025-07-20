@@ -55,6 +55,9 @@ class PolicyWatcherDashboard {
 
         // Load specific tab content
         switch(tabName) {
+            case 'matrix':
+                this.renderMatrix();
+                break;
             case 'overview':
                 this.renderOverview();
                 break;
@@ -66,9 +69,6 @@ class PolicyWatcherDashboard {
                 break;
             case 'analytics':
                 this.renderAnalytics();
-                break;
-            case 'matrix':
-                this.renderMatrixTable();
                 break;
         }
     }
@@ -89,8 +89,12 @@ class PolicyWatcherDashboard {
             console.log('Data loaded successfully:', {
                 runs: this.runLogData.length,
                 summaries: Object.keys(this.summariesData).length,
-                platforms: this.platformData.length
+                platforms: this.platformData.length,
+                lastRunStatus: this.runLogData.length > 0 ? this.runLogData[0].status : 'no data'
             });
+
+            // Force system status update after data is loaded
+            setTimeout(() => this.updateSystemStatus(), 100);
 
         } catch (error) {
             console.error('Error loading dashboard data:', error);
@@ -111,7 +115,8 @@ class PolicyWatcherDashboard {
 
     renderDashboard() {
         this.updateHeaderStats();
-        this.renderOverview(); // This will render the intelligence panel too
+        this.renderMatrix(); // Start with Policy Matrix as default tab
+        this.renderOverview(); // Prepare overview data too
     }
 
     updateHeaderStats() {
@@ -168,7 +173,88 @@ class PolicyWatcherDashboard {
 
     renderPolicyExplorer() {
         this.renderPlatformTabs();
+        this.renderBlockMuteSection();
         this.renderPoliciesByPlatform(this.currentPlatform);
+    }
+
+    renderBlockMuteSection() {
+        const sectionContainer = document.getElementById('block-mute-section');
+        if (!sectionContainer) return;
+
+        const blockingPolicies = [];
+        const mutingPolicies = [];
+
+        // Find blocking and muting policies
+        for (const slug in this.summariesData) {
+            const policy = this.summariesData[slug];
+            const platformName = this.findPlatformName(slug);
+            const summary = policy.initial_summary?.toLowerCase() || '';
+
+            if (slug.includes('block') || summary.includes('block')) {
+                const policyInfo = this.platformData.find(p => p.slug === slug);
+                if (policyInfo) {
+                    blockingPolicies.push({
+                        ...policyInfo,
+                        platform: platformName,
+                        summary: policy.initial_summary,
+                        lastUpdated: policy.last_updated
+                    });
+                }
+            }
+
+            if (summary.includes('mute') || summary.includes('silence') || summary.includes('moderat')) {
+                const policyInfo = this.platformData.find(p => p.slug === slug);
+                if (policyInfo && !blockingPolicies.find(bp => bp.slug === slug)) {
+                    mutingPolicies.push({
+                        ...policyInfo,
+                        platform: platformName,
+                        summary: policy.initial_summary,
+                        lastUpdated: policy.last_updated
+                    });
+                }
+            }
+        }
+
+        let sectionHtml = '<div class="card block-mute-card">';
+        sectionHtml += '<div class="card-header"><h2><i class="fas fa-shield-alt"></i> Block & Moderation Controls</h2></div>';
+        sectionHtml += '<div class="card-body"><div class="block-mute-grid">';
+
+        // Blocking section
+        if (blockingPolicies.length > 0) {
+            sectionHtml += '<div class="control-section">';
+            sectionHtml += '<h3><i class="fas fa-ban"></i> User Blocking</h3>';
+            sectionHtml += '<div class="policy-pills">';
+            blockingPolicies.forEach(policy => {
+                sectionHtml += `
+                    <div class="policy-pill" onclick="openPolicyModal('${policy.slug}')">
+                        <div class="pill-platform">${policy.platform}</div>
+                        <div class="pill-name">${policy.name}</div>
+                        <div class="pill-updated">${this.formatRelativeTime(policy.lastUpdated)}</div>
+                    </div>
+                `;
+            });
+            sectionHtml += '</div></div>';
+        }
+
+        // Muting/Moderation section  
+        if (mutingPolicies.length > 0) {
+            sectionHtml += '<div class="control-section">';
+            sectionHtml += '<h3><i class="fas fa-volume-mute"></i> Moderation & Controls</h3>';
+            sectionHtml += '<div class="policy-pills">';
+            mutingPolicies.forEach(policy => {
+                sectionHtml += `
+                    <div class="policy-pill" onclick="openPolicyModal('${policy.slug}')">
+                        <div class="pill-platform">${policy.platform}</div>
+                        <div class="pill-name">${policy.name}</div>
+                        <div class="pill-updated">${this.formatRelativeTime(policy.lastUpdated)}</div>
+                    </div>
+                `;
+            });
+            sectionHtml += '</div></div>';
+        }
+
+        sectionHtml += '</div></div></div>';
+        sectionContainer.innerHTML = sectionHtml;
     }
 
     renderPlatformTabs() {
@@ -228,20 +314,13 @@ class PolicyWatcherDashboard {
                         <span class="update-badge">${lastUpdated}</span>
                     </div>
                     
-                    <div class="summary initial-summary">
-                        <div class="summary-content" id="summary-${policy.slug}">
-                            <div class="summary-preview">
-                                ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 200))}
-                            </div>
-                            ${summaryData.initial_summary && summaryData.initial_summary.length > 200 ? `
-                                <div class="summary-full" style="display: none;">
-                                    ${this.renderMarkdown(summaryData.initial_summary)}
-                                </div>
-                                <button class="expand-btn" onclick="toggleSummary('${policy.slug}', this)">
-                                    <i class="fas fa-chevron-down"></i> Show Full Summary
-                                </button>
-                            ` : ''}
+                    <div class="summary-preview">
+                        <div class="summary-excerpt">
+                            ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 150))}
                         </div>
+                        <button class="view-summary-btn" onclick="openPolicyModal('${policy.slug}')">
+                            <i class="fas fa-expand"></i> View Full Summary
+                        </button>
                     </div>
                     
                     ${summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.' ? `
@@ -838,24 +917,57 @@ class PolicyWatcherDashboard {
     }
 }
 
-// Global function for summary toggling
-function toggleSummary(slug, button) {
-    const summaryContainer = document.getElementById(`summary-${slug}`);
-    const preview = summaryContainer.querySelector('.summary-preview');
-    const fullContent = summaryContainer.querySelector('.summary-full');
-    const isExpanded = fullContent.style.display === 'block';
+// Global function for opening policy modal
+function openPolicyModal(slug) {
+    const modal = document.getElementById('policy-summary-modal');
+    const title = document.getElementById('policy-modal-title');
+    const content = document.getElementById('policy-modal-content');
+    const visitLink = document.getElementById('policy-modal-visit');
+    const historyLink = document.getElementById('policy-modal-history');
     
-    if (isExpanded) {
-        preview.style.display = 'block';
-        fullContent.style.display = 'none';
-        button.innerHTML = '<i class="fas fa-chevron-down"></i> Show Full Summary';
-        button.classList.remove('expanded');
+    // Get dashboard instance to access data
+    const dashboard = window.policyDashboard;
+    if (!dashboard) return;
+    
+    const policy = dashboard.platformData.find(p => p.slug === slug);
+    const summaryData = dashboard.summariesData[slug] || {};
+    
+    if (!policy) return;
+    
+    // Update modal content
+    title.innerHTML = `<i class="fas fa-file-text"></i> ${policy.name} - ${dashboard.findPlatformName(slug)}`;
+    
+    let modalHtml = '';
+    if (summaryData.initial_summary) {
+        modalHtml += '<div class="modal-summary">';
+        modalHtml += '<h3>Policy Summary</h3>';
+        modalHtml += dashboard.renderMarkdown(summaryData.initial_summary);
+        modalHtml += '</div>';
+        
+        if (summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.') {
+            modalHtml += '<div class="modal-update">';
+            modalHtml += '<h3><i class="fas fa-exclamation-circle"></i> Recent Changes</h3>';
+            modalHtml += dashboard.renderMarkdown(summaryData.last_update_summary);
+            modalHtml += `<div class="update-timestamp">Updated: ${dashboard.formatRelativeTime(summaryData.last_updated)}</div>`;
+            modalHtml += '</div>';
+        }
     } else {
-        preview.style.display = 'none';
-        fullContent.style.display = 'block';
-        button.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
-        button.classList.add('expanded');
+        modalHtml = '<p>No summary available for this policy yet.</p>';
     }
+    
+    content.innerHTML = modalHtml;
+    
+    // Update action links
+    visitLink.href = policy.url;
+    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${slug}`;
+    
+    modal.style.display = 'block';
+}
+
+// Global function for closing policy modal
+function closePolicyModal() {
+    const modal = document.getElementById('policy-summary-modal');
+    modal.style.display = 'none';
 }
 
 // Global function for exporting matrix to CSV
@@ -898,5 +1010,18 @@ function exportMatrix() {
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new PolicyWatcherDashboard();
+    window.policyDashboard = new PolicyWatcherDashboard();
 });
+
+// Global modal close functionality
+window.onclick = function(event) {
+    const policyModal = document.getElementById('policy-summary-modal');
+    const runLogModal = document.getElementById('run-log-modal');
+    
+    if (event.target === policyModal) {
+        closePolicyModal();
+    }
+    if (event.target === runLogModal) {
+        runLogModal.style.display = 'none';
+    }
+}
