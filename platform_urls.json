@@ -42,6 +42,13 @@
     "renderer": "playwright"
   },
   {
+    "platform": "TikTok",
+    "name": "Blocking Users",
+    "slug": "tiktok-blocking-users",
+    "url": "https://support.tiktok.com/en/using-tiktok/followers-and-following/blocking-the-users",
+    "renderer": "playwright"
+  },
+  {
     "platform": "Instagram",
     "name": "Community Guidelines",
     "slug": "instagram-community-guidelines",
@@ -60,6 +67,13 @@
     "name": "Commerce Policies",
     "slug": "instagram-commerce-policies",
     "url": "https://help.instagram.com/1627591227523036",
+    "renderer": "playwright"
+  },
+  {
+    "platform": "Instagram",
+    "name": "Blocking People",
+    "slug": "instagram-blocking-people",
+    "url": "https://help.instagram.com/426700567389543",
     "renderer": "playwright"
   },
   {
@@ -82,6 +96,13 @@
     "slug": "youtube-shopping-ads-policy",
     "url": "https://support.google.com/merchants/answer/6149970",
     "renderer": "httpx"
+  },
+  {
+    "platform": "YouTube",
+    "name": "Hiding Users From Channel",
+    "slug": "youtube-hiding-users",
+    "url": "https://support.google.com/youtube/answer/9482361",
+    "renderer": "playwright"
   },
   {
     "platform": "Whatnot",
