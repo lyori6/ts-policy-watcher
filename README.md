@@ -47,15 +47,18 @@ To run this project locally, you'll need Python 3 and the following setup.
 
 ---
 
-## Project Structure & Key Artifacts
+## Technical Overview
 
+The system is an autonomous intelligence pipeline orchestrated by a GitHub Actions workflow (`.github/workflows/watch.yml`). It runs on a schedule to fetch, process, and store data.
+
+For a complete technical breakdown of the architecture, data flow, core logic, and a comprehensive troubleshooting guide, please see the **[Engineering Handoff Document](handoff.md)**.
+
+### Key Artifacts
+
+*   **`.github/workflows/watch.yml`**: The GitHub Actions workflow that automates the entire process.
 *   **`dashboard/`**: Contains the static HTML, CSS, and JS for the user-facing intelligence dashboard.
-*   **`scripts/`**: Houses the core Python logic for the data pipeline.
-    *   `fetch.py`: Responsible for fetching URLs and saving HTML snapshots.
-    *   `diff_and_notify.py`: Detects changes between snapshots, calls the Gemini API, and updates the `summaries.json` and `run_log.json` files.
-*   **`snapshots/`**: Stores timestamped HTML snapshots of the policy pages. This directory is the "database" of raw data.
-*   **`.github/workflows/main.yml`**: The GitHub Actions workflow that automates the entire process on a schedule.
-*   **`platform_urls.json`**: The configuration file listing all competitor URLs to be monitored.
-*   **`run_log.json`**: A log of all automation runs, including timestamps, status, and any errors. This file powers the "System Health" view on the dashboard.
-*   **`summaries.json`**: The persistent database of AI-generated summaries. It stores an initial summary and the most recent update summary for each tracked policy.
-*   **`PRD.md`**: The formal Product Requirements Document, outlining the project's goals, features, and technical design in detail.
+*   **`scripts/`**: Houses the core Python logic for the data pipeline (`fetch.py`, `diff_and_notify.py`).
+*   **`snapshots/`**: Stores the raw, timestamped HTML content of the tracked policy pages.
+*   **`platform_urls.json`**: The configuration file that defines which URLs to track.
+*   **`run_log.json`**: Records the status of each workflow run for the dashboard's System Health view.
+*   **`summaries.json`**: The persistent database of all AI-generated summaries.

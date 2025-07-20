@@ -46,6 +46,8 @@ The end goal is to transform raw, unstructured competitor changes into actionabl
 
 The system is orchestrated by a GitHub Actions workflow that runs on a schedule. It follows two primary paths: a success path for processing data and a failure path for reporting errors.
 
+*For a complete technical breakdown, see the [Engineering Handoff Document](handoff.md).*
+
 ```
 +------------------+     +--------------------+     +---------------------+
 | GitHub Actions   | --> | scripts/fetch.py   | --> | snapshots/ (Git)    |
