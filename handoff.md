@@ -2,6 +2,123 @@
 
 **Last Updated:** 2025-07-19
 
+---
+
+## **CRITICAL HANDOFF MEMO: THE SILENT CRASH**
+
+**TO:** Next AI Developer
+**FROM:** Cascade
+**SUBJECT:** Unsolved catastrophic failure in the `diff_and_notify.py` script.
+
+I was unable to solve a critical bug, and this document is my final attempt to provide you with all the context needed to succeed where I failed. 
+
+### The Core Mystery
+
+The `diff_and_notify.py` script consistently fails when run within the GitHub Actions workflow. The failure is catastrophic and silent:
+
+1.  The script is triggered by the workflow.
+2.  It crashes before it can perform any meaningful work.
+3.  Crucially, it crashes *before* the `finally` block in `main()` can execute, meaning the `run_log.json` file is never successfully written by the script.
+4.  The workflow itself creates an empty log file (`echo '[]' > run_log.json`) as a placeholder. The fact that this placeholder is never overwritten is the primary evidence of the script's failure to run.
+
+### History of Failed Hypotheses
+
+We methodically tested and disproved several hypotheses. Do not waste time on these paths:
+
+1.  **Hypothesis: Unreliable Git Diffs.**
+    -   **Theory:** `git diff HEAD~1` was unreliable in the Actions environment.
+    -   **Action:** We re-architected the workflow to pass a specific `COMMIT_SHA` to the script.
+    -   **Result:** The underlying problem remained. This was not the root cause.
+
+2.  **Hypothesis: Unhandled Python Exception.**
+    -   **Theory:** A standard Python error (API, parsing, etc.) was crashing the script.
+    -   **Action:** We wrapped the entire `main()` function's logic in a robust `try...finally` block.
+    -   **Result:** The `finally` block never executed, proving the crash is happening outside the scope of standard Python exception handling. It is more fundamental.
+
+3.  **Hypothesis: Silent `subprocess` Crash.**
+    -   **Theory:** The `git` commands being called via `subprocess.run()` were failing and their `stderr` was being suppressed.
+    -   **Action:** We instrumented the `subprocess` calls to explicitly capture and print any `stderr` from the `git` process.
+    -   **Result:** No `stderr` was ever printed to the logs. This was my final failed attempt. It suggests the script may not even be reaching the point where these functions are called.
+
+### **Final Recommendation & Next Steps**
+
+My final conclusion is that **the problem is not in the Python code, but in the GitHub Actions runner environment itself.** The crash is happening at a level below what the Python script can catch.
+
+I strongly advise you to **immediately stop debugging the Python script** and instead focus your investigation on the runner environment and the workflow's execution context.
+
+**Your first steps should be:**
+
+1.  **Shell Verbosity:** Add `set -x` to the top of the `Run differ and notifier` step in `watch.yml`. This will print every shell command as it executes and may reveal a fatal error in how the script is being invoked.
+2.  **Filesystem Checks:** Add `ls -laR` commands to the workflow *before* the Python script is run to verify file paths, permissions, and the existence of the Python executable and dependencies.
+3.  **Simplify to Isolate:** Reduce `diff_and_notify.py` to its absolute simplest form (e.g., `import sys; print("Python is running"); sys.exit(0)`). If even this fails, it proves the issue is with the Python interpreter or environment on the runner.
+4.  **Check Runner Resources:** Investigate if the process is being killed by the runner for exceeding memory or other resource limits, although this is unlikely given the script's simplicity.
+
+Good luck. The answer is in the runner.
+
+---
+
+## 1. System Overview
+
+The T&S Policy Watcher is an automated system designed to monitor changes in the public policy documents of various online platforms (e.g., TikTok, YouTube, Instagram). It periodically scrapes these pages, detects changes, uses a GenAI model to summarize the changes, and presents the information on a simple web dashboard.
+
+The architecture is designed to be simple, serverless, and cost-effective, leveraging a "Git-as-a-Database" approach.
+
+- **Automation:** GitHub Actions runs the core logic on a schedule.
+- **Data Storage:** Raw HTML snapshots, JSON summaries, and run logs are all stored directly in the GitHub repository.
+- **Intelligence:** The Google Gemini API provides AI-powered summaries of policy changes.
+- **Frontend:** A static HTML/JS/CSS dashboard is deployed on Vercel, reading data directly from the GitHub repository via RawGit.
+
+## 2. Core Components
+
+### `/.github/workflows/watch.yml`
+
+This is the heart of the system. It's a GitHub Actions workflow that orchestrates the entire process.
+
+- **Trigger:** Runs on a schedule (`cron: '0 */4 * * *'`) and can be manually dispatched (`workflow_dispatch`).
+- **Concurrency Control:** Uses `concurrency.group` to ensure only one workflow instance runs at a time, preventing race conditions when committing data back to the repo.
+- **Steps:**
+    1.  Checks out the repository.
+    2.  Sets up Python and installs dependencies from `requirements.txt`.
+    3.  Runs the `policy_scraper.py` script to fetch the latest versions of policy pages, saving them to the `snapshots/` directory.
+    4.  Commits the new snapshots and captures the `COMMIT_SHA` of this commit.
+    5.  Runs the `diff_and_notify.py` script, passing the `COMMIT_SHA` as an environment variable.
+    6.  Commits the `summaries.json` and `run_log.json` files generated by the diff script.
+
+### `/scripts/diff_and_notify.py`
+
+This script is the brain of the system. It analyzes the changes committed by the scraper and generates the intelligence.
+
+- **Input:** Takes a `COMMIT_SHA` from the workflow.
+- **Logic:**
+    1.  Uses `git show` with the commit SHA to find which snapshot files were changed in that specific commit.
+    2.  For each changed file, it uses `git diff` to get the raw changes.
+    3.  It sends the diff to the Gemini API to generate a human-readable summary of what changed.
+    4.  It updates `summaries.json` with the new summary.
+    5.  It wraps the entire main execution in a `try...finally` block to ensure that it *always* writes a `run_log.json` file, even if a catastrophic, unhandled error occurs.
+
+### `/dashboard`
+
+Contains the static files for the Vercel-hosted frontend. It reads `run_log.json` and `summaries.json` to display the system status and policy change history.
+
+## 3. Data Flow
+
+1.  **Scrape:** `watch.yml` triggers `policy_scraper.py`.
+2.  **Snapshot:** `policy_scraper.py` saves new HTML files to `snapshots/{policy-name}/{timestamp}.html`.
+3.  **Commit Snapshots:** `watch.yml` commits the new snapshots to the repo.
+4.  **Diff & Summarize:** `watch.yml` triggers `diff_and_notify.py` with the commit SHA.
+5.  **Generate Artifacts:** `diff_and_notify.py` generates `summaries.json` and `run_log.json`.
+6.  **Commit Artifacts:** `watch.yml` commits the JSON artifacts to the repo.
+7.  **Display:** The user visits the Vercel dashboard, which fetches and renders the JSON artifacts.
+
+## 4. Key Artifacts
+
+- **`/snapshots`**: Contains the raw HTML captures of the policy pages, organized by policy and timestamped.
+- **`summaries.json`**: A JSON file containing the AI-generated summaries of all detected policy changes.
+- **`run_log.json`**: A log file for each run, capturing the status (success, failure, partial_failure), number of pages checked, changes found, and a list of any errors that occurred.
+
+
+**Last Updated:** 2025-07-19
+
 ## 1. System Overview
 
 The T&S Policy Watcher is an automated system designed to monitor changes in the public policy documents of various online platforms (e.g., TikTok, YouTube, Instagram). It periodically scrapes these pages, detects changes, uses a GenAI model to summarize the changes, and presents the information on a simple web dashboard.

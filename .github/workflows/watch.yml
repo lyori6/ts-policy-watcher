@@ -79,55 +79,35 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
-      # Debug: Environment investigation for silent crash
-      - name: 'DEBUG: Environment Investigation'
-        run: |
-          set -x
-          echo "=== ENVIRONMENT DEBUG ==="
-          echo "Current working directory:"
-          pwd
-          echo "---"
-          echo "Python version and location:"
-          which python
-          python --version
-          echo "---"
-          echo "File system structure:"
-          ls -laR
-          echo "---"
-          echo "Python import test:"
-          python -c "import sys; print('Python can run'); print('Python path:', sys.path)"
-          echo "---"
-          echo "Check if diff_and_notify.py can be found:"
-          if [ -f "scripts/diff_and_notify.py" ]; then
-            echo "✓ scripts/diff_and_notify.py exists"
-            ls -la scripts/diff_and_notify.py
-          else
-            echo "✗ scripts/diff_and_notify.py NOT FOUND"
-          fi
-          echo "=== END DEBUG ==="
-
-      # Step 7: Test with minimal script first
-      - name: 'Test Minimal Script'
-        env:
-          COMMIT_SHA: ${{ steps.commit.outputs.commit_sha }}
-        run: |
-          set -x
-          echo "Testing minimal script first..."
-          python scripts/diff_and_notify_minimal.py
-          echo "Minimal script completed. Now testing full script..."
-
-      # Step 8: Detect changes, generate summary, and set outputs
+      # Step 7: Detect changes, generate summary, and set outputs
       - name: 'Detect Changes and Notify'
         id: diff
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
           COMMIT_SHA: ${{ steps.commit.outputs.commit_sha }}
-        run: |
-          set -x
-          echo "COMMIT_SHA value: '$COMMIT_SHA'"
-          python scripts/diff_and_notify.py
+        run: python scripts/diff_and_notify.py
 
-      # --- PLACEHOLDER FOR NEXT STEPS ---
-      # In our next iteration, we will add steps here to:
-      # 1. Run the `create_github_issue.py` script if `failures.log` exists.
-      # 2. Run the `diff_and_notify.py` script to analyze the commit we just made.
+      # Step 9: Commit the generated summaries and run log
+      - name: 'Commit Summary Artifacts'
+        run: |
+          git config user.name "Policy Watch Bot"
+          git config user.email "bot@github.com"
+          git add summaries.json run_log.json
+          # Only commit if there are changes to these files
+          if ! git diff --staged --quiet; then
+            git commit -m "CHORE: Update policy summaries and run log"
+            echo "Successfully committed summary artifacts."
+          else
+            echo "No changes to summary artifacts."
+          fi
+
+      # Step 10: Pull and push all changes
+      - name: 'Pull Latest Changes Before Push'
+        run: git pull origin main --rebase
+
+      - name: 'Push Summary Changes'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
