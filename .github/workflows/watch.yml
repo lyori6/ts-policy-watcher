@@ -42,8 +42,15 @@ jobs:
           sudo -E $(which python) -m playwright install-deps
           python -m playwright install
 
-      # Step 4: Run the fetcher script
-      # This is the core action: executing our Python script to get the HTML snapshots.
+      # Step 4: DEBUG and Run the fetcher script
+      - name: 'DEBUG: List files in workspace'
+        run: |
+          echo "Current Working Directory:"
+          pwd
+          echo "---"
+          echo "Recursive file listing:"
+          ls -R
+
       - name: 'Run Fetcher Script'
         run: python scripts/fetch.py
 
