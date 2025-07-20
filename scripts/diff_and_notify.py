@@ -29,19 +29,26 @@ def get_changed_files(commit_sha):
         files = result.stdout.strip().split("\n")
         return [f for f in files if f and f.startswith("snapshots/") and f.endswith(".html")]
     except subprocess.CalledProcessError as e:
-        print(f"Could not get changed files: {e}. This may be the first run.", file=sys.stderr)
+        print(f"ERROR: 'git show' failed with exit code {e.returncode}", file=sys.stderr)
+        print(f"Stderr: {e.stderr}", file=sys.stderr)
         return []
     except Exception as e:
         print(f"An unexpected error occurred while getting changed files: {e}.", file=sys.stderr)
         return []
 
 def get_git_diff(file_path, commit_sha):
-    """Gets the raw diff for a single file from a specific commit."""
-    # This compares the commit with its direct parent
-    return subprocess.run(
-        ["git", "diff", f"{commit_sha}~1", commit_sha, "--", file_path],
-        capture_output=True, text=True, check=True
-    ).stdout
+    """Gets the diff for a specific file from a specific commit."""
+    try:
+        # Diff against the parent commit
+        result = subprocess.run(
+            ["git", "diff", f"{commit_sha}^!", "--", file_path],
+            capture_output=True, text=True, check=True
+        )
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"ERROR: 'git diff' failed for {file_path} with exit code {e.returncode}", file=sys.stderr)
+        print(f"Stderr: {e.stderr}", file=sys.stderr)
+        return ""
 
 def clean_html(html_content):
     """Strips all HTML tags to get clean text."""
