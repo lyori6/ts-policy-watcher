@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&S Policy Watcher Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>T&S Policy Watcher</h1>
+        <p>Intelligence Dashboard</p>
+    </header>
+
+    <main>
+        <section id="system-health">
+            <h2>System Health</h2>
+            <div id="health-status-container">
+                <p><strong>Last Run Status:</strong> <span id="last-run-status">Loading...</span></p>
+                <p><strong>Last Run Timestamp:</strong> <span id="last-run-timestamp">Loading...</span></p>
+                <div id="last-run-errors"></div>
+            </div>
+        </section>
+
+        <section id="policy-explorer">
+            <h2>Policy Explorer</h2>
+            <div id="policy-grid-container"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
