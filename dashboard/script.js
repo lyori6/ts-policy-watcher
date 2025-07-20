@@ -10,6 +10,7 @@ class PolicyWatcherDashboard {
 
         // Data containers
         this.runLogData = [];
+        this.runData = []; // Alias for compatibility
         this.summariesData = {};
         this.platformData = [];
         this.currentPlatform = 'all';
@@ -81,6 +82,7 @@ class PolicyWatcherDashboard {
             ]);
 
             this.runLogData = runLogResponse || [];
+            this.runData = this.runLogData; // Set alias for compatibility
             this.summariesData = summariesResponse || {};
             this.platformData = platformsResponse || [];
 
@@ -315,9 +317,114 @@ class PolicyWatcherDashboard {
     }
 
     renderMatrix() {
-        // Matrix is static HTML, no additional rendering needed
-        // The table is already populated in the HTML
-        console.log('Policy Matrix rendered (static content)');
+        this.renderMatrixTable();
+    }
+
+    renderMatrixTable() {
+        const tbody = document.getElementById('matrix-tbody');
+        if (!tbody) return;
+
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        let matrixHtml = '';
+
+        platforms.forEach(platform => {
+            const platformPolicies = this.platformData.filter(p => p.platform === platform);
+            
+            if (platformPolicies.length === 0) return;
+
+            // Platform header
+            const platformIcon = this.getPlatformIcon(platform);
+            matrixHtml += `
+                <tr class="platform-section">
+                    <td colspan="8" class="platform-header">
+                        <strong><i class="${platformIcon}"></i> ${platform}</strong>
+                    </td>
+                </tr>
+            `;
+
+            // Platform policies
+            platformPolicies.forEach(policy => {
+                const summaryData = this.summariesData[policy.slug] || {};
+                const lastUpdated = summaryData.last_updated ? 
+                    this.formatRelativeTime(summaryData.last_updated) : 'No data';
+                const hasData = summaryData.initial_summary ? 'success' : 'warning';
+                const statusText = summaryData.initial_summary ? 'Tracked' : 'Pending';
+                
+                // Extract key info from summary for display
+                const coverage = this.extractCoverageAreas(summaryData.initial_summary);
+                const keyFeatures = this.extractKeyFeatures(summaryData.initial_summary);
+                const enforcement = this.extractEnforcementInfo(summaryData.initial_summary);
+
+                matrixHtml += `
+                    <tr>
+                        <td>${platform}</td>
+                        <td>${policy.name}</td>
+                        <td><span class="status-badge ${hasData}">${statusText}</span></td>
+                        <td>${coverage}</td>
+                        <td>${keyFeatures}</td>
+                        <td>${enforcement}</td>
+                        <td>${lastUpdated}</td>
+                        <td><a href="${policy.url}" target="_blank" class="link-btn">View</a></td>
+                    </tr>
+                `;
+            });
+        });
+
+        tbody.innerHTML = matrixHtml;
+    }
+
+    getPlatformIcon(platform) {
+        const icons = {
+            'TikTok': 'fab fa-tiktok',
+            'YouTube': 'fab fa-youtube',
+            'Instagram': 'fab fa-instagram', 
+            'Whatnot': 'fas fa-gavel'
+        };
+        return icons[platform] || 'fas fa-globe';
+    }
+
+    extractCoverageAreas(summary) {
+        if (!summary) return 'No data';
+        
+        const keywords = ['harassment', 'blocking', 'moderation', 'community', 'content', 'safety', 'violence', 'hate'];
+        const found = keywords.filter(keyword => 
+            summary.toLowerCase().includes(keyword)
+        ).slice(0, 3);
+        
+        return found.length > 0 ? 
+            found.map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ') : 
+            'General policies';
+    }
+
+    extractKeyFeatures(summary) {
+        if (!summary) return 'No data';
+        
+        // Look for specific feature mentions
+        const features = [];
+        if (summary.toLowerCase().includes('block')) features.push('User blocking');
+        if (summary.toLowerCase().includes('report')) features.push('Reporting system');
+        if (summary.toLowerCase().includes('moderat')) features.push('Content moderation');
+        if (summary.toLowerCase().includes('appeal')) features.push('Appeals process');
+        
+        return features.length > 0 ? features.slice(0, 2).join(', ') : 'Standard policies';
+    }
+
+    extractEnforcementInfo(summary) {
+        if (!summary) return 'No data';
+        
+        // Look for enforcement action mentions
+        const actions = [];
+        if (summary.toLowerCase().includes('removal') || summary.toLowerCase().includes('remove')) {
+            actions.push('Content removal');
+        }
+        if (summary.toLowerCase().includes('suspension') || summary.toLowerCase().includes('ban')) {
+            actions.push('Account suspension');
+        }
+        if (summary.toLowerCase().includes('warning')) {
+            actions.push('Warnings');
+        }
+        
+        return actions.length > 0 ? actions.slice(0, 2).join(', ') : 'Standard enforcement';
     }
 
     renderPlatformActivity() {
@@ -416,7 +523,96 @@ class PolicyWatcherDashboard {
         
         trendContainer.innerHTML = `<p>${trendMessage}</p>`;
 
-        // Gap Analysis & Strategic Implications are static for now, populated via HTML.
+        // --- Platform Activity ---
+        this.renderPlatformActivityInsight();
+
+        // --- Focus Areas ---
+        this.renderFocusAreasInsight();
+    }
+
+    renderPlatformActivityInsight() {
+        const activityContainer = document.getElementById('insight-platform-activity');
+        if (!activityContainer) return;
+
+        const platformStats = {};
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        
+        // Initialize platform counts
+        platforms.forEach(platform => {
+            platformStats[platform] = 0;
+        });
+
+        // Count policies per platform
+        for (const slug in this.summariesData) {
+            const policy = this.summariesData[slug];
+            const platformName = this.findPlatformName(slug);
+            if (platformStats.hasOwnProperty(platformName)) {
+                platformStats[platformName]++;
+            }
+        }
+
+        let activityHtml = '<div class="platform-comparison">';
+        for (const [platform, count] of Object.entries(platformStats)) {
+            const percentage = Math.round((count / Object.values(platformStats).reduce((a, b) => a + b, 0)) * 100) || 0;
+            activityHtml += `
+                <div class="platform-stat">
+                    <span class="platform-name">${platform}</span>
+                    <span class="policy-count">${count} policies</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+        activityHtml += '</div>';
+        
+        activityContainer.innerHTML = activityHtml;
+    }
+
+    renderFocusAreasInsight() {
+        const focusContainer = document.getElementById('insight-focus-areas');
+        if (!focusContainer) return;
+
+        const blockingPolicies = [];
+        const moderationPolicies = [];
+
+        for (const slug in this.summariesData) {
+            const policy = this.summariesData[slug];
+            if (slug.includes('block') || policy.policy_name.toLowerCase().includes('block')) {
+                blockingPolicies.push(this.findPlatformName(slug));
+            }
+            if (slug.includes('moderat') || slug.includes('harassment') || policy.policy_name.toLowerCase().includes('moderat')) {
+                moderationPolicies.push(this.findPlatformName(slug));
+            }
+        }
+
+        const uniqueBlockingPlatforms = [...new Set(blockingPolicies)].filter(p => p !== 'Unknown');
+        const uniqueModerationPlatforms = [...new Set(moderationPolicies)].filter(p => p !== 'Unknown');
+
+        let focusHtml = `
+            <div class="focus-area">
+                <strong>User Blocking:</strong> 
+                ${uniqueBlockingPlatforms.length > 0 ? 
+                    `${uniqueBlockingPlatforms.join(', ')} have dedicated blocking policies` : 
+                    'Limited blocking policy coverage detected'}
+            </div>
+            <div class="focus-area">
+                <strong>Content Moderation:</strong> 
+                ${uniqueModerationPlatforms.length > 0 ? 
+                    `${uniqueModerationPlatforms.join(', ')} have detailed moderation frameworks` : 
+                    'Basic moderation coverage across platforms'}
+            </div>
+        `;
+        
+        focusContainer.innerHTML = focusHtml;
+    }
+
+    findPlatformName(slug) {
+        if (slug.startsWith('tiktok-')) return 'TikTok';
+        if (slug.startsWith('whatnot-')) return 'Whatnot';
+        if (slug.startsWith('youtube-')) return 'YouTube';
+        if (slug.startsWith('instagram-')) return 'Instagram';
+        return 'Unknown';
     }
 
     // Utility Functions
@@ -644,93 +840,6 @@ function exportMatrix() {
     link.click();
     document.body.removeChild(link);
 }
-
-    updateSystemStatus() {
-        const indicator = document.getElementById('system-status-indicator');
-        const icon = document.getElementById('status-icon');
-        const text = document.getElementById('status-text');
-
-        if (!indicator || !icon || !text) return;
-
-        if (!this.runLogData || this.runLogData.length === 0) {
-            indicator.className = 'stat-card';
-            icon.innerHTML = '<i class="fas fa-question-circle"></i>';
-            text.textContent = 'Unknown';
-            return;
-        }
-
-        const lastRun = this.runLogData[0];
-        const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
-
-        if (isSuccess) {
-            indicator.className = 'stat-card status-success';
-            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-            text.textContent = 'Operational';
-        } else {
-            indicator.className = 'stat-card status-error';
-            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-            text.textContent = 'Issues Detected';
-        }
-    }
-
-    setupModal() {
-        const modal = document.getElementById('run-log-modal');
-        const statusIndicator = document.getElementById('system-status-indicator');
-        const closeButton = document.querySelector('.modal .close-button');
-
-        if (!modal || !statusIndicator || !closeButton) return;
-
-        statusIndicator.onclick = () => {
-            modal.style.display = 'block';
-            this.renderRunLogModal();
-        }
-
-        closeButton.onclick = () => {
-            modal.style.display = 'none';
-        }
-
-        window.onclick = (event) => {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-    }
-
-    renderRunLogModal() {
-        const container = document.getElementById('run-log-container');
-        if (!this.runLogData || this.runLogData.length === 0) {
-            container.innerHTML = '<p>No run log data available.</p>';
-            return;
-        }
-
-        const logHtml = this.runLogData.slice(0, 20).map(run => {
-            const isSuccess = run.status === 'success' && (!run.errors || run.errors.length === 0);
-            const statusClass = isSuccess ? 'success' : 'error';
-            const statusIcon = isSuccess ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-exclamation-triangle text-error"></i>';
-            const errorsHtml = run.errors && run.errors.length > 0
-                ? `<div class="error-log"><strong>Errors:</strong><ul>${run.errors.map(e => `<li><b>${e.slug}:</b> ${e.error}</li>`).join('')}</ul></div>`
-                : '';
-
-            return `
-                <div class="log-entry log-${statusClass}">
-                    <div class="log-entry-header">
-                        <span class="log-status">${statusIcon} ${this.capitalizeStatus(run.status)}</span>
-                        <span class="log-timestamp">${this.formatDateTime(run.timestamp_utc)}</span>
-                    </div>
-                    <div class="log-entry-body">
-                        <span>Checked: <b>${run.pages_checked}</b></span>
-                        <span>|</span>
-                        <span>Found: <b>${run.changes_found}</b></span>
-                        <span>|</span>
-                        <span>Commit: <a href="https://github.com/lyori6/ts-policy-watcher/commit/${run.commit_sha}" target="_blank" rel="noopener noreferrer">${run.commit_sha.substring(0, 7)}</a></span>
-                    </div>
-                    ${errorsHtml}
-                </div>
-            `;
-        }).join('');
-
-        container.innerHTML = `<div class="run-log-list">${logHtml}</div>`;
-    }
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
