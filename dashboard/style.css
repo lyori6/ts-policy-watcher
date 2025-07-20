@@ -818,6 +818,156 @@ main {
     }
 }
 
+/* Policy Matrix Styles */
+.matrix-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.export-btn {
+    background: linear-gradient(135deg, var(--success-color), #2ecc71);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.export-btn:hover {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    transform: translateY(-1px);
+}
+
+.matrix-table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 0.9rem;
+}
+
+.matrix-table th {
+    background: linear-gradient(135deg, var(--primary-color), var(--dark-gray));
+    color: white;
+    padding: 1rem 0.8rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-bottom: 2px solid var(--secondary-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.matrix-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #e0e6ed;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.matrix-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.platform-section {
+    background: linear-gradient(135deg, #ecf0f1, #d5dbdb) !important;
+}
+
+.platform-section:hover {
+    background: linear-gradient(135deg, #d5dbdb, #bdc3c7) !important;
+}
+
+.platform-header {
+    padding: 1rem !important;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color) !important;
+}
+
+.platform-header i {
+    margin-right: 0.5rem;
+    color: var(--secondary-color);
+}
+
+.matrix-table .status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.matrix-table .status-badge.success {
+    background: #d5f4e6;
+    color: var(--success-color);
+    border: 1px solid #a3e4d7;
+}
+
+.matrix-table .status-badge.warning {
+    background: #fdf6e3;
+    color: var(--warning-color);
+    border: 1px solid #f7dc6f;
+}
+
+.matrix-table .status-badge.error {
+    background: #fadbd8;
+    color: var(--danger-color);
+    border: 1px solid #f1948a;
+}
+
+.link-btn {
+    background: linear-gradient(135deg, var(--secondary-color), #5dade2);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.link-btn:hover {
+    background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* Matrix Table Responsive */
+@media (max-width: 768px) {
+    .matrix-table {
+        font-size: 0.8rem;
+    }
+    
+    .matrix-table th,
+    .matrix-table td {
+        padding: 0.6rem 0.4rem;
+    }
+    
+    .platform-header {
+        font-size: 1rem;
+    }
+    
+    .export-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
 /* Utility Classes */
 .text-center { text-align: center; }
 .text-right { text-align: right; }

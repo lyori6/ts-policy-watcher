@@ -42,6 +42,9 @@
         <button class="nav-tab" data-tab="analytics">
             <i class="fas fa-chart-line"></i> Analytics
         </button>
+        <button class="nav-tab" data-tab="matrix">
+            <i class="fas fa-table"></i> Policy Matrix
+        </button>
     </nav>
 
     <main>
@@ -170,6 +173,217 @@
                     </div>
                     <div class="card-body">
                         <div id="performance-timeline"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Policy Matrix Tab -->
+        <section id="matrix" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-table"></i> Static Policy Matrix</h2>
+                    <div class="matrix-controls">
+                        <button class="export-btn" onclick="exportMatrix()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="matrix-table-container">
+                        <table id="policy-matrix-table" class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Policy Name</th>
+                                    <th>Status</th>
+                                    <th>Coverage Areas</th>
+                                    <th>Key Features</th>
+                                    <th>Enforcement Actions</th>
+                                    <th>Last Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matrix-tbody">
+                                <!-- TikTok Policies -->
+                                <tr class="platform-section">
+                                    <td colspan="8" class="platform-header">
+                                        <strong><i class="fab fa-tiktok"></i> TikTok</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>TikTok</td>
+                                    <td>Community Guidelines</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Violence, Hate Speech, Harassment, Self-harm, Dangerous Activities, Misinformation</td>
+                                    <td>Three-pronged moderation: Remove, Restrict (under 18), Recommendation ineligible</td>
+                                    <td>Content removal, Account suspension, Community guidelines strikes</td>
+                                    <td>May 17, 2024</td>
+                                    <td><a href="https://www.tiktok.com/community-guidelines/en/" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TikTok</td>
+                                    <td>LIVE Moderation</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Live stream content moderation, Creator controls</td>
+                                    <td>Creator moderators, Age controls (18+), Comment filtering, Keyword blocking</td>
+                                    <td>Mute, Block viewers, Report violations</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://support.tiktok.com/en/live-gifts-wallet/tiktok-live/moderating-on-tiktok-live" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TikTok</td>
+                                    <td>Shop Prohibited Products</td>
+                                    <td><span class="status-badge warning">Incomplete</span></td>
+                                    <td>E-commerce, Prohibited items</td>
+                                    <td>Product restrictions, Seller guidelines</td>
+                                    <td>Product removal, Seller account restrictions</td>
+                                    <td>Unknown</td>
+                                    <td><a href="https://seller-us.tiktok.com/university/rule-detail/10003057" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+
+                                <!-- Whatnot Policies -->
+                                <tr class="platform-section">
+                                    <td colspan="8" class="platform-header">
+                                        <strong><i class="fas fa-gavel"></i> Whatnot</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Whatnot</td>
+                                    <td>Hate and Harassment Policy</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Harassment, Sexual harassment, Hate speech, Off-platform abuse</td>
+                                    <td>Targeted protection, Historical context exceptions, Self-referential slur allowances</td>
+                                    <td>Account removal, Content moderation</td>
+                                    <td>Active</td>
+                                    <td><a href="https://help.whatnot.com/hc/en-us/articles/29262074925069-Hate-and-Harassment-Policy" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Whatnot</td>
+                                    <td>User Blocking</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>User safety, Interaction controls</td>
+                                    <td>Permanent blocking, Multi-feature blocking (DMs, follows, streams, purchases)</td>
+                                    <td>User-initiated blocking, No unblock feature</td>
+                                    <td>Active</td>
+                                    <td><a href="https://help.whatnot.com/hc/en-us/articles/9816865522317-Blocking-a-User" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Whatnot</td>
+                                    <td>Buyer Protection</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Purchase protection, Refund policies</td>
+                                    <td>30-day protection, Category-specific deadlines, EU/UK withdrawal rights</td>
+                                    <td>Refunds, Return requirements, Fraud prevention</td>
+                                    <td>Active</td>
+                                    <td><a href="https://help.whatnot.com/hc/en-us/articles/360061194552-Whatnot-Buyer-Protection-Policy" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Whatnot</td>
+                                    <td>Enforcement Actions</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Policy violations, Account performance</td>
+                                    <td>Graduated penalties, Account health dashboard, Performance tracking</td>
+                                    <td>Warnings, Suspensions, Selling bans, Permanent bans</td>
+                                    <td>Active</td>
+                                    <td><a href="https://help.whatnot.com/hc/en-us/articles/5380505120269-What-Actions-We-Take" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Whatnot</td>
+                                    <td>Reporting System</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>User reporting, Investigation process</td>
+                                    <td>In-app reporting, Email reporting, Anonymous reports</td>
+                                    <td>Trust & Safety investigation, Proactive monitoring</td>
+                                    <td>Active</td>
+                                    <td><a href="https://help.whatnot.com/hc/en-us/articles/5380381014925-How-To-Report-A-User-How-We-Investigate" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Whatnot</td>
+                                    <td>Moderator Guidelines</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Stream moderation, Community management</td>
+                                    <td>Fair moderation, Seller controls, User removal powers</td>
+                                    <td>Stream-specific user removal, Chat management</td>
+                                    <td>Active</td>
+                                    <td><a href="https://help.whatnot.com/hc/en-us/articles/6212550318477-Moderator-Guidelines" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+
+                                <!-- YouTube Policies -->
+                                <tr class="platform-section">
+                                    <td colspan="8" class="platform-header">
+                                        <strong><i class="fab fa-youtube"></i> YouTube</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>YouTube</td>
+                                    <td>Community Guidelines</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Content moderation, Creator support, Abuse prevention</td>
+                                    <td>Automated + human review, EDSA exceptions, YPP requirements</td>
+                                    <td>Content removal, YPP suspension, Appeals process</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://www.youtube.com/howyoutubeworks/policies/community-guidelines/" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>YouTube</td>
+                                    <td>Harassment & Cyberbullying</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Harassment, Doxxing, Threats, Stalking, Sexual harassment</td>
+                                    <td>Protected group focus, Minor protection, EDSA exceptions</td>
+                                    <td>Content removal, Strikes, Channel termination, Policy training</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://support.google.com/youtube/answer/2802268" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>YouTube</td>
+                                    <td>Shopping Ads Policies</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Advertisement content, Shopping platform integration</td>
+                                    <td>AI + human review, Restricted content categories, Technical requirements</td>
+                                    <td>Ad disapproval, Account suspension, Appeals process</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://support.google.com/merchants/answer/6149970" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+
+                                <!-- Instagram Policies -->
+                                <tr class="platform-section">
+                                    <td colspan="8" class="platform-header">
+                                        <strong><i class="fab fa-instagram"></i> Instagram</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Instagram</td>
+                                    <td>Community Guidelines</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Content policies, Community standards</td>
+                                    <td>Comprehensive content moderation, Safety tools</td>
+                                    <td>Content removal, Account restrictions, Community strikes</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://help.instagram.com/477434105621119" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Instagram</td>
+                                    <td>Appeal Process</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Content decision appeals, Account recovery</td>
+                                    <td>Appeal system, Decision review process</td>
+                                    <td>Content restoration, Account reinstatement</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://help.instagram.com/675885993348720" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Instagram</td>
+                                    <td>Commerce Policies</td>
+                                    <td><span class="status-badge success">Active</span></td>
+                                    <td>Shopping features, Business transactions</td>
+                                    <td>Commerce guidelines, Business account requirements</td>
+                                    <td>Feature restrictions, Business account limitations</td>
+                                    <td>Ongoing</td>
+                                    <td><a href="https://help.instagram.com/1627591227523036" target="_blank" class="link-btn">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

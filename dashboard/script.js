@@ -65,6 +65,9 @@ class PolicyWatcherDashboard {
             case 'analytics':
                 this.renderAnalytics();
                 break;
+            case 'matrix':
+                this.renderMatrix();
+                break;
         }
     }
 
@@ -324,6 +327,12 @@ class PolicyWatcherDashboard {
         this.renderPerformanceTrends();
     }
 
+    renderMatrix() {
+        // Matrix is static HTML, no additional rendering needed
+        // The table is already populated in the HTML
+        console.log('Policy Matrix rendered (static content)');
+    }
+
     renderPlatformActivity() {
         const container = document.getElementById('platform-activity-chart');
         const platformStats = this.calculatePlatformStats();
@@ -567,6 +576,44 @@ function toggleSummary(id, button) {
         button.innerHTML = '<i class="fas fa-chevron-up"></i> Read Less';
         button.classList.add('expanded');
     }
+}
+
+// Global function for exporting matrix to CSV
+function exportMatrix() {
+    const table = document.getElementById('policy-matrix-table');
+    const rows = table.querySelectorAll('tbody tr:not(.platform-section)');
+    
+    // CSV headers
+    const headers = ['Platform', 'Policy Name', 'Status', 'Coverage Areas', 'Key Features', 'Enforcement Actions', 'Last Updated', 'URL'];
+    let csvContent = headers.join(',') + '\n';
+    
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 7) {
+            const rowData = [
+                `"${cells[0].textContent.trim()}"`,
+                `"${cells[1].textContent.trim()}"`,
+                `"${cells[2].textContent.trim()}"`,
+                `"${cells[3].textContent.trim()}"`,
+                `"${cells[4].textContent.trim()}"`,
+                `"${cells[5].textContent.trim()}"`,
+                `"${cells[6].textContent.trim()}"`,
+                `"${cells[7].querySelector('a') ? cells[7].querySelector('a').href : ''}"`
+            ];
+            csvContent += rowData.join(',') + '\n';
+        }
+    });
+    
+    // Create and download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `policy-matrix-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // Initialize dashboard when DOM is loaded
