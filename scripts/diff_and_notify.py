@@ -31,6 +31,9 @@ def get_changed_files():
     except subprocess.CalledProcessError as e:
         print(f"Could not get changed files: {e}. This may be the first run.", file=sys.stderr)
         return []
+    except Exception as e:
+        print(f"An unexpected error occurred while getting changed files: {e}.", file=sys.stderr)
+        return []
 
 def get_git_diff(file_path):
     """Gets the raw diff for a single file from the last commit."""
@@ -142,15 +145,18 @@ def main():
         
         if summary_text:
             if is_new_policy:
+                # Create a new entry for a policy seen for the first time
                 summaries_data[slug] = {
                     "initial_summary": summary_text,
-                    "last_update_summary": "",
-                    "last_update_timestamp_utc": ""
+                    "last_update_summary": "", # No updates yet
+                    "last_update_timestamp_utc": datetime.utcnow().isoformat() + 'Z'
                 }
-            
-            summaries_data[slug]['last_update_summary'] = summary_text
-            summaries_data[slug]['last_update_timestamp_utc'] = datetime.utcnow().isoformat() + 'Z'
-            print(f"Generated {'initial' if is_new_policy else 'update'} summary for: {slug}")
+                print(f"Generated initial summary for new policy: {slug}")
+            else:
+                # Update the entry for an existing policy
+                summaries_data[slug]['last_update_summary'] = summary_text
+                summaries_data[slug]['last_update_timestamp_utc'] = datetime.utcnow().isoformat() + 'Z'
+                print(f"Generated update summary for existing policy: {slug}")
             update_count += 1
 
     # Save the updated summaries back to the file
