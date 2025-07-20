@@ -122,11 +122,12 @@ class PolicyWatcherDashboard {
             const now = new Date();
             const hoursSince = Math.round((now - lastRun) / (1000 * 60 * 60));
             document.getElementById('last-check').textContent = `${hoursSince}`;
-            this.updateSystemStatus();
         } else {
             document.getElementById('last-check').textContent = '-';
-            this.updateSystemStatus(); // Show unknown status
         }
+        
+        // Always update system status after data is loaded
+        this.updateSystemStatus();
     }
 
     renderOverview() {
@@ -228,15 +229,17 @@ class PolicyWatcherDashboard {
                     </div>
                     
                     <div class="summary initial-summary">
-                        <div class="summary-content" data-full="${policy.slug}-full">
-                            ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 300))}
-                            ${summaryData.initial_summary.length > 300 ? `
-                                <button class="read-more-btn" onclick="toggleSummary('${policy.slug}-full', this)">
-                                    <i class="fas fa-chevron-down"></i> Read More
-                                </button>
-                                <div class="full-content" style="display: none;">
+                        <div class="summary-content" id="summary-${policy.slug}">
+                            <div class="summary-preview">
+                                ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 200))}
+                            </div>
+                            ${summaryData.initial_summary && summaryData.initial_summary.length > 200 ? `
+                                <div class="summary-full" style="display: none;">
                                     ${this.renderMarkdown(summaryData.initial_summary)}
                                 </div>
+                                <button class="expand-btn" onclick="toggleSummary('${policy.slug}', this)">
+                                    <i class="fas fa-chevron-down"></i> Show Full Summary
+                                </button>
                             ` : ''}
                         </div>
                     </div>
@@ -252,11 +255,11 @@ class PolicyWatcherDashboard {
                     
                     <div class="policy-actions">
                         <a href="https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${policy.slug}" 
-                           target="_blank" class="action-btn history-btn">
-                            <i class="fas fa-history"></i> History
+                           target="_blank" class="action-btn secondary-btn" title="View snapshot history">
+                            <i class="fas fa-clock"></i> History Log
                         </a>
-                        <a href="${policy.url}" target="_blank" class="action-btn live-btn">
-                            <i class="fas fa-external-link-alt"></i> Live Page
+                        <a href="${policy.url}" target="_blank" class="action-btn primary-btn" title="Visit current policy page">
+                            <i class="fas fa-external-link-alt"></i> Visit Page
                         </a>
                     </div>
                 </div>
@@ -287,23 +290,21 @@ class PolicyWatcherDashboard {
 
         const rowsHtml = filteredRuns.map((run, index) => {
             const statusClass = this.getStatusClass(run.status);
-            const duration = index < filteredRuns.length - 1 ? 
-                this.calculateDuration(run.timestamp_utc, filteredRuns[index + 1].timestamp_utc) : 
-                '-';
+            const timeAgo = this.formatRelativeTime(run.timestamp_utc);
             
             return `
                 <tr>
                     <td>${this.formatDateTime(run.timestamp_utc)}</td>
                     <td>
                         <div class="status-cell">
-                            <div class="status-icon ${statusClass}"></div>
+                            <div class="status-icon ${statusClass}" title="${this.getStatusTooltip(run.status)}"></div>
                             ${this.capitalizeStatus(run.status)}
                         </div>
                     </td>
-                    <td>${run.pages_checked}</td>
-                    <td>${run.changes_found}</td>
+                    <td>${run.pages_checked || 0}</td>
+                    <td>${run.changes_found || 0}</td>
                     <td>${run.errors ? run.errors.length : 0}</td>
-                    <td>${duration}</td>
+                    <td>${timeAgo}</td>
                 </tr>
             `;
         }).join('');
@@ -573,36 +574,81 @@ class PolicyWatcherDashboard {
         const focusContainer = document.getElementById('insight-focus-areas');
         if (!focusContainer) return;
 
-        const blockingPolicies = [];
-        const moderationPolicies = [];
+        const capabilities = {
+            blocking: { platforms: [], features: [] },
+            muting: { platforms: [], features: [] },
+            reporting: { platforms: [], features: [] },
+            moderation: { platforms: [], features: [] }
+        };
 
         for (const slug in this.summariesData) {
             const policy = this.summariesData[slug];
-            if (slug.includes('block') || policy.policy_name.toLowerCase().includes('block')) {
-                blockingPolicies.push(this.findPlatformName(slug));
+            const platform = this.findPlatformName(slug);
+            const summary = policy.initial_summary?.toLowerCase() || '';
+
+            // Check for blocking capabilities
+            if (slug.includes('block') || summary.includes('block')) {
+                capabilities.blocking.platforms.push(platform);
+                if (summary.includes('permanent')) capabilities.blocking.features.push('permanent blocking');
+                if (summary.includes('dm') || summary.includes('message')) capabilities.blocking.features.push('message blocking');
+                if (summary.includes('purchase') || summary.includes('buy')) capabilities.blocking.features.push('purchase blocking');
             }
-            if (slug.includes('moderat') || slug.includes('harassment') || policy.policy_name.toLowerCase().includes('moderat')) {
-                moderationPolicies.push(this.findPlatformName(slug));
+
+            // Check for muting/throttling
+            if (summary.includes('mute') || summary.includes('silence') || summary.includes('throttle')) {
+                capabilities.muting.platforms.push(platform);
+                if (summary.includes('temporary')) capabilities.muting.features.push('temporary muting');
+                if (summary.includes('live') || summary.includes('stream')) capabilities.muting.features.push('live stream muting');
+            }
+
+            // Check for reporting systems  
+            if (slug.includes('report') || summary.includes('report')) {
+                capabilities.reporting.platforms.push(platform);
+                if (summary.includes('anonymous')) capabilities.reporting.features.push('anonymous reporting');
+                if (summary.includes('email')) capabilities.reporting.features.push('email reporting');
+            }
+
+            // Check for moderation tools
+            if (slug.includes('moderat') || summary.includes('moderat')) {
+                capabilities.moderation.platforms.push(platform);
+                if (summary.includes('keyword')) capabilities.moderation.features.push('keyword filtering');
+                if (summary.includes('age') || summary.includes('18+')) capabilities.moderation.features.push('age controls');
             }
         }
 
-        const uniqueBlockingPlatforms = [...new Set(blockingPolicies)].filter(p => p !== 'Unknown');
-        const uniqueModerationPlatforms = [...new Set(moderationPolicies)].filter(p => p !== 'Unknown');
+        let focusHtml = '<div class="capabilities-grid">';
+        
+        if ([...new Set(capabilities.blocking.platforms)].length > 0) {
+            focusHtml += `
+                <div class="capability-item">
+                    <div class="capability-header">🚫 User Blocking</div>
+                    <div class="platforms">${[...new Set(capabilities.blocking.platforms)].filter(p => p !== 'Unknown').join(', ')}</div>
+                    <div class="features">${[...new Set(capabilities.blocking.features)].slice(0, 2).join(', ')}</div>
+                </div>
+            `;
+        }
 
-        let focusHtml = `
-            <div class="focus-area">
-                <strong>User Blocking:</strong> 
-                ${uniqueBlockingPlatforms.length > 0 ? 
-                    `${uniqueBlockingPlatforms.join(', ')} have dedicated blocking policies` : 
-                    'Limited blocking policy coverage detected'}
-            </div>
-            <div class="focus-area">
-                <strong>Content Moderation:</strong> 
-                ${uniqueModerationPlatforms.length > 0 ? 
-                    `${uniqueModerationPlatforms.join(', ')} have detailed moderation frameworks` : 
-                    'Basic moderation coverage across platforms'}
-            </div>
-        `;
+        if ([...new Set(capabilities.muting.platforms)].length > 0) {
+            focusHtml += `
+                <div class="capability-item">
+                    <div class="capability-header">🔇 Muting/Throttling</div>
+                    <div class="platforms">${[...new Set(capabilities.muting.platforms)].filter(p => p !== 'Unknown').join(', ')}</div>
+                    <div class="features">${[...new Set(capabilities.muting.features)].slice(0, 2).join(', ')}</div>
+                </div>
+            `;
+        }
+
+        if ([...new Set(capabilities.reporting.platforms)].length > 0) {
+            focusHtml += `
+                <div class="capability-item">
+                    <div class="capability-header">📢 Reporting Systems</div>
+                    <div class="platforms">${[...new Set(capabilities.reporting.platforms)].filter(p => p !== 'Unknown').join(', ')}</div>
+                    <div class="features">${[...new Set(capabilities.reporting.features)].slice(0, 2).join(', ')}</div>
+                </div>
+            `;
+        }
+
+        focusHtml += '</div>';
         
         focusContainer.innerHTML = focusHtml;
     }
@@ -681,6 +727,17 @@ class PolicyWatcherDashboard {
         return 'error';
     }
 
+    getStatusTooltip(status) {
+        const tooltips = {
+            'success': 'All policy pages were successfully checked and processed',
+            'partial_failure': 'Some policy pages had issues but others were processed successfully',
+            'failure': 'The monitoring run failed - check the error details',
+            'pending': 'Run is currently in progress or queued',
+            'error': 'An error occurred during the monitoring run'
+        };
+        return tooltips[status] || 'Status information not available';
+    }
+
     capitalizeStatus(status) {
         return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
@@ -708,11 +765,6 @@ class PolicyWatcherDashboard {
         return diffHours;
     }
 
-    calculateDuration(start, end) {
-        const diffMs = new Date(start) - new Date(end);
-        const diffMin = Math.floor(diffMs / (1000 * 60));
-        return `${diffMin} min`;
-    }
 
     truncateText(text, maxLength) {
         if (!text || text.length <= maxLength) return text || '';
@@ -787,18 +839,21 @@ class PolicyWatcherDashboard {
 }
 
 // Global function for summary toggling
-function toggleSummary(id, button) {
-    const summaryContent = document.querySelector(`[data-full="${id}"]`);
-    const fullContent = summaryContent.querySelector('.full-content');
+function toggleSummary(slug, button) {
+    const summaryContainer = document.getElementById(`summary-${slug}`);
+    const preview = summaryContainer.querySelector('.summary-preview');
+    const fullContent = summaryContainer.querySelector('.summary-full');
     const isExpanded = fullContent.style.display === 'block';
     
     if (isExpanded) {
+        preview.style.display = 'block';
         fullContent.style.display = 'none';
-        button.innerHTML = '<i class="fas fa-chevron-down"></i> Read More';
+        button.innerHTML = '<i class="fas fa-chevron-down"></i> Show Full Summary';
         button.classList.remove('expanded');
     } else {
+        preview.style.display = 'none';
         fullContent.style.display = 'block';
-        button.innerHTML = '<i class="fas fa-chevron-up"></i> Read Less';
+        button.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
         button.classList.add('expanded');
     }
 }
