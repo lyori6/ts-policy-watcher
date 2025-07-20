@@ -108,6 +108,7 @@ class PolicyWatcherDashboard {
 
     renderDashboard() {
         this.updateHeaderStats();
+        this.renderIntelligencePanel(); // New panel
         this.renderOverview();
     }
 
@@ -388,6 +389,48 @@ class PolicyWatcherDashboard {
         `;
 
         container.innerHTML = errorsHtml;
+    }
+
+    renderIntelligencePanel() {
+        // --- Trend Alert --- 
+        const trendContainer = document.getElementById('insight-trend-alert');
+        if (!trendContainer) return; // Exit if the panel isn't in the HTML
+
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        let recentChangesCount = 0;
+        const platformActivity = {};
+
+        for (const slug in this.summariesData) {
+            const policy = this.summariesData[slug];
+            if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
+                const lastUpdatedDate = new Date(policy.last_updated);
+                if (lastUpdatedDate > sevenDaysAgo) {
+                    recentChangesCount++;
+                    if (platformActivity[policy.platform]) {
+                        platformActivity[policy.platform]++;
+                    } else {
+                        platformActivity[policy.platform] = 1;
+                    }
+                }
+            }
+        }
+
+        let trendMessage = '';
+        if (recentChangesCount > 0) {
+            const mostActivePlatform = Object.keys(platformActivity).reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b, '');
+            trendMessage = `<strong>${recentChangesCount}</strong> policy update${recentChangesCount > 1 ? 's' : ''} detected in the last 7 days.`;
+            if (mostActivePlatform) {
+                trendMessage += ` <strong>${mostActivePlatform}</strong> was the most active platform.`;
+            }
+        } else {
+            trendMessage = 'No policy changes detected in the last 7 days. The landscape is currently stable.';
+        }
+        
+        trendContainer.innerHTML = `<p>${trendMessage}</p>`;
+
+        // Gap Analysis & Strategic Implications are static for now, populated via HTML.
     }
 
     // Utility Functions
