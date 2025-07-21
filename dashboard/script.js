@@ -452,6 +452,11 @@ class PolicyWatcherDashboard {
                 const coverage = this.extractCoverageAreas(summaryData.initial_summary);
                 const keyFeatures = this.extractKeyFeatures(summaryData.initial_summary);
                 const enforcement = this.extractEnforcementInfo(summaryData.initial_summary);
+                
+                // Show view button only if we have data
+                const viewButton = summaryData.initial_summary ? 
+                    `<a href="${policy.url}" target="_blank" class="link-btn">View</a>` : 
+                    `<span class="link-btn disabled">No Data</span>`;
 
                 matrixHtml += `
                     <tr>
@@ -462,7 +467,7 @@ class PolicyWatcherDashboard {
                         <td>${keyFeatures}</td>
                         <td>${enforcement}</td>
                         <td>${lastUpdated}</td>
-                        <td><a href="${policy.url}" target="_blank" class="link-btn">View</a></td>
+                        <td>${viewButton}</td>
                     </tr>
                 `;
             });
@@ -673,8 +678,7 @@ class PolicyWatcherDashboard {
 
         const focusHtml = `
             <div class="focus-summary">
-                <p><strong>Monitoring live commerce platform policies</strong> to identify shifts in user safety controls, content moderation approaches, and enforcement mechanisms across TikTok, YouTube, Instagram, and Whatnot.</p>
-                <p>Key focus: <em>User blocking systems, content reporting workflows, and marketplace safety standards</em> that impact creator monetization and audience protection.</p>
+                <p><strong>Monitoring live commerce platform policies</strong> across TikTok, YouTube, Instagram, and Whatnot to identify shifts in user safety controls and enforcement mechanisms.</p>
             </div>
         `;
         

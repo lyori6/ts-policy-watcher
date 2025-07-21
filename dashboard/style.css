@@ -71,25 +71,17 @@ header {
     flex-direction: column;
     align-items: center;
     min-width: 80px;
-    transition: background-color 0.3s ease;
     padding: 0.5rem;
     border-radius: 8px;
-}
-
-.status-item.clickable {
-    cursor: pointer;
-}
-
-.status-item.clickable:hover {
-    background: rgba(255, 255, 255, 0.1);
 }
 
 .status-number, .status-icon {
     font-size: 1.8rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.4rem;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    line-height: 1;
 }
 
 .status-label {
@@ -99,7 +91,8 @@ header {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    line-height: 1.2;
+    line-height: 1.1;
+    margin-top: 0.2rem;
 }
 
 header h1 {
@@ -1419,6 +1412,19 @@ main {
     background: linear-gradient(135deg, #2980b9, var(--secondary-color));
     transform: translateY(-1px);
     color: white;
+}
+
+.link-btn.disabled {
+    background: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.link-btn.disabled:hover {
+    background: #e9ecef;
+    transform: none;
+    color: #6c757d;
 }
 
 /* Matrix Table Responsive */
