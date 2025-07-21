@@ -455,7 +455,7 @@ class PolicyWatcherDashboard {
                 // Show view button only if we have data
                 const viewButton = summaryData.initial_summary ? 
                     `<a href="${policy.url}" target="_blank" class="link-btn">View</a>` : 
-                    `<span class="link-btn disabled">No Data</span>`;
+                    `<span class="link-btn disabled">N/A</span>`;
 
                 matrixHtml += `
                     <tr>
