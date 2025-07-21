@@ -436,14 +436,63 @@ main {
 
 /* Intelligence Panel Styles */
 .intelligence-panel {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    background-color: #f0f4f8; /* A slightly different background */
+    padding: 1.5rem 2rem 2rem 2rem;
+    background-color: #f0f4f8;
     border-bottom: 1px solid #e0e0e0;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+/* Compact Stats Styles */
+.compact-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.compact-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    background: #f8f9fa;
+    transition: background-color 0.2s ease;
+    min-width: 120px;
+}
+
+.compact-stat#system-status-indicator {
+    cursor: pointer;
+}
+
+.compact-stat#system-status-indicator:hover {
+    background: #e9ecef;
+}
+
+.compact-number, .compact-icon {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.compact-label {
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Insights Grid */
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
 }
 
 .insight-card {
@@ -455,9 +504,33 @@ main {
     transition: var(--transition);
 }
 
-.insight-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+/* Remove hover effects - these cards are not clickable */
+
+/* Focus Areas Capabilities Styles */
+.capabilities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.capability-item {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid var(--secondary-color);
+}
+
+.capability-header {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.capability-details {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.4;
 }
 
 .insight-header {
@@ -522,6 +595,30 @@ main {
     color: #666;
     font-size: 0.9rem;
     margin: 1rem 0;
+}
+
+/* Recent Changes Expandable Styles */
+.change-item.expandable {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.change-item.expandable:hover {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.read-more {
+    color: var(--secondary-color);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.read-less {
+    color: var(--secondary-color);
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 10px;
 }
 
 .policy-actions {

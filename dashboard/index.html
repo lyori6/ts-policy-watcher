@@ -30,31 +30,50 @@
     </header>
 
     <section id="intelligence-panel" class="intelligence-panel">
-        <div class="insight-card">
-            <div class="insight-header">
-                <i class="fas fa-chart-line"></i>
-                <h3>Trend Alert</h3>
+        <!-- Compact Stats Tabs -->
+        <div class="compact-stats">
+            <div class="compact-stat">
+                <span class="compact-number" id="total-policies">-</span>
+                <span class="compact-label">Policies Tracked</span>
             </div>
-            <div class="insight-body" id="insight-trend-alert">
-                <p>Loading insights...</p>
+            <div class="compact-stat">
+                <span class="compact-number" id="last-check">-</span>
+                <span class="compact-label">Hours Since Check</span>
             </div>
-        </div>
-        <div class="insight-card">
-            <div class="insight-header">
-                <i class="fas fa-chart-bar"></i>
-                <h3>Platform Activity</h3>
-            </div>
-            <div class="insight-body" id="insight-platform-activity">
-                <p>Loading platform comparison...</p>
+            <div class="compact-stat" id="system-status-indicator" title="Click to view run log">
+                <span class="compact-icon" id="status-icon"><i class="fas fa-question-circle"></i></span>
+                <span class="compact-label" id="status-text">Operational</span>
             </div>
         </div>
-        <div class="insight-card">
-            <div class="insight-header">
-                <i class="fas fa-bullseye"></i>
-                <h3>Focus Areas</h3>
+
+        <!-- Insight Cards -->
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Trend Alert</h3>
+                </div>
+                <div class="insight-body" id="insight-trend-alert">
+                    <p>Loading insights...</p>
+                </div>
             </div>
-            <div class="insight-body" id="insight-focus-areas">
-                <p>Analyzing competitor policy themes...</p>
+            <div class="insight-card">
+                <div class="insight-header">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Platform Activity</h3>
+                </div>
+                <div class="insight-body" id="insight-platform-activity">
+                    <p>Loading platform comparison...</p>
+                </div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-header">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Focus Areas</h3>
+                </div>
+                <div class="insight-body" id="insight-focus-areas">
+                    <p>Analyzing competitor policy themes...</p>
+                </div>
             </div>
         </div>
     </section>
@@ -125,25 +144,6 @@
                     </div>
                 </div>
 
-                <div class="card quick-stats-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-chart-bar"></i> Quick Stats</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="stat-row">
-                            <span>Total Platforms:</span>
-                            <span id="platform-count">-</span>
-                        </div>
-                        <div class="stat-row">
-                            <span>Avg Changes/Day:</span>
-                            <span id="avg-changes">-</span>
-                        </div>
-                        <div class="stat-row">
-                            <span>Success Rate:</span>
-                            <span id="success-rate">-</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 

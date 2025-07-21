@@ -149,27 +149,33 @@ class PolicyWatcherDashboard {
             return;
         }
 
-        const changesHtml = recentChanges.map(change => `
-            <div class="change-item">
-                <div class="platform-tag">${change.platform}</div>
-                <h4>${change.policy_name}</h4>
-                <p class="summary">${this.truncateText(change.last_update_summary, 150)}</p>
-                <div class="timestamp">Updated ${this.formatRelativeTime(change.last_updated)}</div>
-            </div>
-        `).join('');
+        const changesHtml = recentChanges.map((change, index) => {
+            const summaryId = `summary-${index}`;
+            const shortSummary = this.truncateText(change.last_update_summary, 150);
+            const hasMore = change.last_update_summary.length > 150;
+            
+            return `
+                <div class="change-item ${hasMore ? 'expandable' : ''}" onclick="${hasMore ? `toggleSummary('${summaryId}')` : ''}">
+                    <div class="platform-tag">${change.platform}</div>
+                    <h4>${change.policy_name}</h4>
+                    <div class="summary-container">
+                        <p class="summary" id="${summaryId}">
+                            ${shortSummary}
+                            ${hasMore ? '<span class="read-more"> ...Read more</span>' : ''}
+                        </p>
+                        ${hasMore ? `<p class="summary-full" id="${summaryId}-full" style="display: none;">
+                            ${change.last_update_summary}
+                            <span class="read-less" onclick="event.stopPropagation(); toggleSummary('${summaryId}')"> Read less</span>
+                        </p>` : ''}
+                    </div>
+                    <div class="timestamp">Updated ${this.formatRelativeTime(change.last_updated)}</div>
+                </div>
+            `;
+        }).join('');
 
         container.innerHTML = changesHtml;
     }
 
-    renderQuickStats() {
-        const platforms = new Set(this.platformData.map(p => p.platform)).size;
-        const avgChanges = this.calculateAverageChanges();
-        const successRate = this.calculateSuccessRate();
-
-        this.updateElement('platform-count', platforms);
-        this.updateElement('avg-changes', avgChanges.toFixed(1));
-        this.updateElement('success-rate', `${(successRate * 100).toFixed(1)}%`);
-    }
 
     renderPolicyExplorer() {
         this.renderPlatformTabs();
@@ -308,13 +314,13 @@ class PolicyWatcherDashboard {
                 this.formatRelativeTime(summaryData.last_updated) : 'Never';
             
             return `
-                <div class="policy-card">
+                <div class="policy-card" onclick="openPolicyModal('${policy.slug}')" style="cursor: pointer;">
                     <div class="policy-header">
                         <h4>${policy.name}</h4>
                         <span class="update-badge">${lastUpdated}</span>
                     </div>
                     
-                    <div class="summary-preview" onclick="openPolicyModal('${policy.slug}')" style="cursor: pointer;">
+                    <div class="summary-preview">
                         <div class="summary-excerpt">
                             ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 150))}
                         </div>
@@ -330,12 +336,9 @@ class PolicyWatcherDashboard {
                     ` : ''}
                     
                     <div class="policy-actions">
-                        <a href="https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${policy.slug}" 
-                           target="_blank" class="action-btn secondary-btn" title="View snapshot history">
-                            <i class="fas fa-clock"></i> History Log
-                        </a>
-                        <a href="${policy.url}" target="_blank" class="action-btn primary-btn" title="Visit current policy page">
-                            <i class="fas fa-external-link-alt"></i> Visit Page
+                        <a href="${policy.url}" target="_blank" class="action-btn primary-btn" 
+                           title="Visit current policy page" onclick="event.stopPropagation();">
+                            <i class="fas fa-external-link-alt"></i> Visit ${policy.platform} Policy Page
                         </a>
                     </div>
                 </div>
@@ -692,34 +695,46 @@ class PolicyWatcherDashboard {
             }
         }
 
-        let focusHtml = '<div class="capabilities-grid">';
+        let focusHtml = '<div class="capabilities-list">';
         
         if ([...new Set(capabilities.blocking.platforms)].length > 0) {
+            const platforms = [...new Set(capabilities.blocking.platforms)].filter(p => p !== 'Unknown');
+            const features = [...new Set(capabilities.blocking.features)].slice(0, 2);
             focusHtml += `
                 <div class="capability-item">
                     <div class="capability-header">🚫 User Blocking</div>
-                    <div class="platforms">${[...new Set(capabilities.blocking.platforms)].filter(p => p !== 'Unknown').join(', ')}</div>
-                    <div class="features">${[...new Set(capabilities.blocking.features)].slice(0, 2).join(', ')}</div>
+                    <div class="capability-details">
+                        • Platforms: ${platforms.join(', ')}
+                        ${features.length > 0 ? `<br>• Features: ${features.join(', ')}` : ''}
+                    </div>
                 </div>
             `;
         }
 
         if ([...new Set(capabilities.muting.platforms)].length > 0) {
+            const platforms = [...new Set(capabilities.muting.platforms)].filter(p => p !== 'Unknown');
+            const features = [...new Set(capabilities.muting.features)].slice(0, 2);
             focusHtml += `
                 <div class="capability-item">
                     <div class="capability-header">🔇 Muting/Throttling</div>
-                    <div class="platforms">${[...new Set(capabilities.muting.platforms)].filter(p => p !== 'Unknown').join(', ')}</div>
-                    <div class="features">${[...new Set(capabilities.muting.features)].slice(0, 2).join(', ')}</div>
+                    <div class="capability-details">
+                        • Platforms: ${platforms.join(', ')}
+                        ${features.length > 0 ? `<br>• Features: ${features.join(', ')}` : ''}
+                    </div>
                 </div>
             `;
         }
 
         if ([...new Set(capabilities.reporting.platforms)].length > 0) {
+            const platforms = [...new Set(capabilities.reporting.platforms)].filter(p => p !== 'Unknown');
+            const features = [...new Set(capabilities.reporting.features)].slice(0, 2);
             focusHtml += `
                 <div class="capability-item">
                     <div class="capability-header">📢 Reporting Systems</div>
-                    <div class="platforms">${[...new Set(capabilities.reporting.platforms)].filter(p => p !== 'Unknown').join(', ')}</div>
-                    <div class="features">${[...new Set(capabilities.reporting.features)].slice(0, 2).join(', ')}</div>
+                    <div class="capability-details">
+                        • Platforms: ${platforms.join(', ')}
+                        ${features.length > 0 ? `<br>• Features: ${features.join(', ')}` : ''}
+                    </div>
                 </div>
             `;
         }
@@ -740,8 +755,13 @@ class PolicyWatcherDashboard {
     // Utility Functions
 
     getRecentChanges() {
-        return Object.values(this.summariesData)
-            .filter(policy => policy.last_updated && policy.last_update_summary !== 'Initial version.')
+        return Object.entries(this.summariesData)
+            .filter(([slug, policy]) => policy.last_updated && policy.last_update_summary !== 'Initial version.')
+            .map(([slug, policy]) => ({
+                ...policy,
+                slug: slug,
+                platform: this.findPlatformName(slug)
+            }))
             .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
             .slice(0, 5);
     }
@@ -995,6 +1015,20 @@ function openPolicyModal(slug) {
 function closePolicyModal() {
     const modal = document.getElementById('policy-summary-modal');
     modal.style.display = 'none';
+}
+
+// Global function for toggling summary expansion
+function toggleSummary(summaryId) {
+    const shortSummary = document.getElementById(summaryId);
+    const fullSummary = document.getElementById(summaryId + '-full');
+    
+    if (fullSummary.style.display === 'none') {
+        shortSummary.style.display = 'none';
+        fullSummary.style.display = 'block';
+    } else {
+        shortSummary.style.display = 'block';
+        fullSummary.style.display = 'none';
+    }
 }
 
 // Global function for exporting matrix to CSV
