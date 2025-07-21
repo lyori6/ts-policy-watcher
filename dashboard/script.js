@@ -22,7 +22,6 @@ class PolicyWatcherDashboard {
         this.setupEventListeners();
         await this.loadAllData();
         this.renderDashboard();
-        this.setupModal(); // Setup modal after initial render
     }
 
     setupEventListeners() {
