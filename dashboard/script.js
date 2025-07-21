@@ -120,15 +120,26 @@ class PolicyWatcherDashboard {
     }
 
     updateHeaderStats() {
-        document.getElementById('total-policies').textContent = this.platformData.length;
+        // Update compact stats only (removed old header stats)
+        const compactTotalPolicies = document.getElementById('compact-total-policies');
+        const compactLastCheck = document.getElementById('compact-last-check');
+        
+        if (compactTotalPolicies) {
+            compactTotalPolicies.textContent = this.platformData.length;
+        }
 
         if (this.runLogData.length > 0) {
             const lastRun = new Date(this.runLogData[0].timestamp_utc);
             const now = new Date();
-            const hoursSince = Math.round((now - lastRun) / (1000 * 60 * 60));
-            document.getElementById('last-check').textContent = `${hoursSince}`;
+            const minutesSince = Math.round((now - lastRun) / (1000 * 60));
+            
+            if (compactLastCheck) {
+                compactLastCheck.textContent = `${minutesSince}`;
+            }
         } else {
-            document.getElementById('last-check').textContent = '-';
+            if (compactLastCheck) {
+                compactLastCheck.textContent = '-';
+            }
         }
         
         // Always update system status after data is loaded
@@ -160,11 +171,11 @@ class PolicyWatcherDashboard {
                     <h4>${change.policy_name}</h4>
                     <div class="summary-container">
                         <p class="summary" id="${summaryId}">
-                            ${shortSummary}
+                            ${this.renderMarkdown(shortSummary)}
                             ${hasMore ? '<span class="read-more"> ...Read more</span>' : ''}
                         </p>
                         ${hasMore ? `<p class="summary-full" id="${summaryId}-full" style="display: none;">
-                            ${change.last_update_summary}
+                            ${this.renderMarkdown(change.last_update_summary)}
                             <span class="read-less" onclick="event.stopPropagation(); toggleSummary('${summaryId}')"> Read less</span>
                         </p>` : ''}
                     </div>
@@ -921,16 +932,16 @@ class PolicyWatcherDashboard {
     }
 
     updateSystemStatus() {
-        const indicator = document.getElementById('system-status-indicator');
-        const icon = document.getElementById('status-icon');
-        const text = document.getElementById('status-text');
-
-        if (!indicator || !icon || !text) return;
+        // Update compact status indicator only (removed old status indicator)
+        const compactIndicator = document.getElementById('compact-system-status-indicator');
+        const compactIcon = document.getElementById('compact-status-icon');
+        const compactText = document.getElementById('compact-status-text');
 
         if (!this.runLogData || this.runLogData.length === 0) {
-            indicator.className = 'stat-card';
-            icon.innerHTML = '<i class="fas fa-question-circle"></i>';
-            text.textContent = 'Unknown';
+            if (compactIndicator && compactIcon && compactText) {
+                compactIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
+                compactText.textContent = 'Unknown';
+            }
             return;
         }
 
@@ -938,13 +949,15 @@ class PolicyWatcherDashboard {
         const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
 
         if (isSuccess) {
-            indicator.className = 'stat-card status-success';
-            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-            text.textContent = 'Operational';
+            if (compactIndicator && compactIcon && compactText) {
+                compactIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                compactText.textContent = 'Operational';
+            }
         } else {
-            indicator.className = 'stat-card status-error';
-            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-            text.textContent = 'Issues Detected';
+            if (compactIndicator && compactIcon && compactText) {
+                compactIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                compactText.textContent = 'Issues Detected';
+            }
         }
     }
 
