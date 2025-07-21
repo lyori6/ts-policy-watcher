@@ -107,6 +107,51 @@ def get_ai_summary(text_content, is_new_policy):
         
         return None
 
+def is_significant_change(diff_content):
+    """Determines if a change is significant enough to warrant notification."""
+    if not diff_content or len(diff_content.strip()) < 100:
+        return False, "Change too small"
+    
+    # Convert to text for analysis
+    text_content = html2text.html2text(diff_content)
+    words = text_content.split()
+    
+    # Skip if very few meaningful words
+    if len(words) < 20:
+        return False, "Too few words changed"
+    
+    # Detect trivial changes (CSS, navigation, formatting)
+    trivial_indicators = [
+        'class=', 'style=', 'css', 'javascript', 'nav-', 'menu-',
+        'font-', 'color:', 'margin:', 'padding:', 'display:',
+        'href="#"', 'onclick=', '<script', '</script>',
+        'breadcrumb', 'navigation', 'footer', 'header'
+    ]
+    
+    # Count trivial vs. content changes
+    trivial_count = sum(1 for indicator in trivial_indicators 
+                       if indicator.lower() in text_content.lower())
+    content_ratio = len([w for w in words if len(w) > 3]) / len(words) if words else 0
+    
+    # Skip if mostly trivial changes
+    if trivial_count > 5 and content_ratio < 0.6:
+        return False, "Mostly formatting/navigation changes"
+    
+    # Look for substantive content indicators
+    substantive_indicators = [
+        'policy', 'rule', 'guideline', 'prohibited', 'allowed', 'enforcement',
+        'violation', 'report', 'block', 'suspend', 'remove', 'content',
+        'community', 'safety', 'harassment', 'hate', 'spam', 'violence'
+    ]
+    
+    substantive_count = sum(1 for indicator in substantive_indicators 
+                           if indicator.lower() in text_content.lower())
+    
+    if substantive_count >= 2:
+        return True, f"Substantive policy content detected ({substantive_count} indicators)"
+    
+    return False, "No significant policy content changes detected"
+
 def process_changed_file(file_path, is_new_policy, commit_sha):
     """Processes a single changed file to generate a summary."""
     print(f"\nProcessing: {file_path} {'(new policy)' if is_new_policy else '(existing policy)'}")
@@ -118,6 +163,13 @@ def process_changed_file(file_path, is_new_policy, commit_sha):
             text_to_summarize = clean_html(content)
         else:
             diff_content = get_git_diff(file_path, commit_sha)
+            
+            # Check if change is significant
+            is_significant, reason = is_significant_change(diff_content)
+            if not is_significant:
+                print(f"Skipping: {reason}")
+                return None
+                
             text_to_summarize = html2text.html2text(diff_content)
 
         if len(text_to_summarize.split()) < 10:
@@ -155,29 +207,108 @@ def log_run_status(status, pages_checked, changes_found, errors):
     
     print(f"Successfully logged run status to {RUN_LOG_FILE}")
 
+def group_changes_by_platform(changes):
+    """Groups policy changes by platform for better organization."""
+    platform_groups = {}
+    
+    for change in changes:
+        # Extract platform from policy name or use a mapping
+        policy_name = change['policy_name'].lower()
+        platform = 'Unknown'
+        
+        if 'tiktok' in policy_name:
+            platform = 'TikTok'
+        elif 'instagram' in policy_name:
+            platform = 'Instagram'  
+        elif 'youtube' in policy_name:
+            platform = 'YouTube'
+        elif 'whatnot' in policy_name:
+            platform = 'Whatnot'
+            
+        if platform not in platform_groups:
+            platform_groups[platform] = []
+        platform_groups[platform].append(change)
+    
+    return platform_groups
+
+def create_concise_summary(summary_text, max_sentences=2):
+    """Creates a concise 1-2 sentence summary from longer text."""
+    if not summary_text:
+        return "Policy updated with new content."
+    
+    # Split into sentences and take first 1-2 meaningful ones
+    sentences = [s.strip() for s in summary_text.split('.') if s.strip() and len(s.strip()) > 20]
+    
+    if not sentences:
+        return "Policy content has been updated."
+    
+    # Take first sentence, or first two if first is very short
+    if len(sentences) == 1 or len(sentences[0]) > 80:
+        return sentences[0] + "."
+    else:
+        return sentences[0] + ". " + sentences[1] + "."
+
 def send_email_notification(changes):
-    """Sends an email notification with a summary of all changes."""
+    """Sends a concise email notification with grouped policy changes."""
     if not RESEND_API_KEY or not RECIPIENT_EMAIL:
         print("ERROR: Resend API Key or Recipient Email not configured. Skipping email.", file=sys.stderr)
         return
 
+    if not changes:
+        print("No significant changes to report via email.")
+        return
+
     resend.api_key = RESEND_API_KEY
 
-    subject = f"Policy Watcher Alert: {len(changes)} Policy Change(s) Detected"
+    # Group changes by platform
+    platform_groups = group_changes_by_platform(changes)
     
-    # Convert markdown to HTML for the email body
-    h = html2text.HTML2Text()
-    h.body_width = 0 # Don't wrap lines
-
-    html_body = f"<h1>Policy Watcher Report</h1>"
-    html_body += f"<p>Detected {len(changes)} policy change(s) on {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC.</p>"
+    subject = f"Policy Watch: {len(changes)} meaningful change{'s' if len(changes) != 1 else ''} detected"
     
-    for change in changes:
-        change_type = "New Policy" if change['is_new'] else "Policy Update"
-        # Simple markdown to HTML conversion
-        summary_html = change['summary'].replace('\n', '<br>')
-        html_body += f"<h2>{change['policy_name']} ({change_type})</h2>"
-        html_body += f"<div>{summary_html}</div><hr>"
+    # Create concise HTML email
+    html_body = f"""
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+            Policy Watch Report
+        </h2>
+        <p style="color: #555; margin-bottom: 25px;">
+            Detected {len(changes)} meaningful policy change{'s' if len(changes) != 1 else ''} on {datetime.utcnow().strftime('%B %d, %Y at %H:%M')} UTC
+        </p>
+    """
+    
+    for platform, platform_changes in platform_groups.items():
+        html_body += f"""
+        <div style="margin-bottom: 25px; border-left: 4px solid #3498db; padding-left: 15px;">
+            <h3 style="color: #2c3e50; margin: 0 0 15px 0; font-size: 18px;">{platform}</h3>
+        """
+        
+        for change in platform_changes:
+            change_type = "New Policy" if change['is_new'] else "Updated"
+            concise_summary = create_concise_summary(change['summary'])
+            policy_clean_name = change['policy_name'].replace(platform.lower(), '').strip()
+            
+            html_body += f"""
+            <div style="margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px;">
+                <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px;">
+                    {policy_clean_name} <span style="font-size: 12px; color: #7f8c8d;">({change_type})</span>
+                </div>
+                <div style="color: #555; line-height: 1.4;">
+                    {concise_summary}
+                </div>
+            </div>
+            """
+        
+        html_body += "</div>"
+    
+    html_body += """
+        <div style="margin-top: 30px; padding: 15px; background: #ecf0f1; border-radius: 6px; text-align: center;">
+            <p style="color: #7f8c8d; margin: 0; font-size: 14px;">
+                View detailed changes and history at your 
+                <a href="https://ts-policy-watcher.vercel.app/" style="color: #3498db;">Policy Dashboard</a>
+            </p>
+        </div>
+    </div>
+    """
 
     try:
         params = {
@@ -256,9 +387,14 @@ def main():
                 json.dump(summaries_data, f, indent=2)
             print(f"Successfully updated {SUMMARIES_FILE}.")
 
-            # Send a single email with all the updates
+            # Send email only if there are meaningful changes to report
             if email_notifications:
+                print(f"Sending email notification for {len(email_notifications)} meaningful changes.")
                 send_email_notification(email_notifications)
+            else:
+                print("No meaningful changes detected - skipping email notification.")
+        else:
+            print("No policy updates to process - skipping email notification.")
 
     except Exception as e:
         print(f"An unhandled error occurred: {e}", file=sys.stderr)
