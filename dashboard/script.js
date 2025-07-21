@@ -120,12 +120,12 @@ class PolicyWatcherDashboard {
     }
 
     updateHeaderStats() {
-        // Update compact stats only (removed old header stats)
-        const compactTotalPolicies = document.getElementById('compact-total-policies');
-        const compactLastCheck = document.getElementById('compact-last-check');
+        // Update header status bar elements
+        const headerTotalPolicies = document.getElementById('header-total-policies');
+        const headerLastCheck = document.getElementById('header-last-check');
         
-        if (compactTotalPolicies) {
-            compactTotalPolicies.textContent = this.platformData.length;
+        if (headerTotalPolicies) {
+            headerTotalPolicies.textContent = this.platformData.length;
         }
 
         if (this.runLogData.length > 0) {
@@ -133,12 +133,12 @@ class PolicyWatcherDashboard {
             const now = new Date();
             const minutesSince = Math.round((now - lastRun) / (1000 * 60));
             
-            if (compactLastCheck) {
-                compactLastCheck.textContent = `${minutesSince}`;
+            if (headerLastCheck) {
+                headerLastCheck.textContent = `${minutesSince}`;
             }
         } else {
-            if (compactLastCheck) {
-                compactLastCheck.textContent = '-';
+            if (headerLastCheck) {
+                headerLastCheck.textContent = '-';
             }
         }
         
@@ -153,6 +153,11 @@ class PolicyWatcherDashboard {
 
     renderRecentChanges() {
         const container = document.getElementById('recent-changes-list');
+        if (!container) {
+            console.error('Recent changes container not found');
+            return;
+        }
+
         const recentChanges = this.getRecentChanges();
 
         if (recentChanges.length === 0) {
@@ -161,23 +166,25 @@ class PolicyWatcherDashboard {
         }
 
         const changesHtml = recentChanges.map((change, index) => {
-            const summaryId = `summary-${index}`;
-            const shortSummary = this.truncateText(change.last_update_summary, 150);
-            const hasMore = change.last_update_summary.length > 150;
+            const summaryId = `summary-${Date.now()}-${index}`; // More unique IDs
+            const shortSummary = this.truncateText(change.last_update_summary, 200);
+            const hasMore = change.last_update_summary && change.last_update_summary.length > 200;
             
             return `
-                <div class="change-item ${hasMore ? 'expandable' : ''}" onclick="${hasMore ? `toggleSummary('${summaryId}')` : ''}">
-                    <div class="platform-tag">${change.platform}</div>
-                    <h4>${change.policy_name}</h4>
+                <div class="change-item ${hasMore ? 'expandable' : ''}" ${hasMore ? `data-summary-id="${summaryId}"` : ''}>
+                    <div class="change-header">
+                        <div class="platform-tag">${change.platform}</div>
+                        <h4>${change.policy_name}</h4>
+                    </div>
                     <div class="summary-container">
-                        <p class="summary" id="${summaryId}">
+                        <div class="summary" id="${summaryId}">
                             ${this.renderMarkdown(shortSummary)}
-                            ${hasMore ? '<span class="read-more"> ...Read more</span>' : ''}
-                        </p>
-                        ${hasMore ? `<p class="summary-full" id="${summaryId}-full" style="display: none;">
+                            ${hasMore ? '<button class="read-more-btn" onclick="toggleSummary(\'' + summaryId + '\')" type="button"><i class="fas fa-chevron-down"></i> Read more</button>' : ''}
+                        </div>
+                        ${hasMore ? `<div class="summary-full" id="${summaryId}-full" style="display: none;">
                             ${this.renderMarkdown(change.last_update_summary)}
-                            <span class="read-less" onclick="event.stopPropagation(); toggleSummary('${summaryId}')"> Read less</span>
-                        </p>` : ''}
+                            <button class="read-more-btn expanded" onclick="toggleSummary('${summaryId}')" type="button"><i class="fas fa-chevron-up"></i> Read less</button>
+                        </div>` : ''}
                     </div>
                     <div class="timestamp">Updated ${this.formatRelativeTime(change.last_updated)}</div>
                 </div>
@@ -664,93 +671,12 @@ class PolicyWatcherDashboard {
         const focusContainer = document.getElementById('insight-focus-areas');
         if (!focusContainer) return;
 
-        const capabilities = {
-            blocking: { platforms: [], features: [] },
-            muting: { platforms: [], features: [] },
-            reporting: { platforms: [], features: [] },
-            moderation: { platforms: [], features: [] }
-        };
-
-        for (const slug in this.summariesData) {
-            const policy = this.summariesData[slug];
-            const platform = this.findPlatformName(slug);
-            const summary = policy.initial_summary?.toLowerCase() || '';
-
-            // Check for blocking capabilities
-            if (slug.includes('block') || summary.includes('block')) {
-                capabilities.blocking.platforms.push(platform);
-                if (summary.includes('permanent')) capabilities.blocking.features.push('permanent blocking');
-                if (summary.includes('dm') || summary.includes('message')) capabilities.blocking.features.push('message blocking');
-                if (summary.includes('purchase') || summary.includes('buy')) capabilities.blocking.features.push('purchase blocking');
-            }
-
-            // Check for muting/throttling
-            if (summary.includes('mute') || summary.includes('silence') || summary.includes('throttle')) {
-                capabilities.muting.platforms.push(platform);
-                if (summary.includes('temporary')) capabilities.muting.features.push('temporary muting');
-                if (summary.includes('live') || summary.includes('stream')) capabilities.muting.features.push('live stream muting');
-            }
-
-            // Check for reporting systems  
-            if (slug.includes('report') || summary.includes('report')) {
-                capabilities.reporting.platforms.push(platform);
-                if (summary.includes('anonymous')) capabilities.reporting.features.push('anonymous reporting');
-                if (summary.includes('email')) capabilities.reporting.features.push('email reporting');
-            }
-
-            // Check for moderation tools
-            if (slug.includes('moderat') || summary.includes('moderat')) {
-                capabilities.moderation.platforms.push(platform);
-                if (summary.includes('keyword')) capabilities.moderation.features.push('keyword filtering');
-                if (summary.includes('age') || summary.includes('18+')) capabilities.moderation.features.push('age controls');
-            }
-        }
-
-        let focusHtml = '<div class="capabilities-list">';
-        
-        if ([...new Set(capabilities.blocking.platforms)].length > 0) {
-            const platforms = [...new Set(capabilities.blocking.platforms)].filter(p => p !== 'Unknown');
-            const features = [...new Set(capabilities.blocking.features)].slice(0, 2);
-            focusHtml += `
-                <div class="capability-item">
-                    <div class="capability-header">🚫 User Blocking</div>
-                    <div class="capability-details">
-                        • Platforms: ${platforms.join(', ')}
-                        ${features.length > 0 ? `<br>• Features: ${features.join(', ')}` : ''}
-                    </div>
-                </div>
-            `;
-        }
-
-        if ([...new Set(capabilities.muting.platforms)].length > 0) {
-            const platforms = [...new Set(capabilities.muting.platforms)].filter(p => p !== 'Unknown');
-            const features = [...new Set(capabilities.muting.features)].slice(0, 2);
-            focusHtml += `
-                <div class="capability-item">
-                    <div class="capability-header">🔇 Muting/Throttling</div>
-                    <div class="capability-details">
-                        • Platforms: ${platforms.join(', ')}
-                        ${features.length > 0 ? `<br>• Features: ${features.join(', ')}` : ''}
-                    </div>
-                </div>
-            `;
-        }
-
-        if ([...new Set(capabilities.reporting.platforms)].length > 0) {
-            const platforms = [...new Set(capabilities.reporting.platforms)].filter(p => p !== 'Unknown');
-            const features = [...new Set(capabilities.reporting.features)].slice(0, 2);
-            focusHtml += `
-                <div class="capability-item">
-                    <div class="capability-header">📢 Reporting Systems</div>
-                    <div class="capability-details">
-                        • Platforms: ${platforms.join(', ')}
-                        ${features.length > 0 ? `<br>• Features: ${features.join(', ')}` : ''}
-                    </div>
-                </div>
-            `;
-        }
-
-        focusHtml += '</div>';
+        const focusHtml = `
+            <div class="focus-summary">
+                <p><strong>Monitoring live commerce platform policies</strong> to identify shifts in user safety controls, content moderation approaches, and enforcement mechanisms across TikTok, YouTube, Instagram, and Whatnot.</p>
+                <p>Key focus: <em>User blocking systems, content reporting workflows, and marketplace safety standards</em> that impact creator monetization and audience protection.</p>
+            </div>
+        `;
         
         focusContainer.innerHTML = focusHtml;
     }
@@ -932,15 +858,15 @@ class PolicyWatcherDashboard {
     }
 
     updateSystemStatus() {
-        // Update compact status indicator only (removed old status indicator)
-        const compactIndicator = document.getElementById('compact-system-status-indicator');
-        const compactIcon = document.getElementById('compact-status-icon');
-        const compactText = document.getElementById('compact-status-text');
+        // Update header status indicator
+        const headerIndicator = document.getElementById('header-system-status');
+        const headerIcon = document.getElementById('header-status-icon');
+        const headerText = document.getElementById('header-status-text');
 
         if (!this.runLogData || this.runLogData.length === 0) {
-            if (compactIndicator && compactIcon && compactText) {
-                compactIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
-                compactText.textContent = 'Unknown';
+            if (headerIndicator && headerIcon && headerText) {
+                headerIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
+                headerText.textContent = 'Unknown';
             }
             return;
         }
@@ -949,14 +875,14 @@ class PolicyWatcherDashboard {
         const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
 
         if (isSuccess) {
-            if (compactIndicator && compactIcon && compactText) {
-                compactIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                compactText.textContent = 'Operational';
+            if (headerIndicator && headerIcon && headerText) {
+                headerIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                headerText.textContent = 'Operational';
             }
         } else {
-            if (compactIndicator && compactIcon && compactText) {
-                compactIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-                compactText.textContent = 'Issues Detected';
+            if (headerIndicator && headerIcon && headerText) {
+                headerIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                headerText.textContent = 'Issues Detected';
             }
         }
     }
@@ -1035,12 +961,21 @@ function toggleSummary(summaryId) {
     const shortSummary = document.getElementById(summaryId);
     const fullSummary = document.getElementById(summaryId + '-full');
     
-    if (fullSummary.style.display === 'none') {
-        shortSummary.style.display = 'none';
-        fullSummary.style.display = 'block';
-    } else {
+    if (!shortSummary || !fullSummary) {
+        console.error('Summary elements not found:', summaryId);
+        return;
+    }
+    
+    const isFullVisible = fullSummary.style.display !== 'none' && fullSummary.style.display !== '';
+    
+    if (isFullVisible) {
+        // Show short, hide full
         shortSummary.style.display = 'block';
         fullSummary.style.display = 'none';
+    } else {
+        // Show full, hide short
+        shortSummary.style.display = 'none';
+        fullSummary.style.display = 'block';
     }
 }
 

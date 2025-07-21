@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 import html2text
 import warnings
 import resend
+import markdown
 
 # Suppress BeautifulSoup warnings
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
@@ -232,21 +233,35 @@ def group_changes_by_platform(changes):
     return platform_groups
 
 def create_concise_summary(summary_text, max_sentences=2):
-    """Creates a concise 1-2 sentence summary from longer text."""
+    """Creates a concise 1-2 sentence summary from longer text while preserving markdown."""
     if not summary_text:
         return "Policy updated with new content."
     
-    # Split into sentences and take first 1-2 meaningful ones
-    sentences = [s.strip() for s in summary_text.split('.') if s.strip() and len(s.strip()) > 20]
+    # Clean up the text while preserving basic markdown
+    lines = [line.strip() for line in summary_text.split('\n') if line.strip()]
     
-    if not sentences:
+    # Filter out empty lines and headers, keep content lines
+    content_lines = []
+    for line in lines:
+        # Skip headers and bullet points for the concise summary
+        if not line.startswith('#') and not line.startswith('*') and not line.startswith('-'):
+            content_lines.append(line)
+    
+    if not content_lines:
         return "Policy content has been updated."
     
-    # Take first sentence, or first two if first is very short
-    if len(sentences) == 1 or len(sentences[0]) > 80:
-        return sentences[0] + "."
-    else:
-        return sentences[0] + ". " + sentences[1] + "."
+    # Join the first couple content lines and limit to reasonable length
+    summary = ' '.join(content_lines[:max_sentences])
+    
+    # Limit length while preserving markdown formatting
+    if len(summary) > 200:
+        # Find a good breaking point near word boundaries
+        truncated = summary[:197]
+        last_space = truncated.rfind(' ')
+        if last_space > 100:
+            summary = truncated[:last_space] + "..."
+    
+    return summary
 
 def send_email_notification(changes):
     """Sends a concise email notification with grouped policy changes."""
@@ -285,6 +300,8 @@ def send_email_notification(changes):
         for change in platform_changes:
             change_type = "New Policy" if change['is_new'] else "Updated"
             concise_summary = create_concise_summary(change['summary'])
+            # Convert markdown to HTML for proper email rendering
+            concise_summary_html = markdown.markdown(concise_summary)
             policy_clean_name = change['policy_name'].replace(platform.lower(), '').strip()
             
             html_body += f"""
@@ -293,7 +310,7 @@ def send_email_notification(changes):
                     {policy_clean_name} <span style="font-size: 12px; color: #7f8c8d;">({change_type})</span>
                 </div>
                 <div style="color: #555; line-height: 1.4;">
-                    {concise_summary}
+                    {concise_summary_html}
                 </div>
             </div>
             """

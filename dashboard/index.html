@@ -10,27 +10,30 @@
 <body>
     <header>
         <div class="header-content">
-            <h1><i class="fas fa-shield-alt"></i> T&S Policy Watcher</h1>
-            <p>Competitive Intelligence Dashboard</p>
+            <div class="header-left">
+                <h1><i class="fas fa-shield-alt"></i> T&S Policy Watcher</h1>
+                <p>Competitive Intelligence Dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="header-status-bar">
+                    <div class="status-item">
+                        <span class="status-number" id="header-total-policies">-</span>
+                        <span class="status-label">Policies Tracked</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-number" id="header-last-check">-</span>
+                        <span class="status-label">Minutes Since Check</span>
+                    </div>
+                    <div class="status-item clickable" id="header-system-status" title="Click to view run log" onclick="openRunLogModal()">
+                        <span class="status-icon" id="header-status-icon"><i class="fas fa-question-circle"></i></span>
+                        <span class="status-label" id="header-status-text">Operational</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
     <section id="intelligence-panel" class="intelligence-panel">
-        <!-- Compact Stats Tabs -->
-        <div class="compact-stats">
-            <div class="compact-stat">
-                <span class="compact-number" id="compact-total-policies">-</span>
-                <span class="compact-label">Policies Tracked</span>
-            </div>
-            <div class="compact-stat">
-                <span class="compact-number" id="compact-last-check">-</span>
-                <span class="compact-label">Minutes Since Check</span>
-            </div>
-            <div class="compact-stat" id="compact-system-status-indicator" title="Click to view run log" onclick="openRunLogModal()">
-                <span class="compact-icon" id="compact-status-icon"><i class="fas fa-question-circle"></i></span>
-                <span class="compact-label" id="compact-status-text">Operational</span>
-            </div>
-        </div>
 
         <!-- Insight Cards -->
         <div class="insights-grid">
@@ -120,16 +123,13 @@
 
         <!-- Overview Tab -->
         <section id="overview" class="tab-content">
-            <div class="overview-grid">
-                <div class="card recent-changes-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-bell"></i> Recent Policy Changes</h2>
-                    </div>
-                    <div class="card-body">
-                        <div id="recent-changes-list">Loading...</div>
-                    </div>
+            <div class="card recent-changes-card full-width">
+                <div class="card-header">
+                    <h2><i class="fas fa-bell"></i> Recent Policy Changes</h2>
                 </div>
-
+                <div class="card-body">
+                    <div id="recent-changes-list">Loading...</div>
+                </div>
             </div>
         </section>
 

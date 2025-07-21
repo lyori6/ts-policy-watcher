@@ -40,6 +40,66 @@ header {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.header-right {
+    flex-shrink: 0;
+    margin-left: 2rem;
+}
+
+.header-status-bar {
+    display: flex;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+    transition: background-color 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.status-item.clickable {
+    cursor: pointer;
+}
+
+.status-item.clickable:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.status-number, .status-icon {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.status-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
 header h1 {
@@ -211,6 +271,11 @@ main {
     grid-row: span 2;
 }
 
+.full-width {
+    width: 100%;
+    grid-column: 1 / -1;
+}
+
 /* Health Badges */
 .health-badge {
     padding: 0.5rem 1rem;
@@ -288,31 +353,51 @@ main {
 
 /* Recent Changes List */
 .change-item {
-    padding: 1rem;
+    padding: 1.5rem;
     border-left: 4px solid var(--secondary-color);
     background: #f8f9fa;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    transition: all 0.3s ease;
+}
+
+.change-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+.change-header {
+    margin-bottom: 1rem;
 }
 
 .change-item h4 {
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .change-item .platform-tag {
     display: inline-block;
     background: var(--secondary-color);
     color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
     font-size: 0.8rem;
-    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .change-item .timestamp {
     color: #666;
     font-size: 0.9rem;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.summary-container {
+    margin: 1rem 0;
 }
 
 /* Platform Tabs */
@@ -443,50 +528,6 @@ main {
     margin: 0 auto;
 }
 
-/* Compact Stats Styles */
-.compact-stats {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.compact-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    background: #f8f9fa;
-    transition: background-color 0.2s ease;
-    min-width: 120px;
-}
-
-.compact-stat#system-status-indicator {
-    cursor: pointer;
-}
-
-.compact-stat#system-status-indicator:hover {
-    background: #e9ecef;
-}
-
-.compact-number, .compact-icon {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 0.25rem;
-}
-
-.compact-label {
-    font-size: 0.75rem;
-    color: #666;
-    text-align: center;
-    font-weight: 500;
-}
 
 /* Insights Grid */
 .insights-grid {
@@ -506,31 +547,30 @@ main {
 
 /* Remove hover effects - these cards are not clickable */
 
-/* Focus Areas Capabilities Styles */
-.capabilities-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+/* Focus Areas Summary Styles */
+.focus-summary {
+    line-height: 1.6;
 }
 
-.capability-item {
-    padding: 0.75rem;
-    background: #f8f9fa;
-    border-radius: 6px;
-    border-left: 3px solid var(--secondary-color);
-}
-
-.capability-header {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.capability-details {
-    font-size: 0.85rem;
+.focus-summary p {
+    margin: 0 0 0.8rem 0;
+    font-size: 0.95rem;
     color: #555;
-    line-height: 1.4;
+}
+
+.focus-summary p:last-child {
+    margin-bottom: 0;
+}
+
+.focus-summary strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.focus-summary em {
+    color: var(--secondary-color);
+    font-style: normal;
+    font-weight: 500;
 }
 
 .insight-header {
@@ -938,12 +978,52 @@ main {
 }
 
 @media (max-width: 768px) {
-    .header-stats {
-        grid-template-columns: 1fr;
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .header-right {
+        margin-left: 0;
+        align-self: stretch;
+    }
+    
+    .header-status-bar {
+        gap: 1rem;
+        padding: 0.8rem 1rem;
+        justify-content: space-around;
+    }
+    
+    .status-item {
+        min-width: 60px;
+        padding: 0.3rem;
+    }
+    
+    .status-number, .status-icon {
+        font-size: 1.4rem;
+    }
+    
+    .status-label {
+        font-size: 0.6rem;
     }
     
     .overview-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .change-item {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .change-item h4 {
+        font-size: 1.1rem;
+    }
+    
+    .change-item .platform-tag {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
     }
     
     .analytics-grid {
