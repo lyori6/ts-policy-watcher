@@ -45,21 +45,42 @@ def clean_html(html_content: str) -> str:
     """
     Cleans HTML content by removing noisy tags and normalizing whitespace.
     For Google/YouTube help pages, it specifically targets the main article body
-    and removes dynamic elements like feedback forms.
+    and removes dynamic elements like feedback forms and follow buttons.
     """
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    # For Google/YouTube pages, the main content is in a specific div.
-    # Targeting this reduces noise from headers, footers, and sidebars.
-    article_body = soup.find('div', class_='article-body', itemprop='articleBody')
+    # For Google/YouTube pages, find the main content area
+    # First try class-based selector, then itemprop-based selector
+    article_body = soup.find('div', class_='article-body')
+    if not article_body:
+        article_body = soup.find('div', attrs={'itemprop': 'articleBody'})
     
     # If a specific container is found, use it. Otherwise, use the whole soup.
     target_soup = article_body if article_body else soup
 
-    # Remove the feedback form, which contains dynamic IDs
+    # Remove dynamic elements that change on each request
+    # 1. Remove the feedback form, which contains dynamic IDs
     feedback_form = target_soup.find('div', class_='article-survey-container')
     if feedback_form:
         feedback_form.decompose()
+    
+    # 2. Remove follow/subscribe buttons with dynamic IDs
+    for subscribe_btn in target_soup.find_all('div', class_='subscribe-btn'):
+        subscribe_btn.decompose()
+    
+    # 3. Remove any element with dynamic ID patterns (contains random numbers)
+    import re
+    for element in target_soup.find_all(attrs={'id': re.compile(r'.*-\d+\.\d+.*')}):
+        element.decompose()
+    
+    # 4. Remove Google-specific dynamic elements
+    # Remove zwieback_id div that contains dynamic session IDs
+    for zwieback_div in target_soup.find_all('div', attrs={'data-page-data-key': 'zwieback_id'}):
+        zwieback_div.decompose()
+    
+    # 5. Remove hidden elements that don't contain meaningful content
+    for hidden_element in target_soup.find_all(attrs={'style': re.compile(r'display:\s*none')}):
+        hidden_element.decompose()
 
     # Remove other tags that don't contain meaningful policy text
     for tag in target_soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
@@ -71,8 +92,6 @@ def clean_html(html_content: str) -> str:
     return "\n".join(line for line in lines if line)
 
 def main():
-
-
     """Main function to orchestrate the fetching process."""
     print("--- Starting Fetcher Script ---")
     
@@ -134,7 +153,21 @@ def main():
                     old_content = output_path.read_text(encoding="utf-8")
                     cleaned_old = clean_html(old_content)
 
+                    # Debug mode: Save raw HTML files for comparison if DEBUG_FETCH is set
+                    if os.environ.get("DEBUG_FETCH"):
+                        debug_dir = Path("/tmp")
+                        debug_dir.mkdir(exist_ok=True)
+                        (debug_dir / f"{slug}_fetch1.html").write_text(old_content, encoding="utf-8")
+                        (debug_dir / f"{slug}_fetch2.html").write_text(content, encoding="utf-8")
+                        (debug_dir / f"{slug}_cleaned1.txt").write_text(cleaned_old, encoding="utf-8")
+                        (debug_dir / f"{slug}_cleaned2.txt").write_text(cleaned_new, encoding="utf-8")
+                        print(f"  - DEBUG: Saved files to /tmp/{slug}_fetch*.html and /tmp/{slug}_cleaned*.txt")
+
                     # Compare cleaned content
+                    if os.environ.get("DEBUG_FETCH"):
+                        print(f"  - DEBUG: cleaned_old length: {len(cleaned_old)}, cleaned_new length: {len(cleaned_new)}")
+                        print(f"  - DEBUG: cleaned_old == cleaned_new: {cleaned_old == cleaned_new}")
+                    
                     if cleaned_old == cleaned_new:
                         print(f"  - NO CHANGE: Content for '{slug}' is unchanged.")
                     else:
