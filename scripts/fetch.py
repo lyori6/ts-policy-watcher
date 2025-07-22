@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+from bs4 import BeautifulSoup
 
 # --- Configuration ---
 USER_AGENT = "TrustAndSafety-Policy-Watcher/1.0 (https://github.com/your-repo/ts-policy-watcher; mailto:your-email@example.com)"
@@ -39,6 +40,13 @@ def fetch_with_playwright(url: str) -> str:
         finally:
             browser.close()
         return content
+
+def clean_html(html_content: str) -> str:
+    """Removes script and style tags from HTML and returns the remaining text."""
+    soup = BeautifulSoup(html_content, 'html.parser')
+    for tag in soup(['script', 'style']):
+        tag.decompose()
+    return str(soup)
 
 def main():
     """Main function to orchestrate the fetching process."""
@@ -89,12 +97,21 @@ def main():
 
         if content:
             try:
-                timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H%M%SZ")
-                output_path = SNAPSHOTS_DIR / slug / f"{timestamp}.html"
-                
+                output_path = SNAPSHOTS_DIR / slug / "snapshot.html"
                 output_path.parent.mkdir(parents=True, exist_ok=True)
-                output_path.write_text(content, encoding="utf-8")
-                print(f"  - SUCCESS: Snapshot saved to {output_path}")
+
+                old_content = ""
+                if output_path.exists():
+                    old_content = output_path.read_text(encoding="utf-8")
+
+                cleaned_old = clean_html(old_content)
+                cleaned_new = clean_html(content)
+
+                if cleaned_old == cleaned_new:
+                    print(f"  - NO CHANGE: Content for '{slug}' is unchanged.")
+                else:
+                    output_path.write_text(content, encoding="utf-8")
+                    print(f"  - SUCCESS: Snapshot updated for {slug} at {output_path}")
             except Exception as e:
                 print(f"    - CRITICAL: Failed to write file for {url}. Reason: {e}", file=sys.stderr)
                 failures.append({"url": url, "platform": slug, "reason": f"File write error: {e}"})
