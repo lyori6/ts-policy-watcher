@@ -44,9 +44,11 @@ def fetch_with_playwright(url: str) -> str:
 def clean_html(html_content: str) -> str:
     """Removes script and style tags from HTML and returns the remaining text."""
     soup = BeautifulSoup(html_content, 'html.parser')
-    for tag in soup(['script', 'style']):
+    for tag in soup(['script', 'style', 'meta', 'link']):
         tag.decompose()
-    return str(soup)
+    text = soup.get_text()
+    lines = (line.strip() for line in text.splitlines())
+    return "\n".join(line for line in lines if line)
 
 def main():
     """Main function to orchestrate the fetching process."""
@@ -100,18 +102,23 @@ def main():
                 output_path = SNAPSHOTS_DIR / slug / "snapshot.html"
                 output_path.parent.mkdir(parents=True, exist_ok=True)
 
-                old_content = ""
-                if output_path.exists():
-                    old_content = output_path.read_text(encoding="utf-8")
-
-                cleaned_old = clean_html(old_content)
+                is_new_policy = not output_path.exists()
                 cleaned_new = clean_html(content)
 
-                if cleaned_old == cleaned_new:
-                    print(f"  - NO CHANGE: Content for '{slug}' is unchanged.")
-                else:
+                if is_new_policy:
                     output_path.write_text(content, encoding="utf-8")
-                    print(f"  - SUCCESS: Snapshot updated for {slug} at {output_path}")
+                    print(f"  - NEW: Saved initial snapshot for {slug} at {output_path}")
+                else:
+                    old_content = output_path.read_text(encoding="utf-8")
+                    cleaned_old = clean_html(old_content)
+
+                    # Compare cleaned content
+                    if cleaned_old == cleaned_new:
+                        print(f"  - NO CHANGE: Content for '{slug}' is unchanged.")
+                    else:
+                        # Overwrite the file only if the cleaned content is different
+                        output_path.write_text(content, encoding="utf-8")
+                        print(f"  - SUCCESS: Snapshot updated for {slug} at {output_path}")
             except Exception as e:
                 print(f"    - CRITICAL: Failed to write file for {url}. Reason: {e}", file=sys.stderr)
                 failures.append({"url": url, "platform": slug, "reason": f"File write error: {e}"})
