@@ -42,15 +42,31 @@ def fetch_with_playwright(url: str) -> str:
         return content
 
 def clean_html(html_content: str) -> str:
-    """Removes script and style tags from HTML and returns the remaining text."""
+    """
+    Cleans HTML content by removing noisy tags and normalizing whitespace.
+    For Google/YouTube help pages, it specifically targets the main article body.
+    """
     soup = BeautifulSoup(html_content, 'html.parser')
-    for tag in soup(['script', 'style', 'meta', 'link']):
+
+    # For Google/YouTube pages, the main content is in a specific div.
+    # Targeting this reduces noise from headers, footers, and sidebars.
+    article_body = soup.find('div', class_='article-body', itemprop='articleBody')
+    
+    # If a specific container is found, use it. Otherwise, use the whole soup.
+    target_soup = article_body if article_body else soup
+
+    # Remove tags that don't contain meaningful policy text
+    for tag in target_soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
         tag.decompose()
-    text = soup.get_text()
+        
+    # Normalize text to be resilient to whitespace changes
+    text = target_soup.get_text()
     lines = (line.strip() for line in text.splitlines())
     return "\n".join(line for line in lines if line)
 
 def main():
+
+
     """Main function to orchestrate the fetching process."""
     print("--- Starting Fetcher Script ---")
     
