@@ -44,7 +44,8 @@ def fetch_with_playwright(url: str) -> str:
 def clean_html(html_content: str) -> str:
     """
     Cleans HTML content by removing noisy tags and normalizing whitespace.
-    For Google/YouTube help pages, it specifically targets the main article body.
+    For Google/YouTube help pages, it specifically targets the main article body
+    and removes dynamic elements like feedback forms.
     """
     soup = BeautifulSoup(html_content, 'html.parser')
 
@@ -55,7 +56,12 @@ def clean_html(html_content: str) -> str:
     # If a specific container is found, use it. Otherwise, use the whole soup.
     target_soup = article_body if article_body else soup
 
-    # Remove tags that don't contain meaningful policy text
+    # Remove the feedback form, which contains dynamic IDs
+    feedback_form = target_soup.find('div', class_='article-survey-container')
+    if feedback_form:
+        feedback_form.decompose()
+
+    # Remove other tags that don't contain meaningful policy text
     for tag in target_soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
         tag.decompose()
         
