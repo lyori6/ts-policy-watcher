@@ -31,14 +31,18 @@ RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
 def get_changed_files(commit_sha):
     """Gets a list of snapshot files from a specific commit SHA."""
     try:
+        # Use git diff to compare the commit with its parent (HEAD^)
+        # This ensures we only get files that have actually changed.
         result = subprocess.run(
-            ["git", "show", "--pretty=", "--name-only", commit_sha],
+            ["git", "diff", "--name-only", f"{commit_sha}^", commit_sha],
             capture_output=True, text=True, check=True
         )
         files = result.stdout.strip().split("\n")
-        return [f for f in files if f and f.startswith("snapshots/") and f.endswith(".html")]
+        changed_html_files = [f for f in files if f and f.startswith("snapshots/") and f.endswith(".html")]
+        print(f"DEBUG: Found {len(changed_html_files)} changed HTML files: {changed_html_files}")
+        return changed_html_files
     except subprocess.CalledProcessError as e:
-        print(f"ERROR: 'git show' failed with exit code {e.returncode}", file=sys.stderr)
+        print(f"ERROR: 'git diff' failed with exit code {e.returncode}", file=sys.stderr)
         print(f"Stderr: {e.stderr}", file=sys.stderr)
         return []
     except Exception as e:
