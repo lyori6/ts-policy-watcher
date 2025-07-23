@@ -716,13 +716,15 @@ main {
 .status-cell {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    font-weight: 500;
 }
 
 .status-icon {
     width: 12px;
     height: 12px;
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .status-icon.success {
@@ -742,6 +744,84 @@ main {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+}
+
+.platform-activity-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: var(--light-gray);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.platform-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.platform-info small {
+    color: #666;
+    margin-left: 0.5rem;
+}
+
+.activity-metrics {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+}
+
+.change-count {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.change-rate {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+}
+
+/* Risk Assessment Indicators */
+.risk-indicator {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.risk-indicator.elevated {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+.risk-indicator.moderate {
+    background: rgba(243, 156, 18, 0.1);
+    color: var(--warning-color);
+    border: 1px solid var(--warning-color);
+}
+
+.risk-indicator.stable {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+/* Coverage Analysis */
+.gap-indicators {
+    margin-top: 1rem;
+}
+
+.coverage-item {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #555;
 }
 
 .chart-placeholder {

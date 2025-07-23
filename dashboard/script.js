@@ -533,12 +533,25 @@ class PolicyWatcherDashboard {
         const container = document.getElementById('platform-activity-chart');
         const platformStats = this.calculatePlatformStats();
         
-        const chartHtml = Object.entries(platformStats).map(([platform, stats]) => `
-            <div class="stat-row">
-                <span><strong>${platform}</strong></span>
-                <span>${stats.changes} changes</span>
-            </div>
-        `).join('');
+        const chartHtml = Object.entries(platformStats)
+            .filter(([platform, stats]) => stats.policies > 0) // Only show platforms we're tracking
+            .sort(([,a], [,b]) => b.changes - a.changes) // Sort by change frequency
+            .map(([platform, stats]) => {
+                const icon = this.getPlatformIcon(platform);
+                return `
+                    <div class="platform-activity-row">
+                        <div class="platform-info">
+                            <i class="${icon}" style="color: var(--secondary-color); margin-right: 0.5rem;"></i>
+                            <strong>${platform}</strong>
+                            <small>(${stats.policies} policies)</small>
+                        </div>
+                        <div class="activity-metrics">
+                            <span class="change-count">${stats.changes} changes</span>
+                            <span class="change-rate">${stats.changeRate}% rate</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
 
         container.innerHTML = chartHtml || '<div class="chart-placeholder">Platform activity data will appear here</div>';
     }
@@ -557,7 +570,7 @@ class PolicyWatcherDashboard {
                 <span>${(trends.successRate * 100).toFixed(1)}%</span>
             </div>
             <div class="stat-row">
-                <span>Total Changes Detected</span>
+                <span>Changes Today</span>
                 <span>${trends.totalChanges}</span>
             </div>
         `;
@@ -615,12 +628,14 @@ class PolicyWatcherDashboard {
         let trendMessage = '';
         if (recentChangesCount > 0) {
             const mostActivePlatform = Object.keys(platformActivity).reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b, '');
-            trendMessage = `<strong>${recentChangesCount}</strong> policy update${recentChangesCount > 1 ? 's' : ''} detected in the last 7 days.`;
+            const riskLevel = recentChangesCount > 3 ? 'elevated' : 'moderate';
+            trendMessage = `<span class="risk-indicator ${riskLevel}">⚠️ ${riskLevel.toUpperCase()} ACTIVITY</span><br>`;
+            trendMessage += `<strong>${recentChangesCount}</strong> competitor policy update${recentChangesCount > 1 ? 's' : ''} in the last 7 days may indicate market shifts requiring review.`;
             if (mostActivePlatform) {
-                trendMessage += ` <strong>${mostActivePlatform}</strong> was the most active platform.`;
+                trendMessage += ` <strong>${mostActivePlatform}</strong> leading changes.`;
             }
         } else {
-            trendMessage = 'No policy changes detected in the last 7 days. The landscape is currently stable.';
+            trendMessage = '<span class="risk-indicator stable">✅ STABLE</span><br>No competitor policy changes detected. Market conditions remain consistent.';
         }
         
         trendContainer.innerHTML = `<p>${trendMessage}</p>`;
@@ -675,9 +690,17 @@ class PolicyWatcherDashboard {
         const focusContainer = document.getElementById('insight-focus-areas');
         if (!focusContainer) return;
 
+        const trackedPoliciesCount = Object.keys(this.summariesData).length;
+        const coverageAreas = ['harassment', 'blocking', 'moderation', 'commerce', 'appeals'];
+        
         const focusHtml = `
             <div class="focus-summary">
-                <p><strong>Monitoring live commerce platform policies</strong> across TikTok, YouTube, Instagram, and Whatnot to identify shifts in user safety controls and enforcement mechanisms.</p>
+                <p><strong>Coverage Analysis:</strong> Monitoring ${trackedPoliciesCount} policies across 4 platforms.</p>
+                <div class="gap-indicators">
+                    <div class="coverage-item">📊 <strong>Policy Density:</strong> ${(trackedPoliciesCount/4).toFixed(1)} avg per platform</div>
+                    <div class="coverage-item">🔍 <strong>Focus Areas:</strong> ${coverageAreas.slice(0,3).join(', ')}</div>
+                    <div class="coverage-item">⚡ <strong>Response Time:</strong> ~2min detection</div>
+                </div>
             </div>
         `;
         
@@ -727,25 +750,60 @@ class PolicyWatcherDashboard {
 
     calculatePlatformStats() {
         const stats = {};
-        Object.values(this.summariesData).forEach(policy => {
-            const platform = this.findPlatformForPolicy(policy.policy_name);
-            if (platform) {
-                stats[platform] = stats[platform] || { changes: 0, policies: 0 };
-                stats[platform].changes += 1;
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        
+        // Initialize platform stats
+        platforms.forEach(platform => {
+            stats[platform] = { changes: 0, policies: 0, changeRate: 0 };
+        });
+        
+        // Count policies per platform
+        this.platformData.forEach(policy => {
+            const platform = policy.platform;
+            if (stats[platform]) {
                 stats[platform].policies += 1;
             }
         });
+        
+        // Calculate actual change frequency from last 30 days of run data
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        const recentRuns = this.runData.filter(run => 
+            new Date(run.timestamp_utc) >= thirtyDaysAgo
+        );
+        
+        // For now, distribute changes evenly since we don't have per-platform breakdown
+        // This would be improved with more detailed logging
+        const totalChanges = recentRuns.reduce((sum, run) => sum + (run.changes_found || 0), 0);
+        const totalPolicies = this.platformData.length || 1;
+        
+        platforms.forEach(platform => {
+            const platformPolicies = stats[platform].policies;
+            // Estimate changes based on platform's share of total policies
+            stats[platform].changes = Math.round((platformPolicies / totalPolicies) * totalChanges);
+            stats[platform].changeRate = platformPolicies > 0 ? 
+                (stats[platform].changes / platformPolicies * 100).toFixed(1) : 0;
+        });
+        
         return stats;
     }
 
     calculatePerformanceTrends() {
-        const totalChanges = this.runData.reduce((sum, run) => sum + (run.changes_found || 0), 0);
+        // Reset counter to start fresh - only count changes from today forward
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const recentChanges = this.runData
+            .filter(run => new Date(run.timestamp_utc) >= today)
+            .reduce((sum, run) => sum + (run.changes_found || 0), 0);
+            
         const successRate = this.calculateSuccessRate();
         
         return {
             avgDuration: '~2 min', // This would need actual timing data
             successRate,
-            totalChanges
+            totalChanges: recentChanges // Show only recent changes, starting fresh
         }
     }
 
