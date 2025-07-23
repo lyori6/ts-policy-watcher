@@ -20,7 +20,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_API_KEY_2 = os.environ.get("GEMINI_API_KEY_2")
 RUN_LOG_FILE = "run_log.json"
 SUMMARIES_FILE = "summaries.json"
-PROMPT_TEMPLATE = """You are a Trust & Safety analyst. Below is text from a competitor's policy page. Analyze it and provide a concise summary in markdown format for a product manager. {instruction}\n\nText:\n---\n{policy_text}\n---\n\nSummary:"""
+PROMPT_TEMPLATE = """Summarize this competitor policy change in 2-3 bullet points for a product manager. Focus on key updates/changes only. {instruction}\n\nPolicy text:\n{policy_text}\n\nSummary (2-3 bullets):"""
 
 # Track which API key we're currently using
 current_api_key = GEMINI_API_KEY
