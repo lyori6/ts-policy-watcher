@@ -81,15 +81,38 @@ def clean_html(html_content: str) -> str:
     # 5. Remove hidden elements that don't contain meaningful content
     for hidden_element in target_soup.find_all(attrs={'style': re.compile(r'display:\s*none')}):
         hidden_element.decompose()
-
-    # Remove other tags that don't contain meaningful policy text
-    for tag in target_soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
-        tag.decompose()
-        
-    # Normalize text to be resilient to whitespace changes
+    
+    # 6. Remove search elements that can appear in different positions
+    for search_element in target_soup.find_all(['input', 'button'], attrs={'type': 'search'}):
+        search_element.decompose()
+    for search_element in target_soup.find_all(attrs={'class': re.compile(r'search|menu')}):
+        search_element.decompose()
+    
+    # 7. Remove Google-specific navigation elements that load dynamically
+    for nav_element in target_soup.find_all(['form', 'div'], attrs={'role': 'search'}):
+        nav_element.decompose()
+    
+    # 8. Remove text patterns that appear in different orders dynamically
+    # This is aggressive filtering for navigation elements
+    dynamic_nav_patterns = [
+        'SearchClear searchClose searchMain menu',
+        'Google Help', 
+        'Help Center',
+        'Google apps'
+    ]
+    
+    # Split text into lines and filter out navigation patterns
     text = target_soup.get_text()
-    lines = (line.strip() for line in text.splitlines())
-    return "\n".join(line for line in lines if line)
+    lines = text.splitlines()
+    filtered_lines = []
+    
+    for line in lines:
+        line = line.strip()
+        if line and not any(pattern in line for pattern in dynamic_nav_patterns):
+            filtered_lines.append(line)
+    
+    # Return early with filtered content
+    return "\n".join(filtered_lines)
 
 def main():
     """Main function to orchestrate the fetching process."""
