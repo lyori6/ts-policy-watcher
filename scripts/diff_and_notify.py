@@ -20,7 +20,12 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_API_KEY_2 = os.environ.get("GEMINI_API_KEY_2")
 RUN_LOG_FILE = "run_log.json"
 SUMMARIES_FILE = "summaries.json"
-PROMPT_TEMPLATE = """Summarize this competitor policy change in 2-3 bullet points for a product manager. Focus on key updates/changes only. {instruction}\n\nPolicy text:\n{policy_text}\n\nSummary (2-3 bullets):"""
+PROMPT_TEMPLATE = """As a Trust & Safety analyst, provide a concise summary for a product manager. {instruction}
+
+Policy content:
+{policy_text}
+
+Provide a direct summary using bullet points:"""
 
 # Track which API key we're currently using
 current_api_key = GEMINI_API_KEY
@@ -79,8 +84,8 @@ def get_ai_summary(text_content, is_new_policy):
     model = genai.GenerativeModel('gemini-2.5-flash')
     
     instruction = (
-        "Summarize the key points of this entire policy document." if is_new_policy 
-        else "Summarize the key changes based on this diff."
+        "Analyze this complete policy document and highlight the key aspects." if is_new_policy 
+        else "Identify the specific changes and their impact."
     )
     
     prompt = PROMPT_TEMPLATE.format(instruction=instruction, policy_text=text_content)
@@ -222,11 +227,21 @@ def create_concise_summary(summary_text, max_length=800):
     # Clean up the text while preserving important markdown
     lines = [line.strip() for line in summary_text.split('\n') if line.strip()]
     
-    # Keep headers, bullet points, and content - this is important policy info
+    # Remove redundant intro phrases
     filtered_lines = []
+    skip_patterns = [
+        "here are the key changes based on the diff",
+        "based on the diff",
+        "here are the key changes",
+        "the key changes are",
+        "summary:",
+        "key changes:"
+    ]
+    
     for line in lines:
-        # Skip only very specific formatting lines
-        if line.startswith('---') or line.startswith('==='):
+        # Skip only very specific formatting lines and redundant intros
+        if (line.startswith('---') or line.startswith('===') or 
+            any(pattern in line.lower() for pattern in skip_patterns)):
             continue
         # Keep everything else including bullets and headers
         filtered_lines.append(line)
@@ -264,16 +279,21 @@ def send_email_notification(changes):
     # Group changes by platform
     platform_groups = group_changes_by_platform(changes)
     
-    subject = f"Policy Watch: {len(changes)} meaningful change{'s' if len(changes) != 1 else ''} detected"
+    # More concise subject line
+    if len(changes) == 1:
+        platform = list(platform_groups.keys())[0] if platform_groups else "Policy"
+        subject = f"Policy Update: {platform}"
+    else:
+        subject = f"Policy Updates: {len(changes)} changes"
     
     # Create concise HTML email
     html_body = f"""
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
-            Policy Watch Report
+            T&S Policy Updates
         </h2>
         <p style="color: #555; margin-bottom: 25px;">
-            Detected {len(changes)} meaningful policy change{'s' if len(changes) != 1 else ''} on {datetime.now(UTC).strftime('%B %d, %Y at %H:%M')} UTC
+            {len(changes)} change{'s' if len(changes) != 1 else ''} detected • {datetime.now(UTC).strftime('%B %d, %Y at %H:%M')} UTC
         </p>
     """
     
