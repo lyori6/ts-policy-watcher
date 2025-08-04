@@ -12,8 +12,15 @@ __pycache__/
 
 # macOS
 .DS_Store
-.DS_Store
-.DS_Store
 
-# Handoff file
+# Development snapshots (not committed)
+snapshots/development/
+snapshots/testing/
+
+# Keep production snapshots in git
+!snapshots/production/
+
+# Test artifacts
+.pytest_cache/
+/tmp/fetch_debug_*
 

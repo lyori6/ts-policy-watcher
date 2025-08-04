@@ -11,11 +11,30 @@ from bs4 import BeautifulSoup
 
 # --- Configuration ---
 USER_AGENT = "TrustAndSafety-Policy-Watcher/1.0 (https://github.com/your-repo/ts-policy-watcher; mailto:your-email@example.com)"
-SNAPSHOTS_DIR = Path("snapshots")
 URL_CONFIG_FILE = Path("platform_urls.json")
 FAILURE_LOG_FILE = Path("failures.log")
 RETRY_ATTEMPTS = 2
 RETRY_DELAY_SECONDS = 5
+
+def get_snapshot_base_directory():
+    """
+    Determine snapshot base directory based on environment.
+    
+    Environment detection logic:
+    - GitHub Actions (production): snapshots/production/
+    - Local development (DEBUG_FETCH=1 or DEVELOPMENT_MODE=1): snapshots/development/
+    - Default: snapshots/production/ (backward compatibility)
+    """
+    if os.getenv('GITHUB_ACTIONS'):
+        return Path("snapshots/production")
+    elif os.getenv('DEBUG_FETCH') or os.getenv('DEVELOPMENT_MODE'):
+        return Path("snapshots/development")
+    else:
+        # Backward compatibility: use production by default
+        return Path("snapshots/production")
+
+# Dynamic snapshots directory based on environment
+SNAPSHOTS_DIR = get_snapshot_base_directory()
 
 def fetch_with_httpx(url: str) -> str:
     """Fetches page content using the lightweight httpx library."""
