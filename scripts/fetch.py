@@ -5,7 +5,7 @@ import time
 import os
 import sys
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 from bs4 import BeautifulSoup
 
@@ -118,6 +118,12 @@ def main():
     """Main function to orchestrate the fetching process."""
     print("--- Starting Fetcher Script ---")
     
+    # Track run statistics
+    run_start_time = datetime.now(UTC)
+    pages_checked = 0
+    changes_found = 0
+    errors = []
+    
     # CRITICAL: Check if config file exists
     if not URL_CONFIG_FILE.is_file():
         print(f"FATAL: Configuration file not found at '{URL_CONFIG_FILE}'. Make sure it's in the root directory.", file=sys.stderr)
@@ -145,6 +151,8 @@ def main():
         print(f"\n[INFO] Processing '{slug}'...")
         print(f"  - URL: {url}")
         print(f"  - Renderer: {renderer}")
+        
+        pages_checked += 1
 
         content = None
         for attempt in range(RETRY_ATTEMPTS):
@@ -155,11 +163,13 @@ def main():
                     content = fetch_with_httpx(url)
                 break 
             except Exception as e:
-                print(f"    - Attempt {attempt + 1}/{RETRY_ATTEMPTS} FAILED. Reason: {e}", file=sys.stderr)
+                error_msg = f"Attempt {attempt + 1}/{RETRY_ATTEMPTS} FAILED for {slug}. Reason: {e}"
+                print(f"    - {error_msg}", file=sys.stderr)
                 if attempt < RETRY_ATTEMPTS - 1:
                     time.sleep(RETRY_DELAY_SECONDS)
                 else:
                     failures.append({"url": url, "platform": slug, "reason": str(e)})
+                    errors.append(error_msg)
 
         if content:
             try:
@@ -196,11 +206,46 @@ def main():
                     else:
                         # Overwrite the file only if the cleaned content is different
                         output_path.write_text(content, encoding="utf-8")
+                        changes_found += 1
                         print(f"  - SUCCESS: Snapshot updated for {slug} at {output_path}")
             except Exception as e:
                 print(f"    - CRITICAL: Failed to write file for {url}. Reason: {e}", file=sys.stderr)
                 failures.append({"url": url, "platform": slug, "reason": f"File write error: {e}"})
 
+    # Create run log entry
+    try:
+        run_log_entry = {
+            "timestamp_utc": run_start_time.isoformat() + "Z",
+            "status": "success" if not failures else "partial_failure",
+            "pages_checked": pages_checked,
+            "changes_found": changes_found,
+            "errors": errors
+        }
+        
+        # Load existing run log or create new one
+        run_log_file = Path("run_log.json")
+        if run_log_file.exists():
+            try:
+                with open(run_log_file, "r") as f:
+                    run_log = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                run_log = []
+        else:
+            run_log = []
+        
+        # Add new entry at the beginning and keep only the last 25 entries
+        run_log.insert(0, run_log_entry)
+        run_log = run_log[:25]
+        
+        # Write updated run log
+        with open(run_log_file, "w") as f:
+            json.dump(run_log, f, indent=2)
+        
+        print(f"\n--- Run Log Updated: {pages_checked} pages checked, {changes_found} changes found ---")
+    
+    except Exception as e:
+        print(f"WARNING: Failed to update run log: {e}", file=sys.stderr)
+        
     if failures:
         print(f"\n--- Fetch completed with {len(failures)} failures. ---", file=sys.stderr)
         with open(FAILURE_LOG_FILE, "w") as f:

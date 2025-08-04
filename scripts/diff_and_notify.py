@@ -4,7 +4,7 @@ import os
 import sys
 import json
 import subprocess
-from datetime import datetime
+from datetime import datetime, UTC
 import google.generativeai as genai
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 import html2text
@@ -187,30 +187,8 @@ def process_changed_file(file_path, is_new_policy, commit_sha):
         return None
 
 def log_run_status(status, pages_checked, changes_found, errors):
-    """Appends the status of the current run to a JSON log file."""
-    log_entry = {
-        "timestamp_utc": datetime.utcnow().isoformat() + 'Z',
-        "status": status,
-        "pages_checked": pages_checked,
-        "changes_found": changes_found,
-        "errors": errors
-    }
-    
-    log_data = []
-    if os.path.exists(RUN_LOG_FILE):
-        try:
-            with open(RUN_LOG_FILE, 'r') as f:
-                log_data = json.load(f)
-        except (json.JSONDecodeError, FileNotFoundError):
-            print(f"Warning: Could not read or parse {RUN_LOG_FILE}. A new one will be created.", file=sys.stderr)
-            log_data = []
-
-    log_data.insert(0, log_entry)
-
-    with open(RUN_LOG_FILE, 'w') as f:
-        json.dump(log_data, f, indent=2)
-    
-    print(f"Successfully logged run status to {RUN_LOG_FILE}")
+    """Log summary processing status (run_log is now handled by fetch.py)."""
+    print(f"Summary processing complete: {status}, {pages_checked} pages checked, {changes_found} changes found")
 
 def group_changes_by_platform(changes):
     """Groups policy changes by platform for better organization."""
@@ -236,34 +214,38 @@ def group_changes_by_platform(changes):
     
     return platform_groups
 
-def create_concise_summary(summary_text, max_sentences=2):
-    """Creates a concise 1-2 sentence summary from longer text while preserving markdown."""
+def create_concise_summary(summary_text, max_length=800):
+    """Creates a concise summary from longer text while preserving important markdown formatting."""
     if not summary_text:
         return "Policy updated with new content."
     
-    # Clean up the text while preserving basic markdown
+    # Clean up the text while preserving important markdown
     lines = [line.strip() for line in summary_text.split('\n') if line.strip()]
     
-    # Filter out empty lines and headers, keep content lines
-    content_lines = []
+    # Keep headers, bullet points, and content - this is important policy info
+    filtered_lines = []
     for line in lines:
-        # Skip headers and bullet points for the concise summary
-        if not line.startswith('#') and not line.startswith('*') and not line.startswith('-'):
-            content_lines.append(line)
+        # Skip only very specific formatting lines
+        if line.startswith('---') or line.startswith('==='):
+            continue
+        # Keep everything else including bullets and headers
+        filtered_lines.append(line)
     
-    if not content_lines:
+    if not filtered_lines:
         return "Policy content has been updated."
     
-    # Join the first couple content lines and limit to reasonable length
-    summary = ' '.join(content_lines[:max_sentences])
+    # Join lines with proper spacing
+    summary = '\n'.join(filtered_lines)
     
-    # Limit length while preserving markdown formatting
-    if len(summary) > 200:
+    # Only truncate if extremely long (over 800 chars)
+    if len(summary) > max_length:
         # Find a good breaking point near word boundaries
-        truncated = summary[:197]
+        truncated = summary[:max_length-3]
         last_space = truncated.rfind(' ')
-        if last_space > 100:
+        if last_space > max_length//2:
             summary = truncated[:last_space] + "..."
+        else:
+            summary = truncated + "..."
     
     return summary
 
@@ -291,7 +273,7 @@ def send_email_notification(changes):
             Policy Watch Report
         </h2>
         <p style="color: #555; margin-bottom: 25px;">
-            Detected {len(changes)} meaningful policy change{'s' if len(changes) != 1 else ''} on {datetime.utcnow().strftime('%B %d, %Y at %H:%M')} UTC
+            Detected {len(changes)} meaningful policy change{'s' if len(changes) != 1 else ''} on {datetime.now(UTC).strftime('%B %d, %Y at %H:%M')} UTC
         </p>
     """
     
@@ -384,12 +366,12 @@ def main():
                             "policy_name": slug.replace('-', ' ').title(),
                             "initial_summary": summary_text,
                             "last_update_summary": "Initial version.",
-                            "last_updated": datetime.utcnow().isoformat() + 'Z'
+                            "last_updated": datetime.now(UTC).isoformat().replace('+00:00', 'Z')
                         }
                         print(f"Generated initial summary for new policy: {slug}")
                     else:
                         summaries_data[slug]['last_update_summary'] = summary_text
-                        summaries_data[slug]['last_updated'] = datetime.utcnow().isoformat() + 'Z'
+                        summaries_data[slug]['last_updated'] = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
                         print(f"Generated update summary for existing policy: {slug}")
                     update_count += 1
                     email_notifications.append({
