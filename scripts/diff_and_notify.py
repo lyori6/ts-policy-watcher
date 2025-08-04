@@ -234,14 +234,18 @@ def create_concise_summary(summary_text, max_length=800):
         "based on the diff",
         "here are the key changes",
         "the key changes are",
+        "here's a concise summary for the product manager",
+        "here's a summary for the product manager",
         "summary:",
         "key changes:"
     ]
     
     for line in lines:
         # Skip only very specific formatting lines and redundant intros
+        line_lower = line.lower().strip()
         if (line.startswith('---') or line.startswith('===') or 
-            any(pattern in line.lower() for pattern in skip_patterns)):
+            any(pattern in line_lower for pattern in skip_patterns) or
+            line_lower.endswith(':') and any(pattern in line_lower for pattern in skip_patterns)):
             continue
         # Keep everything else including bullets and headers
         filtered_lines.append(line)
@@ -286,59 +290,44 @@ def send_email_notification(changes):
     else:
         subject = f"Policy Updates: {len(changes)} changes"
     
-    # Create concise HTML email
-    html_body = f"""
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
-            T&S Policy Updates
-        </h2>
-        <p style="color: #555; margin-bottom: 25px;">
-            {len(changes)} change{'s' if len(changes) != 1 else ''} detected • {datetime.now(UTC).strftime('%B %d, %Y at %H:%M')} UTC
-        </p>
-    """
+    # Create clean plain text email
+    email_body = f"""T&S Policy Updates
+{len(changes)} change{'s' if len(changes) != 1 else ''} detected • {datetime.now(UTC).strftime('%B %d, %Y at %H:%M')} UTC
+
+"""
     
     for platform, platform_changes in platform_groups.items():
-        html_body += f"""
-        <div style="margin-bottom: 25px; border-left: 4px solid #3498db; padding-left: 15px;">
-            <h3 style="color: #2c3e50; margin: 0 0 15px 0; font-size: 18px;">{platform}</h3>
-        """
+        email_body += f"{platform.upper()}\n{'=' * len(platform)}\n\n"
         
         for change in platform_changes:
             change_type = "New Policy" if change['is_new'] else "Updated"
             concise_summary = create_concise_summary(change['summary'])
-            # Convert markdown to HTML for proper email rendering
-            concise_summary_html = markdown.markdown(concise_summary)
             policy_clean_name = change['policy_name'].replace(platform.lower(), '').strip()
             
-            html_body += f"""
-            <div style="margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px;">
-                <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px;">
-                    {policy_clean_name} <span style="font-size: 12px; color: #7f8c8d;">({change_type})</span>
-                </div>
-                <div style="color: #555; line-height: 1.4;">
-                    {concise_summary_html}
-                </div>
-            </div>
-            """
+            email_body += f"{policy_clean_name} ({change_type})\n"
+            email_body += f"{'-' * (len(policy_clean_name) + len(change_type) + 3)}\n"
+            
+            # Clean up markdown formatting for plain text
+            plain_summary = concise_summary.replace('**', '').replace('* ', '• ')
+            # Remove any remaining double spaces and clean up formatting
+            plain_summary = ' '.join(plain_summary.split())
+            email_body += f"{plain_summary}\n\n"
         
-        html_body += "</div>"
+        email_body += "\n"
     
-    html_body += """
-        <div style="margin-top: 30px; padding: 15px; background: #ecf0f1; border-radius: 6px; text-align: center;">
-            <p style="color: #7f8c8d; margin: 0; font-size: 14px;">
-                View detailed changes and history at your 
-                <a href="https://ts-policy-watcher.vercel.app/" style="color: #3498db;">Policy Dashboard</a>
-            </p>
-        </div>
-    </div>
-    """
+    email_body += """────────────────────────────────────────
+
+View detailed changes and history at:
+https://ts-policy-watcher.vercel.app/
+
+"""
 
     try:
         params = {
             "from": "Policy Watcher <onboarding@resend.dev>",
             "to": [RECIPIENT_EMAIL],
             "subject": subject,
-            "html": html_body,
+            "text": email_body,
         }
         email = resend.Emails.send(params)
         print(f"Successfully sent email notification. Message ID: {email['id']}")
