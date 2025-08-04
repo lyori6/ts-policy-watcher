@@ -1,9 +1,16 @@
 [
   {
+    "platform": "Test",
+    "name": "Change Detection Test",
+    "slug": "test-change-detection",
+    "url": "https://httpbin.org/uuid",
+    "renderer": "httpx"
+  },
+  {
     "platform": "Whatnot",
     "name": "Community Guidelines",
     "slug": "whatnot-community-guidelines",
-    "url": "https://support.whatnot.com/hc/en-us/articles/360060824552-Community-Guidelines",
+    "url": "https://help.whatnot.com/hc/en-us/articles/360060824552-Community-Guidelines",
     "renderer": "playwright"
   },
   {
@@ -17,7 +24,7 @@
     "platform": "Whatnot",
     "name": "Prohibited Items",
     "slug": "whatnot-prohibited-items",
-    "url": "https://support.whatnot.com/hc/en-us/articles/360060825312-Prohibited-Items",
+    "url": "https://help.whatnot.com/hc/en-us/articles/360060825312-Prohibited-Items",
     "renderer": "playwright"
   },
   {
