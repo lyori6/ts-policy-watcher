@@ -475,3 +475,53 @@ https://ts-policy-watcher.vercel.app/
 - Simplified email template (no HTML/CSS maintenance)
 - Consistent rendering regardless of email client updates
 - Easier debugging and content modification
+
+### 7.7. Comprehensive AI Content Filtering (Final Update)
+
+**Issue Resolution:**
+- **Problem**: Inconsistent email formatting between sends (clean at 12:12, messy at 12:16)
+- **Root Cause**: Multiple AI-generated intro patterns not being caught by initial filtering
+- **Solution**: Comprehensive pattern matching with multiple detection methods
+
+**Enhanced Skip Patterns Added:**
+```
+"here's a concise summary of the"
+"as a trust & safety analyst, here"
+"as a trust & safety analyst, here's"  
+"summary for product manager"
+"summary for a product manager"
+"concise summary for a product manager"
+"concise summary for the product manager"
+"for a product manager:"
+"for the product manager:"
+"overview:"
+"key information:"
+"policy overview:"
+```
+
+**Multi-Layer Filtering Logic:**
+1. **Contains Check**: Pattern anywhere in line
+2. **Starts-With Check**: Line begins with pattern (first 50 chars)
+3. **Header Colon Check**: Headers ending with colons that match patterns
+4. **Markdown Header Check**: `###` or `##` headers containing patterns
+
+**Testing Verification:**
+- **Message ID**: `e0882a18-f9e7-4d5f-b879-e9fe772b1dc0` demonstrates consistent filtering
+- **Debug Results**: Successfully removes "Here's a concise summary for a product manager:" and all variants
+- **Consistency**: All AI-generated intro text now filtered regardless of variation
+
+**Final Email Format:**
+```
+T&S Policy Updates
+1 change detected • August 04, 2025 at 19:41 UTC
+
+YOUTUBE
+=======
+
+Hiding Users (Updated)
+---------------------
+• Specific Changes: The entire user feedback form previously located...
+• Impact: Users can no longer provide direct feedback...
+```
+
+**Result**: Professional, consistent plain text emails without any redundant AI-generated introduction text.
