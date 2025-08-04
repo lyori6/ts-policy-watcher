@@ -260,8 +260,13 @@ def create_concise_summary(summary_text, max_length=800):
         if line.startswith('---') or line.startswith('==='):
             continue
             
-        # Skip lines that contain any of our skip patterns
+        # Skip lines that contain any of our skip patterns (more flexible matching)
         if any(pattern in line_lower for pattern in skip_patterns):
+            continue
+        
+        # Additional check for lines that start with problematic patterns
+        line_start = line_lower[:50]  # Check first 50 chars for efficiency
+        if any(line_start.startswith(pattern.replace(':', '')) for pattern in skip_patterns):
             continue
             
         # Skip lines that are just headers ending with colon that match patterns
