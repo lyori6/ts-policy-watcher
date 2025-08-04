@@ -227,7 +227,7 @@ def create_concise_summary(summary_text, max_length=800):
     # Clean up the text while preserving important markdown
     lines = [line.strip() for line in summary_text.split('\n') if line.strip()]
     
-    # Remove redundant intro phrases
+    # Remove redundant intro phrases - comprehensive patterns
     filtered_lines = []
     skip_patterns = [
         "here are the key changes based on the diff",
@@ -236,17 +236,44 @@ def create_concise_summary(summary_text, max_length=800):
         "the key changes are",
         "here's a concise summary for the product manager",
         "here's a summary for the product manager",
+        "here's a concise summary of the",
+        "as a trust & safety analyst, here",
+        "as a trust & safety analyst, here's",
+        "summary for product manager",
+        "summary for a product manager",
+        "concise summary for a product manager",
+        "concise summary for the product manager",
+        "for a product manager:",
+        "for the product manager:",
         "summary:",
-        "key changes:"
+        "key changes:",
+        "overview:",
+        "key information:",
+        "policy overview:"
     ]
     
     for line in lines:
         # Skip only very specific formatting lines and redundant intros
         line_lower = line.lower().strip()
-        if (line.startswith('---') or line.startswith('===') or 
-            any(pattern in line_lower for pattern in skip_patterns) or
-            line_lower.endswith(':') and any(pattern in line_lower for pattern in skip_patterns)):
+        
+        # Skip separator lines
+        if line.startswith('---') or line.startswith('==='):
             continue
+            
+        # Skip lines that contain any of our skip patterns
+        if any(pattern in line_lower for pattern in skip_patterns):
+            continue
+            
+        # Skip lines that are just headers ending with colon that match patterns
+        if (line_lower.endswith(':') and 
+            any(pattern.replace(':', '') in line_lower for pattern in skip_patterns)):
+            continue
+            
+        # Skip standalone intro headers like "### Summary" or "## Overview"  
+        if (line.startswith('#') and 
+            any(pattern.replace(':', '') in line_lower for pattern in skip_patterns if len(pattern) > 5)):
+            continue
+            
         # Keep everything else including bullets and headers
         filtered_lines.append(line)
     
