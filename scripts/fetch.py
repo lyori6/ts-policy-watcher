@@ -234,7 +234,7 @@ def main():
     # Create run log entry
     try:
         run_log_entry = {
-            "timestamp_utc": run_start_time.isoformat() + "Z",
+            "timestamp_utc": run_start_time.isoformat().replace('+00:00', 'Z'),
             "status": "success" if not failures else "partial_failure",
             "pages_checked": pages_checked,
             "changes_found": changes_found,

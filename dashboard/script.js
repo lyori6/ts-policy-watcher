@@ -128,7 +128,8 @@ class PolicyWatcherDashboard {
         }
 
         if (this.runLogData.length > 0) {
-            const lastRun = new Date(this.runLogData[0].timestamp_utc);
+            const cleanedTimestamp = this.cleanTimestamp(this.runLogData[0].timestamp_utc);
+            const lastRun = new Date(cleanedTimestamp);
             const now = new Date();
             
             // Validate that the date is valid to prevent NaN
@@ -739,6 +740,17 @@ class PolicyWatcherDashboard {
 
     // Utility Functions
 
+    cleanTimestamp(timestamp) {
+        if (!timestamp) return timestamp;
+        
+        // Fix malformed timestamps that have both +00:00 and Z
+        if (timestamp.includes('+00:00Z')) {
+            return timestamp.replace('+00:00Z', 'Z');
+        }
+        
+        return timestamp;
+    }
+
     getRecentChanges() {
         return Object.entries(this.summariesData)
             .filter(([slug, policy]) => {
@@ -864,11 +876,19 @@ class PolicyWatcherDashboard {
     }
 
     formatDateTime(isoString) {
-        return new Date(isoString).toLocaleString();
+        const cleanedTimestamp = this.cleanTimestamp(isoString);
+        return new Date(cleanedTimestamp).toLocaleString();
     }
 
     formatRelativeTime(isoString) {
-        const date = new Date(isoString);
+        const cleanedTimestamp = this.cleanTimestamp(isoString);
+        const date = new Date(cleanedTimestamp);
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return 'Invalid date';
+        }
+        
         const now = new Date();
         const diffMs = now - date;
         const diffMinutes = Math.floor(diffMs / (1000 * 60));
