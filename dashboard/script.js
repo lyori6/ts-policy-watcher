@@ -637,26 +637,47 @@ class PolicyWatcherDashboard {
             }
         }
 
-        let trendMessage = '';
+        // Compact risk updates display
+        let riskLevel = 'stable';
+        let riskIcon = '✅';
+        let riskText = 'STABLE';
+        
         if (recentChangesCount > 0) {
-            // Only calculate most active platform if we have platform activity data
+            // Calculate most active platform
             let mostActivePlatform = '';
             const platforms = Object.keys(platformActivity);
             if (platforms.length > 0) {
                 mostActivePlatform = platforms.reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b);
             }
             
-            const riskLevel = recentChangesCount > 3 ? 'elevated' : 'moderate';
-            trendMessage = `<span class="risk-indicator ${riskLevel}">⚠️ ${riskLevel.toUpperCase()} ACTIVITY</span><br>`;
-            trendMessage += `<strong>${recentChangesCount}</strong> competitor policy update${recentChangesCount > 1 ? 's' : ''} in the last 7 days may indicate market shifts requiring review.`;
-            if (mostActivePlatform) {
-                trendMessage += ` <strong>${mostActivePlatform}</strong> leading changes.`;
-            }
-        } else {
-            trendMessage = '<span class="risk-indicator stable">✅ STABLE</span><br>No competitor policy changes detected. Market conditions remain consistent.';
+            riskLevel = recentChangesCount > 3 ? 'elevated' : 'moderate';
+            riskIcon = riskLevel === 'elevated' ? '🚨' : '⚠️';
+            riskText = riskLevel.toUpperCase() + ' ACTIVITY';
+            
+            // Store expanded content for click functionality
+            window.riskExpandedContent = {
+                recentChangesCount,
+                mostActivePlatform,
+                riskLevel,
+                platformActivity
+            };
         }
         
-        trendContainer.innerHTML = `<p>${trendMessage}</p>`;
+        // Compact display
+        const compactRisk = `
+            <div class="risk-compact" onclick="toggleRiskExpansion()">
+                <div class="risk-summary">
+                    <span class="risk-indicator ${riskLevel}">${riskIcon} ${riskText}</span>
+                    ${recentChangesCount > 0 ? `<span class="risk-count">${recentChangesCount} changes</span>` : ''}
+                </div>
+                <div class="expand-hint">
+                    <i class="fas fa-chevron-down"></i> <span>Click for details</span>
+                </div>
+            </div>
+            <div class="risk-expanded" id="risk-expanded" style="display: none;"></div>
+        `;
+        
+        trendContainer.innerHTML = compactRisk;
 
         // --- Competitive Intelligence (Change Frequency) ---
         this.renderCompetitiveIntelligence();
@@ -683,44 +704,34 @@ class PolicyWatcherDashboard {
             return;
         }
 
-        const mostActiveChanges = Math.max(...sortedPlatforms.map(([,stats]) => stats.changes));
+        // Store expanded content for click functionality
+        window.competitiveExpandedContent = sortedPlatforms;
+
+        // Get top competitor for compact display
+        const [topPlatform, topStats] = sortedPlatforms[0];
+        const topIcon = this.getPlatformIcon(topPlatform);
         
-        let activityHtml = '<div class="competitive-intelligence">';
-        
-        sortedPlatforms.forEach(([platform, stats]) => {
-            const icon = this.getPlatformIcon(platform);
-            const isLeader = stats.changes === mostActiveChanges && mostActiveChanges > 0;
-            const intensity = mostActiveChanges > 0 ? Math.round((stats.changes / mostActiveChanges) * 100) : 0;
-            
-            activityHtml += `
-                <div class="competitor-activity ${isLeader ? 'most-active' : ''}">
-                    <div class="competitor-header">
-                        <i class="${icon}" style="color: var(--secondary-color);"></i>
-                        <strong>${platform}</strong>
-                        ${isLeader && stats.changes > 0 ? '<span class="leader-badge">🔥 MOST ACTIVE</span>' : ''}
+        // Compact display - show only top competitor
+        const compactCompetitive = `
+            <div class="competitive-compact" onclick="toggleCompetitiveExpansion()">
+                <div class="competitive-summary">
+                    <div class="top-competitor">
+                        <i class="${topIcon}"></i>
+                        <strong>${topPlatform}</strong>
+                        ${topStats.changes > 0 ? '<span class="leader-badge">LEADING</span>' : ''}
                     </div>
-                    <div class="activity-details">
-                        <span class="change-count">${stats.changes} changes</span>
-                        <span class="change-rate">${stats.policies} policies tracked</span>
-                    </div>
-                    <div class="activity-bar">
-                        <div class="activity-fill" style="width: ${intensity}%; background: ${isLeader ? '#ff6b35' : '#4ECDC4'}"></div>
+                    <div class="activity-stats">
+                        <span class="change-count">${topStats.changes} changes</span>
                     </div>
                 </div>
-            `;
-        });
+                <div class="expand-hint">
+                    <i class="fas fa-chevron-down"></i> <span>View all competitors</span>
+                </div>
+            </div>
+            <div class="competitive-expanded" id="competitive-expanded" style="display: none;"></div>
+        `;
         
-        activityHtml += '</div>';
-        
-        // Add strategic summary
-        if (mostActiveChanges > 0) {
-            const topCompetitor = sortedPlatforms[0][0];
-            activityHtml += `<div class="intelligence-summary">💡 <strong>${topCompetitor}</strong> leads competitor activity with strategic policy updates.</div>`;
-        } else {
-            activityHtml += `<div class="intelligence-summary">📊 All competitors stable - no significant policy changes detected.</div>`;
-        }
-        
-        activityContainer.innerHTML = activityHtml;
+        activityContainer.innerHTML = compactCompetitive;
     }
 
     renderLatestKeyChange() {
@@ -733,8 +744,10 @@ class PolicyWatcherDashboard {
         if (recentChanges.length === 0) {
             changeContainer.innerHTML = `
                 <div class="latest-change-empty">
-                    <p>📋 No recent policy changes detected.</p>
-                    <small>All competitor policies remain stable.</small>
+                    <div class="empty-state">
+                        <span class="empty-icon">📋</span>
+                        <span class="empty-text">No recent changes</span>
+                    </div>
                 </div>
             `;
             return;
@@ -746,38 +759,37 @@ class PolicyWatcherDashboard {
         
         // Extract key details from the summary
         const summary = latestChange.last_update_summary || latestChange.initial_summary || '';
-        const shortSummary = this.truncateText(summary, 120);
-        
-        // Determine change impact level
         const impactLevel = this.assessChangeImpact(summary);
         const impactColor = impactLevel === 'high' ? '#ff6b35' : impactLevel === 'medium' ? '#ffa500' : '#4ECDC4';
         
-        const changeHtml = `
-            <div class="latest-change-content">
-                <div class="change-header">
-                    <div class="platform-indicator">
-                        <i class="${icon}" style="color: ${impactColor};"></i>
+        // Store expanded content for click functionality
+        window.latestChangeExpandedContent = {
+            latestChange,
+            summary,
+            impactLevel,
+            impactColor
+        };
+        
+        // Compact display - just key info
+        const compactChange = `
+            <div class="latest-change-compact" onclick="toggleLatestChangeExpansion()">
+                <div class="change-preview">
+                    <div class="change-basic">
+                        <i class="${icon}"></i>
                         <strong>${latestChange.platform}</strong>
-                        <span class="impact-badge" style="background: ${impactColor};">${impactLevel.toUpperCase()} IMPACT</span>
+                        <span class="policy-brief">${this.truncateText(latestChange.policy_name.replace('Policy', '').replace('Guidelines', ''), 20)}</span>
+                        <span class="impact-badge" style="background: ${impactColor};">${impactLevel.toUpperCase()}</span>
                     </div>
                     <div class="change-timing">${timeAgo}</div>
                 </div>
-                
-                <div class="change-summary">
-                    <h4>${latestChange.policy_name}</h4>
-                    <p>${this.renderMarkdown(shortSummary)}</p>
-                </div>
-                
-                <div class="change-actions">
-                    <button class="insight-action-btn" onclick="openPolicyModal('${latestChange.slug}')" title="View full policy details">
-                        <i class="fas fa-eye"></i> View Details
-                    </button>
-                    <span class="strategic-note">💡 Strategic intelligence update</span>
+                <div class="expand-hint">
+                    <i class="fas fa-chevron-down"></i> <span>View details</span>
                 </div>
             </div>
+            <div class="latest-change-expanded" id="latest-change-expanded" style="display: none;"></div>
         `;
         
-        changeContainer.innerHTML = changeHtml;
+        changeContainer.innerHTML = compactChange;
     }
 
     assessChangeImpact(summary) {
@@ -819,6 +831,153 @@ class PolicyWatcherDashboard {
         return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                   .replace(/\*(.*?)\*/g, '<em>$1</em>');
     }
+}
+
+// Global toggle functions for card expansions
+function toggleRiskExpansion() {
+    const expanded = document.getElementById('risk-expanded');
+    const compact = document.querySelector('.risk-compact');
+    const chevron = compact.querySelector('.fa-chevron-down');
+    
+    if (expanded.style.display === 'none') {
+        // Show expanded content
+        if (window.riskExpandedContent) {
+            const data = window.riskExpandedContent;
+            let expandedHtml = `
+                <div class="risk-details">
+                    <div class="risk-breakdown">
+                        <h4>Market Risk Analysis</h4>
+                        <p><strong>${data.recentChangesCount}</strong> competitor policy updates in the last 7 days indicate <strong>${data.riskLevel}</strong> market activity.</p>
+                        ${data.mostActivePlatform ? `<p>🔥 <strong>${data.mostActivePlatform}</strong> is leading changes with strategic policy updates.</p>` : ''}
+                    </div>
+                    <div class="platform-breakdown">
+                        <h5>Platform Activity:</h5>
+                        <ul class="activity-list">
+            `;
+            
+            Object.entries(data.platformActivity).forEach(([platform, count]) => {
+                if (count > 0) {
+                    expandedHtml += `<li><strong>${platform}:</strong> ${count} changes</li>`;
+                }
+            });
+            
+            expandedHtml += `
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            expanded.innerHTML = expandedHtml;
+        }
+        expanded.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        // Hide expanded content
+        expanded.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
+
+function toggleCompetitiveExpansion() {
+    const expanded = document.getElementById('competitive-expanded');
+    const compact = document.querySelector('.competitive-compact');
+    const chevron = compact.querySelector('.fa-chevron-down');
+    
+    if (expanded.style.display === 'none') {
+        // Show expanded content
+        if (window.competitiveExpandedContent) {
+            const sortedPlatforms = window.competitiveExpandedContent;
+            const mostActiveChanges = Math.max(...sortedPlatforms.map(([,stats]) => stats.changes));
+            
+            let expandedHtml = `
+                <div class="competitive-details">
+                    <h4>All Competitors</h4>
+                    <div class="competitors-list">
+            `;
+            
+            sortedPlatforms.forEach(([platform, stats]) => {
+                const icon = app.getPlatformIcon(platform);
+                const isLeader = stats.changes === mostActiveChanges && mostActiveChanges > 0;
+                const intensity = mostActiveChanges > 0 ? Math.round((stats.changes / mostActiveChanges) * 100) : 0;
+                
+                expandedHtml += `
+                    <div class="competitor-detail ${isLeader ? 'leader' : ''}">
+                        <div class="competitor-info">
+                            <i class="${icon}"></i>
+                            <strong>${platform}</strong>
+                            ${isLeader ? '<span class="leader-tag">LEADING</span>' : ''}
+                        </div>
+                        <div class="competitor-stats">
+                            <span class="changes">${stats.changes} changes</span>
+                            <span class="policies">${stats.policies} tracked</span>
+                        </div>
+                        <div class="activity-bar-mini">
+                            <div class="activity-fill-mini" style="width: ${intensity}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            expandedHtml += `
+                    </div>
+                    <div class="competitive-summary">
+                        💡 Strategic insight: Monitor ${sortedPlatforms[0][0]} closely for policy trend leadership.
+                    </div>
+                </div>
+            `;
+            
+            expanded.innerHTML = expandedHtml;
+        }
+        expanded.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        // Hide expanded content
+        expanded.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
+
+function toggleLatestChangeExpansion() {
+    const expanded = document.getElementById('latest-change-expanded');
+    const compact = document.querySelector('.latest-change-compact');
+    const chevron = compact.querySelector('.fa-chevron-down');
+    
+    if (expanded.style.display === 'none') {
+        // Show expanded content
+        if (window.latestChangeExpandedContent) {
+            const data = window.latestChangeExpandedContent;
+            const shortSummary = app.truncateText(data.summary, 200);
+            
+            const expandedHtml = `
+                <div class="change-details">
+                    <div class="change-header-detailed">
+                        <h4>${data.latestChange.policy_name}</h4>
+                        <span class="impact-badge-large" style="background: ${data.impactColor};">
+                            ${data.impactLevel.toUpperCase()} IMPACT
+                        </span>
+                    </div>
+                    <div class="change-content">
+                        <p>${app.renderMarkdown(shortSummary)}</p>
+                    </div>
+                    <div class="change-actions-detailed">
+                        <button class="detail-action-btn" onclick="openPolicyModal('${data.latestChange.slug}')">
+                            <i class="fas fa-eye"></i> View Full Policy
+                        </button>
+                        <span class="strategic-insight">💡 Strategic intelligence update</span>
+                    </div>
+                </div>
+            `;
+            
+            expanded.innerHTML = expandedHtml;
+        }
+        expanded.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        // Hide expanded content
+        expanded.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
 
     findPlatformName(slug) {
         if (slug.startsWith('tiktok-')) return 'TikTok';
