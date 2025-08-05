@@ -798,6 +798,28 @@ class PolicyWatcherDashboard {
         return 'low';
     }
 
+    getPlatformIcon(platform) {
+        switch (platform.toLowerCase()) {
+            case 'tiktok': return 'fab fa-tiktok';
+            case 'youtube': return 'fab fa-youtube';
+            case 'instagram': return 'fab fa-instagram';
+            case 'whatnot': return 'fas fa-store';
+            default: return 'fas fa-building';
+        }
+    }
+
+    truncateText(text, maxLength) {
+        if (!text || text.length <= maxLength) return text;
+        return text.substring(0, maxLength).trim() + '...';
+    }
+
+    renderMarkdown(text) {
+        if (!text) return '';
+        // Simple markdown-like rendering for basic formatting
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    }
+
     findPlatformName(slug) {
         if (slug.startsWith('tiktok-')) return 'TikTok';
         if (slug.startsWith('whatnot-')) return 'Whatnot';
