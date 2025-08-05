@@ -658,74 +658,144 @@ class PolicyWatcherDashboard {
         
         trendContainer.innerHTML = `<p>${trendMessage}</p>`;
 
-        // --- Platform Activity ---
-        this.renderPlatformActivityInsight();
+        // --- Competitive Intelligence (Change Frequency) ---
+        this.renderCompetitiveIntelligence();
 
-        // --- Focus Areas ---
-        this.renderFocusAreasInsight();
+        // --- Latest Key Change ---
+        this.renderLatestKeyChange();
     }
 
-    renderPlatformActivityInsight() {
+    renderCompetitiveIntelligence() {
         const activityContainer = document.getElementById('insight-platform-activity');
         if (!activityContainer) return;
 
-        const platformStats = {};
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        // Get actual platform change activity data
+        const platformStats = this.calculatePlatformStats();
         
-        // Initialize platform counts
-        platforms.forEach(platform => {
-            platformStats[platform] = 0;
-        });
+        // Sort platforms by change frequency for strategic insight
+        const sortedPlatforms = Object.entries(platformStats)
+            .filter(([platform, stats]) => stats.policies > 0) // Only show platforms we track
+            .sort(([,a], [,b]) => b.changes - a.changes) // Sort by most active first
+            .slice(0, 4); // Top 4 most active
 
-        // Count policies per platform (exclude test data)
-        for (const slug in this.summariesData) {
-            // Filter out test policies
-            if (slug.startsWith('test-')) continue;
-            
-            const policy = this.summariesData[slug];
-            const platformName = this.findPlatformName(slug);
-            if (platformStats.hasOwnProperty(platformName)) {
-                platformStats[platformName]++;
-            }
+        if (sortedPlatforms.length === 0) {
+            activityContainer.innerHTML = '<p class="no-data">No competitor activity data available.</p>';
+            return;
         }
 
-        let activityHtml = '<div class="platform-comparison">';
-        for (const [platform, count] of Object.entries(platformStats)) {
-            const percentage = Math.round((count / Object.values(platformStats).reduce((a, b) => a + b, 0)) * 100) || 0;
+        const mostActiveChanges = Math.max(...sortedPlatforms.map(([,stats]) => stats.changes));
+        
+        let activityHtml = '<div class="competitive-intelligence">';
+        
+        sortedPlatforms.forEach(([platform, stats]) => {
+            const icon = this.getPlatformIcon(platform);
+            const isLeader = stats.changes === mostActiveChanges && mostActiveChanges > 0;
+            const intensity = mostActiveChanges > 0 ? Math.round((stats.changes / mostActiveChanges) * 100) : 0;
+            
             activityHtml += `
-                <div class="platform-stat">
-                    <span class="platform-name">${platform}</span>
-                    <span class="policy-count">${count} policies</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                <div class="competitor-activity ${isLeader ? 'most-active' : ''}">
+                    <div class="competitor-header">
+                        <i class="${icon}" style="color: var(--secondary-color);"></i>
+                        <strong>${platform}</strong>
+                        ${isLeader && stats.changes > 0 ? '<span class="leader-badge">🔥 MOST ACTIVE</span>' : ''}
+                    </div>
+                    <div class="activity-details">
+                        <span class="change-count">${stats.changes} changes</span>
+                        <span class="change-rate">${stats.policies} policies tracked</span>
+                    </div>
+                    <div class="activity-bar">
+                        <div class="activity-fill" style="width: ${intensity}%; background: ${isLeader ? '#ff6b35' : '#4ECDC4'}"></div>
                     </div>
                 </div>
             `;
-        }
+        });
+        
         activityHtml += '</div>';
+        
+        // Add strategic summary
+        if (mostActiveChanges > 0) {
+            const topCompetitor = sortedPlatforms[0][0];
+            activityHtml += `<div class="intelligence-summary">💡 <strong>${topCompetitor}</strong> leads competitor activity with strategic policy updates.</div>`;
+        } else {
+            activityHtml += `<div class="intelligence-summary">📊 All competitors stable - no significant policy changes detected.</div>`;
+        }
         
         activityContainer.innerHTML = activityHtml;
     }
 
-    renderFocusAreasInsight() {
-        const focusContainer = document.getElementById('insight-focus-areas');
-        if (!focusContainer) return;
+    renderLatestKeyChange() {
+        const changeContainer = document.getElementById('insight-latest-change');
+        if (!changeContainer) return;
 
-        const trackedPoliciesCount = Object.keys(this.summariesData).length;
-        const coverageAreas = ['harassment', 'blocking', 'moderation', 'commerce', 'appeals'];
+        // Get the most recent policy change
+        const recentChanges = this.getRecentChanges();
         
-        const focusHtml = `
-            <div class="focus-summary">
-                <p><strong>Coverage Analysis:</strong> Monitoring ${trackedPoliciesCount} policies across 4 platforms.</p>
-                <div class="gap-indicators">
-                    <div class="coverage-item">📊 <strong>Policy Density:</strong> ${(trackedPoliciesCount/4).toFixed(1)} avg per platform</div>
-                    <div class="coverage-item">🔍 <strong>Focus Areas:</strong> ${coverageAreas.slice(0,3).join(', ')}</div>
-                    <div class="coverage-item">⚡ <strong>Response Time:</strong> ~2min detection</div>
+        if (recentChanges.length === 0) {
+            changeContainer.innerHTML = `
+                <div class="latest-change-empty">
+                    <p>📋 No recent policy changes detected.</p>
+                    <small>All competitor policies remain stable.</small>
+                </div>
+            `;
+            return;
+        }
+
+        const latestChange = recentChanges[0];
+        const timeAgo = this.formatRelativeTime(latestChange.last_updated);
+        const icon = this.getPlatformIcon(latestChange.platform);
+        
+        // Extract key details from the summary
+        const summary = latestChange.last_update_summary || latestChange.initial_summary || '';
+        const shortSummary = this.truncateText(summary, 120);
+        
+        // Determine change impact level
+        const impactLevel = this.assessChangeImpact(summary);
+        const impactColor = impactLevel === 'high' ? '#ff6b35' : impactLevel === 'medium' ? '#ffa500' : '#4ECDC4';
+        
+        const changeHtml = `
+            <div class="latest-change-content">
+                <div class="change-header">
+                    <div class="platform-indicator">
+                        <i class="${icon}" style="color: ${impactColor};"></i>
+                        <strong>${latestChange.platform}</strong>
+                        <span class="impact-badge" style="background: ${impactColor};">${impactLevel.toUpperCase()} IMPACT</span>
+                    </div>
+                    <div class="change-timing">${timeAgo}</div>
+                </div>
+                
+                <div class="change-summary">
+                    <h4>${latestChange.policy_name}</h4>
+                    <p>${this.renderMarkdown(shortSummary)}</p>
+                </div>
+                
+                <div class="change-actions">
+                    <button class="insight-action-btn" onclick="openPolicyModal('${latestChange.slug}')" title="View full policy details">
+                        <i class="fas fa-eye"></i> View Details
+                    </button>
+                    <span class="strategic-note">💡 Strategic intelligence update</span>
                 </div>
             </div>
         `;
         
-        focusContainer.innerHTML = focusHtml;
+        changeContainer.innerHTML = changeHtml;
+    }
+
+    assessChangeImpact(summary) {
+        if (!summary) return 'low';
+        
+        const highImpactKeywords = ['monetization', 'algorithm', 'policy change', 'new rule', 'banned', 'prohibited', 'enforcement'];
+        const mediumImpactKeywords = ['guideline', 'update', 'clarification', 'revision', 'modification'];
+        
+        const summaryLower = summary.toLowerCase();
+        
+        if (highImpactKeywords.some(keyword => summaryLower.includes(keyword))) {
+            return 'high';
+        }
+        if (mediumImpactKeywords.some(keyword => summaryLower.includes(keyword))) {
+            return 'medium';
+        }
+        
+        return 'low';
     }
 
     findPlatformName(slug) {
