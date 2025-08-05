@@ -1,5 +1,46 @@
 # T&S Policy Watcher: Snapshot Architecture Improvement
 
+## 🚀 Quick Start Guide
+
+### Environment Detection
+The system automatically detects your environment:
+- **GitHub Actions** → `snapshots/production/` (automatic)
+- **Local Development** → `snapshots/development/` (with `DEBUG_FETCH=1` or `DEVELOPMENT_MODE=1`)
+- **Default** → `snapshots/production/` (backward compatibility)
+
+### Essential Commands
+
+```bash
+# 📋 List available production policies
+python scripts/sync_prod_snapshots.py --list
+
+# 🔄 Sync all production data to development
+python scripts/sync_prod_snapshots.py --all
+
+# 🎯 Sync specific policies for testing
+python scripts/sync_prod_snapshots.py --policies youtube-harassment-policy,tiktok-community-guidelines
+
+# 🧪 Run in development mode (writes to snapshots/development/)
+DEBUG_FETCH=1 python scripts/fetch.py
+
+# 🚀 Run in production mode (writes to snapshots/production/)
+python scripts/fetch.py
+
+# ✅ Run all tests
+python -m pytest tests/test_snapshot_architecture.py tests/test_integration_workflow.py -v
+```
+
+### Directory Structure
+```
+snapshots/
+├── production/          # 🚀 GitHub Actions (Git tracked)
+│   └── [20 policies]
+└── development/         # 💻 Local dev (Git ignored)
+    └── [synced policies]
+```
+
+---
+
 ## 🎯 Executive Summary
 
 **The Problem:** Our policy monitoring system suffered from constant merge conflicts between GitHub Actions (production) and local development, both writing to the same `snapshots/` directory. This created a 30+ minute overhead per development session and blocked efficient iteration.
@@ -191,4 +232,68 @@ This snapshot architecture improvement represents a **fundamental shift** from c
 
 The comprehensive test suite (21/21 passing) and production sync utility ensure the system is **production-ready** with full confidence in its reliability and maintainability.
 
-**Ready for GitHub deployment and production validation.**
+## 📊 Final Validation Results - DEPLOYED ✅
+
+### Production Deployment Status
+- ✅ **GitHub Actions Workflow**: Successfully running with environment-based architecture
+- ✅ **Git Workflow Fixed**: Resolved rebase conflicts with stash logic
+- ✅ **Environment Detection**: Confirmed working in GitHub Actions and local environments
+
+### Python Scripts Validation
+
+**🔧 Production Sync Utility (`sync_prod_snapshots.py`)**
+```bash
+$ python scripts/sync_prod_snapshots.py --list
+📋 Available production policies (20 total):
+────────────────────────────────────────────────────────────────────
+   instagram-appeal-process                   1173.9 KB
+   youtube-harassment-policy                  1236.0 KB
+   [... 18 more policies ...]
+────────────────────────────────────────────────────────────────────
+```
+- ✅ **Policy listing**: Clean output with file sizes
+- ✅ **Selective sync**: Successfully tested with specific policies
+- ✅ **Full sync**: `--all` flag working perfectly
+- ✅ **Error handling**: Validates policy existence before sync
+
+**🔧 Environment Detection (`fetch.py`)**
+```bash
+$ DEBUG_FETCH=1 python scripts/fetch.py
+--- Starting Fetcher Script ---
+[INFO] Processing 20 policies...
+--- Run Log Updated: 20 pages checked, 0 changes found ---
+--- Fetch completed successfully with 0 failures ---
+```
+- ✅ **Development mode**: Correctly writes to `snapshots/development/`
+- ✅ **Production mode**: Correctly writes to `snapshots/production/` 
+- ✅ **Debug output**: Comprehensive logging with temp files and content comparisons
+- ✅ **All 20 policies**: No errors, clean execution
+
+**🔧 Migration Script (`migrate_snapshots.py`)**
+```bash
+$ python scripts/migrate_snapshots.py
+🔄 Starting snapshot migration to environment-based structure...
+ℹ️  No existing snapshots found to migrate.
+```
+- ✅ **Smart detection**: Correctly identifies completed migration
+- ✅ **Safe operation**: No unnecessary operations when migration complete
+
+### Test Coverage: 21/21 Tests Passing ✅
+- ✅ **15 Unit Tests**: Environment detection, path generation, isolation
+- ✅ **6 Integration Tests**: Workflow simulation, sync utility, git integration
+- ✅ **100% Success Rate**: All validation scenarios covered
+
+### Directory Structure Confirmation
+```
+snapshots/
+├── production/          # 20 policies (1.2MB - 1.3MB each)
+│   ├── youtube-harassment-policy/
+│   ├── instagram-appeal-process/
+│   └── [18 more production policies...]
+└── development/         # 20 policies (synced from production)
+    ├── youtube-harassment-policy/
+    ├── tiktok-community-guidelines/
+    └── [18 more development policies...]
+```
+
+**Architecture Successfully Deployed and Validated - Ready for Production Use**
