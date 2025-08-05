@@ -130,10 +130,17 @@ class PolicyWatcherDashboard {
         if (this.runLogData.length > 0) {
             const lastRun = new Date(this.runLogData[0].timestamp_utc);
             const now = new Date();
-            const minutesSince = Math.round((now - lastRun) / (1000 * 60));
             
-            if (headerLastCheck) {
-                headerLastCheck.textContent = `${minutesSince}`;
+            // Validate that the date is valid to prevent NaN
+            if (isNaN(lastRun.getTime())) {
+                if (headerLastCheck) {
+                    headerLastCheck.textContent = 'Invalid';
+                }
+            } else {
+                const minutesSince = Math.round((now - lastRun) / (1000 * 60));
+                if (headerLastCheck) {
+                    headerLastCheck.textContent = `${minutesSince}`;
+                }
             }
         } else {
             if (headerLastCheck) {
@@ -611,15 +618,21 @@ class PolicyWatcherDashboard {
         const platformActivity = {};
 
         for (const slug in this.summariesData) {
+            // Filter out test policies from risk assessment
+            if (slug.startsWith('test-')) continue;
+            
             const policy = this.summariesData[slug];
             if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
                 const lastUpdatedDate = new Date(policy.last_updated);
                 if (lastUpdatedDate > sevenDaysAgo) {
                     recentChangesCount++;
-                    if (platformActivity[policy.platform]) {
-                        platformActivity[policy.platform]++;
-                    } else {
-                        platformActivity[policy.platform] = 1;
+                    const platformName = this.findPlatformName(slug);
+                    if (platformName && platformName !== 'Unknown') {
+                        if (platformActivity[platformName]) {
+                            platformActivity[platformName]++;
+                        } else {
+                            platformActivity[platformName] = 1;
+                        }
                     }
                 }
             }
@@ -627,7 +640,13 @@ class PolicyWatcherDashboard {
 
         let trendMessage = '';
         if (recentChangesCount > 0) {
-            const mostActivePlatform = Object.keys(platformActivity).reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b, '');
+            // Only calculate most active platform if we have platform activity data
+            let mostActivePlatform = '';
+            const platforms = Object.keys(platformActivity);
+            if (platforms.length > 0) {
+                mostActivePlatform = platforms.reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b);
+            }
+            
             const riskLevel = recentChangesCount > 3 ? 'elevated' : 'moderate';
             trendMessage = `<span class="risk-indicator ${riskLevel}">⚠️ ${riskLevel.toUpperCase()} ACTIVITY</span><br>`;
             trendMessage += `<strong>${recentChangesCount}</strong> competitor policy update${recentChangesCount > 1 ? 's' : ''} in the last 7 days may indicate market shifts requiring review.`;
@@ -659,8 +678,11 @@ class PolicyWatcherDashboard {
             platformStats[platform] = 0;
         });
 
-        // Count policies per platform
+        // Count policies per platform (exclude test data)
         for (const slug in this.summariesData) {
+            // Filter out test policies
+            if (slug.startsWith('test-')) continue;
+            
             const policy = this.summariesData[slug];
             const platformName = this.findPlatformName(slug);
             if (platformStats.hasOwnProperty(platformName)) {
@@ -719,7 +741,12 @@ class PolicyWatcherDashboard {
 
     getRecentChanges() {
         return Object.entries(this.summariesData)
-            .filter(([slug, policy]) => policy.last_updated && policy.last_update_summary !== 'Initial version.')
+            .filter(([slug, policy]) => {
+                // Filter out test policies and only include real policy updates
+                return !slug.startsWith('test-') && 
+                       policy.last_updated && 
+                       policy.last_update_summary !== 'Initial version.';
+            })
             .map(([slug, policy]) => ({
                 ...policy,
                 slug: slug,
