@@ -69,7 +69,16 @@ jobs:
       # Step 6: Pull latest changes to avoid race conditions
       # This ensures our local branch is up-to-date before pushing.
       - name: 'Pull Latest Changes'
-        run: git pull origin main --rebase
+        run: |
+          # Check if there are any uncommitted changes that would block rebase
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            echo "Found uncommitted changes, stashing them temporarily"
+            git stash push -m "Temporary stash before rebase"
+            git pull origin main --rebase
+            git stash pop
+          else
+            git pull origin main --rebase
+          fi
 
       # Step 7: Push the changes back to the main branch
       # This uses a dedicated action to handle pushing the commits.
@@ -106,7 +115,16 @@ jobs:
 
       # Step 10: Pull and push all changes
       - name: 'Pull Latest Changes Before Push'
-        run: git pull origin main --rebase
+        run: |
+          # Check if there are any uncommitted changes that would block rebase
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            echo "Found uncommitted changes, stashing them temporarily"
+            git stash push -m "Temporary stash before final rebase"
+            git pull origin main --rebase
+            git stash pop
+          else
+            git pull origin main --rebase
+          fi
 
       - name: 'Push Summary Changes'
         uses: ad-m/github-push-action@master
