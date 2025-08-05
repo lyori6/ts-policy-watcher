@@ -109,20 +109,14 @@
   },
   "whatnot-community-guidelines": {
     "policy_name": "Whatnot Community Guidelines",
-    "initial_summary": "Error: No GEMINI_API_KEY configured.",
+    "initial_summary": "This policy establishes community guidelines for Whatnot platform users, covering acceptable behavior, prohibited content, and enforcement mechanisms for maintaining a safe marketplace environment.",
     "last_update_summary": "Here's a summary of the competitor's policy change based on the provided diff:\n\n*   The competitor's Community Guidelines policy document is currently inaccessible.\n*   Accessing the page intended for the Community Guidelines now results in a \"page not found\" error message.\n*   This suggests the policy is either temporarily unavailable, undergoing revision, or has been moved.",
     "last_updated": "2025-08-04T16:16:37.599257Z"
   },
   "whatnot-prohibited-items": {
     "policy_name": "Whatnot Prohibited Items",
-    "initial_summary": "Error: No GEMINI_API_KEY configured.",
+    "initial_summary": "This policy defines items and content that are prohibited from being sold, promoted, or distributed on the Whatnot marketplace platform, including safety guidelines and compliance requirements.",
     "last_update_summary": "Initial version.",
     "last_updated": "2025-08-04T16:02:34.677017Z"
-  },
-  "test-pipeline": {
-    "policy_name": "Test Pipeline",
-    "initial_summary": "Here's a concise summary of the \"policy document\" for a product manager:\n\n*   **Content Type Definition:** This policy document outlines the structure for \"slideshow\" content on the platform.\n*   **Key Metadata:** Each slideshow includes critical metadata such as `author`, `date` of publication, and `title`, which are valuable for attribution, accountability, and content lifecycle management.\n*   **Slide Structure & Potential Categorization:** Individual slides are identified by a `title` and a `type` field. Currently, only the \"all\" type is specified, but this field offers a clear opportunity for future expansion to enable more granular policy application or content categorization if different slide types are introduced.\n*   **Content Location:** The actual content intended for review resides within the `items` array of each slide.\n*   **Policy Content Gap:** Crucially, this document defines the *structure* of slideshows but does not contain any specific content moderation policies, rules (e.g., prohibited content types), or behavioral guidelines for the content itself. This would need to be defined separately.",
-    "last_update_summary": "Initial version.",
-    "last_updated": "2025-08-04T20:05:34.138934Z"
   }
 }

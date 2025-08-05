@@ -63,11 +63,9 @@ class PolicyWatcherDashboard {
             case 'platforms':
                 this.renderPolicyExplorer();
                 break;
-            case 'history':
-                this.renderHistory();
-                break;
             case 'analytics':
                 this.renderAnalytics();
+                this.renderHistory(); // Also load system logs
                 break;
         }
     }
