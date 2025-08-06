@@ -1019,39 +1019,23 @@ main {
     margin-bottom: 0.8rem;
 }
 
-/* Development Indicator */
-.dev-indicator {
-    background: rgba(255, 193, 7, 0.2);
-    border: 1px solid rgba(255, 193, 7, 0.5);
-    border-radius: 4px;
-    padding: 0.3rem 0.6rem;
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #856404;
-    backdrop-filter: blur(10px);
-    display: inline-block;
-}
-
-.dev-indicator span {
-    font-weight: 500;
-}
 
 /* Enhanced Insight Card Styling */
 .insight-card {
     background: white;
     border-radius: 16px !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .insight-card:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
 .insight-card.expanded {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Enhanced Header Styling */

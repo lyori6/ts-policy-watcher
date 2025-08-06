@@ -20,19 +20,8 @@ class PolicyWatcherDashboard {
 
     async init() {
         this.setupEventListeners();
-        this.showDevIndicator();
         await this.loadAllData();
         this.renderDashboard();
-    }
-
-    showDevIndicator() {
-        // Show dev indicator if this is a Vercel preview deployment
-        if (window.location.hostname.includes('vercel.app') && !window.location.hostname.includes('ts-policy-watcher.vercel.app')) {
-            const devIndicator = document.getElementById('dev-indicator');
-            if (devIndicator) {
-                devIndicator.style.display = 'block';
-            }
-        }
     }
 
     setupEventListeners() {
