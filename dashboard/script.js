@@ -1,15 +1,7 @@
-// Enhanced T&S Policy Watcher Dashboard JavaScript  
-// Version: 2025-08-06-FORCE-REFRESH-NOW
-// CACHE BUSTER: 12345-METHODS-FIXED
+// Enhanced T&S Policy Watcher Dashboard JavaScript
 
 class PolicyWatcherDashboard {
     constructor() {
-        console.log('🔥 NEW VERSION LOADING - CACHE BUSTER ACTIVE 🔥');
-        console.log('Methods available:', {
-            cleanTimestamp: typeof this.cleanTimestamp,
-            updateSystemStatus: typeof this.updateSystemStatus
-        });
-        
         // GitHub raw content URLs
         this.GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main';
         this.LOG_FILE_PATH = `${this.GITHUB_RAW_BASE}/run_log.json`;
@@ -26,99 +18,6 @@ class PolicyWatcherDashboard {
         this.init();
     }
 
-    // Essential utility methods - defined FIRST to be available to all other methods
-    cleanTimestamp(timestamp) {
-        if (!timestamp) return timestamp;
-        // Remove the extra 'Z' if timestamp already ends with 'Z'
-        return timestamp.replace(/\+00:00Z$/, 'Z');
-    }
-
-    updateSystemStatus() {
-        const statusIndicator = document.querySelector('.system-status');
-        if (!statusIndicator) return;
-
-        if (this.runLogData.length === 0) {
-            statusIndicator.className = 'system-status error';
-            statusIndicator.textContent = 'No Data';
-            return;
-        }
-
-        const lastRun = this.runLogData[0];
-        const cleanedTimestamp = this.cleanTimestamp(lastRun.timestamp_utc);
-        const lastRunTime = new Date(cleanedTimestamp);
-        const now = new Date();
-        const hoursSinceLastRun = (now - lastRunTime) / (1000 * 60 * 60);
-
-        if (isNaN(lastRunTime.getTime())) {
-            statusIndicator.className = 'system-status error';
-            statusIndicator.textContent = 'Invalid Data';
-            return;
-        }
-
-        // Determine system status based on last run time and status
-        if (lastRun.status !== 'success') {
-            statusIndicator.className = 'system-status error';
-            statusIndicator.textContent = 'Error';
-        } else if (hoursSinceLastRun > 4) { // More than 4 hours
-            statusIndicator.className = 'system-status warning';
-            statusIndicator.textContent = 'Stale';
-        } else {
-            statusIndicator.className = 'system-status success';
-            statusIndicator.textContent = 'Active';
-        }
-    }
-
-    showErrorState() {
-        const statusIndicator = document.querySelector('.system-status');
-        if (statusIndicator) {
-            statusIndicator.className = 'system-status error';
-            statusIndicator.textContent = 'Error';
-        }
-
-        // Show error message in main content areas
-        const containers = ['recent-changes-list', 'platform-content', 'matrix-tbody'];
-        containers.forEach(containerId => {
-            const container = document.getElementById(containerId);
-            if (container) {
-                container.innerHTML = `
-                    <div class="error-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Unable to Load Data</h3>
-                        <p>Please check your internet connection and refresh the page.</p>
-                    </div>
-                `;
-            }
-        });
-    }
-
-    formatRelativeTime(timestamp) {
-        if (!timestamp) return 'Never';
-        
-        const cleanedTimestamp = this.cleanTimestamp(timestamp);
-        const date = new Date(cleanedTimestamp);
-        const now = new Date();
-        
-        if (isNaN(date.getTime())) {
-            return 'Invalid';
-        }
-        
-        const diffMs = now - date;
-        const diffMins = Math.round(diffMs / (1000 * 60));
-        const diffHours = Math.round(diffMs / (1000 * 60 * 60));
-        const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
-        
-        if (diffMins < 60) {
-            return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-        } else if (diffHours < 24) {
-            return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-        } else if (diffDays < 7) {
-            return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-        } else {
-            return date.toLocaleDateString();
-        }
-    }
-
-    // Main application methods
     async init() {
         this.setupEventListeners();
         await this.loadAllData();
@@ -139,6 +38,35 @@ class PolicyWatcherDashboard {
             historyFilter.addEventListener('change', (e) => {
                 this.renderHistoryTable(e.target.value);
             });
+        }
+    }
+
+    switchMainTab(tabName) {
+        // Update nav tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.tab === tabName);
+        });
+
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.toggle('active', content.id === tabName);
+        });
+
+        // Load specific tab content
+        switch(tabName) {
+            case 'matrix':
+                this.renderMatrix();
+                break;
+            case 'overview':
+                this.renderOverview();
+                break;
+            case 'platforms':
+                this.renderPolicyExplorer();
+                break;
+            case 'analytics':
+                this.renderAnalytics();
+                this.renderHistory(); // Also load system logs
+                break;
         }
     }
 
@@ -223,115 +151,272 @@ class PolicyWatcherDashboard {
         this.updateSystemStatus();
     }
 
-    // Main rendering methods
     renderOverview() {
-        this.renderRiskUpdatesCard();
-        this.renderCompetitiveIntelligenceCard();
-        this.renderLatestKeyChangeCard();
+        this.renderRecentChanges();
+        this.renderIntelligencePanel();
     }
 
-    renderRiskUpdatesCard() {
-        const riskContainer = document.getElementById('risk-expanded');
-        if (!riskContainer) return;
+    renderRecentChanges() {
+        const container = document.getElementById('recent-changes-list');
+        if (!container) {
+            console.error('Recent changes container not found');
+            return;
+        }
 
         const recentChanges = this.getRecentChanges();
-        
+
         if (recentChanges.length === 0) {
-            riskContainer.innerHTML = '<p class="no-data">No recent policy changes detected in the last 7 days.</p>';
+            container.innerHTML = '<p class="text-center" style="color: #666; font-style: italic;">No recent changes detected</p>';
             return;
         }
 
-        // Calculate risk metrics
-        const totalChanges = recentChanges.length;
-        const platforms = [...new Set(recentChanges.map(change => change.platform))];
-        const leadingPlatform = platforms[0] || 'No data';
-
-        const summaryHtml = `
-            <div class="risk-summary">
-                <p><strong>${totalChanges} competitor policy updates</strong> in the last 7 days may indicate market shifts requiring review. <strong>${leadingPlatform}</strong> leading changes.</p>
-            </div>
-        `;
-
-        const changesHtml = recentChanges.slice(0, 5).map(change => `
-            <div class="risk-item">
-                <div class="risk-header">
-                    <span class="platform-badge">${change.platform}</span>
-                    <span class="risk-time">${this.formatRelativeTime(change.last_updated)}</span>
+        const changesHtml = recentChanges.map((change, index) => {
+            const summaryId = `summary-${Date.now()}-${index}`; // More unique IDs
+            const shortSummary = this.truncateText(change.last_update_summary, 200);
+            const hasMore = change.last_update_summary && change.last_update_summary.length > 200;
+            
+            return `
+                <div class="change-item ${hasMore ? 'expandable' : ''}" ${hasMore ? `data-summary-id="${summaryId}"` : ''}>
+                    <div class="change-header">
+                        <div class="platform-tag">${change.platform}</div>
+                        <h4>${change.policy_name}</h4>
+                    </div>
+                    <div class="summary-container">
+                        <div class="summary" id="${summaryId}">
+                            ${this.renderMarkdown(shortSummary)}
+                            ${hasMore ? '<button class="read-more-btn" onclick="toggleSummary(\'' + summaryId + '\')" type="button"><i class="fas fa-chevron-down"></i> Read more</button>' : ''}
+                        </div>
+                        ${hasMore ? `<div class="summary-full" id="${summaryId}-full" style="display: none;">
+                            ${this.renderMarkdown(change.last_update_summary)}
+                            <button class="read-more-btn expanded" onclick="toggleSummary('${summaryId}')" type="button"><i class="fas fa-chevron-up"></i> Read less</button>
+                        </div>` : ''}
+                    </div>
+                    <div class="timestamp">Updated ${this.formatRelativeTime(change.last_updated)}</div>
                 </div>
-                <div class="risk-title">${change.policy_name}</div>
-                <div class="risk-description">${this.truncateText(change.last_update_summary, 150)}</div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
-        riskContainer.innerHTML = summaryHtml + changesHtml;
+        container.innerHTML = changesHtml;
     }
 
-    renderCompetitiveIntelligenceCard() {
-        const competitiveContainer = document.getElementById('competitive-expanded');
-        if (!competitiveContainer) return;
 
-        const platformStats = this.calculatePlatformStats();
-        const platforms = Object.keys(platformStats).sort((a, b) => 
-            platformStats[b].changes - platformStats[a].changes
-        );
+    renderPolicyExplorer() {
+        this.renderPlatformTabs();
+        // this.renderBlockMuteSection(); // Hidden for now - needs better design
+        this.renderPoliciesByPlatform(this.currentPlatform);
+    }
 
-        if (platforms.length === 0) {
-            competitiveContainer.innerHTML = '<p class="no-data">No platform data available.</p>';
+    renderBlockMuteSection() {
+        const sectionContainer = document.getElementById('block-mute-section');
+        if (!sectionContainer) return;
+
+        const blockingPolicies = [];
+        const mutingPolicies = [];
+
+        // Find blocking and muting policies
+        for (const slug in this.summariesData) {
+            const policy = this.summariesData[slug];
+            const platformName = this.findPlatformName(slug);
+            const summary = policy.initial_summary?.toLowerCase() || '';
+
+            if (slug.includes('block') || summary.includes('block')) {
+                const policyInfo = this.platformData.find(p => p.slug === slug);
+                if (policyInfo) {
+                    blockingPolicies.push({
+                        ...policyInfo,
+                        platform: platformName,
+                        summary: policy.initial_summary,
+                        lastUpdated: policy.last_updated
+                    });
+                }
+            }
+
+            if (summary.includes('mute') || summary.includes('silence') || summary.includes('moderat')) {
+                const policyInfo = this.platformData.find(p => p.slug === slug);
+                if (policyInfo && !blockingPolicies.find(bp => bp.slug === slug)) {
+                    mutingPolicies.push({
+                        ...policyInfo,
+                        platform: platformName,
+                        summary: policy.initial_summary,
+                        lastUpdated: policy.last_updated
+                    });
+                }
+            }
+        }
+
+        let sectionHtml = '<div class="card block-mute-card">';
+        sectionHtml += '<div class="card-header"><h2><i class="fas fa-shield-alt"></i> Block & Moderation Controls</h2></div>';
+        sectionHtml += '<div class="card-body"><div class="block-mute-grid">';
+
+        // Blocking section
+        if (blockingPolicies.length > 0) {
+            sectionHtml += '<div class="control-section">';
+            sectionHtml += '<h3><i class="fas fa-ban"></i> User Blocking</h3>';
+            sectionHtml += '<div class="policy-pills">';
+            blockingPolicies.forEach(policy => {
+                sectionHtml += `
+                    <div class="policy-pill" onclick="openPolicyModal('${policy.slug}')">
+                        <div class="pill-platform">${policy.platform}</div>
+                        <div class="pill-name">${policy.name}</div>
+                        <div class="pill-updated">${this.formatRelativeTime(policy.lastUpdated)}</div>
+                    </div>
+                `;
+            });
+            sectionHtml += '</div></div>';
+        }
+
+        // Muting/Moderation section  
+        if (mutingPolicies.length > 0) {
+            sectionHtml += '<div class="control-section">';
+            sectionHtml += '<h3><i class="fas fa-volume-mute"></i> Moderation & Controls</h3>';
+            sectionHtml += '<div class="policy-pills">';
+            mutingPolicies.forEach(policy => {
+                sectionHtml += `
+                    <div class="policy-pill" onclick="openPolicyModal('${policy.slug}')">
+                        <div class="pill-platform">${policy.platform}</div>
+                        <div class="pill-name">${policy.name}</div>
+                        <div class="pill-updated">${this.formatRelativeTime(policy.lastUpdated)}</div>
+                    </div>
+                `;
+            });
+            sectionHtml += '</div></div>';
+        }
+
+        sectionHtml += '</div></div></div>';
+        sectionContainer.innerHTML = sectionHtml;
+    }
+
+    renderPlatformTabs() {
+        const tabsContainer = document.getElementById('platform-tabs');
+        const platforms = ['all', ...new Set(this.platformData.map(p => p.platform))];
+        
+        const tabsHtml = platforms.map(platform => `
+            <button class="platform-tab ${platform === this.currentPlatform ? 'active' : ''}" 
+                    data-platform="${platform}">
+                ${platform === 'all' ? 'All Platforms' : platform}
+            </button>
+        `).join('');
+
+        tabsContainer.innerHTML = tabsHtml;
+
+        // Add event listeners
+        tabsContainer.querySelectorAll('.platform-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                this.currentPlatform = e.target.dataset.platform;
+                this.renderPolicyExplorer();
+            });
+        });
+    }
+
+    renderPoliciesByPlatform(selectedPlatform) {
+        const container = document.getElementById('platform-content');
+        let filteredPolicies = selectedPlatform === 'all' ? 
+            this.platformData : 
+            this.platformData.filter(p => p.platform === selectedPlatform);
+
+        // Filter out policies without summaries to keep the view clean
+        filteredPolicies = filteredPolicies.filter(policy => {
+            const summaryData = this.summariesData[policy.slug];
+            return summaryData && summaryData.initial_summary;
+        });
+
+        if (filteredPolicies.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No Policy Summaries Available</h3>
+                    <p>Summaries will appear here once the AI analysis pipeline processes new policy changes.</p>
+                </div>
+            `;
             return;
         }
 
-        const statsHtml = platforms.map(platform => {
-            const stats = platformStats[platform];
+        const policiesHtml = filteredPolicies.map(policy => {
+            const summaryData = this.summariesData[policy.slug] || {};
+            const lastUpdated = summaryData.last_updated ? 
+                this.formatRelativeTime(summaryData.last_updated) : 'Never';
+            
             return `
-                <div class="platform-stat">
-                    <div class="stat-header">
-                        <span class="platform-name">${platform}</span>
-                        <span class="stat-badge ${stats.changes > 0 ? 'most-active' : ''}">${stats.changes > 0 ? 'MOST ACTIVE' : 'STABLE'}</span>
+                <div class="policy-card" onclick="openPolicyModal('${policy.slug}')" style="cursor: pointer;">
+                    <div class="policy-header">
+                        <h4>${policy.name}</h4>
+                        <span class="update-badge">${lastUpdated}</span>
                     </div>
-                    <div class="stat-details">
-                        <span>${stats.changes} changes</span>
-                        <span>${stats.policies} policies tracked</span>
+                    
+                    <div class="summary-preview">
+                        <div class="summary-excerpt">
+                            ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 150))}
+                        </div>
+                    </div>
+                    
+                    ${summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.' ? `
+                        <div class="summary update-summary">
+                            <div class="update-label">
+                                <i class="fas fa-exclamation-circle"></i> Latest Change
+                            </div>
+                            ${this.renderMarkdown(this.truncateText(summaryData.last_update_summary, 200))}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="policy-actions">
+                        <a href="${policy.url}" target="_blank" class="action-btn primary-btn" 
+                           title="Visit current policy page" onclick="event.stopPropagation();">
+                            <i class="fas fa-external-link-alt"></i> Visit ${policy.platform} Policy Page
+                        </a>
                     </div>
                 </div>
             `;
         }).join('');
 
-        const summaryText = platforms.length > 0 ? 
-            `${platforms[0]} leads competitor activity with strategic policy updates.` :
-            'Monitoring competitor platform activity.';
-
-        competitiveContainer.innerHTML = `
-            <div class="competitive-summary">
-                <p>${summaryText}</p>
-            </div>
-            <div class="platform-stats">${statsHtml}</div>
-        `;
+        container.innerHTML = policiesHtml;
     }
 
-    renderLatestKeyChangeCard() {
-        const changeContainer = document.getElementById('change-expanded');
-        if (!changeContainer) return;
+    renderHistory() {
+        this.renderHistoryTable('all');
+    }
 
-        const recentChanges = this.getRecentChanges();
-        
-        if (recentChanges.length === 0) {
-            changeContainer.innerHTML = '<p class="no-data">No recent changes to display.</p>';
+    renderHistoryTable(filter) {
+        const tbody = document.getElementById('history-tbody');
+        let filteredRuns = this.runData;
+
+        if (filter !== 'all') {
+            filteredRuns = this.runData.filter(run => 
+                filter === 'success' ? run.status === 'success' : run.status !== 'success'
+            );
+        }
+
+        if (filteredRuns.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">No runs found</td></tr>';
             return;
         }
 
-        const latestChange = recentChanges[0];
-        const timeAgo = this.formatRelativeTime(latestChange.last_updated);
+        const rowsHtml = filteredRuns.map((run, index) => {
+            const statusClass = this.getStatusClass(run.status);
+            const timeAgo = this.formatRelativeTime(run.timestamp_utc);
+            
+            return `
+                <tr>
+                    <td>${this.formatDateTime(run.timestamp_utc)}</td>
+                    <td>
+                        <div class="status-cell">
+                            <div class="status-icon ${statusClass}" title="${this.getStatusTooltip(run.status)}"></div>
+                            ${this.capitalizeStatus(run.status)}
+                        </div>
+                    </td>
+                    <td>${run.pages_checked || 0}</td>
+                    <td>${run.changes_found || 0}</td>
+                    <td>${run.errors ? run.errors.length : 0}</td>
+                    <td>${timeAgo}</td>
+                </tr>
+            `;
+        }).join('');
 
-        changeContainer.innerHTML = `
-            <div class="change-header">
-                <span class="platform-badge impact-high">${latestChange.platform}</span>
-                <span class="change-time">${timeAgo}</span>
-                <span class="impact-badge">HIGH IMPACT</span>
-            </div>
-            <div class="change-title">${latestChange.policy_name}</div>
-            <div class="change-summary">${this.truncateText(latestChange.last_update_summary, 200)}</div>
-            <button class="view-details-btn">View Details</button>
-        `;
+        tbody.innerHTML = rowsHtml;
+    }
+
+    renderAnalytics() {
+        this.renderPlatformActivity();
+        this.renderPerformanceTrends();
     }
 
     renderMatrix() {
@@ -342,158 +427,716 @@ class PolicyWatcherDashboard {
         const tbody = document.getElementById('matrix-tbody');
         if (!tbody) return;
 
-        if (this.platformData.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="no-data">No policy data available</td></tr>';
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        let matrixHtml = '';
+
+        platforms.forEach(platform => {
+            const platformPolicies = this.platformData.filter(p => p.platform === platform);
+            
+            if (platformPolicies.length === 0) return;
+
+            // Platform header
+            const platformIcon = this.getPlatformIcon(platform);
+            matrixHtml += `
+                <tr class="platform-section">
+                    <td colspan="8" class="platform-header">
+                        <strong><i class="${platformIcon}"></i> ${platform}</strong>
+                    </td>
+                </tr>
+            `;
+
+            // Platform policies
+            platformPolicies.forEach(policy => {
+                const summaryData = this.summariesData[policy.slug] || {};
+                const lastUpdated = summaryData.last_updated ? 
+                    this.formatRelativeTime(summaryData.last_updated) : 'No data';
+                const hasData = summaryData.initial_summary ? 'success' : 'warning';
+                const statusText = summaryData.initial_summary ? 'Tracked' : 'Pending';
+                
+                // Extract key info from summary for display
+                const coverage = this.extractCoverageAreas(summaryData.initial_summary);
+                const keyFeatures = this.extractKeyFeatures(summaryData.initial_summary);
+                const enforcement = this.extractEnforcementInfo(summaryData.initial_summary);
+                
+                // Show view button only if we have data
+                const viewButton = summaryData.initial_summary ? 
+                    `<a href="${policy.url}" target="_blank" class="link-btn">View</a>` : 
+                    `<span class="link-btn disabled">N/A</span>`;
+
+                matrixHtml += `
+                    <tr>
+                        <td>${platform}</td>
+                        <td>${policy.name}</td>
+                        <td><span class="status-badge ${hasData}">${statusText}</span></td>
+                        <td>${coverage}</td>
+                        <td>${keyFeatures}</td>
+                        <td>${enforcement}</td>
+                        <td>${lastUpdated}</td>
+                        <td>${viewButton}</td>
+                    </tr>
+                `;
+            });
+        });
+
+        tbody.innerHTML = matrixHtml;
+    }
+
+    getPlatformIcon(platform) {
+        const icons = {
+            'TikTok': 'fab fa-tiktok',
+            'YouTube': 'fab fa-youtube',
+            'Instagram': 'fab fa-instagram', 
+            'Whatnot': 'fas fa-gavel'
+        };
+        return icons[platform] || 'fas fa-globe';
+    }
+
+    extractCoverageAreas(summary) {
+        if (!summary) return 'No data';
+        
+        const keywords = ['harassment', 'blocking', 'moderation', 'community', 'content', 'safety', 'violence', 'hate'];
+        const found = keywords.filter(keyword => 
+            summary.toLowerCase().includes(keyword)
+        ).slice(0, 3);
+        
+        return found.length > 0 ? 
+            found.map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ') : 
+            'General policies';
+    }
+
+    extractKeyFeatures(summary) {
+        if (!summary) return 'No data';
+        
+        // Look for specific feature mentions
+        const features = [];
+        if (summary.toLowerCase().includes('block')) features.push('User blocking');
+        if (summary.toLowerCase().includes('report')) features.push('Reporting system');
+        if (summary.toLowerCase().includes('moderat')) features.push('Content moderation');
+        if (summary.toLowerCase().includes('appeal')) features.push('Appeals process');
+        
+        return features.length > 0 ? features.slice(0, 2).join(', ') : 'Standard policies';
+    }
+
+    extractEnforcementInfo(summary) {
+        if (!summary) return 'No data';
+        
+        // Look for enforcement action mentions
+        const actions = [];
+        if (summary.toLowerCase().includes('removal') || summary.toLowerCase().includes('remove')) {
+            actions.push('Content removal');
+        }
+        if (summary.toLowerCase().includes('suspension') || summary.toLowerCase().includes('ban')) {
+            actions.push('Account suspension');
+        }
+        if (summary.toLowerCase().includes('warning')) {
+            actions.push('Warnings');
+        }
+        
+        return actions.length > 0 ? actions.slice(0, 2).join(', ') : 'Standard enforcement';
+    }
+
+    renderPlatformActivity() {
+        const container = document.getElementById('platform-activity-chart');
+        const platformStats = this.calculatePlatformStats();
+        
+        const chartHtml = Object.entries(platformStats)
+            .filter(([platform, stats]) => stats.policies > 0) // Only show platforms we're tracking
+            .sort(([,a], [,b]) => b.changes - a.changes) // Sort by change frequency
+            .map(([platform, stats]) => {
+                const icon = this.getPlatformIcon(platform);
+                return `
+                    <div class="platform-activity-row">
+                        <div class="platform-info">
+                            <i class="${icon}" style="color: var(--secondary-color); margin-right: 0.5rem;"></i>
+                            <strong>${platform}</strong>
+                            <small>(${stats.policies} policies)</small>
+                        </div>
+                        <div class="activity-metrics">
+                            <span class="change-count">${stats.changes} changes</span>
+                            <span class="change-rate">${stats.changeRate}% rate</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        container.innerHTML = chartHtml || '<div class="chart-placeholder">Platform activity data will appear here</div>';
+    }
+
+    renderPerformanceTrends() {
+        const container = document.getElementById('performance-timeline');
+        const trends = this.calculatePerformanceTrends();
+        
+        const trendsHtml = `
+            <div class="stat-row">
+                <span>Average Run Duration</span>
+                <span>${trends.avgDuration}</span>
+            </div>
+            <div class="stat-row">
+                <span>Success Rate (30 days)</span>
+                <span>${(trends.successRate * 100).toFixed(1)}%</span>
+            </div>
+            <div class="stat-row">
+                <span>Changes Today</span>
+                <span>${trends.totalChanges}</span>
+            </div>
+        `;
+
+        container.innerHTML = trendsHtml;
+    }
+
+    renderErrors(errors) {
+        const container = document.getElementById('last-run-errors');
+        
+        if (!errors || errors.length === 0) {
+            container.style.display = 'none';
             return;
         }
 
-        const rows = this.platformData.map(policy => {
-            const summary = this.summariesData[policy.slug];
-            const lastUpdated = summary?.last_updated ? this.formatRelativeTime(summary.last_updated) : 'Never';
-            const status = this.getRandomStatus(); // Simplified status logic
-            
-            return `
-                <tr>
-                    <td>${policy.platform}</td>
-                    <td>${policy.name}</td>
-                    <td><span class="status-badge ${status}">${this.capitalizeStatus(status)}</span></td>
-                    <td>Privacy, Safety</td>
-                    <td>User-generated content, Data protection</td>
-                    <td>Content removal, Account suspension</td>
-                    <td>${lastUpdated}</td>
-                </tr>
-            `;
-        }).join('');
+        container.style.display = 'block';
+        const errorsHtml = `
+            <h4>Errors from last run:</h4>
+            ${errors.map(err => `
+                <div class="error-item">
+                    <strong>${err.file}:</strong> ${err.error}
+                </div>
+            `).join('')}
+        `;
 
-        tbody.innerHTML = rows;
+        container.innerHTML = errorsHtml;
     }
 
-    switchMainTab(tabName) {
-        // Update active tab
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.tab === tabName);
-        });
+    renderIntelligencePanel() {
+        // --- Trend Alert --- 
+        const trendContainer = document.getElementById('insight-trend-alert');
+        if (!trendContainer) return; // Exit if the panel isn't in the HTML
 
-        // Show corresponding section
-        document.querySelectorAll('.tab-section').forEach(section => {
-            section.style.display = section.id === tabName + '-section' ? 'block' : 'none';
-        });
-
-        // Render content based on tab
-        if (tabName === 'matrix') {
-            this.renderMatrix();
-        } else if (tabName === 'overview') {
-            this.renderOverview();
-        }
-    }
-
-    // Additional utility methods
-    getRandomStatus() {
-        const statuses = ['monitored', 'updated', 'stable'];
-        return statuses[Math.floor(Math.random() * statuses.length)];
-    }
-
-    truncateText(text, maxLength) {
-        if (!text || text.length <= maxLength) return text;
-        return text.substring(0, maxLength).trim() + '...';
-    }
-
-    capitalizeStatus(status) {
-        return status.charAt(0).toUpperCase() + status.slice(1);
-    }
-
-    getRecentChanges() {
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        const recentChanges = [];
+        let recentChangesCount = 0;
+        const platformActivity = {};
 
         for (const slug in this.summariesData) {
-            // Filter out test policies
+            // Filter out test policies from risk assessment
             if (slug.startsWith('test-')) continue;
             
             const policy = this.summariesData[slug];
             if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
                 const lastUpdatedDate = new Date(policy.last_updated);
                 if (lastUpdatedDate > sevenDaysAgo) {
-                    // Find platform name and policy name
+                    recentChangesCount++;
                     const platformName = this.findPlatformName(slug);
-                    const policyInfo = this.platformData.find(p => p.slug === slug);
-                    
-                    recentChanges.push({
-                        slug: slug,
-                        platform: platformName,
-                        policy_name: policyInfo ? policyInfo.name : this.slugToTitle(slug),
-                        last_updated: policy.last_updated,
-                        last_update_summary: policy.last_update_summary,
-                        initial_summary: policy.initial_summary
-                    });
+                    if (platformName && platformName !== 'Unknown') {
+                        if (platformActivity[platformName]) {
+                            platformActivity[platformName]++;
+                        } else {
+                            platformActivity[platformName] = 1;
+                        }
+                    }
                 }
             }
         }
 
-        // Sort by last updated (most recent first)
-        return recentChanges.sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated));
-    }
-
-    findPlatformName(slug) {
-        const policyInfo = this.platformData.find(p => p.slug === slug);
-        if (policyInfo) return policyInfo.platform;
-        
-        // Fallback: try to extract from slug
-        if (slug.includes('youtube')) return 'YouTube';
-        if (slug.includes('tiktok')) return 'TikTok';
-        if (slug.includes('instagram')) return 'Instagram';
-        if (slug.includes('whatnot')) return 'Whatnot';
-        return 'Unknown';
-    }
-
-    slugToTitle(slug) {
-        return slug.split('-')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-    }
-
-    calculatePlatformStats() {
-        const stats = {};
-        
-        // Initialize with platforms from platform data
-        this.platformData.forEach(policy => {
-            if (!stats[policy.platform]) {
-                stats[policy.platform] = { policies: 0, changes: 0, changeRate: 0 };
+        let trendMessage = '';
+        if (recentChangesCount > 0) {
+            // Only calculate most active platform if we have platform activity data
+            let mostActivePlatform = '';
+            const platforms = Object.keys(platformActivity);
+            if (platforms.length > 0) {
+                mostActivePlatform = platforms.reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b);
             }
-            stats[policy.platform].policies++;
+            
+            const riskLevel = recentChangesCount > 3 ? 'elevated' : 'moderate';
+            trendMessage = `<span class="risk-indicator ${riskLevel}">⚠️ ${riskLevel.toUpperCase()} ACTIVITY</span><br>`;
+            trendMessage += `<strong>${recentChangesCount}</strong> competitor policy update${recentChangesCount > 1 ? 's' : ''} in the last 7 days may indicate market shifts requiring review.`;
+            if (mostActivePlatform) {
+                trendMessage += ` <strong>${mostActivePlatform}</strong> leading changes.`;
+            }
+        } else {
+            trendMessage = '<span class="risk-indicator stable">✅ STABLE</span><br>No competitor policy changes detected. Market conditions remain consistent.';
+        }
+        
+        trendContainer.innerHTML = `<p>${trendMessage}</p>`;
+
+        // --- Platform Activity ---
+        this.renderPlatformActivityInsight();
+
+        // --- Focus Areas ---
+        this.renderFocusAreasInsight();
+    }
+
+    renderPlatformActivityInsight() {
+        const activityContainer = document.getElementById('insight-platform-activity');
+        if (!activityContainer) return;
+
+        const platformStats = {};
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        
+        // Initialize platform counts
+        platforms.forEach(platform => {
+            platformStats[platform] = 0;
         });
 
-        // Count changes from summaries
+        // Count policies per platform (exclude test data)
         for (const slug in this.summariesData) {
             // Filter out test policies
             if (slug.startsWith('test-')) continue;
             
             const policy = this.summariesData[slug];
             const platformName = this.findPlatformName(slug);
-            
-            if (policy.last_updated && policy.last_update_summary !== 'Initial version.' && stats[platformName]) {
-                stats[platformName].changes++;
+            if (platformStats.hasOwnProperty(platformName)) {
+                platformStats[platformName]++;
             }
         }
 
-        // Calculate change rates
-        Object.keys(stats).forEach(platform => {
-            const platformStats = stats[platform];
-            platformStats.changeRate = platformStats.policies > 0 ? 
-                Math.round((platformStats.changes / platformStats.policies) * 100) : 0;
-        });
+        let activityHtml = '<div class="platform-comparison">';
+        for (const [platform, count] of Object.entries(platformStats)) {
+            const percentage = Math.round((count / Object.values(platformStats).reduce((a, b) => a + b, 0)) * 100) || 0;
+            activityHtml += `
+                <div class="platform-stat">
+                    <span class="platform-name">${platform}</span>
+                    <span class="policy-count">${count} policies</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+        activityHtml += '</div>';
+        
+        activityContainer.innerHTML = activityHtml;
+    }
 
+    renderFocusAreasInsight() {
+        const focusContainer = document.getElementById('insight-focus-areas');
+        if (!focusContainer) return;
+
+        const trackedPoliciesCount = Object.keys(this.summariesData).length;
+        const coverageAreas = ['harassment', 'blocking', 'moderation', 'commerce', 'appeals'];
+        
+        const focusHtml = `
+            <div class="focus-summary">
+                <p><strong>Coverage Analysis:</strong> Monitoring ${trackedPoliciesCount} policies across 4 platforms.</p>
+                <div class="gap-indicators">
+                    <div class="coverage-item">📊 <strong>Policy Density:</strong> ${(trackedPoliciesCount/4).toFixed(1)} avg per platform</div>
+                    <div class="coverage-item">🔍 <strong>Focus Areas:</strong> ${coverageAreas.slice(0,3).join(', ')}</div>
+                    <div class="coverage-item">⚡ <strong>Response Time:</strong> ~2min detection</div>
+                </div>
+            </div>
+        `;
+        
+        focusContainer.innerHTML = focusHtml;
+    }
+
+    findPlatformName(slug) {
+        if (slug.startsWith('tiktok-')) return 'TikTok';
+        if (slug.startsWith('whatnot-')) return 'Whatnot';
+        if (slug.startsWith('youtube-')) return 'YouTube';
+        if (slug.startsWith('instagram-')) return 'Instagram';
+        return 'Unknown';
+    }
+
+    // Utility Functions
+
+    cleanTimestamp(timestamp) {
+        if (!timestamp) return timestamp;
+        
+        // Fix malformed timestamps that have both +00:00 and Z
+        if (timestamp.includes('+00:00Z')) {
+            return timestamp.replace('+00:00Z', 'Z');
+        }
+        
+        return timestamp;
+    }
+
+    getRecentChanges() {
+        return Object.entries(this.summariesData)
+            .filter(([slug, policy]) => {
+                // Filter out test policies and only include real policy updates
+                return !slug.startsWith('test-') && 
+                       policy.last_updated && 
+                       policy.last_update_summary !== 'Initial version.';
+            })
+            .map(([slug, policy]) => ({
+                ...policy,
+                slug: slug,
+                platform: this.findPlatformName(slug)
+            }))
+            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
+            .slice(0, 5);
+    }
+
+    calculateUptime() {
+        if (this.runData.length < 2) return '100%';
+        
+        const successfulRuns = this.runData.filter(run => run.status === 'success').length;
+        return `${((successfulRuns / this.runData.length) * 100).toFixed(1)}%`;
+    }
+
+    calculateSuccessRate() {
+        if (this.runData.length === 0) return 1;
+        const successfulRuns = this.runData.filter(run => run.status === 'success').length;
+        return successfulRuns / this.runData.length;
+    }
+
+    calculateAverageChanges() {
+        if (this.runData.length === 0) return 0;
+        const totalChanges = this.runData.reduce((sum, run) => sum + (run.changes_found || 0), 0);
+        return totalChanges / this.runData.length;
+    }
+
+    calculatePlatformStats() {
+        const stats = {};
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        
+        // Initialize platform stats
+        platforms.forEach(platform => {
+            stats[platform] = { changes: 0, policies: 0, changeRate: 0 };
+        });
+        
+        // Count policies per platform
+        this.platformData.forEach(policy => {
+            const platform = policy.platform;
+            if (stats[platform]) {
+                stats[platform].policies += 1;
+            }
+        });
+        
+        // Calculate actual change frequency from last 30 days of run data
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        const recentRuns = this.runData.filter(run => 
+            new Date(run.timestamp_utc) >= thirtyDaysAgo
+        );
+        
+        // For now, distribute changes evenly since we don't have per-platform breakdown
+        // This would be improved with more detailed logging
+        const totalChanges = recentRuns.reduce((sum, run) => sum + (run.changes_found || 0), 0);
+        const totalPolicies = this.platformData.length || 1;
+        
+        platforms.forEach(platform => {
+            const platformPolicies = stats[platform].policies;
+            // Estimate changes based on platform's share of total policies
+            stats[platform].changes = Math.round((platformPolicies / totalPolicies) * totalChanges);
+            stats[platform].changeRate = platformPolicies > 0 ? 
+                (stats[platform].changes / platformPolicies * 100).toFixed(1) : 0;
+        });
+        
         return stats;
+    }
+
+    calculatePerformanceTrends() {
+        // Reset counter to start fresh - only count changes from today forward
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const recentChanges = this.runData
+            .filter(run => new Date(run.timestamp_utc) >= today)
+            .reduce((sum, run) => sum + (run.changes_found || 0), 0);
+            
+        const successRate = this.calculateSuccessRate();
+        
+        return {
+            avgDuration: '~2 min', // This would need actual timing data
+            successRate,
+            totalChanges: recentChanges // Show only recent changes, starting fresh
+        }
+    }
+
+    findPlatformForPolicy(policyName) {
+        const policy = this.platformData.find(p => 
+            p.name.toLowerCase().includes(policyName.toLowerCase()) ||
+            policyName.toLowerCase().includes(p.platform.toLowerCase())
+        );
+        return policy?.platform;
+    }
+
+    getStatusClass(status) {
+        if (status === 'success') return 'success';
+        if (status === 'partial_failure') return 'warning';
+        return 'error';
+    }
+
+    getStatusTooltip(status) {
+        const tooltips = {
+            'success': 'All policy pages were successfully checked and processed',
+            'partial_failure': 'Some policy pages had issues but others were processed successfully',
+            'failure': 'The monitoring run failed - check the error details',
+            'pending': 'Run is currently in progress or queued',
+            'error': 'An error occurred during the monitoring run'
+        };
+        return tooltips[status] || 'Status information not available';
+    }
+
+    capitalizeStatus(status) {
+        return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    formatDateTime(isoString) {
+        const cleanedTimestamp = this.cleanTimestamp(isoString);
+        return new Date(cleanedTimestamp).toLocaleString();
+    }
+
+    formatRelativeTime(isoString) {
+        const cleanedTimestamp = this.cleanTimestamp(isoString);
+        const date = new Date(cleanedTimestamp);
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return 'Invalid date';
+        }
+        
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        if (diffMinutes > 0) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+        return 'Just now';
+    }
+
+    getHoursAgo(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        return diffHours;
+    }
+
+
+    truncateText(text, maxLength) {
+        if (!text || text.length <= maxLength) return text || '';
+        return text.substring(0, maxLength) + '...';
+    }
+
+    renderMarkdown(text) {
+        if (!text) return '';
+        
+        // Enhanced markdown rendering for better formatting
+        let html = text
+            // Headers
+            .replace(/### (.*?)$/gm, '<h4 class="md-h4">$1</h4>')
+            .replace(/## (.*?)$/gm, '<h3 class="md-h3">$1</h3>')
+            .replace(/# (.*?)$/gm, '<h2 class="md-h2">$1</h2>')
+            
+            // Bold and italic
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            
+            // Bullet points - handle various formats
+            .replace(/^\* (.*?)$/gm, '<li>$1</li>')
+            .replace(/^- (.*?)$/gm, '<li>$1</li>')
+            .replace(/^\+ (.*?)$/gm, '<li>$1</li>')
+            
+            // Convert consecutive list items into proper ul tags
+            .replace(/(<li>.*?<\/li>)(\s*<li>.*?<\/li>)*/gs, '<ul>$&</ul>')
+            
+            // Paragraphs - split on double newlines
+            .split('\n\n')
+            .map(paragraph => {
+                // Don't wrap headers or lists in p tags
+                if (paragraph.includes('<h') || paragraph.includes('<ul>') || paragraph.includes('<li>')) {
+                    return paragraph;
+                }
+                // Clean up single newlines within paragraphs
+                return paragraph ? `<p>${paragraph.replace(/\n/g, '<br>')}</p>` : '';
+            })
+            .join('');
+
+        return html;
+    }
+
+    updateElement(id, content, className = '', isHtml = false) {
+        const element = document.getElementById(id);
+        if (element) {
+            if (isHtml) {
+                element.innerHTML = content;
+            } else {
+                element.textContent = content;
+            }
+            if (className) {
+                element.className = className;
+            }
+        }
+    }
+
+    updateSystemStatus() {
+        // Update header status indicator
+        const headerIndicator = document.getElementById('header-system-status');
+        const headerIcon = document.getElementById('header-status-icon');
+        const headerText = document.getElementById('header-status-text');
+
+        if (!this.runLogData || this.runLogData.length === 0) {
+            if (headerIndicator && headerIcon && headerText) {
+                headerIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
+                headerText.textContent = 'Unknown';
+            }
+            return;
+        }
+
+        const lastRun = this.runLogData[0];
+        const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
+
+        if (isSuccess) {
+            if (headerIndicator && headerIcon && headerText) {
+                headerIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                headerText.textContent = 'Operational';
+            }
+        } else {
+            if (headerIndicator && headerIcon && headerText) {
+                headerIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                headerText.textContent = 'Issues Detected';
+            }
+        }
+    }
+
+    showErrorState() {
+        // Show error state when data loading fails
+        const errorMessage = `
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--danger-color); margin-bottom: 1rem;"></i>
+                    <h3>Unable to Load Dashboard Data</h3>
+                    <p>Please ensure the repository is public and try refreshing the page.</p>
+                </div>
+            </div>
+        `;
+        
+        document.querySelector('main').innerHTML = errorMessage;
     }
 }
 
-// Initialize the app
-const app = new PolicyWatcherDashboard();
+// Global function for opening policy modal
+function openPolicyModal(slug) {
+    const modal = document.getElementById('policy-summary-modal');
+    const title = document.getElementById('policy-modal-title');
+    const content = document.getElementById('policy-modal-content');
+    const visitLink = document.getElementById('policy-modal-visit');
+    const historyLink = document.getElementById('policy-modal-history');
+    
+    // Get dashboard instance to access data
+    const dashboard = window.policyDashboard;
+    if (!dashboard) return;
+    
+    const policy = dashboard.platformData.find(p => p.slug === slug);
+    const summaryData = dashboard.summariesData[slug] || {};
+    
+    if (!policy) return;
+    
+    // Update modal content
+    title.innerHTML = `<i class="fas fa-file-text"></i> ${policy.name} - ${dashboard.findPlatformName(slug)}`;
+    
+    let modalHtml = '';
+    if (summaryData.initial_summary) {
+        modalHtml += '<div class="modal-summary">';
+        modalHtml += '<h3>Policy Summary</h3>';
+        modalHtml += dashboard.renderMarkdown(summaryData.initial_summary);
+        modalHtml += '</div>';
+        
+        if (summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.') {
+            modalHtml += '<div class="modal-update">';
+            modalHtml += '<h3><i class="fas fa-exclamation-circle"></i> Recent Changes</h3>';
+            modalHtml += dashboard.renderMarkdown(summaryData.last_update_summary);
+            modalHtml += `<div class="update-timestamp">Updated: ${dashboard.formatRelativeTime(summaryData.last_updated)}</div>`;
+            modalHtml += '</div>';
+        }
+    } else {
+        modalHtml = '<p>No summary available for this policy yet.</p>';
+    }
+    
+    content.innerHTML = modalHtml;
+    
+    // Update action links
+    visitLink.href = policy.url;
+    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${slug}`;
+    
+    modal.style.display = 'block';
+}
 
-console.log('Dashboard initialized successfully with methods:', {
-    cleanTimestamp: typeof app.cleanTimestamp,
-    updateSystemStatus: typeof app.updateSystemStatus,
-    updateHeaderStats: typeof app.updateHeaderStats
+// Global function for closing policy modal
+function closePolicyModal() {
+    const modal = document.getElementById('policy-summary-modal');
+    modal.style.display = 'none';
+}
+
+// Global function for toggling summary expansion
+function toggleSummary(summaryId) {
+    const shortSummary = document.getElementById(summaryId);
+    const fullSummary = document.getElementById(summaryId + '-full');
+    
+    if (!shortSummary || !fullSummary) {
+        console.error('Summary elements not found:', summaryId);
+        return;
+    }
+    
+    const isFullVisible = fullSummary.style.display !== 'none' && fullSummary.style.display !== '';
+    
+    if (isFullVisible) {
+        // Show short, hide full
+        shortSummary.style.display = 'block';
+        fullSummary.style.display = 'none';
+    } else {
+        // Show full, hide short
+        shortSummary.style.display = 'none';
+        fullSummary.style.display = 'block';
+    }
+}
+
+// Global function for exporting matrix to CSV
+function exportMatrix() {
+    const table = document.getElementById('policy-matrix-table');
+    const rows = table.querySelectorAll('tbody tr:not(.platform-section)');
+    
+    // CSV headers
+    const headers = ['Platform', 'Policy Name', 'Status', 'Coverage Areas', 'Key Features', 'Enforcement Actions', 'Last Updated', 'URL'];
+    let csvContent = headers.join(',') + '\n';
+    
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 7) {
+            const rowData = [
+                `"${cells[0].textContent.trim()}"`,
+                `"${cells[1].textContent.trim()}"`,
+                `"${cells[2].textContent.trim()}"`,
+                `"${cells[3].textContent.trim()}"`,
+                `"${cells[4].textContent.trim()}"`,
+                `"${cells[5].textContent.trim()}"`,
+                `"${cells[6].textContent.trim()}"`,
+                `"${cells[7].querySelector('a') ? cells[7].querySelector('a').href : ''}"`
+            ];
+            csvContent += rowData.join(',') + '\n';
+        }
+    });
+    
+    // Create and download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `policy-matrix-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Initialize dashboard when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.policyDashboard = new PolicyWatcherDashboard();
 });
+
+// Global modal close functionality
+window.onclick = function(event) {
+    const policyModal = document.getElementById('policy-summary-modal');
+    const runLogModal = document.getElementById('run-log-modal');
+    
+    if (event.target === policyModal) {
+        closePolicyModal();
+    }
+    if (event.target === runLogModal) {
+        runLogModal.style.display = 'none';
+    }
+}
