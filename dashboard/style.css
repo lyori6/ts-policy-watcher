@@ -888,6 +888,137 @@ main {
     color: #555;
 }
 
+/* Platform Frequency Comparison */
+.platform-frequency-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.platform-frequency-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    border-radius: 6px;
+    border-left: 4px solid var(--light-gray);
+    background: #f9f9f9;
+    transition: var(--transition);
+}
+
+.platform-frequency-stat.high {
+    border-left-color: var(--danger-color);
+    background: #fef2f2;
+}
+
+.platform-frequency-stat.moderate {
+    border-left-color: var(--warning-color);
+    background: #fffbf0;
+}
+
+.platform-frequency-stat.low {
+    border-left-color: var(--success-color);
+    background: #f0fdf4;
+}
+
+.platform-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.platform-info i {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+}
+
+.platform-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.frequency-metrics {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.change-count {
+    font-weight: 600;
+    color: #333;
+}
+
+.frequency-rate {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* Latest Key Change */
+.latest-change-card {
+    padding: 0.5rem 0;
+}
+
+.change-platform {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.change-platform i {
+    color: var(--secondary-color);
+}
+
+.change-policy {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.change-summary {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+.view-change-btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.view-change-btn:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+}
+
+.no-changes-state {
+    text-align: center;
+    padding: 1rem 0;
+    color: #666;
+}
+
+.no-changes-state i {
+    font-size: 2rem;
+    color: var(--success-color);
+    margin-bottom: 0.8rem;
+}
+
 .chart-placeholder {
     background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
     height: 300px;

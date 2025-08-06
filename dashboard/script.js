@@ -661,71 +661,140 @@ class PolicyWatcherDashboard {
         // --- Platform Activity ---
         this.renderPlatformActivityInsight();
 
-        // --- Focus Areas ---
-        this.renderFocusAreasInsight();
+        // --- Latest Key Change ---
+        this.renderLatestKeyChangeInsight();
     }
 
     renderPlatformActivityInsight() {
         const activityContainer = document.getElementById('insight-platform-activity');
         if (!activityContainer) return;
 
-        const platformStats = {};
+        const platformChangeFrequency = {};
         const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
-        // Initialize platform counts
+        // Initialize platform stats
         platforms.forEach(platform => {
-            platformStats[platform] = 0;
+            platformChangeFrequency[platform] = { changes: 0, policies: 0, frequency: 0 };
         });
 
-        // Count policies per platform (exclude test data)
+        // Count policies and changes per platform (exclude test data)
         for (const slug in this.summariesData) {
-            // Filter out test policies
             if (slug.startsWith('test-')) continue;
             
             const policy = this.summariesData[slug];
             const platformName = this.findPlatformName(slug);
-            if (platformStats.hasOwnProperty(platformName)) {
-                platformStats[platformName]++;
+            if (platformChangeFrequency.hasOwnProperty(platformName)) {
+                platformChangeFrequency[platformName].policies++;
+                
+                // Count recent changes
+                if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
+                    const lastUpdatedDate = new Date(policy.last_updated);
+                    if (lastUpdatedDate > thirtyDaysAgo) {
+                        platformChangeFrequency[platformName].changes++;
+                    }
+                }
             }
         }
 
-        let activityHtml = '<div class="platform-comparison">';
-        for (const [platform, count] of Object.entries(platformStats)) {
-            const percentage = Math.round((count / Object.values(platformStats).reduce((a, b) => a + b, 0)) * 100) || 0;
+        // Calculate change frequency (changes per policy)
+        platforms.forEach(platform => {
+            const stats = platformChangeFrequency[platform];
+            stats.frequency = stats.policies > 0 ? (stats.changes / stats.policies * 100).toFixed(1) : 0;
+        });
+
+        // Sort by change frequency for display
+        const sortedPlatforms = platforms.sort((a, b) => 
+            platformChangeFrequency[b].changes - platformChangeFrequency[a].changes
+        );
+
+        let activityHtml = '<div class="platform-frequency-comparison">';
+        sortedPlatforms.forEach(platform => {
+            const stats = platformChangeFrequency[platform];
+            const icon = this.getPlatformIcon(platform);
+            const activityLevel = stats.changes > 2 ? 'high' : stats.changes > 0 ? 'moderate' : 'low';
+            
             activityHtml += `
-                <div class="platform-stat">
-                    <span class="platform-name">${platform}</span>
-                    <span class="policy-count">${count} policies</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                <div class="platform-frequency-stat ${activityLevel}">
+                    <div class="platform-info">
+                        <i class="${icon}"></i>
+                        <span class="platform-name">${platform}</span>
+                    </div>
+                    <div class="frequency-metrics">
+                        <span class="change-count">${stats.changes} changes</span>
+                        <span class="frequency-rate">${stats.frequency}% rate</span>
                     </div>
                 </div>
             `;
-        }
+        });
         activityHtml += '</div>';
         
         activityContainer.innerHTML = activityHtml;
     }
 
-    renderFocusAreasInsight() {
-        const focusContainer = document.getElementById('insight-focus-areas');
-        if (!focusContainer) return;
+    renderLatestKeyChangeInsight() {
+        const changeContainer = document.getElementById('insight-latest-change');
+        if (!changeContainer) return;
 
-        const trackedPoliciesCount = Object.keys(this.summariesData).length;
-        const coverageAreas = ['harassment', 'blocking', 'moderation', 'commerce', 'appeals'];
-        
-        const focusHtml = `
-            <div class="focus-summary">
-                <p><strong>Coverage Analysis:</strong> Monitoring ${trackedPoliciesCount} policies across 4 platforms.</p>
-                <div class="gap-indicators">
-                    <div class="coverage-item">📊 <strong>Policy Density:</strong> ${(trackedPoliciesCount/4).toFixed(1)} avg per platform</div>
-                    <div class="coverage-item">🔍 <strong>Focus Areas:</strong> ${coverageAreas.slice(0,3).join(', ')}</div>
-                    <div class="coverage-item">⚡ <strong>Response Time:</strong> ~2min detection</div>
+        // Find the most recent policy change
+        let latestChange = null;
+        let latestDate = null;
+
+        for (const slug in this.summariesData) {
+            if (slug.startsWith('test-')) continue;
+            
+            const policy = this.summariesData[slug];
+            if (policy.last_updated && policy.last_update_summary && policy.last_update_summary !== 'Initial version.') {
+                const lastUpdatedDate = new Date(policy.last_updated);
+                if (!latestDate || lastUpdatedDate > latestDate) {
+                    latestDate = lastUpdatedDate;
+                    latestChange = {
+                        ...policy,
+                        slug,
+                        platform: this.findPlatformName(slug),
+                        policy_name: this.getPolicyName(slug)
+                    };
+                }
+            }
+        }
+
+        let changeHtml = '';
+        if (latestChange) {
+            const timeAgo = this.formatRelativeTime(latestChange.last_updated);
+            const icon = this.getPlatformIcon(latestChange.platform);
+            
+            changeHtml = `
+                <div class="latest-change-card">
+                    <div class="change-platform">
+                        <i class="${icon}"></i>
+                        <strong>${latestChange.platform}</strong> • ${timeAgo}
+                    </div>
+                    <div class="change-policy">${latestChange.policy_name}</div>
+                    <div class="change-summary">
+                        ${this.renderMarkdown(this.truncateText(latestChange.last_update_summary, 150))}
+                    </div>
+                    <button class="view-change-btn" onclick="openPolicyModal('${latestChange.slug}')" type="button">
+                        <i class="fas fa-external-link-alt"></i> View Details
+                    </button>
                 </div>
-            </div>
-        `;
+            `;
+        } else {
+            changeHtml = `
+                <div class="no-changes-state">
+                    <i class="fas fa-check-circle"></i>
+                    <p><strong>All Quiet</strong></p>
+                    <p>No recent policy changes detected across tracked platforms.</p>
+                </div>
+            `;
+        }
         
-        focusContainer.innerHTML = focusHtml;
+        changeContainer.innerHTML = changeHtml;
+    }
+
+    getPolicyName(slug) {
+        const policy = this.platformData.find(p => p.slug === slug);
+        return policy ? policy.name : 'Unknown Policy';
     }
 
     findPlatformName(slug) {
