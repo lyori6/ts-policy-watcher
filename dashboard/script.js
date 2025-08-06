@@ -834,7 +834,7 @@ class PolicyWatcherDashboard {
 }
 
 // Initialize the app
-const app = new PolicyWatcher();
+const app = new PolicyWatcherDashboard();
 
 // Global toggle functions for card expansions  
 function toggleRiskExpansion() {
