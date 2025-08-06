@@ -1019,6 +1019,23 @@ main {
     margin-bottom: 0.8rem;
 }
 
+/* Development Indicator */
+.dev-indicator {
+    background: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.5);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #856404;
+    backdrop-filter: blur(10px);
+    display: inline-block;
+}
+
+.dev-indicator span {
+    font-weight: 500;
+}
+
 .chart-placeholder {
     background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
     height: 300px;

@@ -42,8 +42,45 @@ python scripts/diff_and_notify.py
 ```
 
 ### Dashboard
-- **Local**: Open `dashboard/index.html` in a browser  
-- **Live**: https://ts-policy-watcher.vercel.app/ (automatically deploys from main branch)
+- **Production**: https://ts-policy-watcher.vercel.app/ (deploys from `main` branch)
+- **Development**: Preview deployments generated from `dev` branch PRs
+- **Local**: Open `dashboard/index.html` in a browser
+
+## Development Workflow
+
+This project uses a **dev branch workflow** with Vercel preview deployments for safe development.
+
+### Branch Strategy
+- **`main`** - Production branch (auto-deploys to live site)
+- **`dev`** - Development branch (creates preview deployments)
+
+### Making Changes
+1. **Work in dev branch**:
+   ```bash
+   git checkout dev
+   git pull origin dev
+   # Make your changes
+   git add .
+   git commit -m "your changes"
+   git push origin dev
+   ```
+
+2. **Vercel automatically creates preview deployments** for `dev` branch pushes
+   - Preview URL will be visible in GitHub commits/PRs
+   - Test your changes in the preview environment
+
+3. **Deploy to production**:
+   ```bash
+   git checkout main
+   git merge dev
+   git push origin main
+   ```
+
+### Preview Deployment Benefits
+- ✅ **Safe testing** - Changes are isolated from production
+- ✅ **Automatic previews** - Every dev branch push creates a preview URL
+- ✅ **Team collaboration** - Share preview links for review
+- ✅ **Zero downtime** - Production remains stable during development
 
 ## Troubleshooting
 
