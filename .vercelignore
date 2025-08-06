@@ -1,0 +1,17 @@
+# Exclude large snapshot files from Vercel builds
+snapshots/
+venv/
+*.pyc
+__pycache__/
+.pytest_cache/
+tests/
+scripts/
+requirements.txt
+*.md
+*.py
+
+# Keep only essential dashboard files
+!dashboard/
+!platform_urls.json
+!run_log.json
+!summaries.json
