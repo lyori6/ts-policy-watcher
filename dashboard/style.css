@@ -1036,6 +1036,98 @@ main {
     font-weight: 500;
 }
 
+/* Enhanced Insight Card Styling */
+.insight-card {
+    background: white;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.insight-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12) !important;
+}
+
+.insight-card.expanded {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Enhanced Header Styling */
+.insight-header {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9)) !important;
+    backdrop-filter: blur(10px) !important;
+    padding: 1.2rem !important;
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+.insight-header .left {
+    gap: 1rem !important;
+}
+
+.icon-container {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: var(--transition);
+}
+
+.icon-container.risk {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.icon-container.intel {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.icon-container.change {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.insight-header h3 {
+    color: #2c3e50 !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+}
+
+.card-subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 400;
+}
+
+/* Enhanced card types */
+.risk-card {
+    border-left: 4px solid #e74c3c;
+}
+
+.intel-card {
+    border-left: 4px solid #3498db;
+}
+
+.change-card {
+    border-left: 4px solid #f39c12;
+}
+
 .chart-placeholder {
     background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
     height: 300px;
