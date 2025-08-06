@@ -542,9 +542,73 @@ main {
     display: flex;
     flex-direction: column;
     transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    min-height: 120px;
 }
 
-/* Remove hover effects - these cards are not clickable */
+.insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.insight-card.expanded {
+    min-height: auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.insight-header .left {
+    display: flex;
+    align-items: center;
+}
+
+.insight-header i:first-child {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.insight-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.expand-icon {
+    font-size: 0.9rem;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.insight-card.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+.insight-body {
+    padding: 0 1rem 1rem;
+    line-height: 1.5;
+}
+
+.insight-body.compact {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: 50px;
+}
+
+.insight-body.expanded {
+    max-height: none;
+    -webkit-line-clamp: none;
+}
 
 /* Focus Areas Summary Styles */
 .focus-summary {

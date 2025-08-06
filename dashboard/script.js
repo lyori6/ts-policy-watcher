@@ -1085,6 +1085,24 @@ function toggleSummary(summaryId) {
     }
 }
 
+// Global function for toggling insight card expansion
+function toggleInsightCard(card) {
+    const body = card.querySelector('.insight-body');
+    const isExpanded = card.classList.contains('expanded');
+    
+    if (isExpanded) {
+        // Collapse
+        card.classList.remove('expanded');
+        body.classList.remove('expanded');
+        body.classList.add('compact');
+    } else {
+        // Expand
+        card.classList.add('expanded');
+        body.classList.remove('compact');
+        body.classList.add('expanded');
+    }
+}
+
 // Global function for exporting matrix to CSV
 function exportMatrix() {
     const table = document.getElementById('policy-matrix-table');
