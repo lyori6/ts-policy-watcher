@@ -4,18 +4,5 @@
       "source": "/",
       "destination": "/dashboard/index.html"
     }
-  ],
-  "git": {
-    "deploymentEnabled": {
-      "main": true,
-      "dev": true
-    }
-  },
-  "github": {
-    "silent": false,
-    "autoJobCancelation": false
-  },
-  "env": {
-    "VERCEL_ENV": "@vercel-env"
-  }
+  ]
 }
