@@ -5,7 +5,7 @@ An automated competitive intelligence system that monitors competitor Trust & Sa
 ## What It Does
 
 The T&S Policy Watcher automatically:
-- **Monitors** 20+ policy pages across TikTok, YouTube, Instagram, and Whatnot every 6 hours
+- **Monitors** 20+ policy pages across TikTok, YouTube, Meta, and Whatnot every 6 hours
 - **Detects** substantive policy changes while filtering out cosmetic updates  
 - **Summarizes** changes using AI (Google Gemini) with product manager-focused insights
 - **Notifies** stakeholders via clean, mobile-friendly email notifications

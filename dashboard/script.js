@@ -452,7 +452,7 @@ class PolicyWatcherDashboard {
         const tbody = document.getElementById('matrix-tbody');
         if (!tbody) return;
 
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
         let matrixHtml = '';
 
         platforms.forEach(platform => {
@@ -510,7 +510,7 @@ class PolicyWatcherDashboard {
         const icons = {
             'TikTok': 'fab fa-tiktok',
             'YouTube': 'fab fa-youtube',
-            'Instagram': 'fab fa-instagram', 
+            'Meta': 'fab fa-meta', 
             'Whatnot': 'fas fa-gavel'
         };
         return icons[platform] || 'fas fa-globe';
@@ -695,7 +695,7 @@ class PolicyWatcherDashboard {
         if (!activityContainer) return;
 
         const platformChangeFrequency = {};
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
@@ -826,7 +826,7 @@ class PolicyWatcherDashboard {
         if (slug.startsWith('tiktok-')) return 'TikTok';
         if (slug.startsWith('whatnot-')) return 'Whatnot';
         if (slug.startsWith('youtube-')) return 'YouTube';
-        if (slug.startsWith('instagram-')) return 'Instagram';
+        if (slug.startsWith('instagram-')) return 'Meta';
         return 'Unknown';
     }
 
@@ -881,7 +881,7 @@ class PolicyWatcherDashboard {
 
     calculatePlatformStats() {
         const stats = {};
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Instagram'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
         
         // Initialize platform stats
         platforms.forEach(platform => {

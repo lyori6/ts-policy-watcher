@@ -18,7 +18,7 @@ The Trust & Safety Policy Watcher is a production-grade system that automaticall
 
 ### The Challenge: Operating Blind in High-Stakes Competition
 
-In the fast-paced world of live commerce and social media, Trust & Safety policy is a strategic battleground. Platforms like TikTok, YouTube, Instagram, and Whatnot constantly evolve their rules around content moderation, user safety, and prohibited items. Product managers need to stay ahead of these changes to:
+In the fast-paced world of live commerce and social media, Trust & Safety policy is a strategic battleground. Platforms like TikTok, YouTube, Meta, and Whatnot constantly evolve their rules around content moderation, user safety, and prohibited items. Product managers need to stay ahead of these changes to:
 
 - **Anticipate Market Shifts**: Understanding competitor policy directions before they impact the market
 - **Identify Competitive Advantages**: Finding gaps or opportunities in competitor approaches  
@@ -131,7 +131,7 @@ The vision was to create a fully automated, "set it and forget it" system that w
 ### Current Production Status
 
 **✅ Operational Excellence**:
-- **Coverage**: 20+ policies across TikTok, YouTube, Instagram, Whatnot
+- **Coverage**: 20+ policies across TikTok, YouTube, Meta, Whatnot
 - **Reliability**: 95%+ uptime with comprehensive error handling
 - **Accuracy**: Near-zero false positives with intelligent change detection
 - **User Experience**: Professional mobile-optimized notifications

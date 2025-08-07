@@ -309,7 +309,7 @@ The system now correctly generates and sends detailed policy summaries like:
 ### 5.6. Current System Status: PRODUCTION READY
 
 **✅ Fully Operational System:**
-- **Monitoring**: 20 policies across TikTok, YouTube, Instagram, and Whatnot
+- **Monitoring**: 20 policies across TikTok, YouTube, Meta, and Whatnot
 - **Change Detection**: AI-powered filtering of meaningful vs trivial changes
 - **Summarization**: High-quality policy analysis via Gemini API integration
 - **Notifications**: Professional HTML email notifications via Resend API
@@ -679,7 +679,7 @@ The comprehensive testing phase successfully validated all system components, co
 
 **Context Understanding:**
 This is a production Trust & Safety policy monitoring system that:
-- Monitors 20 policy pages across TikTok, YouTube, Instagram, and Whatnot
+- Monitors 20 policy pages across TikTok, YouTube, Meta, and Whatnot
 - Uses AI (Google Gemini) to generate policy change summaries
 - Sends professional plain text email notifications via Resend API
 - Runs on 6-hour GitHub Actions cron schedule
