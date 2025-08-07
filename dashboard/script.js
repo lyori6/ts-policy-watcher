@@ -2,11 +2,16 @@
 
 class PolicyWatcherDashboard {
     constructor() {
+        // Dynamically determine branch based on deployment URL
+        const branch = this.detectBranch();
+        
         // GitHub raw content URLs
-        this.GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main';
+        this.GITHUB_RAW_BASE = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${branch}`;
         this.LOG_FILE_PATH = `${this.GITHUB_RAW_BASE}/run_log.json`;
         this.SUMMARIES_PATH = `${this.GITHUB_RAW_BASE}/summaries.json`;
         this.PLATFORM_URLS_PATH = `${this.GITHUB_RAW_BASE}/platform_urls.json`;
+        
+        console.log(`🌐 Dashboard using branch: ${branch}`);
 
         // Data containers
         this.runLogData = [];
@@ -16,6 +21,26 @@ class PolicyWatcherDashboard {
         this.currentPlatform = 'all';
 
         this.init();
+    }
+
+    detectBranch() {
+        // Check if we're on a Vercel preview deployment
+        const hostname = window.location.hostname;
+        const url = window.location.href;
+        
+        // Vercel dev branch preview URLs contain 'git-dev-'
+        if (hostname.includes('git-dev-') || url.includes('git-dev-')) {
+            return 'dev';
+        }
+        
+        // Check for other branch patterns in Vercel URLs
+        const branchMatch = hostname.match(/git-([^-]+)-/);
+        if (branchMatch) {
+            return branchMatch[1];
+        }
+        
+        // Default to main branch for production
+        return 'main';
     }
 
     async init() {
