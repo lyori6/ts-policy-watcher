@@ -1120,7 +1120,7 @@ function openPolicyModal(slug) {
     
     // Update action links
     visitLink.href = policy.url;
-    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/${slug}`;
+    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/production/${slug}`;
     
     modal.style.display = 'block';
 }
