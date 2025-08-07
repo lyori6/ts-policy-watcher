@@ -531,83 +531,43 @@ main {
 /* Insights Grid */
 .insights-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
 }
 
 .insight-card {
     background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--card-shadow);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
-    transition: var(--transition);
-    cursor: pointer;
+    transition: all 0.2s ease;
     position: relative;
-    min-height: 120px;
+    min-height: 180px;
+    overflow: hidden;
 }
 
 .insight-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.insight-card.expanded {
-    min-height: auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.08);
 }
 
 .insight-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.insight-header .left {
-    display: flex;
-    align-items: center;
-}
-
-.insight-header i:first-child {
-    margin-right: 0.5rem;
-    color: var(--primary-color);
-}
-
-.insight-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.expand-icon {
-    font-size: 0.9rem;
-    color: #666;
-    transition: transform 0.3s ease;
-}
-
-.insight-card.expanded .expand-icon {
-    transform: rotate(180deg);
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 1rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .insight-body {
-    padding: 0 1rem 1rem;
-    line-height: 1.5;
-}
-
-.insight-body.compact {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    max-height: 50px;
-}
-
-.insight-body.expanded {
-    max-height: none;
-    -webkit-line-clamp: none;
+    padding: 1rem 1.25rem 1.25rem 1.25rem;
+    line-height: 1.6;
+    flex: 1;
+    font-size: 0.9rem;
+    color: #374151;
 }
 
 /* Focus Areas Summary Styles */
@@ -1020,96 +980,69 @@ main {
 }
 
 
-/* Enhanced Insight Card Styling */
-.insight-card {
-    background: white;
-    border-radius: 16px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
 
-.insight-card:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-}
 
-.insight-card.expanded {
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Enhanced Header Styling */
-.insight-header {
-    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9)) !important;
-    backdrop-filter: blur(10px) !important;
-    padding: 1.2rem !important;
-    margin-bottom: 0 !important;
-    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
-}
-
-.insight-header .left {
-    gap: 1rem !important;
-}
 
 .icon-container {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: var(--transition);
+    font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 .icon-container.risk {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
+    background: #fee2e2;
+    color: #dc2626;
 }
 
 .icon-container.intel {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
+    background: #dbeafe;
+    color: #2563eb;
 }
 
 .icon-container.change {
-    background: linear-gradient(135deg, #f39c12, #e67e22);
-    color: white;
+    background: #fef3c7;
+    color: #d97706;
 }
 
 .header-text {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.25rem;
+    flex: 1;
 }
 
 .insight-header h3 {
-    color: #2c3e50 !important;
-    font-size: 1.1rem !important;
-    font-weight: 600 !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
+    color: #111827;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+    letter-spacing: -0.01em;
 }
 
 .card-subtitle {
-    font-size: 0.85rem;
-    color: #64748b;
+    font-size: 0.8rem;
+    color: #6b7280;
     font-weight: 400;
+    line-height: 1.3;
 }
 
-/* Enhanced card types */
-.risk-card {
-    border-left: 4px solid #e74c3c;
+/* Enhanced card types - Apple-inspired minimal approach */
+.risk-card:hover {
+    border-color: rgba(220, 38, 38, 0.1);
 }
 
-.intel-card {
-    border-left: 4px solid #3498db;
+.intel-card:hover {
+    border-color: rgba(37, 99, 235, 0.1);
 }
 
-.change-card {
-    border-left: 4px solid #f39c12;
+.change-card:hover {
+    border-color: rgba(217, 119, 6, 0.1);
 }
 
 .chart-placeholder {
@@ -1373,6 +1306,29 @@ main {
     
     .status-label {
         font-size: 0.6rem;
+    }
+    
+    /* Mobile-optimized insights grid */
+    .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .insight-card {
+        min-height: 160px;
+    }
+    
+    .insight-header {
+        padding: 1rem 1rem 0.75rem 1rem;
+    }
+    
+    .insight-body {
+        padding: 0.75rem 1rem 1rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .intelligence-panel {
+        padding: 1rem;
     }
     
     .overview-grid {

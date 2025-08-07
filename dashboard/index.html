@@ -37,54 +37,45 @@
 
         <!-- Insight Cards -->
         <div class="insights-grid">
-            <div class="insight-card risk-card" onclick="toggleInsightCard(this)">
+            <div class="insight-card risk-card">
                 <div class="insight-header">
-                    <div class="left">
-                        <div class="icon-container risk">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="header-text">
-                            <h3>Market Risk Assessment</h3>
-                            <span class="card-subtitle">Monitor competitive stability</span>
-                        </div>
+                    <div class="icon-container risk">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-                    <i class="fas fa-chevron-down expand-icon"></i>
+                    <div class="header-text">
+                        <h3>Risk Updates</h3>
+                        <span class="card-subtitle">Monitor competitive stability</span>
+                    </div>
                 </div>
-                <div class="insight-body compact" id="insight-trend-alert">
+                <div class="insight-body" id="insight-trend-alert">
                     <p>Loading market risk analysis...</p>
                 </div>
             </div>
-            <div class="insight-card intel-card" onclick="toggleInsightCard(this)">
+            <div class="insight-card intel-card">
                 <div class="insight-header">
-                    <div class="left">
-                        <div class="icon-container intel">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="header-text">
-                            <h3>Competitive Intelligence</h3>
-                            <span class="card-subtitle">Platform change frequency (since 30 days ago)</span>
-                        </div>
+                    <div class="icon-container intel">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <i class="fas fa-chevron-down expand-icon"></i>
+                    <div class="header-text">
+                        <h3>Competitive Intelligence</h3>
+                        <span class="card-subtitle">Platform change frequency (30 days)</span>
+                    </div>
                 </div>
-                <div class="insight-body compact" id="insight-platform-activity">
+                <div class="insight-body" id="insight-platform-activity">
                     <p>Loading competitive landscape...</p>
                 </div>
             </div>
-            <div class="insight-card change-card" onclick="toggleInsightCard(this)">
+            <div class="insight-card change-card">
                 <div class="insight-header">
-                    <div class="left">
-                        <div class="icon-container change">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="header-text">
-                            <h3>Latest Key Change</h3>
-                            <span class="card-subtitle">Most recent policy update</span>
-                        </div>
+                    <div class="icon-container change">
+                        <i class="fas fa-bolt"></i>
                     </div>
-                    <i class="fas fa-chevron-down expand-icon"></i>
+                    <div class="header-text">
+                        <h3>Latest Key Change</h3>
+                        <span class="card-subtitle">Most recent policy update</span>
+                    </div>
                 </div>
-                <div class="insight-body compact" id="insight-latest-change">
+                <div class="insight-body" id="insight-latest-change">
                     <p>Loading latest policy changes...</p>
                 </div>
             </div>
