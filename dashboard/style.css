@@ -86,6 +86,19 @@ header {
     height: 1.4rem;
 }
 
+/* Health status indicators */
+.status-item.operational .status-icon {
+    color: #22c55e;  /* Green for operational */
+}
+
+.status-item.degraded .status-icon {
+    color: #f59e0b;  /* Yellow/Orange for degraded */
+}
+
+.status-item.issues .status-icon {
+    color: #ef4444;  /* Red for issues */
+}
+
 .status-label {
     font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.9);

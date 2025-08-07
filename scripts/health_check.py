@@ -1,0 +1,414 @@
+#!/usr/bin/env python3
+"""
+Phase 2.1: Core Health Checking Service
+
+Proactive URL health monitoring to detect issues before they impact policy monitoring.
+- Quick HEAD requests for fast health validation
+- Health status tracking and history
+- Integration with existing fetch.py system
+- Separate from content fetching for efficiency
+
+Design Goals:
+- Fast health checks (<30s for all URLs)
+- Minimal bandwidth usage (HEAD requests)
+- Robust error classification
+- Historical health tracking
+"""
+
+import json
+import httpx
+import time
+import ssl
+import concurrent.futures
+from pathlib import Path
+from datetime import datetime, UTC, timedelta
+from typing import Dict, List, Optional, NamedTuple
+from dataclasses import dataclass, asdict
+from enum import Enum
+
+# Health Status Classifications
+class HealthStatus(Enum):
+    HEALTHY = "healthy"          # HTTP 200, fast response, no recent failures
+    DEGRADED = "degraded"        # HTTP 200 but slow, or intermittent failures  
+    FAILED = "failed"            # HTTP 4xx/5xx, timeout, DNS failure, consecutive failures
+    UNKNOWN = "unknown"          # New URL, insufficient data
+
+@dataclass
+class HealthCheckResult:
+    """Result of a single health check"""
+    url: str
+    slug: str
+    platform: str
+    timestamp: str
+    status: HealthStatus
+    http_status: Optional[int]
+    response_time_ms: Optional[int]
+    error_message: Optional[str]
+    ssl_valid: Optional[bool]
+
+@dataclass  
+class URLHealthRecord:
+    """Complete health record for a URL"""
+    slug: str
+    platform: str
+    url: str
+    current_status: HealthStatus
+    last_success: Optional[str]
+    last_failure: Optional[str]
+    consecutive_failures: int
+    total_checks: int
+    success_count: int
+    health_history: List[Dict]  # Recent check results
+    
+    @property
+    def success_rate(self) -> float:
+        """Calculate success rate percentage"""
+        if self.total_checks == 0:
+            return 0.0
+        return (self.success_count / self.total_checks) * 100
+
+class URLHealthChecker:
+    """Core health checking service"""
+    
+    def __init__(self, config_file: Path = None):
+        self.config_file = config_file or Path("platform_urls.json")
+        self.health_db_file = Path("url_health.json")
+        self.max_history_entries = 30  # Keep 30 days of history
+        self.timeout_seconds = 10
+        self.slow_threshold_ms = 2000    # >2s is degraded
+        self.failed_threshold = 3        # 3 consecutive failures = failed status
+        
+    def run_health_checks(self) -> Dict:
+        """Run health checks for all URLs in configuration"""
+        
+        print("🏥 Starting URL Health Check System")
+        print("=" * 50)
+        
+        # Load URL configuration
+        if not self.config_file.exists():
+            raise FileNotFoundError(f"Configuration file not found: {self.config_file}")
+            
+        with open(self.config_file, 'r') as f:
+            platform_urls = json.load(f)
+        
+        print(f"📋 Loaded {len(platform_urls)} URLs for health checking")
+        
+        # Load existing health database
+        health_db = self.load_health_database()
+        
+        # Run health checks
+        check_results = []
+        start_time = time.time()
+        
+        # Use ThreadPoolExecutor for concurrent health checks
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            # Create tasks for concurrent health checks
+            future_to_config = {}
+            for url_config in platform_urls:
+                future = executor.submit(
+                    self.check_url_health,
+                    url_config["url"], 
+                    url_config["slug"],
+                    url_config["platform"]
+                )
+                future_to_config[future] = url_config
+            
+            # Execute all health checks concurrently
+            print("🔍 Running concurrent health checks...")
+            for future in concurrent.futures.as_completed(future_to_config):
+                try:
+                    result = future.result()
+                    check_results.append(result)
+                except Exception as e:
+                    print(f"   ❌ Health check exception: {e}")
+        
+        # Process results and update health database  
+        for result in check_results:
+            if isinstance(result, HealthCheckResult):
+                self.update_url_health_record(health_db, result)
+        
+        elapsed_time = time.time() - start_time
+        
+        # Update system health summary
+        system_health = self.calculate_system_health(health_db)
+        health_db["system_health"] = system_health
+        health_db["system_health"]["last_check"] = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+        
+        # Save updated health database
+        self.save_health_database(health_db)
+        
+        # Print summary
+        print(f"\n📊 Health Check Summary:")
+        print(f"   Total URLs checked: {len(check_results)}")
+        print(f"   Healthy: {system_health['healthy_urls']} 🟢")
+        print(f"   Degraded: {system_health['degraded_urls']} 🟡") 
+        print(f"   Failed: {system_health['failed_urls']} 🔴")
+        print(f"   System uptime: {system_health['system_uptime']:.1f}%")
+        print(f"   Elapsed time: {elapsed_time:.2f}s")
+        
+        return {
+            "results": check_results,
+            "system_health": system_health,
+            "elapsed_time": elapsed_time
+        }
+    
+    def check_url_health(self, url: str, slug: str, platform: str) -> HealthCheckResult:
+        """Perform health check on a single URL"""
+        
+        print(f"   🔍 Checking {slug}...")
+        
+        start_time = time.time()
+        
+        try:
+            # Perform HEAD request for quick health check using httpx
+            with httpx.Client(timeout=self.timeout_seconds, follow_redirects=True) as client:
+                response = client.head(url)
+                response_time_ms = int((time.time() - start_time) * 1000)
+                
+                # Determine health status
+                if response.status_code == 200:
+                    if response_time_ms <= self.slow_threshold_ms:
+                        status = HealthStatus.HEALTHY
+                    else:
+                        status = HealthStatus.DEGRADED  # Slow response
+                elif 300 <= response.status_code < 400:
+                    # Redirects are generally OK for health checks
+                    status = HealthStatus.HEALTHY if response_time_ms <= self.slow_threshold_ms else HealthStatus.DEGRADED
+                else:
+                    # 4xx/5xx errors
+                    status = HealthStatus.FAILED
+                
+                # Check SSL if HTTPS
+                ssl_valid = None
+                if url.startswith('https://'):
+                    ssl_valid = self.check_ssl_health(url)
+                
+                print(f"      ✅ {status.value} ({response.status_code}, {response_time_ms}ms)")
+                
+                return HealthCheckResult(
+                    url=url,
+                    slug=slug,
+                    platform=platform,
+                    timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
+                    status=status,
+                    http_status=response.status_code,
+                    response_time_ms=response_time_ms,
+                    error_message=None,
+                    ssl_valid=ssl_valid
+                )
+                
+        except httpx.TimeoutException:
+            print(f"      ❌ timeout")
+            return HealthCheckResult(
+                url=url,
+                slug=slug, 
+                platform=platform,
+                timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
+                status=HealthStatus.FAILED,
+                http_status=None,
+                response_time_ms=None,
+                error_message="Request timeout",
+                ssl_valid=None
+            )
+            
+        except Exception as e:
+            print(f"      ❌ error: {str(e)[:50]}...")
+            return HealthCheckResult(
+                url=url,
+                slug=slug,
+                platform=platform,
+                timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
+                status=HealthStatus.FAILED,
+                http_status=None,
+                response_time_ms=None,
+                error_message=str(e)[:200],  # Truncate long error messages
+                ssl_valid=None
+            )
+    
+    def check_ssl_health(self, url: str) -> bool:
+        """Quick SSL certificate validation"""
+        try:
+            # Simple SSL check - just verify the certificate is valid
+            from urllib.parse import urlparse
+            parsed = urlparse(url)
+            
+            # Create SSL context for validation
+            context = ssl.create_default_context()
+            
+            # Quick SSL handshake test with timeout
+            with ssl.create_connection((parsed.hostname, parsed.port or 443), timeout=5) as sock:
+                with context.wrap_socket(sock, server_hostname=parsed.hostname) as ssock:
+                    # If we get here, SSL is valid
+                    return True
+                    
+        except Exception:
+            return False
+    
+    def load_health_database(self) -> Dict:
+        """Load existing health database or create new one"""
+        
+        if not self.health_db_file.exists():
+            return {
+                "urls": {},
+                "system_health": {
+                    "last_check": None,
+                    "total_urls": 0,
+                    "healthy_urls": 0,
+                    "degraded_urls": 0,
+                    "failed_urls": 0,
+                    "system_uptime": 0.0
+                }
+            }
+        
+        try:
+            with open(self.health_db_file, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"⚠️  Error loading health database: {e}")
+            print("   Creating new health database...")
+            # Delete corrupted file and return empty database
+            if self.health_db_file.exists():
+                self.health_db_file.unlink()
+            return {
+                "urls": {},
+                "system_health": {
+                    "last_check": None,
+                    "total_urls": 0,
+                    "healthy_urls": 0,
+                    "degraded_urls": 0,
+                    "failed_urls": 0,
+                    "system_uptime": 0.0
+                }
+            }
+    
+    def save_health_database(self, health_db: Dict):
+        """Save health database to disk"""
+        try:
+            with open(self.health_db_file, 'w') as f:
+                json.dump(health_db, f, indent=2)
+        except IOError as e:
+            print(f"❌ Error saving health database: {e}")
+    
+    def update_url_health_record(self, health_db: Dict, result: HealthCheckResult):
+        """Update health record for a URL based on check result"""
+        
+        urls = health_db.setdefault("urls", {})
+        
+        # Get or create health record
+        if result.url not in urls:
+            record = URLHealthRecord(
+                slug=result.slug,
+                platform=result.platform,
+                url=result.url,
+                current_status=HealthStatus.UNKNOWN,
+                last_success=None,
+                last_failure=None,
+                consecutive_failures=0,
+                total_checks=0,
+                success_count=0,
+                health_history=[]
+            )
+        else:
+            # Convert dict back to dataclass for easier manipulation
+            record_data = urls[result.url].copy()
+            # Convert string status back to enum
+            if 'current_status' in record_data:
+                record_data['current_status'] = HealthStatus(record_data['current_status'])
+            record = URLHealthRecord(**record_data)
+        
+        # Update record based on check result
+        record.total_checks += 1
+        
+        if result.status in [HealthStatus.HEALTHY, HealthStatus.DEGRADED]:
+            record.success_count += 1
+            record.last_success = result.timestamp
+            record.consecutive_failures = 0
+        else:
+            record.last_failure = result.timestamp  
+            record.consecutive_failures += 1
+        
+        # Determine current status based on consecutive failures
+        if record.consecutive_failures >= self.failed_threshold:
+            record.current_status = HealthStatus.FAILED
+        else:
+            record.current_status = result.status
+        
+        # Add to health history (keep only recent entries)
+        history_entry = {
+            "timestamp": result.timestamp,
+            "status": result.status.value,
+            "http_status": result.http_status,
+            "response_time_ms": result.response_time_ms,
+            "error_message": result.error_message,
+            "ssl_valid": result.ssl_valid
+        }
+        
+        record.health_history.insert(0, history_entry)
+        record.health_history = record.health_history[:self.max_history_entries]
+        
+        # Convert to dict and handle enum serialization
+        record_dict = asdict(record)
+        record_dict['current_status'] = record.current_status.value
+        
+        # Save back to database
+        urls[result.url] = record_dict
+    
+    def calculate_system_health(self, health_db: Dict) -> Dict:
+        """Calculate overall system health metrics"""
+        
+        urls = health_db.get("urls", {})
+        
+        total_urls = len(urls)
+        healthy_urls = 0
+        degraded_urls = 0
+        failed_urls = 0
+        
+        for url_data in urls.values():
+            status = url_data.get("current_status", "unknown")
+            if status == "healthy":
+                healthy_urls += 1
+            elif status == "degraded":
+                degraded_urls += 1
+            elif status == "failed":
+                failed_urls += 1
+        
+        # Calculate system uptime (percentage of healthy + degraded URLs)
+        if total_urls > 0:
+            system_uptime = ((healthy_urls + degraded_urls) / total_urls) * 100
+        else:
+            system_uptime = 0.0
+        
+        return {
+            "total_urls": total_urls,
+            "healthy_urls": healthy_urls,
+            "degraded_urls": degraded_urls,
+            "failed_urls": failed_urls,
+            "unknown_urls": total_urls - healthy_urls - degraded_urls - failed_urls,
+            "system_uptime": round(system_uptime, 2)
+        }
+
+def main():
+    """Main entry point for health checking"""
+    
+    health_checker = URLHealthChecker()
+    
+    try:
+        results = health_checker.run_health_checks()
+        
+        # Exit with error code if there are failed URLs (for monitoring)
+        failed_count = results["system_health"]["failed_urls"]
+        if failed_count > 0:
+            print(f"\n⚠️  {failed_count} URLs failed health checks")
+            exit(1)
+        else:
+            print(f"\n✅ All URLs passed health checks")
+            exit(0)
+            
+    except Exception as e:
+        print(f"\n❌ Health check system error: {e}")
+        import traceback
+        traceback.print_exc()
+        exit(1)
+
+if __name__ == "__main__":
+    main()

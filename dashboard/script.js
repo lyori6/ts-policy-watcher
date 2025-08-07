@@ -10,6 +10,7 @@ class PolicyWatcherDashboard {
         this.LOG_FILE_PATH = `${this.GITHUB_RAW_BASE}/run_log.json`;
         this.SUMMARIES_PATH = `${this.GITHUB_RAW_BASE}/summaries.json`;
         this.PLATFORM_URLS_PATH = `${this.GITHUB_RAW_BASE}/platform_urls.json`;
+        this.HEALTH_DATA_PATH = `${this.GITHUB_RAW_BASE}/url_health.json`;
         
         console.log(`🌐 Dashboard using branch: ${branch}`);
 
@@ -18,6 +19,7 @@ class PolicyWatcherDashboard {
         this.runData = []; // Alias for compatibility
         this.summariesData = {};
         this.platformData = [];
+        this.healthData = null;  // URL health monitoring data
         this.currentPlatform = 'all';
 
         this.init();
@@ -97,21 +99,25 @@ class PolicyWatcherDashboard {
 
     async loadAllData() {
         try {
-            const [runLogResponse, summariesResponse, platformsResponse] = await Promise.all([
+            const [runLogResponse, summariesResponse, platformsResponse, healthResponse] = await Promise.all([
                 this.fetchData(this.LOG_FILE_PATH),
                 this.fetchData(this.SUMMARIES_PATH),
-                this.fetchData(this.PLATFORM_URLS_PATH)
+                this.fetchData(this.PLATFORM_URLS_PATH),
+                this.fetchData(this.HEALTH_DATA_PATH)
             ]);
 
             this.runLogData = runLogResponse || [];
             this.runData = this.runLogData; // Set alias for compatibility
             this.summariesData = summariesResponse || {};
             this.platformData = platformsResponse || [];
+            this.healthData = healthResponse || null;
 
             console.log('Data loaded successfully:', {
                 runs: this.runLogData.length,
                 summaries: Object.keys(this.summariesData).length,
                 platforms: this.platformData.length,
+                healthData: this.healthData ? 'loaded' : 'not available',
+                systemUptime: this.healthData?.system_health?.system_uptime || 'N/A',
                 lastRunStatus: this.runLogData.length > 0 ? this.runLogData[0].status : 'no data'
             });
 
@@ -1072,18 +1078,54 @@ class PolicyWatcherDashboard {
         }
 
         const lastRun = this.runLogData[0];
-        const isSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
+        const isRunSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
+        
+        // Check health data if available
+        let healthStatus = null;
+        if (this.healthData && this.healthData.system_health) {
+            const health = this.healthData.system_health;
+            if (health.failed_urls > 0) {
+                healthStatus = 'degraded';
+            } else if (health.system_uptime >= 95) {
+                healthStatus = 'healthy';
+            } else {
+                healthStatus = 'degraded';
+            }
+        }
 
-        if (isSuccess) {
-            if (headerIndicator && headerIcon && headerText) {
-                headerIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                headerText.textContent = 'Operational';
+        // Determine overall system status
+        let overallStatus = 'operational';
+        let iconHtml = '<i class="fas fa-check-circle"></i>';
+        let statusText = 'Operational';
+        
+        if (!isRunSuccess) {
+            overallStatus = 'issues';
+            iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
+            statusText = 'Issues Detected';
+        } else if (healthStatus === 'degraded') {
+            overallStatus = 'degraded';
+            iconHtml = '<i class="fas fa-exclamation-circle"></i>';
+            statusText = 'Health Degraded';
+        }
+
+        // Add health tooltip
+        let tooltipText = '';
+        if (this.healthData && this.healthData.system_health) {
+            const health = this.healthData.system_health;
+            tooltipText = `System Uptime: ${health.system_uptime}%\nHealthy URLs: ${health.healthy_urls}/${health.total_urls}\nFailed URLs: ${health.failed_urls}`;
+        }
+
+        if (headerIndicator && headerIcon && headerText) {
+            headerIcon.innerHTML = iconHtml;
+            headerText.textContent = statusText;
+            
+            // Add health tooltip if available
+            if (tooltipText) {
+                headerIndicator.title = tooltipText;
             }
-        } else {
-            if (headerIndicator && headerIcon && headerText) {
-                headerIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-                headerText.textContent = 'Issues Detected';
-            }
+            
+            // Update CSS class for styling
+            headerIndicator.className = `status-item ${overallStatus}`;
         }
     }
 

@@ -1,0 +1,190 @@
+name: Daily URL Health Check
+
+on:
+  schedule:
+    # Run daily at 8:00 AM UTC (adjust timezone as needed)
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # Allow manual triggering
+    inputs:
+      alert_on_failure:
+        description: 'Send alerts if URLs fail health checks'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    name: URL Health Check
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Install Playwright browsers (if needed for health checks)
+      run: |
+        # Only install if we need browser-based health checks
+        # For now, health checks use HEAD requests, so this is optional
+        echo "Skipping Playwright install for HEAD-based health checks"
+        
+    - name: Run URL Health Checks
+      id: health_check
+      run: |
+        echo "Running daily URL health checks..."
+        
+        # Run the health check system
+        if python scripts/health_check.py; then
+          echo "health_status=success" >> $GITHUB_OUTPUT
+          echo "All URLs passed health checks ✅"
+        else
+          echo "health_status=failed" >> $GITHUB_OUTPUT
+          echo "Some URLs failed health checks ❌"
+          exit_code=$?
+          echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Upload health database as artifact
+      uses: actions/upload-artifact@v3
+      if: always()  # Upload even if health checks failed
+      with:
+        name: url-health-database
+        path: url_health.json
+        retention-days: 30
+        
+    - name: Read health results
+      if: always()
+      id: read_results
+      run: |
+        if [ -f "url_health.json" ]; then
+          # Extract key metrics for reporting
+          total_urls=$(python3 -c "import json; data=json.load(open('url_health.json')); print(data['system_health']['total_urls'])")
+          healthy_urls=$(python3 -c "import json; data=json.load(open('url_health.json')); print(data['system_health']['healthy_urls'])")
+          failed_urls=$(python3 -c "import json; data=json.load(open('url_health.json')); print(data['system_health']['failed_urls'])")
+          uptime=$(python3 -c "import json; data=json.load(open('url_health.json')); print(data['system_health']['system_uptime'])")
+          
+          echo "total_urls=$total_urls" >> $GITHUB_OUTPUT
+          echo "healthy_urls=$healthy_urls" >> $GITHUB_OUTPUT
+          echo "failed_urls=$failed_urls" >> $GITHUB_OUTPUT
+          echo "uptime=$uptime" >> $GITHUB_OUTPUT
+          
+          echo "📊 Health Check Results:"
+          echo "   Total URLs: $total_urls"
+          echo "   Healthy: $healthy_urls"
+          echo "   Failed: $failed_urls"  
+          echo "   System Uptime: $uptime%"
+        else
+          echo "❌ Health database not found"
+        fi
+        
+    - name: Create health check summary
+      if: always()
+      run: |
+        cat << 'EOF' > health_summary.md
+        # Daily URL Health Check Results
+        
+        **Date**: $(date -u '+%Y-%m-%d %H:%M UTC')
+        **Status**: ${{ steps.health_check.outputs.health_status == 'success' && '✅ All Systems Healthy' || '❌ Health Issues Detected' }}
+        
+        ## System Health Metrics
+        - **Total URLs Monitored**: ${{ steps.read_results.outputs.total_urls || 'N/A' }}
+        - **Healthy URLs**: ${{ steps.read_results.outputs.healthy_urls || 'N/A' }} 🟢
+        - **Failed URLs**: ${{ steps.read_results.outputs.failed_urls || 'N/A' }} 🔴
+        - **System Uptime**: ${{ steps.read_results.outputs.uptime || 'N/A' }}%
+        
+        ## Health Check Details
+        This automated health check uses HEAD requests to quickly validate URL accessibility.
+        
+        - ✅ **Healthy**: HTTP 200, fast response time
+        - 🔴 **Failed**: HTTP 4xx/5xx, timeout, or network error
+        
+        ## Next Steps
+        ${{ steps.health_check.outputs.health_status == 'failed' && '⚠️ **Action Required**: Review failed URLs and investigate connectivity issues.' || '✅ **No Action Required**: All monitored URLs are healthy.' }}
+        EOF
+        
+        # Display summary
+        cat health_summary.md
+        
+    - name: Post health results to GitHub Issues (on failure)
+      if: failure() && github.event.inputs.alert_on_failure != 'false'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Read health summary
+          let healthSummary = '';
+          try {
+            healthSummary = fs.readFileSync('health_summary.md', 'utf8');
+          } catch (error) {
+            healthSummary = 'Health summary not available';
+          }
+          
+          // Check if there's already an open health issue
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ['health-check', 'automated'],
+            state: 'open'
+          });
+          
+          if (issues.data.length === 0) {
+            // Create new health issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 URL Health Check Failed - ' + new Date().toISOString().split('T')[0],
+              body: healthSummary + '\n\n---\n*This issue was automatically created by the daily health check workflow.*',
+              labels: ['health-check', 'automated', 'bug']
+            });
+          } else {
+            // Update existing health issue
+            const issue = issues.data[0];
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: '## Updated Health Check Results\n\n' + healthSummary
+            });
+          }
+        
+    - name: Notify on success (close any open health issues)
+      if: success()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          // Close any open health issues if system is healthy
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ['health-check', 'automated'],
+            state: 'open'
+          });
+          
+          for (const issue of issues.data) {
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              state: 'closed'
+            });
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: '✅ **Health Restored**: All URLs are now passing health checks. Closing this issue automatically.'
+            });
+          }
