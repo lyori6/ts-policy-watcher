@@ -30,6 +30,12 @@ class PolicyWatcherDashboard {
         const hostname = window.location.hostname;
         const url = window.location.href;
         
+        // TEMPORARY: Force dev branch for local testing of Meta fix
+        if (hostname === 'localhost' || hostname === '' || url.startsWith('file://')) {
+            console.log('🔧 LOCAL TESTING: Forcing dev branch data');
+            return 'dev';
+        }
+        
         // Vercel dev branch preview URLs contain 'git-dev-'
         if (hostname.includes('git-dev-') || url.includes('git-dev-')) {
             return 'dev';
@@ -456,15 +462,31 @@ class PolicyWatcherDashboard {
 
     renderMatrixTable() {
         const tbody = document.getElementById('matrix-tbody');
-        if (!tbody) return;
+        if (!tbody) {
+            console.error('❌ Matrix tbody element not found');
+            return;
+        }
 
         const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
         let matrixHtml = '';
 
+        console.log('🔍 Matrix rendering debug:', {
+            totalPlatformData: this.platformData.length,
+            platformsToRender: platforms,
+            platformDataSample: this.platformData.slice(0, 3)
+        });
+
         platforms.forEach(platform => {
             const platformPolicies = this.platformData.filter(p => p.platform === platform);
             
-            if (platformPolicies.length === 0) return;
+            console.log(`🔍 Platform: ${platform} - Found ${platformPolicies.length} policies`);
+            
+            if (platformPolicies.length === 0) {
+                console.warn(`⚠️ Skipping ${platform} - no policies found`);
+                return;
+            }
+            
+            console.log(`✅ Rendering ${platform} with policies:`, platformPolicies.map(p => p.name));
 
             // Platform header
             const platformIcon = this.getPlatformIcon(platform);
