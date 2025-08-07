@@ -16,6 +16,34 @@ FAILURE_LOG_FILE = Path("failures.log")
 RETRY_ATTEMPTS = 2
 RETRY_DELAY_SECONDS = 5
 
+# --- Error Classification ---
+class URLErrorTypes:
+    """Classification of URL fetch errors for smart retry logic."""
+    BROKEN_LINK = "404_not_found"          # Don't retry - URL is permanently broken
+    ACCESS_DENIED = "403_forbidden"        # Don't retry - Access blocked
+    SERVER_ERROR = "5xx_server_error"      # Retry - Temporary server issue
+    NETWORK_TIMEOUT = "timeout"            # Retry - Network connectivity issue
+    UNKNOWN = "unknown_error"              # Retry once - Uncertain cause
+
+def classify_error(exception: Exception) -> str:
+    """Classify error type for smart retry logic."""
+    error_str = str(exception).lower()
+    
+    if "404" in error_str or "not found" in error_str:
+        return URLErrorTypes.BROKEN_LINK
+    elif "403" in error_str or "forbidden" in error_str:
+        return URLErrorTypes.ACCESS_DENIED
+    elif "5" in error_str and ("50" in error_str or "51" in error_str or "52" in error_str or "53" in error_str):
+        return URLErrorTypes.SERVER_ERROR
+    elif "timeout" in error_str:
+        return URLErrorTypes.NETWORK_TIMEOUT
+    else:
+        return URLErrorTypes.UNKNOWN
+
+def should_retry(error_type: str) -> bool:
+    """Determine if error type should be retried."""
+    return error_type in [URLErrorTypes.SERVER_ERROR, URLErrorTypes.NETWORK_TIMEOUT, URLErrorTypes.UNKNOWN]
+
 def get_snapshot_base_directory():
     """
     Determine snapshot base directory based on environment.
@@ -50,7 +78,12 @@ def fetch_with_playwright(url: str) -> str:
         browser = p.chromium.launch()
         page = browser.new_page(user_agent=USER_AGENT)
         try:
-            page.goto(url, timeout=60000, wait_until='domcontentloaded')
+            response = page.goto(url, timeout=60000, wait_until='domcontentloaded')
+            
+            # CRITICAL FIX: Check HTTP status code to prevent silent failures
+            if response and response.status >= 400:
+                raise Exception(f"HTTP {response.status}: {response.status_text}")
+            
             page.wait_for_timeout(3000)
             content = page.content()
         except PlaywrightTimeoutError as e:
@@ -174,6 +207,7 @@ def main():
         pages_checked += 1
 
         content = None
+        error_type = None
         for attempt in range(RETRY_ATTEMPTS):
             try:
                 if renderer == "playwright":
@@ -182,12 +216,32 @@ def main():
                     content = fetch_with_httpx(url)
                 break 
             except Exception as e:
-                error_msg = f"Attempt {attempt + 1}/{RETRY_ATTEMPTS} FAILED for {slug}. Reason: {e}"
+                error_type = classify_error(e)
+                error_msg = f"Attempt {attempt + 1}/{RETRY_ATTEMPTS} FAILED for {slug}. Error Type: {error_type}. Reason: {e}"
                 print(f"    - {error_msg}", file=sys.stderr)
-                if attempt < RETRY_ATTEMPTS - 1:
+                
+                # Smart retry logic - don't retry permanent failures
+                if not should_retry(error_type):
+                    print(f"    - Not retrying {error_type} - permanent failure", file=sys.stderr)
+                    failures.append({
+                        "url": url, 
+                        "platform": slug, 
+                        "reason": str(e),
+                        "error_type": error_type,
+                        "attempts": attempt + 1
+                    })
+                    errors.append(error_msg)
+                    break
+                elif attempt < RETRY_ATTEMPTS - 1:
                     time.sleep(RETRY_DELAY_SECONDS)
                 else:
-                    failures.append({"url": url, "platform": slug, "reason": str(e)})
+                    failures.append({
+                        "url": url, 
+                        "platform": slug, 
+                        "reason": str(e),
+                        "error_type": error_type,
+                        "attempts": RETRY_ATTEMPTS
+                    })
                     errors.append(error_msg)
 
         if content:
