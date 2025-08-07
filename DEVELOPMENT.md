@@ -94,8 +94,13 @@ git push origin main
 
 ### 1. Dashboard Development
 - **Local Testing**: Open `dashboard/index.html` directly
-- **Data Sources**: Uses live GitHub raw files (summaries.json, run_log.json)
+- **Data Sources**: Automatically detects branch and uses appropriate data
+  - Dev preview: Fetches from `dev` branch via `git-dev-*` URL detection
+  - Production: Fetches from `main` branch  
+  - Console logs active branch: "Dashboard using branch: dev"
 - **Styling**: Edit `dashboard/style.css` for visual changes
+  - Follows Apple-inspired B2B design principles
+  - Clean, minimal aesthetics with static cards (no expand/collapse)
 - **Functionality**: Edit `dashboard/script.js` for behavior
 
 ### 2. Python Scripts
@@ -105,6 +110,9 @@ git push origin main
 
 ### 3. Configuration Changes
 - **URLs**: Edit `platform_urls.json` to add/remove monitored policies
+  - Use Playwright audit scripts to validate URL health
+  - Update broken/redirected links to final destinations
+  - Test URLs before deployment to avoid 404 errors
 - **Environment**: Update GitHub Actions secrets for API keys
 
 ## Common Development Tasks
@@ -120,10 +128,19 @@ git push origin main
 2. Test with `scripts/fetch.py`
 3. Verify changes in `run_log.json`
 
+### Policy URL Audit & Management
+1. **Create audit script** to test all policy URLs with Playwright
+2. **Identify issues**: Broken links (404), redirected URLs, inaccessible pages
+3. **Research correct URLs**: Find updated policy pages on platform help centers  
+4. **Update platform_urls.json**: Replace broken URLs with working ones
+5. **Verify fixes**: Test updated URLs before deployment
+
 ### Debugging Issues
 1. Check preview deployment logs in Vercel dashboard
 2. Use browser dev tools on preview URL
 3. Test data sources: summaries.json, run_log.json
+4. **Branch Sync Issues**: Check console for "Dashboard using branch: X" message
+5. **Data Mismatch**: Verify dev preview uses dev branch data, not main branch
 
 ## Preview Deployment Benefits
 
@@ -132,6 +149,32 @@ git push origin main
 ✅ **Live Testing**: Test with real data in live environment  
 ✅ **Automatic**: Zero manual deployment steps
 ✅ **Fast Feedback**: Immediate preview URL on push
+✅ **Branch-Aware Data**: Dev preview automatically uses dev branch data
+
+## Enhanced Development Tools
+
+### Link Auditing with Playwright
+```python
+# Create comprehensive audit script
+python audit_links.py  # Tests all URLs in platform_urls.json
+
+# Quick fix verification  
+python test_fixed_urls.py  # Tests specific updated URLs
+```
+
+### Dashboard Debugging
+- **Console Logging**: Check browser console for branch detection
+- **Network Tab**: Verify correct GitHub raw URLs being fetched
+- **Branch Detection**: Look for "Dashboard using branch: X" message
+
+### Policy URL Management
+```bash
+# Test individual policy URLs
+playwright codegen --target python-async {policy_url}
+
+# Validate URL changes
+python -c "import asyncio; from playwright.async_api import async_playwright; # test code"
+```
 
 ## Troubleshooting Development
 
@@ -144,6 +187,12 @@ git push origin main
 - Verify data files exist: `summaries.json`, `run_log.json`
 - Check browser console for JavaScript errors
 - Ensure file paths are correct in `script.js`
+- **Snapshot Links**: History links point to `snapshots/production/{policy-slug}` structure
+
+### Data Architecture Notes
+- **Snapshots**: Organized as `snapshots/production/` and `snapshots/development/`
+- **GitHub Links**: Dashboard history buttons link to production snapshots
+- **Branch Detection**: Dashboard automatically uses correct data branch based on deployment URL
 
 ### Git Workflow Issues
 ```bash
