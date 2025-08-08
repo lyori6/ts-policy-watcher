@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-Phase 2.1: Core Health Checking Service
+Phase 2.2: Core Health Checking Service
 
 Proactive URL health monitoring to detect issues before they impact policy monitoring.
 - Quick HEAD requests for fast health validation
+- Smart handling of Playwright URLs (skips HEAD requests due to bot protection)
 - Health status tracking and history
 - Integration with existing fetch.py system
 - Separate from content fetching for efficiency
 
 Design Goals:
 - Fast health checks (<30s for all URLs)
-- Minimal bandwidth usage (HEAD requests)
+- Minimal bandwidth usage (HEAD requests for httpx URLs)
+- Smart bot protection handling (Playwright URLs marked as healthy by default)
 - Robust error classification
 - Historical health tracking
 """
@@ -109,7 +111,8 @@ class URLHealthChecker:
                     self.check_url_health,
                     url_config["url"], 
                     url_config["slug"],
-                    url_config["platform"]
+                    url_config["platform"],
+                    url_config.get("renderer", "httpx")
                 )
                 future_to_config[future] = url_config
             
@@ -152,7 +155,7 @@ class URLHealthChecker:
             "elapsed_time": elapsed_time
         }
     
-    def check_url_health(self, url: str, slug: str, platform: str) -> HealthCheckResult:
+    def check_url_health(self, url: str, slug: str, platform: str, renderer: str = "httpx") -> HealthCheckResult:
         """Perform health check on a single URL"""
         
         print(f"   🔍 Checking {slug}...")
@@ -160,6 +163,21 @@ class URLHealthChecker:
         start_time = time.time()
         
         try:
+            # Skip HEAD requests for Playwright URLs (they often have bot protection)
+            if renderer == "playwright":
+                print(f"      🎭 Skipping HEAD request for Playwright URL (bot protection)")
+                return HealthCheckResult(
+                    url=url,
+                    slug=slug,
+                    platform=platform,
+                    timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
+                    status=HealthStatus.HEALTHY,  # Assume healthy, actual monitoring via Playwright
+                    http_status=None,
+                    response_time_ms=None,
+                    error_message="Skipped HEAD request - using Playwright for content monitoring",
+                    ssl_valid=None
+                )
+            
             # Perform HEAD request for quick health check using httpx
             with httpx.Client(timeout=self.timeout_seconds, follow_redirects=True) as client:
                 response = client.head(url)

@@ -74,14 +74,15 @@ The T&S Policy Watcher is an automated intelligence pipeline designed to be robu
     *   **Enhanced**: Now loads and processes health alerts alongside policy changes.
     *   It aggregates all summaries and health alerts, sending a single, consolidated email notification via the Resend API.
 
-*   **Health Monitoring (`scripts/health_check.py`):** **[NEW COMPONENT]**
-    *   **Proactive URL Health Validation**: Performs lightweight HEAD requests to all policy URLs before content monitoring.
-    *   **Health Status Classification**: URLs are classified as `healthy`, `degraded`, or `failed` based on HTTP status and response time.
-    *   **Alert Detection**: Compares current health state with previous runs to detect newly failed URLs.
-    *   **Non-blocking Design**: Health failures don't stop content monitoring - they're reported via alerts.
-    *   **Health History Tracking**: Maintains 30 days of health check history per URL.
-    *   **Data Outputs**: Generates `url_health.json` (status tracking) and `health_alerts.json` (alert notifications).
-    *   **Integration**: Health data is committed to Git alongside snapshots and consumed by dashboard + notifications.
+*   **Health Monitoring (`scripts/health_check.py`):** **[ENHANCED COMPONENT]**
+    *   **Smart Health Validation**: HEAD requests for httpx URLs, intelligent skipping for Playwright URLs (bot protection)
+    *   **Health Status Classification**: URLs are classified as `healthy`, `degraded`, or `failed` based on HTTP status and response time
+    *   **Bot Protection Handling**: Playwright URLs marked as healthy by default to avoid false alerts from Cloudflare/bot protection
+    *   **Alert Detection**: Compares current health state with previous runs to detect newly failed URLs
+    *   **Non-blocking Design**: Health failures don't stop content monitoring - they're reported via alerts
+    *   **Health History Tracking**: Maintains 30 days of health check history per URL
+    *   **Data Outputs**: Generates `url_health.json` (status tracking) and `health_alerts.json` (alert notifications)
+    *   **Integration**: Health data is committed to Git alongside snapshots and consumed by dashboard + notifications
 
 *   **Data Storage (JSON & Git):**
     *   **`platform_urls.json`:** The master configuration file defining which policies to track.
@@ -119,7 +120,9 @@ The system follows a **"Never Miss a Change"** approach - URL health issues shou
 ```
 Every 6 Hours:
 1. 🏥 Health Check (scripts/health_check.py)
-   ├── HEAD requests to all 20+ policy URLs
+   ├── Smart URL validation based on renderer type:
+   │   ├── httpx URLs: HEAD requests for health validation
+   │   └── playwright URLs: Skip HEAD (bot protection) → mark healthy
    ├── Classify: healthy/degraded/failed  
    ├── Compare with previous state → detect new failures
    └── Generate: url_health.json + health_alerts.json
@@ -180,7 +183,27 @@ Every 6 Hours:
 - **🟡 Degraded**: HTTP 200 but slow (>2s) OR intermittent failures  
 - **🔴 Failed**: HTTP 4xx/5xx, timeouts, DNS errors, or 3+ consecutive failures
 
-### 2.5. Dashboard Health Integration
+### 2.5. Smart Bot Protection Handling **[NEW]**
+
+The health check system intelligently handles URLs that use different rendering approaches:
+
+**HTTP-based URLs (`"renderer": "httpx"`):**
+- Uses standard HEAD requests for fast health validation
+- Gets real HTTP status codes and response times
+- Examples: YouTube Community Guidelines, Google Support pages
+
+**Playwright URLs (`"renderer": "playwright"`):**
+- **Skips HEAD requests** (often blocked by bot protection like Cloudflare)
+- **Marks as healthy by default** since actual monitoring uses full browser
+- **Avoids false alerts** from bot protection systems
+- Examples: All Whatnot, TikTok, Meta policies
+
+**Why This Works:**
+- Playwright URLs with bot protection would always show as "failed" via HEAD requests
+- But Playwright content monitoring with real browser bypasses these protections
+- Health system now focuses on legitimate connectivity issues vs. bot protection
+
+### 2.6. Dashboard Health Integration
 
 - **Health Alert Banner**: Red banner appears when URLs are inaccessible
 - **Operational Status**: Simple "Operational" vs "Issues Detected" (not complex metrics)
