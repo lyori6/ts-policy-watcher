@@ -206,7 +206,7 @@ def group_changes_by_platform(changes):
         
         if 'tiktok' in policy_name:
             platform = 'TikTok'
-        elif 'instagram' in policy_name:
+        elif 'instagram' in policy_name or 'meta' in policy_name:
             platform = 'Meta'  
         elif 'youtube' in policy_name:
             platform = 'YouTube'

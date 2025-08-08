@@ -871,7 +871,7 @@ class PolicyWatcherDashboard {
         if (slug.startsWith('tiktok-')) return 'TikTok';
         if (slug.startsWith('whatnot-')) return 'Whatnot';
         if (slug.startsWith('youtube-')) return 'YouTube';
-        if (slug.startsWith('instagram-')) return 'Meta';
+        if (slug.startsWith('instagram-') || slug.startsWith('meta-')) return 'Meta';
         return 'Unknown';
     }
 
