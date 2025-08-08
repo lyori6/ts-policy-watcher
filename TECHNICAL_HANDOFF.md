@@ -15,30 +15,49 @@ The T&S Policy Watcher is an automated intelligence pipeline designed to be robu
 
 ```
 +------------------+     +--------------------+     +---------------------+
-| GitHub Actions   | --> | scripts/fetch.py   | --> | snapshots/ (Git)    |
-| (Scheduler)      |     | (httpx/Playwright) |     | (Raw HTML Storage)  |
-+------------------+     +---------+----------+     +---------------------+
+| GitHub Actions   | --> | scripts/health_    | --> | url_health.json     |
+| (6hr Schedule)   |     | check.py (HEAD)    |     | (Health Tracking)   |
++------------------+     +--------------------+     +---------------------+
+                                   |
+                                   v
+                         +--------------------+     +---------------------+
+                         | scripts/fetch.py   | --> | snapshots/ (Git)    |
+                         | (httpx/Playwright) |     | (Raw HTML Storage)  |
+                         +---------+----------+     +---------------------+
                                    |
               (On Failure) ------> | <------ (On Success)
                                    |
-+--------------------------+       |         +-------------------------+
-| (Future: Error Handling) |       |         | scripts/diff_and_notify.py |
-| (Creates GitHub Issue)   |       |         | (Python + Gemini API)   |
-+--------------------------+       |         +------------+------------+
-                                   |                      |
-                                   v                      v
-                         +------------------+     +------------------+
-                         | run_log.json     |     | summaries.json   |
-                         | (Health Status)  |     | (AI Summaries)   |
-                         +------------------+     +------------------+
+                                   v
+                         +-------------------------+
+                         | scripts/diff_and_notify.py |
+                         | (Gemini AI + Resend)    |
+                         +------------+------------+
+                                      |
+                    +-----------------+-----------------+
+                    |                 |                 |
+                    v                 v                 v
+          +------------------+ +---------------+ +-----------------+
+          | run_log.json     | |summaries.json | |health_alerts.json|
+          | (Run Status)     | |(AI Summaries) | |(Failed URLs)    |
+          +------------------+ +---------------+ +-----------------+
+                    |                 |                 |
+                    +--------+--------+---------+-------+
+                             |                  |
+                             v                  v
+                    +------------------+ +-------------+
+                    | Email Alerts     | | Dashboard   |
+                    | (Policy+Health)  | | (Vercel)    |
+                    +------------------+ +-------------+
 ```
 
 ### 1.2. Key Components & Technologies
 
 *   **Orchestration (`.github/workflows/watch.yml`):**
     *   A GitHub Actions workflow triggers the pipeline on a 6-hour cron schedule.
+    *   **NEW**: Includes integrated URL health monitoring with pre-flight checks.
     *   It is responsible for checking out the code, setting up the Python environment, installing dependencies, and executing the scripts.
     *   It manages all necessary environment variables (API keys, etc.) as GitHub secrets.
+    *   **Enhanced Flow**: Health Check → Content Monitoring → Analysis → Notifications (combined policy changes + health alerts)
 
 *   **Data Collection (`scripts/fetch.py`):**
     *   Reads the list of target URLs from `platform_urls.json`.
@@ -52,26 +71,127 @@ The T&S Policy Watcher is an automated intelligence pipeline designed to be robu
     *   For each changed policy, it sends the old and new content to the Google Gemini API to generate a summary of the changes.
 
     **CRITICAL DEPENDENCY:** This script relies on the `git` history created by the `watch.yml` workflow. The workflow runs `fetch.py`, then **commits** any changes to the `snapshots/` directory. `diff_and_notify.py` then uses `git diff` against the previous commit to find what changed. It cannot be run standalone without a preceding commit.
-    *   It aggregates all summaries and sends a single, consolidated email notification via the Resend API.
+    *   **Enhanced**: Now loads and processes health alerts alongside policy changes.
+    *   It aggregates all summaries and health alerts, sending a single, consolidated email notification via the Resend API.
+
+*   **Health Monitoring (`scripts/health_check.py`):** **[NEW COMPONENT]**
+    *   **Proactive URL Health Validation**: Performs lightweight HEAD requests to all policy URLs before content monitoring.
+    *   **Health Status Classification**: URLs are classified as `healthy`, `degraded`, or `failed` based on HTTP status and response time.
+    *   **Alert Detection**: Compares current health state with previous runs to detect newly failed URLs.
+    *   **Non-blocking Design**: Health failures don't stop content monitoring - they're reported via alerts.
+    *   **Health History Tracking**: Maintains 30 days of health check history per URL.
+    *   **Data Outputs**: Generates `url_health.json` (status tracking) and `health_alerts.json` (alert notifications).
+    *   **Integration**: Health data is committed to Git alongside snapshots and consumed by dashboard + notifications.
 
 *   **Data Storage (JSON & Git):**
     *   **`platform_urls.json`:** The master configuration file defining which policies to track.
     *   **`snapshots/`:** A directory containing the raw HTML of the latest version of each policy. These files are committed to Git, creating a version history.
     *   **`summaries.json`:** The persistent database of AI-generated content, including an initial comprehensive summary and a summary of the latest update for each policy.
-    *   **`run_log.json`:** A log of the most recent script run, capturing the timestamp, number of pages checked, changes found, and any errors. This file powers the dashboard's health status.
+    *   **`run_log.json`:** A log of the most recent script run, capturing the timestamp, number of pages checked, changes found, and any errors. This file powers the dashboard's operational status.
+    *   **`url_health.json`:** **[NEW]** Complete health tracking database with per-URL status, history, and system-wide metrics.
+    *   **`health_alerts.json`:** **[NEW]** Recent health alerts for newly failed URLs, consumed by notification system.
 
 *   **Frontend (`dashboard/`):**
     *   A static HTML, CSS, and JavaScript single-page application.
-    *   It fetches the `run_log.json` and `summaries.json` files directly from the GitHub repository to populate the dashboard.
+    *   **Enhanced**: Now fetches health data (`url_health.json`, `health_alerts.json`) alongside existing data files.
+    *   **Health Alert Display**: Shows visual health alert banners when URLs are inaccessible.
+    *   **Simplified Status**: Shows "Operational" vs detailed health metrics for external users.
     *   Hosted on Vercel, which automatically redeploys on pushes to the `main` branch.
+    *   **Branch Detection**: Automatically loads data from correct branch (`main` for production, `dev` for preview deployments).
 
-    **NOTE:** The dashboard is a pure "pull" application. It has no backend server. The JavaScript code makes direct, unauthenticated GET requests to the raw content URLs of `run_log.json` and `summaries.json` in the public GitHub repository.
+    **NOTE:** The dashboard is a pure "pull" application. It has no backend server. The JavaScript code makes direct, unauthenticated GET requests to the raw content URLs of data files in the public GitHub repository.
 
 ---
 
-## 2. Setup & Local Development
+## 2. Health Monitoring System Architecture **[NEW]**
 
-### 2.1. Prerequisites
+### 2.1. Health Monitoring Philosophy
+
+The system follows a **"Never Miss a Change"** approach - URL health issues should never cause silent failures in policy monitoring. The health system is designed to be:
+
+- **Non-blocking**: Content monitoring continues even if URLs fail health checks
+- **Proactive**: Detects and alerts on URL accessibility issues before they impact monitoring
+- **Integrated**: Health alerts are combined with policy change notifications in single emails
+- **User-friendly**: Dashboard shows simple "Operational" status rather than complex health metrics
+
+### 2.2. Health Check Workflow
+
+```
+Every 6 Hours:
+1. 🏥 Health Check (scripts/health_check.py)
+   ├── HEAD requests to all 20+ policy URLs
+   ├── Classify: healthy/degraded/failed  
+   ├── Compare with previous state → detect new failures
+   └── Generate: url_health.json + health_alerts.json
+
+2. 📋 Content Monitoring (scripts/fetch.py) 
+   ├── Proceeds regardless of health issues
+   └── Uses GET + Playwright for actual content
+
+3. 🔍 Analysis & Notification (scripts/diff_and_notify.py)
+   ├── Process policy changes (existing)
+   ├── Load health alerts (new)
+   └── Send combined email notification
+```
+
+### 2.3. Health Data Structures
+
+**`url_health.json`** - Complete health tracking:
+```json
+{
+  "urls": {
+    "https://example.com/policy": {
+      "slug": "platform-policy-name",
+      "platform": "Platform",
+      "current_status": "healthy|degraded|failed",
+      "consecutive_failures": 0,
+      "health_history": [/* last 30 checks */]
+    }
+  },
+  "system_health": {
+    "total_urls": 20,
+    "healthy_urls": 18,
+    "failed_urls": 2,
+    "system_uptime": 90.0,
+    "last_check": "2025-08-08T19:36:14Z"
+  }
+}
+```
+
+**`health_alerts.json`** - Recent failures for notifications:
+```json
+[
+  {
+    "type": "url_failure",
+    "url": "https://example.com/policy",
+    "slug": "platform-policy-name", 
+    "platform": "Platform",
+    "previous_status": "healthy",
+    "current_status": "failed",
+    "error_message": "HTTP 403: Forbidden",
+    "timestamp": "2025-08-08T14:30:00Z"
+  }
+]
+```
+
+### 2.4. Health Status Classification
+
+- **🟢 Healthy**: HTTP 200, response time < 2s, no recent failures
+- **🟡 Degraded**: HTTP 200 but slow (>2s) OR intermittent failures  
+- **🔴 Failed**: HTTP 4xx/5xx, timeouts, DNS errors, or 3+ consecutive failures
+
+### 2.5. Dashboard Health Integration
+
+- **Health Alert Banner**: Red banner appears when URLs are inaccessible
+- **Operational Status**: Simple "Operational" vs "Issues Detected" (not complex metrics)
+- **Auto-dismiss**: Health alerts auto-hide after 30 seconds unless manually dismissed
+- **Real-time Updates**: Health data loads from GitHub raw URLs alongside other dashboard data
+
+---
+
+## 3. Setup & Local Development
+
+### 3.1. Prerequisites
 
 1.  **Clone the repository:**
     ```sh
@@ -97,13 +217,14 @@ The T&S Policy Watcher is an automated intelligence pipeline designed to be robu
     export RECIPIENT_EMAIL="your_email@domain.com"
     ```
 
-### 2.2. Running the Pipeline Locally
+### 3.2. Running the Pipeline Locally
 
+*   **Health Check:** `python3 scripts/health_check.py` **[NEW]**
 *   **Fetch Snapshots:** `python3 scripts/fetch.py`
 *   **Generate Summaries & Notifications:** `python3 scripts/diff_and_notify.py` (Note: This requires that `fetch.py` has been run and the resulting changes have been committed to git).
 *   **View the Dashboard:** Open `dashboard/index.html` in a web browser.
 
-### 2.3. Managing Monitored Policies
+### 3.3. Managing Monitored Policies
 
 The `platform_urls.json` file is the heart of the configuration. To add, remove, or modify a tracked policy, simply edit this file. Each entry requires:
 

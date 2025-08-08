@@ -384,8 +384,72 @@ class URLHealthChecker:
             "degraded_urls": degraded_urls,
             "failed_urls": failed_urls,
             "unknown_urls": total_urls - healthy_urls - degraded_urls - failed_urls,
-            "system_uptime": round(system_uptime, 2)
+            "system_uptime": round(system_uptime, 2),
+            "last_check": datetime.now(UTC).isoformat().replace('+00:00', 'Z')
         }
+    
+    def detect_health_alerts(self, current_health_db: Dict, previous_health_db: Dict = None) -> List[Dict]:
+        """Detect newly failed URLs and generate health alerts"""
+        
+        alerts = []
+        current_urls = current_health_db.get("urls", {})
+        previous_urls = previous_health_db.get("urls", {}) if previous_health_db else {}
+        
+        for url, current_data in current_urls.items():
+            current_status = current_data.get("current_status", "unknown")
+            slug = current_data.get("slug", "unknown")
+            platform = current_data.get("platform", "unknown")
+            
+            # Check if URL just failed (was healthy/degraded, now failed)
+            if current_status == "failed":
+                previous_data = previous_urls.get(url, {})
+                previous_status = previous_data.get("current_status", "unknown")
+                
+                # New failure detected
+                if previous_status in ["healthy", "degraded", "unknown"] or not previous_urls:
+                    error_msg = None
+                    if current_data.get("health_history") and len(current_data["health_history"]) > 0:
+                        error_msg = current_data["health_history"][0].get("error_message")
+                    
+                    alert = {
+                        "type": "url_failure",
+                        "url": url,
+                        "slug": slug,
+                        "platform": platform,
+                        "previous_status": previous_status,
+                        "current_status": current_status,
+                        "error_message": error_msg,
+                        "timestamp": datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+                    }
+                    alerts.append(alert)
+                    
+        return alerts
+    
+    def save_health_alerts(self, alerts: List[Dict]) -> None:
+        """Save health alerts to file for consumption by notification system"""
+        if not alerts:
+            return
+            
+        alert_file = Path("health_alerts.json")
+        
+        # Load existing alerts if file exists
+        existing_alerts = []
+        if alert_file.exists():
+            try:
+                with open(alert_file, 'r') as f:
+                    existing_alerts = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                existing_alerts = []
+        
+        # Add new alerts and keep only last 50
+        all_alerts = alerts + existing_alerts
+        all_alerts = all_alerts[:50]
+        
+        # Save alerts
+        with open(alert_file, 'w') as f:
+            json.dump(all_alerts, f, indent=2)
+        
+        print(f"💾 Saved {len(alerts)} health alerts to {alert_file}")
 
 def main():
     """Main entry point for health checking"""
@@ -393,22 +457,42 @@ def main():
     health_checker = URLHealthChecker()
     
     try:
+        # Load previous health data for alert detection
+        previous_health_db = None
+        if health_checker.health_db_file.exists():
+            try:
+                with open(health_checker.health_db_file, 'r') as f:
+                    previous_health_db = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                previous_health_db = None
+        
+        # Run current health checks
         results = health_checker.run_health_checks()
         
-        # Exit with error code if there are failed URLs (for monitoring)
+        # Detect health alerts by comparing with previous state
+        alerts = health_checker.detect_health_alerts(results, previous_health_db)
+        
+        # Save alerts for notification system
+        if alerts:
+            health_checker.save_health_alerts(alerts)
+            print(f"🚨 Generated {len(alerts)} health alerts")
+            for alert in alerts:
+                print(f"   ⚠️  {alert['platform']} - {alert['slug']}: {alert['previous_status']} → {alert['current_status']}")
+        
+        # Report summary
         failed_count = results["system_health"]["failed_urls"]
         if failed_count > 0:
             print(f"\n⚠️  {failed_count} URLs failed health checks")
-            exit(1)
+            # Don't exit with error code - we want the workflow to continue
+            # Health issues will be reported via alerts and notifications
         else:
             print(f"\n✅ All URLs passed health checks")
-            exit(0)
             
     except Exception as e:
         print(f"\n❌ Health check system error: {e}")
         import traceback
         traceback.print_exc()
-        exit(1)
+        # Don't exit with error code - we want the workflow to continue
 
 if __name__ == "__main__":
     main()

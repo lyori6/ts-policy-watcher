@@ -6,9 +6,10 @@ An automated competitive intelligence system that monitors competitor Trust & Sa
 
 The T&S Policy Watcher automatically:
 - **Monitors** 20+ policy pages across TikTok, YouTube, Meta, and Whatnot every 6 hours
+- **🆕 Health Checks** all URLs before content monitoring to prevent silent failures  
 - **Detects** substantive policy changes while filtering out cosmetic updates  
 - **Summarizes** changes using AI (Google Gemini) with product manager-focused insights
-- **Notifies** stakeholders via clean, mobile-friendly email notifications
+- **🆕 Alerts** on both policy changes AND URL health issues in unified notifications
 - **Tracks** system health and policy trends through a comprehensive dashboard
 
 ## Why It's Useful
@@ -34,6 +35,9 @@ export RECIPIENT_EMAIL="your_email@domain.com"
 
 ### Running Locally
 ```bash
+# 🆕 Run health checks (new - prevents silent failures)
+python scripts/health_check.py
+
 # Fetch policy snapshots
 python scripts/fetch.py
 

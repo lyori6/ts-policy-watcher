@@ -46,27 +46,34 @@ jobs:
           sudo -E $(which python) -m playwright install-deps
           python -m playwright install
 
-      # Step 4: Run the fetcher script
+      # Step 4: Pre-flight URL Health Check
+      - name: 'Pre-flight URL Health Check'
+        run: |
+          echo "Running pre-flight health checks..."
+          python scripts/health_check.py
+          echo "Health check completed, proceeding with content monitoring."
+
+      # Step 5: Run the fetcher script
       - name: 'Run Fetcher Script'
         run: python scripts/fetch.py
 
-      # Step 5: Commit the new snapshots back to the repository
-      - name: 'Commit Snapshots'
+      # Step 6: Commit the new snapshots and health data back to the repository
+      - name: 'Commit Snapshots and Health Data'
         id: commit
         run: |
           git config user.name "Policy Watch Bot"
           git config user.email "bot@github.com"
-          git add snapshots/
+          git add snapshots/ url_health.json
           # If there are changes, commit them and output the SHA
           if ! git diff --staged --quiet; then
-            git commit -m "CHORE: Update T&S policy snapshots"
+            git commit -m "CHORE: Update T&S policy snapshots and health data"
             echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           else
             echo "No changes to commit."
             echo "commit_sha=" >> "$GITHUB_OUTPUT"
           fi
 
-      # Step 6: Pull latest changes to avoid race conditions
+      # Step 7: Pull latest changes to avoid race conditions
       # This ensures our local branch is up-to-date before pushing.
       - name: 'Pull Latest Changes'
         run: |
@@ -80,7 +87,7 @@ jobs:
             git pull origin main --rebase
           fi
 
-      # Step 7: Push the changes back to the main branch
+      # Step 8: Push the changes back to the main branch
       # This uses a dedicated action to handle pushing the commits.
       - name: 'Push Changes'
         uses: ad-m/github-push-action@master
@@ -88,7 +95,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
-      # Step 8: Detect changes, generate summary, and set outputs
+      # Step 9: Detect changes, generate summary, and set outputs
       - name: 'Detect Changes and Notify'
         id: diff
         env:
@@ -99,7 +106,7 @@ jobs:
           COMMIT_SHA: ${{ steps.commit.outputs.commit_sha }}
         run: python scripts/diff_and_notify.py
 
-      # Step 9: Commit the generated summaries and run log
+      # Step 10: Commit the generated summaries and run log
       - name: 'Commit Summary Artifacts'
         run: |
           git config user.name "Policy Watch Bot"
@@ -113,7 +120,7 @@ jobs:
             echo "No changes to summary artifacts."
           fi
 
-      # Step 10: Pull and push all changes
+      # Step 11: Pull and push all changes
       - name: 'Pull Latest Changes Before Push'
         run: |
           # Check if there are any uncommitted changes that would block rebase

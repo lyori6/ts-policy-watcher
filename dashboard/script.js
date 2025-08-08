@@ -11,6 +11,7 @@ class PolicyWatcherDashboard {
         this.SUMMARIES_PATH = `${this.GITHUB_RAW_BASE}/summaries.json`;
         this.PLATFORM_URLS_PATH = `${this.GITHUB_RAW_BASE}/platform_urls.json`;
         this.HEALTH_DATA_PATH = `${this.GITHUB_RAW_BASE}/url_health.json`;
+        this.HEALTH_ALERTS_PATH = `${this.GITHUB_RAW_BASE}/health_alerts.json`;
         
         console.log(`🌐 Dashboard using branch: ${branch}`);
 
@@ -105,11 +106,12 @@ class PolicyWatcherDashboard {
 
     async loadAllData() {
         try {
-            const [runLogResponse, summariesResponse, platformsResponse, healthResponse] = await Promise.all([
+            const [runLogResponse, summariesResponse, platformsResponse, healthResponse, healthAlertsResponse] = await Promise.all([
                 this.fetchData(this.LOG_FILE_PATH),
                 this.fetchData(this.SUMMARIES_PATH),
                 this.fetchData(this.PLATFORM_URLS_PATH),
-                this.fetchData(this.HEALTH_DATA_PATH)
+                this.fetchData(this.HEALTH_DATA_PATH),
+                this.fetchData(this.HEALTH_ALERTS_PATH)
             ]);
 
             this.runLogData = runLogResponse || [];
@@ -117,18 +119,23 @@ class PolicyWatcherDashboard {
             this.summariesData = summariesResponse || {};
             this.platformData = platformsResponse || [];
             this.healthData = healthResponse || null;
+            this.healthAlerts = healthAlertsResponse || [];
 
             console.log('Data loaded successfully:', {
                 runs: this.runLogData.length,
                 summaries: Object.keys(this.summariesData).length,
                 platforms: this.platformData.length,
                 healthData: this.healthData ? 'loaded' : 'not available',
+                healthAlerts: this.healthAlerts ? this.healthAlerts.length : 0,
                 systemUptime: this.healthData?.system_health?.system_uptime || 'N/A',
                 lastRunStatus: this.runLogData.length > 0 ? this.runLogData[0].status : 'no data'
             });
 
             // Force system status update after data is loaded
-            setTimeout(() => this.updateSystemStatus(), 100);
+            setTimeout(() => {
+                this.updateSystemStatus();
+                this.checkAndShowHealthAlerts();
+            }, 100);
 
         } catch (error) {
             console.error('Error loading dashboard data:', error);
@@ -174,8 +181,18 @@ class PolicyWatcherDashboard {
                 }
             } else {
                 const minutesSince = Math.round((now - lastRun) / (1000 * 60));
+                const hoursSince = Math.round(minutesSince / 60);
+                
                 if (headerLastCheck) {
-                    headerLastCheck.textContent = `${minutesSince}`;
+                    // Display in a more user-friendly format
+                    if (minutesSince < 60) {
+                        headerLastCheck.textContent = `${minutesSince}`;
+                    } else if (hoursSince < 24) {
+                        headerLastCheck.textContent = `${hoursSince * 60}` // Show in minutes for consistency with label
+                    } else {
+                        const daysSince = Math.round(hoursSince / 24);
+                        headerLastCheck.textContent = `${daysSince * 24 * 60}` // Show very old times in minutes but cap display
+                    }
                 }
             }
         } else {
@@ -1086,7 +1103,7 @@ class PolicyWatcherDashboard {
     }
 
     updateSystemStatus() {
-        // Update header status indicator
+        // Update header status indicator with simplified operational status
         const headerIndicator = document.getElementById('header-system-status');
         const headerIcon = document.getElementById('header-status-icon');
         const headerText = document.getElementById('header-status-text');
@@ -1100,51 +1117,38 @@ class PolicyWatcherDashboard {
         }
 
         const lastRun = this.runLogData[0];
-        const isRunSuccess = lastRun.status === 'success' && (!lastRun.errors || lastRun.errors.length === 0);
+        const lastRunTime = new Date(this.cleanTimestamp(lastRun.timestamp_utc));
+        const now = new Date();
+        const hoursSinceLastRun = (now - lastRunTime) / (1000 * 60 * 60);
         
-        // Check health data if available
-        let healthStatus = null;
-        if (this.healthData && this.healthData.system_health) {
-            const health = this.healthData.system_health;
-            if (health.failed_urls > 0) {
-                healthStatus = 'degraded';
-            } else if (health.system_uptime >= 95) {
-                healthStatus = 'healthy';
-            } else {
-                healthStatus = 'degraded';
-            }
-        }
-
-        // Determine overall system status
+        // Simplified operational status based on content monitoring
         let overallStatus = 'operational';
         let iconHtml = '<i class="fas fa-check-circle"></i>';
         let statusText = 'Operational';
+        let tooltipText = '';
         
-        if (!isRunSuccess) {
+        // Check if system is operational based on recent successful runs
+        if (hoursSinceLastRun > 12) {
+            // System hasn't run in over 12 hours - likely an issue
+            overallStatus = 'issues';
+            iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
+            statusText = 'System Issues';
+            tooltipText = `Last successful run: ${Math.round(hoursSinceLastRun)} hours ago\nExpected: Every 6 hours`;
+        } else if (lastRun.status !== 'success' || (lastRun.errors && lastRun.errors.length > 0)) {
+            // Recent run had issues
             overallStatus = 'issues';
             iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
             statusText = 'Issues Detected';
-        } else if (healthStatus === 'degraded') {
-            overallStatus = 'degraded';
-            iconHtml = '<i class="fas fa-exclamation-circle"></i>';
-            statusText = 'Health Degraded';
-        }
-
-        // Add health tooltip
-        let tooltipText = '';
-        if (this.healthData && this.healthData.system_health) {
-            const health = this.healthData.system_health;
-            tooltipText = `System Uptime: ${health.system_uptime}%\nHealthy URLs: ${health.healthy_urls}/${health.total_urls}\nFailed URLs: ${health.failed_urls}`;
+            tooltipText = `Last run status: ${lastRun.status}\nErrors: ${lastRun.errors ? lastRun.errors.length : 0}`;
+        } else {
+            // System is operational - content monitoring working properly
+            tooltipText = `Monitoring ${this.platformData.length} policies\nLast successful run: ${Math.round(hoursSinceLastRun * 60)} minutes ago\nNext run: ~${6 - Math.round(hoursSinceLastRun)} hours`;
         }
 
         if (headerIndicator && headerIcon && headerText) {
             headerIcon.innerHTML = iconHtml;
             headerText.textContent = statusText;
-            
-            // Add health tooltip if available
-            if (tooltipText) {
-                headerIndicator.title = tooltipText;
-            }
+            headerIndicator.title = tooltipText;
             
             // Update CSS class for styling
             headerIndicator.className = `status-item ${overallStatus}`;
@@ -1164,6 +1168,67 @@ class PolicyWatcherDashboard {
         `;
         
         document.querySelector('main').innerHTML = errorMessage;
+    }
+
+    // Health Alert Management
+    checkAndShowHealthAlerts() {
+        if (!this.healthAlerts || this.healthAlerts.length === 0) {
+            this.hideHealthAlertBanner();
+            return;
+        }
+
+        // Filter for recent alerts (last 24 hours)
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const recentAlerts = this.healthAlerts.filter(alert => {
+            const alertTime = new Date(alert.timestamp);
+            return alertTime > twentyFourHoursAgo;
+        });
+
+        if (recentAlerts.length === 0) {
+            this.hideHealthAlertBanner();
+            return;
+        }
+
+        this.showHealthAlertBanner(recentAlerts);
+    }
+
+    showHealthAlertBanner(alerts) {
+        const banner = document.getElementById('health-alert-banner');
+        const alertText = document.getElementById('health-alert-text');
+        
+        if (!banner || !alertText) return;
+
+        // Count alerts by platform
+        const platformCounts = {};
+        alerts.forEach(alert => {
+            const platform = alert.platform || 'Unknown';
+            platformCounts[platform] = (platformCounts[platform] || 0) + 1;
+        });
+
+        // Create summary message
+        const platformSummaries = Object.entries(platformCounts)
+            .map(([platform, count]) => `${count} ${platform} URL${count !== 1 ? 's' : ''}`)
+            .join(', ');
+
+        alertText.textContent = `${platformSummaries} currently inaccessible. Content monitoring may be affected.`;
+        banner.style.display = 'block';
+
+        // Auto-dismiss after 30 seconds unless user has dismissed manually
+        if (!banner.dataset.userDismissed) {
+            setTimeout(() => {
+                if (!banner.dataset.userDismissed) {
+                    this.hideHealthAlertBanner();
+                }
+            }, 30000);
+        }
+    }
+
+    hideHealthAlertBanner() {
+        const banner = document.getElementById('health-alert-banner');
+        if (banner) {
+            banner.style.display = 'none';
+            banner.dataset.userDismissed = 'false';
+        }
     }
 }
 
@@ -1243,6 +1308,14 @@ function toggleSummary(summaryId) {
     }
 }
 
+// Global function for dismissing health alerts
+function dismissHealthAlert() {
+    const banner = document.getElementById('health-alert-banner');
+    if (banner) {
+        banner.style.display = 'none';
+        banner.dataset.userDismissed = 'true';
+    }
+}
 
 // Global function for exporting matrix to CSV
 function exportMatrix() {
