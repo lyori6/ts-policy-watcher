@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Phase 2.2: Core Health Checking Service
+Phase 2.2: Enhanced Core Health Checking Service
 
 Proactive URL health monitoring to detect issues before they impact policy monitoring.
-- Quick HEAD requests for fast health validation
-- Smart handling of Playwright URLs (skips HEAD requests due to bot protection)
+- Quick HEAD requests for fast health validation (httpx URLs)
+- ENHANCED: Real Playwright health checks for bot-protected URLs
 - Health status tracking and history
 - Integration with existing fetch.py system
 - Separate from content fetching for efficiency
@@ -12,9 +12,15 @@ Proactive URL health monitoring to detect issues before they impact policy monit
 Design Goals:
 - Fast health checks (<30s for all URLs)
 - Minimal bandwidth usage (HEAD requests for httpx URLs)
-- Smart bot protection handling (Playwright URLs marked as healthy by default)
+- ENHANCED: Smart bot protection handling (Playwright health checks for real validation)
 - Robust error classification
 - Historical health tracking
+
+Recent Enhancements:
+- Playwright integration for bot-protected sites (WhatNot, TikTok, Meta)
+- Real HTTP status validation instead of assumption-based health reporting
+- Configurable Playwright health check behavior
+- Improved error detection and classification
 """
 
 import json
@@ -27,6 +33,7 @@ from datetime import datetime, UTC, timedelta
 from typing import Dict, List, Optional, NamedTuple
 from dataclasses import dataclass, asdict
 from enum import Enum
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 # Health Status Classifications
 class HealthStatus(Enum):
@@ -79,6 +86,9 @@ class URLHealthChecker:
         self.timeout_seconds = 10
         self.slow_threshold_ms = 2000    # >2s is degraded
         self.failed_threshold = 3        # 3 consecutive failures = failed status
+        self.playwright_timeout_ms = 15000  # 15s timeout for Playwright health checks
+        self.enable_playwright_health = True  # Enable Playwright-based health checks
+        self.playwright_user_agent = "TrustAndSafety-Policy-Watcher/1.0 Health Check"
         
     def run_health_checks(self) -> Dict:
         """Run health checks for all URLs in configuration"""
@@ -156,26 +166,73 @@ class URLHealthChecker:
         }
     
     def check_url_health(self, url: str, slug: str, platform: str, renderer: str = "httpx") -> HealthCheckResult:
-        """Perform health check on a single URL"""
+        """
+        Perform health check on a single URL with smart renderer selection.
+        
+        - httpx URLs: Fast HEAD requests for basic health validation
+        - playwright URLs: Full browser health checks to bypass bot protection
+        
+        Args:
+            url: URL to check
+            slug: URL slug identifier 
+            platform: Platform name
+            renderer: "httpx" or "playwright" - determines checking method
+            
+        Returns:
+            HealthCheckResult with status, timing, and error information
+        """
         
         print(f"   🔍 Checking {slug}...")
         
         start_time = time.time()
         
         try:
-            # Skip HEAD requests for Playwright URLs (they often have bot protection)
+            # Use Playwright for bot-protected URLs instead of skipping health checks
             if renderer == "playwright":
-                print(f"      🎭 Skipping HEAD request for Playwright URL (bot protection)")
+                if not self.enable_playwright_health:
+                    # Fallback to old behavior if Playwright health checks are disabled
+                    print(f"      🎭 Playwright health checks disabled - marking as healthy")
+                    return HealthCheckResult(
+                        url=url,
+                        slug=slug,
+                        platform=platform,
+                        timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
+                        status=HealthStatus.HEALTHY,
+                        http_status=None,
+                        response_time_ms=None,
+                        error_message="Playwright health checks disabled - assumed healthy",
+                        ssl_valid=None
+                    )
+                
+                print(f"      🎭 Using Playwright for health check (bot protection handling)")
+                http_status, response_time_ms, error_message = self.check_url_health_with_playwright(url)
+                
+                # Determine health status based on Playwright results
+                if http_status >= 200 and http_status < 400:
+                    if response_time_ms <= self.slow_threshold_ms:
+                        status = HealthStatus.HEALTHY
+                    else:
+                        status = HealthStatus.DEGRADED  # Slow response
+                else:
+                    status = HealthStatus.FAILED
+                
+                # Check SSL if HTTPS (optional for Playwright checks)
+                ssl_valid = None
+                if url.startswith('https://') and status != HealthStatus.FAILED:
+                    ssl_valid = self.check_ssl_health(url)
+                
+                print(f"      ✅ {status.value} ({http_status}, {response_time_ms}ms)")
+                
                 return HealthCheckResult(
                     url=url,
                     slug=slug,
                     platform=platform,
                     timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
-                    status=HealthStatus.HEALTHY,  # Assume healthy, actual monitoring via Playwright
-                    http_status=None,
-                    response_time_ms=None,
-                    error_message="Skipped HEAD request - using Playwright for content monitoring",
-                    ssl_valid=None
+                    status=status,
+                    http_status=http_status,
+                    response_time_ms=response_time_ms,
+                    error_message=error_message,
+                    ssl_valid=ssl_valid
                 )
             
             # Perform HEAD request for quick health check using httpx
@@ -261,6 +318,49 @@ class URLHealthChecker:
                     
         except Exception:
             return False
+    
+    def check_url_health_with_playwright(self, url: str) -> tuple[int, int, Optional[str]]:
+        """
+        Perform lightweight health check using Playwright for bot-protected sites.
+        Returns: (http_status, response_time_ms, error_message)
+        """
+        start_time = time.time()
+        
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch()
+                page = browser.new_page(user_agent=self.playwright_user_agent)
+                
+                try:
+                    # Navigate to the page with a reasonable timeout
+                    response = page.goto(url, timeout=self.playwright_timeout_ms, wait_until='domcontentloaded')
+                    response_time_ms = int((time.time() - start_time) * 1000)
+                    
+                    if response:
+                        http_status = response.status
+                        
+                        # For health checks, we just need to verify the page loads
+                        # No need to wait for full rendering or extract content
+                        if http_status >= 200 and http_status < 300:
+                            return http_status, response_time_ms, None
+                        elif http_status >= 300 and http_status < 400:
+                            # Redirects are generally OK for health checks
+                            return http_status, response_time_ms, None
+                        else:
+                            return http_status, response_time_ms, f"HTTP {http_status}"
+                    else:
+                        return 0, int((time.time() - start_time) * 1000), "No response received"
+                        
+                except PlaywrightTimeoutError:
+                    response_time_ms = int((time.time() - start_time) * 1000)
+                    return 0, response_time_ms, "Playwright timeout"
+                    
+                finally:
+                    browser.close()
+                    
+        except Exception as e:
+            response_time_ms = int((time.time() - start_time) * 1000)
+            return 0, response_time_ms, f"Playwright error: {str(e)[:100]}"
     
     def load_health_database(self) -> Dict:
         """Load existing health database or create new one"""
@@ -445,29 +545,16 @@ class URLHealthChecker:
     
     def save_health_alerts(self, alerts: List[Dict]) -> None:
         """Save health alerts to file for consumption by notification system"""
-        if not alerts:
-            return
-            
         alert_file = Path("health_alerts.json")
         
-        # Load existing alerts if file exists
-        existing_alerts = []
-        if alert_file.exists():
-            try:
-                with open(alert_file, 'r') as f:
-                    existing_alerts = json.load(f)
-            except (json.JSONDecodeError, IOError):
-                existing_alerts = []
-        
-        # Add new alerts and keep only last 50
-        all_alerts = alerts + existing_alerts
-        all_alerts = all_alerts[:50]
-        
-        # Save alerts
+        # Save only current active alerts (replaces existing file)
         with open(alert_file, 'w') as f:
-            json.dump(all_alerts, f, indent=2)
+            json.dump(alerts, f, indent=2)
         
-        print(f"💾 Saved {len(alerts)} health alerts to {alert_file}")
+        if alerts:
+            print(f"💾 Saved {len(alerts)} active health alerts to {alert_file}")
+        else:
+            print(f"💾 Cleared health alerts file (no active alerts)")
 
 def main():
     """Main entry point for health checking"""
@@ -490,12 +577,14 @@ def main():
         # Detect health alerts by comparing with previous state
         alerts = health_checker.detect_health_alerts(results, previous_health_db)
         
-        # Save alerts for notification system
+        # Save alerts for notification system (always call to clear resolved alerts)
+        health_checker.save_health_alerts(alerts)
         if alerts:
-            health_checker.save_health_alerts(alerts)
             print(f"🚨 Generated {len(alerts)} health alerts")
             for alert in alerts:
                 print(f"   ⚠️  {alert['platform']} - {alert['slug']}: {alert['previous_status']} → {alert['current_status']}")
+        else:
+            print(f"✅ No active health alerts")
         
         # Report summary
         failed_count = results["system_health"]["failed_urls"]
