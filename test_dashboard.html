@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Data Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .result { margin: 10px 0; padding: 10px; background: #f5f5f5; }
+        .error { background: #ffeeee; color: red; }
+        .success { background: #eeffee; color: green; }
+    </style>
+</head>
+<body>
+    <h1>Dashboard Data Loading Test</h1>
+    <div id="results"></div>
+
+    <script>
+        async function testDataLoading() {
+            const results = document.getElementById('results');
+            
+            // Test URLs that dashboard uses
+            const branch = 'dev'; // Force dev branch like dashboard does for localhost
+            const baseUrl = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${branch}`;
+            const healthAlertsUrl = `${baseUrl}/health_alerts.json`;
+            
+            results.innerHTML += `<div class="result">Testing URL: ${healthAlertsUrl}</div>`;
+            
+            try {
+                // Add cache busting
+                const cacheBustUrl = `${healthAlertsUrl}?t=${Date.now()}`;
+                results.innerHTML += `<div class="result">With cache busting: ${cacheBustUrl}</div>`;
+                
+                const response = await fetch(cacheBustUrl);
+                const data = await response.json();
+                
+                results.innerHTML += `<div class="result success">✅ Loaded ${data.length} health alerts</div>`;
+                
+                if (data.length > 0) {
+                    results.innerHTML += `<div class="result error">❌ FOUND ALERTS:</div>`;
+                    data.forEach(alert => {
+                        results.innerHTML += `<div class="result error">- ${alert.platform} ${alert.slug}: ${alert.current_status} (${alert.timestamp})</div>`;
+                    });
+                    
+                    // Check if alerts are recent (dashboard logic)
+                    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                    const recentAlerts = data.filter(alert => {
+                        const alertTime = new Date(alert.timestamp);
+                        return alertTime > twentyFourHoursAgo;
+                    });
+                    
+                    results.innerHTML += `<div class="result ${recentAlerts.length > 0 ? 'error' : 'success'}">Recent alerts (last 24h): ${recentAlerts.length}</div>`;
+                    results.innerHTML += `<div class="result ${recentAlerts.length > 0 ? 'error' : 'success'}">Should show banner: ${recentAlerts.length > 0 ? 'YES' : 'NO'}</div>`;
+                    
+                } else {
+                    results.innerHTML += `<div class="result success">✅ No alerts found - dashboard should NOT show health banner</div>`;
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<div class="result error">❌ Error: ${error}</div>`;
+            }
+        }
+        
+        // Run test when page loads
+        window.onload = testDataLoading;
+    </script>
+</body>
+</html>
