@@ -37,7 +37,7 @@
 
         <!-- Insight Cards -->
         <div class="insights-grid">
-            <div class="insight-card intel-card" onclick="openPlatformActivityModal()">
+            <div class="insight-card intel-card" onclick="openPlatformActivityModal()" tabindex="0" role="button" aria-label="Platform Activity Details">
                 <div class="insight-content">
                     <div class="insight-icon">
                         <i class="fas fa-chart-bar"></i>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div class="insight-card change-card" onclick="openLatestUpdateModal()">
+            <div class="insight-card change-card" onclick="openLatestUpdateModal()" tabindex="0" role="button" aria-label="Latest Update Details">
                 <div class="insight-content">
                     <div class="insight-icon">
                         <i class="fas fa-clock"></i>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <div class="insight-card system-card" onclick="openSystemHealthModal()">
+            <div class="insight-card system-card" onclick="openSystemHealthModal()" tabindex="0" role="button" aria-label="System Health Details">
                 <div class="insight-content">
                     <div class="insight-icon">
                         <i class="fas fa-server"></i>
@@ -161,11 +161,13 @@
                 <!-- Block/Mute content will be populated by JS -->
             </div>
 
-            <div class="platform-selector">
+            <div class="platform-selector" id="platform-selector">
                 <div class="platform-tabs" id="platform-tabs">
                     <!-- Platform tabs will be populated by JS -->
                 </div>
             </div>
+            <!-- Spacer to prevent content jump when platform selector becomes sticky -->
+            <div class="platform-selector-spacer" id="platform-selector-spacer"></div>
             <div class="platform-content" id="platform-content">
                 <!-- Platform-specific policies will be populated by JS -->
             </div>
