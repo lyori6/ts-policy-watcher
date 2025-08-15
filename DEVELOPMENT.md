@@ -94,10 +94,9 @@ git push origin main
 
 ### 1. Dashboard Development
 - **Local Testing**: Open `dashboard/index.html` directly
-- **Data Sources**: Automatically detects branch and uses appropriate data
-  - Dev preview: Fetches from `dev` branch via `git-dev-*` URL detection
-  - Production: Fetches from `main` branch  
-  - Console logs active branch: "Dashboard using branch: dev"
+- **Data Sources (simplified)**: Dashboard always fetches data artifacts (`summaries.json`, `run_log.json`, `url_health.json`, `health_alerts.json`) from the `main` branch to avoid dev/main data drift.
+  - Preview or local UI changes on `dev` still render against production data from `main`.
+  - Console logs active UI branch: "Dashboard using branch: dev" (for asset/code context only).
 - **Styling**: Edit `dashboard/style.css` for visual changes
   - Follows Apple-inspired B2B design principles
   - Clean, minimal aesthetics with static cards (no expand/collapse)
@@ -138,9 +137,9 @@ git push origin main
 ### Debugging Issues
 1. Check preview deployment logs in Vercel dashboard
 2. Use browser dev tools on preview URL
-3. Test data sources: summaries.json, run_log.json
-4. **Branch Sync Issues**: Check console for "Dashboard using branch: X" message
-5. **Data Mismatch**: Verify dev preview uses dev branch data, not main branch
+3. Test data sources: `summaries.json`, `run_log.json` (fetched from `main`)
+4. **Branch Context**: Check console for "Dashboard using branch: X" message (affects UI assets only)
+5. **Data Consistency**: Dashboard intentionally reads production data from `main` on all branches
 
 ## Preview Deployment Benefits
 
@@ -190,9 +189,9 @@ python -c "import asyncio; from playwright.async_api import async_playwright; # 
 - **Snapshot Links**: History links point to `snapshots/production/{policy-slug}` structure
 
 ### Data Architecture Notes
-- **Snapshots**: Organized as `snapshots/production/` and `snapshots/development/`
-- **GitHub Links**: Dashboard history buttons link to production snapshots
-- **Branch Detection**: Dashboard automatically uses correct data branch based on deployment URL
+- **Snapshots**: Organized as `snapshots/production/` and `snapshots/development/` (dev is for local script testing only)
+- **GitHub Links**: Dashboard history buttons link to production snapshots on `main`
+- **Data Branching**: Dashboard always fetches data artifacts from `main` regardless of preview branch
 
 ### Git Workflow Issues
 ```bash

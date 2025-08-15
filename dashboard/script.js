@@ -5,13 +5,14 @@ class PolicyWatcherDashboard {
         // Dynamically determine branch based on deployment URL
         const branch = this.detectBranch();
         
-        // GitHub raw content URLs
-        this.GITHUB_RAW_BASE = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${branch}`;
-        this.LOG_FILE_PATH = `${this.GITHUB_RAW_BASE}/run_log.json`;
-        this.SUMMARIES_PATH = `${this.GITHUB_RAW_BASE}/summaries.json`;
-        this.PLATFORM_URLS_PATH = `${this.GITHUB_RAW_BASE}/platform_urls.json`;
-        this.HEALTH_DATA_PATH = `${this.GITHUB_RAW_BASE}/url_health.json`;
-        this.HEALTH_ALERTS_PATH = `${this.GITHUB_RAW_BASE}/health_alerts.json`;
+        // GitHub raw content URLs (pin data to main for consistency across branches)
+        this.DATA_BRANCH = 'main';
+        this.DATA_RAW_BASE = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${this.DATA_BRANCH}`;
+        this.LOG_FILE_PATH = `${this.DATA_RAW_BASE}/run_log.json`;
+        this.SUMMARIES_PATH = `${this.DATA_RAW_BASE}/summaries.json`;
+        this.PLATFORM_URLS_PATH = `${this.DATA_RAW_BASE}/platform_urls.json`;
+        this.HEALTH_DATA_PATH = `${this.DATA_RAW_BASE}/url_health.json`;
+        this.HEALTH_ALERTS_PATH = `${this.DATA_RAW_BASE}/health_alerts.json`;
         
         console.log(`🌐 Dashboard using branch: ${branch}`);
 
@@ -24,6 +25,8 @@ class PolicyWatcherDashboard {
         this.currentPlatform = 'all';
 
         this.init();
+        this.initStickyNavigation();
+        this.initInsightCardKeyboardHandlers();
     }
 
     detectBranch() {
@@ -1364,6 +1367,155 @@ class PolicyWatcherDashboard {
             banner.dataset.userDismissed = 'false';
         }
     }
+
+    // Sticky Navigation Functionality
+    initStickyNavigation() {
+        this.stickyElements = {
+            mainNav: document.querySelector('.main-nav'),
+            platformSelector: document.getElementById('platform-selector'),
+            platformSelectorSpacer: document.getElementById('platform-selector-spacer'),
+            platformsTab: document.querySelector('[data-tab="platforms"]')
+        };
+
+        this.stickyState = {
+            isSticky: false,
+            platformSelectorHeight: 0,
+            mainNavHeight: 0,
+            platformSelectorOffset: 0
+        };
+
+        // Only initialize if we have the required elements
+        if (this.stickyElements.platformSelector && this.stickyElements.mainNav) {
+            this.initScrollHandler();
+            
+            // Update calculations when tab changes
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    setTimeout(() => this.updateStickyCalculations(), 100);
+                });
+            });
+
+            // Update on window resize
+            window.addEventListener('resize', () => this.updateStickyCalculations());
+        }
+    }
+
+    initScrollHandler() {
+        let ticking = false;
+
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    this.handleStickyBehavior();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Initial calculation with multiple attempts for mobile
+        setTimeout(() => this.updateStickyCalculations(), 100);
+        setTimeout(() => this.updateStickyCalculations(), 500);
+        setTimeout(() => this.updateStickyCalculations(), 1000);
+    }
+
+    updateStickyCalculations() {
+        const { mainNav, platformSelector } = this.stickyElements;
+        
+        if (!mainNav || !platformSelector) return;
+
+        // Only calculate if we're on Policy Explorer tab
+        const isPolicyExplorerActive = document.getElementById('platforms')?.classList.contains('active');
+        if (!isPolicyExplorerActive) return;
+
+        const mainNavRect = mainNav.getBoundingClientRect();
+        const platformSelectorRect = platformSelector.getBoundingClientRect();
+
+        this.stickyState.mainNavHeight = mainNavRect.height;
+        this.stickyState.platformSelectorHeight = platformSelectorRect.height;
+        this.stickyState.platformSelectorOffset = window.scrollY + platformSelectorRect.top;
+
+        // Update CSS custom property for spacer height
+        document.documentElement.style.setProperty(
+            '--platform-selector-height', 
+            `${this.stickyState.platformSelectorHeight}px`
+        );
+    }
+
+    handleStickyBehavior() {
+        const { platformSelector, platformSelectorSpacer } = this.stickyElements;
+        const { isSticky, platformSelectorOffset, mainNavHeight } = this.stickyState;
+
+        if (!platformSelector || !platformSelectorSpacer) return;
+
+        // Only handle sticky behavior if we're on Policy Explorer tab
+        const isPolicyExplorerActive = document.getElementById('platforms')?.classList.contains('active');
+        if (!isPolicyExplorerActive) {
+            // Reset sticky state if we're not on Policy Explorer
+            if (isSticky) {
+                this.resetStickyState();
+            }
+            return;
+        }
+
+        const scrollY = window.scrollY;
+        // Adjust threshold for smaller screens
+        const threshold = window.innerWidth <= 768 ? mainNavHeight * 0.5 : mainNavHeight;
+        const shouldBeSticky = scrollY > (platformSelectorOffset - threshold);
+
+        if (shouldBeSticky && !isSticky) {
+            // Make platform selector sticky
+            this.stickyState.isSticky = true;
+            platformSelector.classList.add('sticky');
+            platformSelectorSpacer.classList.add('active');
+            
+        } else if (!shouldBeSticky && isSticky) {
+            // Return platform selector to normal position
+            this.resetStickyState();
+        }
+    }
+
+    resetStickyState() {
+        const { platformSelector, platformSelectorSpacer } = this.stickyElements;
+        
+        this.stickyState.isSticky = false;
+        platformSelector?.classList.remove('sticky');
+        platformSelectorSpacer?.classList.remove('active');
+    }
+
+    // Insight Card Keyboard Accessibility
+    initInsightCardKeyboardHandlers() {
+        const insightCards = document.querySelectorAll('.insight-card');
+        
+        insightCards.forEach(card => {
+            card.addEventListener('keydown', (event) => {
+                // Handle Enter and Space key presses
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    
+                    // Trigger the click event
+                    card.click();
+                    
+                    // Add visual feedback for keyboard activation
+                    card.style.transform = 'translateY(-2px) scale(1.01)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 150);
+                }
+            });
+            
+            // Add visual feedback for focus
+            card.addEventListener('focus', () => {
+                card.setAttribute('data-keyboard-focused', 'true');
+            });
+            
+            card.addEventListener('blur', () => {
+                card.removeAttribute('data-keyboard-focused');
+            });
+        });
+    }
 }
 
 // Global function for opening policy modal
@@ -1408,7 +1560,10 @@ function openPolicyModal(slug) {
     
     // Update action links
     visitLink.href = policy.url;
-    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/tree/main/snapshots/production/${slug}`;
+    // Point to GitHub file history on main for explicitness and stability
+    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/commits/main/snapshots/production/${slug}/snapshot.html`;
+    historyLink.target = '_blank';
+    historyLink.rel = 'noopener noreferrer';
     
     modal.style.display = 'block';
 }
