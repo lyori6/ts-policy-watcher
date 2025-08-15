@@ -2,8 +2,8 @@
 
 **A comprehensive guide for developers and maintainers. This document details the system's architecture, setup, deployment, and operational history.**
 
-**Last Updated:** 2025-08-04
-**Status:** System is fully operational after comprehensive debugging and fixes. All major issues resolved.
+**Last Updated:** 2025-08-15
+**Status:** System is fully operational with enhanced dashboard UI/UX. Recent improvements include executive-level status cards and modal-based deep dives.
 
 ---
 
@@ -1019,5 +1019,58 @@ dashboard/ ← run_log.json + summaries.json ← scripts/diff_and_notify.py
 - Resend API free tier limits email volume  
 - Gemini API quotas require intelligent usage and fallback planning
 - Git repository size grows with every snapshot update
+
+---
+
+## 10. Recent Changes & Dashboard Enhancements
+
+### 10.1. Dashboard Redesign (August 2025)
+
+**Major UI/UX Improvements:**
+- **Complete Card Redesign**: Transformed messy expandable cards into clean status indicators
+- **Modal-Based Deep Dives**: Replaced inline expansion with focused modals for detailed information
+- **Executive-Level Design**: Cards now function as "status lights" rather than mini-dashboards
+- **Responsive Optimization**: Improved mobile and tablet viewing experience
+
+**Specific Changes:**
+
+**Intelligence Cards:**
+- **Platform Activity**: Shows "Most Active: [Platform]" with detailed modal showing 30-day breakdown
+- **Latest Update**: Displays "[Platform] • [Time]" with modal containing full policy change details
+- **System Health**: Simple status ("All Systems OK") with modal showing recent runs and diagnostics
+- **Removed Risk Alerts**: Eliminated noise/alert fatigue by removing risk assessment card
+
+**Policy Matrix Table:**
+- **Full-Width Platform Headers**: Platform rows (TikTok, Whatnot, etc.) now span entire table width with gray background
+- **Improved Visual Separation**: Better borders and spacing between platform sections
+- **Cleaner Table Design**: Subtle column separators and consistent styling
+
+**Technical Implementation:**
+- **Modal System**: Added 3 new modals (`platform-activity-modal`, `latest-update-modal`, `system-health-modal`)
+- **JavaScript Refactoring**: Replaced expansion logic with modal content generation functions
+- **CSS Optimization**: Removed hover effects on non-interactive elements, improved responsive grid
+- **HTML Structure**: Simplified card markup from complex nested layouts to clean status displays
+
+**Design Philosophy:**
+- **Glance + Drill-Down**: Key info at a glance, depth available on-demand
+- **No Information Overload**: Eliminated cramped card content and visual noise
+- **Professional Appearance**: Executive-ready dashboard suitable for leadership review
+
+### 10.2. Code Quality Improvements
+
+**Layout Fixes:**
+- Fixed platform name truncation in cards by optimizing flexbox layout
+- Improved text flow and responsive behavior across all screen sizes
+- Cleaned up legacy CSS and removed unused expansion styles
+
+**Modal Functionality:**
+- Implemented proper modal close behavior (click outside or X button)
+- Fixed "View Full Policy" button to properly transition between modals
+- Added comprehensive modal content with platform breakdowns and system diagnostics
+
+**Table Structure:**
+- Changed platform headers from `colspan="8"` to individual cells for proper styling
+- Ensured full-width gray backgrounds for platform sections
+- Added subtle visual improvements for better readability
 
 This guide provides comprehensive context for any AI agent to quickly understand, maintain, and extend the T&S Policy Watcher system effectively.

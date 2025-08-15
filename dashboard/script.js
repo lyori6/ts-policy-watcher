@@ -509,9 +509,16 @@ class PolicyWatcherDashboard {
             const platformIcon = this.getPlatformIcon(platform);
             matrixHtml += `
                 <tr class="platform-section">
-                    <td colspan="8" class="platform-header">
+                    <td class="platform-header">
                         <strong><i class="${platformIcon}"></i> ${platform}</strong>
                     </td>
+                    <td class="platform-header-empty"></td>
+                    <td class="platform-header-empty"></td>
+                    <td class="platform-header-empty"></td>
+                    <td class="platform-header-empty"></td>
+                    <td class="platform-header-empty"></td>
+                    <td class="platform-header-empty"></td>
+                    <td class="platform-header-empty"></td>
                 </tr>
             `;
 
@@ -676,138 +683,58 @@ class PolicyWatcherDashboard {
     }
 
     renderIntelligencePanel() {
-        // --- Trend Alert --- 
-        const trendContainer = document.getElementById('insight-trend-alert');
-        if (!trendContainer) return; // Exit if the panel isn't in the HTML
-
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-        let recentChangesCount = 0;
-        const platformActivity = {};
-
-        for (const slug in this.summariesData) {
-            // Filter out test policies from risk assessment
-            if (slug.startsWith('test-')) continue;
-            
-            const policy = this.summariesData[slug];
-            if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
-                const lastUpdatedDate = new Date(policy.last_updated);
-                if (lastUpdatedDate > sevenDaysAgo) {
-                    recentChangesCount++;
-                    const platformName = this.findPlatformName(slug);
-                    if (platformName && platformName !== 'Unknown') {
-                        if (platformActivity[platformName]) {
-                            platformActivity[platformName]++;
-                        } else {
-                            platformActivity[platformName] = 1;
-                        }
-                    }
-                }
-            }
-        }
-
-        let trendMessage = '';
-        if (recentChangesCount > 0) {
-            // Only calculate most active platform if we have platform activity data
-            let mostActivePlatform = '';
-            const platforms = Object.keys(platformActivity);
-            if (platforms.length > 0) {
-                mostActivePlatform = platforms.reduce((a, b) => platformActivity[a] > platformActivity[b] ? a : b);
-            }
-            
-            const riskLevel = recentChangesCount > 3 ? 'elevated' : 'moderate';
-            trendMessage = `<span class="risk-indicator ${riskLevel}">⚠️ ${riskLevel.toUpperCase()} ACTIVITY</span><br>`;
-            trendMessage += `<strong>${recentChangesCount}</strong> competitor policy update${recentChangesCount > 1 ? 's' : ''} in the last 7 days may indicate market shifts requiring review.`;
-            if (mostActivePlatform) {
-                trendMessage += ` <strong>${mostActivePlatform}</strong> leading changes.`;
-            }
-        } else {
-            trendMessage = '<span class="risk-indicator stable">✅ STABLE</span><br>No competitor policy changes detected. Market conditions remain consistent.';
-        }
-        
-        trendContainer.innerHTML = `<p>${trendMessage}</p>`;
-
-        // --- Platform Activity ---
-        this.renderPlatformActivityInsight();
-
-        // --- Latest Key Change ---
-        this.renderLatestKeyChangeInsight();
+        this.updatePlatformActivityStatus();
+        this.updateLatestUpdateStatus();
+        this.updateSystemHealthStatus();
     }
 
-    renderPlatformActivityInsight() {
-        const activityContainer = document.getElementById('insight-platform-activity');
-        if (!activityContainer) return;
 
-        const platformChangeFrequency = {};
+    updatePlatformActivityStatus() {
+        const statusElement = document.getElementById('platform-activity-status');
+        if (!statusElement) return;
+
         const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
-        // Initialize platform stats
+        const stats = {};
         platforms.forEach(platform => {
-            platformChangeFrequency[platform] = { changes: 0, policies: 0, frequency: 0 };
+            stats[platform] = { changes: 0 };
         });
 
-        // Count policies and changes per platform (exclude test data)
         for (const slug in this.summariesData) {
             if (slug.startsWith('test-')) continue;
             
             const policy = this.summariesData[slug];
             const platformName = this.findPlatformName(slug);
-            if (platformChangeFrequency.hasOwnProperty(platformName)) {
-                platformChangeFrequency[platformName].policies++;
-                
-                // Count recent changes
+            if (stats[platformName]) {
                 if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
                     const lastUpdatedDate = new Date(policy.last_updated);
                     if (lastUpdatedDate > thirtyDaysAgo) {
-                        platformChangeFrequency[platformName].changes++;
+                        stats[platformName].changes++;
                     }
                 }
             }
         }
 
-        // Calculate change frequency (changes per policy)
-        platforms.forEach(platform => {
-            const stats = platformChangeFrequency[platform];
-            stats.frequency = stats.policies > 0 ? (stats.changes / stats.policies * 100).toFixed(1) : 0;
-        });
-
-        // Sort by change frequency for display
-        const sortedPlatforms = platforms.sort((a, b) => 
-            platformChangeFrequency[b].changes - platformChangeFrequency[a].changes
-        );
-
-        let activityHtml = '<div class="platform-frequency-comparison">';
-        sortedPlatforms.forEach(platform => {
-            const stats = platformChangeFrequency[platform];
-            const icon = this.getPlatformIcon(platform);
-            const activityLevel = stats.changes > 2 ? 'high' : stats.changes > 0 ? 'moderate' : 'low';
-            
-            activityHtml += `
-                <div class="platform-frequency-stat ${activityLevel}">
-                    <div class="platform-info">
-                        <i class="${icon}"></i>
-                        <span class="platform-name">${platform}</span>
-                    </div>
-                    <div class="frequency-metrics">
-                        <span class="change-count">${stats.changes} changes</span>
-                        <span class="frequency-rate">${stats.frequency}% rate</span>
-                    </div>
-                </div>
-            `;
-        });
-        activityHtml += '</div>';
+        // Find most active platform
+        const mostActive = platforms.reduce((a, b) => 
+            stats[a].changes > stats[b].changes ? a : b);
         
-        activityContainer.innerHTML = activityHtml;
+        const totalChanges = platforms.reduce((sum, p) => sum + stats[p].changes, 0);
+        
+        // Update status with minimal but meaningful info
+        if (totalChanges > 0) {
+            statusElement.textContent = `Most Active: ${mostActive}`;
+        } else {
+            statusElement.textContent = 'Low Activity';
+        }
     }
 
-    renderLatestKeyChangeInsight() {
-        const changeContainer = document.getElementById('insight-latest-change');
-        if (!changeContainer) return;
+    updateLatestUpdateStatus() {
+        const statusElement = document.getElementById('latest-update-status');
+        if (!statusElement) return;
 
-        // Find the most recent policy change
         let latestChange = null;
         let latestDate = null;
 
@@ -829,37 +756,217 @@ class PolicyWatcherDashboard {
             }
         }
 
-        let changeHtml = '';
         if (latestChange) {
             const timeAgo = this.formatRelativeTime(latestChange.last_updated);
-            const icon = this.getPlatformIcon(latestChange.platform);
+            statusElement.textContent = `${latestChange.platform} • ${timeAgo}`;
+        } else {
+            statusElement.textContent = 'No recent updates';
+        }
+    }
+
+    updateSystemHealthStatus() {
+        const statusElement = document.getElementById('system-health-status');
+        if (!statusElement) return;
+
+        let statusText = 'All Systems OK';
+
+        if (this.runData && this.runData.length > 0) {
+            const lastRun = this.runData[0];
+            const hoursAgo = this.getHoursAgo(new Date(lastRun.timestamp_utc));
             
-            changeHtml = `
-                <div class="latest-change-card">
-                    <div class="change-platform">
+            if (hoursAgo > 48) {
+                statusText = 'System Offline';
+            } else if (lastRun.status === 'success') {
+                statusText = 'All Systems OK';
+            } else if (lastRun.status === 'partial_failure') {
+                statusText = 'Partial Issues';
+            } else {
+                statusText = 'System Errors';
+            }
+        }
+
+        statusElement.textContent = statusText;
+    }
+
+    generatePlatformActivityModalContent() {
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        const stats = {};
+        platforms.forEach(platform => {
+            stats[platform] = { changes: 0, policies: 0, recentChanges: [] };
+        });
+
+        for (const slug in this.summariesData) {
+            if (slug.startsWith('test-')) continue;
+            
+            const policy = this.summariesData[slug];
+            const platformName = this.findPlatformName(slug);
+            if (stats[platformName]) {
+                stats[platformName].policies++;
+                
+                if (policy.last_updated && policy.last_update_summary !== 'Initial version.') {
+                    const lastUpdatedDate = new Date(policy.last_updated);
+                    if (lastUpdatedDate > thirtyDaysAgo) {
+                        stats[platformName].changes++;
+                        stats[platformName].recentChanges.push({
+                            name: this.getPolicyName(slug),
+                            updated: this.formatRelativeTime(policy.last_updated)
+                        });
+                    }
+                }
+            }
+        }
+
+        let html = '<div class="platform-activity-details">';
+        
+        // Summary
+        const totalChanges = platforms.reduce((sum, p) => sum + stats[p].changes, 0);
+        html += `<div class="activity-summary">
+            <h3>30-Day Activity Overview</h3>
+            <p><strong>${totalChanges}</strong> policy changes detected across all platforms</p>
+        </div>`;
+
+        // Platform breakdown
+        html += '<div class="platform-breakdown">';
+        platforms.forEach(platform => {
+            const icon = this.getPlatformIcon(platform);
+            html += `
+                <div class="platform-detail">
+                    <div class="platform-header">
                         <i class="${icon}"></i>
-                        <strong>${latestChange.platform}</strong> • ${timeAgo}
+                        <h4>${platform}</h4>
+                        <span class="change-count">${stats[platform].changes} changes</span>
                     </div>
-                    <div class="change-policy">${latestChange.policy_name}</div>
-                    <div class="change-summary">
-                        ${this.renderMarkdown(this.truncateText(latestChange.last_update_summary, 150))}
+                    <div class="platform-stats">
+                        <span>${stats[platform].policies} policies tracked</span>
                     </div>
-                    <button class="view-change-btn" onclick="openPolicyModal('${latestChange.slug}')" type="button">
-                        <i class="fas fa-external-link-alt"></i> View Details
+                    ${stats[platform].recentChanges.length > 0 ? 
+                        `<div class="recent-changes">
+                            ${stats[platform].recentChanges.map(change => 
+                                `<div class="change-item">${change.name} • ${change.updated}</div>`
+                            ).join('')}
+                        </div>` : 
+                        '<div class="no-changes">No recent changes</div>'
+                    }
+                </div>
+            `;
+        });
+        html += '</div></div>';
+
+        return html;
+    }
+
+    generateLatestUpdateModalContent() {
+        let latestChange = null;
+        let latestDate = null;
+
+        for (const slug in this.summariesData) {
+            if (slug.startsWith('test-')) continue;
+            
+            const policy = this.summariesData[slug];
+            if (policy.last_updated && policy.last_update_summary && policy.last_update_summary !== 'Initial version.') {
+                const lastUpdatedDate = new Date(policy.last_updated);
+                if (!latestDate || lastUpdatedDate > latestDate) {
+                    latestDate = lastUpdatedDate;
+                    latestChange = {
+                        ...policy,
+                        slug,
+                        platform: this.findPlatformName(slug),
+                        policy_name: this.getPolicyName(slug)
+                    };
+                }
+            }
+        }
+
+        if (!latestChange) {
+            return '<div class="no-updates"><p>No recent policy updates found.</p></div>';
+        }
+
+        const timeAgo = this.formatRelativeTime(latestChange.last_updated);
+        const icon = this.getPlatformIcon(latestChange.platform);
+
+        return `
+            <div class="latest-update-details">
+                <div class="update-header">
+                    <div class="platform-info">
+                        <i class="${icon}"></i>
+                        <div>
+                            <h3>${latestChange.policy_name}</h3>
+                            <p>${latestChange.platform} • Updated ${timeAgo}</p>
+                        </div>
+                    </div>
+                    <button onclick="closeLatestUpdateModal(); openPolicyModal('${latestChange.slug}');" class="action-btn primary-btn">
+                        <i class="fas fa-external-link-alt"></i> View Full Policy
                     </button>
                 </div>
-            `;
-        } else {
-            changeHtml = `
-                <div class="no-changes-state">
-                    <i class="fas fa-check-circle"></i>
-                    <p><strong>All Quiet</strong></p>
-                    <p>No recent policy changes detected across tracked platforms.</p>
+                <div class="update-content">
+                    <h4>What Changed</h4>
+                    <div class="update-summary">
+                        ${this.renderMarkdown(latestChange.last_update_summary)}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    generateSystemHealthModalContent() {
+        if (!this.runData || this.runData.length === 0) {
+            return '<div class="no-data"><p>No system data available.</p></div>';
+        }
+
+        const recentRuns = this.runData.slice(0, 10);
+        const lastRun = recentRuns[0];
+        const hoursAgo = this.getHoursAgo(new Date(lastRun.timestamp_utc));
+
+        let overallStatus = 'operational';
+        let statusText = 'All Systems Operational';
+        
+        if (hoursAgo > 48) {
+            overallStatus = 'down';
+            statusText = 'System Offline';
+        } else if (lastRun.status === 'partial_failure') {
+            overallStatus = 'degraded';
+            statusText = 'Partial Service Issues';
+        } else if (lastRun.status !== 'success') {
+            overallStatus = 'issues';
+            statusText = 'Service Issues Detected';
+        }
+
+        let html = `
+            <div class="system-health-details">
+                <div class="health-overview">
+                    <div class="status-indicator ${overallStatus}">
+                        <h3>${statusText}</h3>
+                        <p>Last run: ${this.formatRelativeTime(lastRun.timestamp_utc)}</p>
+                    </div>
+                </div>
+                
+                <div class="recent-runs">
+                    <h4>Recent System Runs</h4>
+                    <div class="runs-list">
+        `;
+
+        recentRuns.forEach(run => {
+            const statusClass = this.getStatusClass(run.status);
+            html += `
+                <div class="run-item ${statusClass}">
+                    <div class="run-info">
+                        <span class="run-time">${this.formatRelativeTime(run.timestamp_utc)}</span>
+                        <span class="run-status">${this.capitalizeStatus(run.status)}</span>
+                    </div>
+                    <div class="run-stats">
+                        ${run.pages_checked ? `${run.pages_checked} pages checked` : ''}
+                        ${run.changes_found ? ` • ${run.changes_found} changes` : ''}
+                        ${run.errors_count ? ` • ${run.errors_count} errors` : ''}
+                    </div>
                 </div>
             `;
-        }
-        
-        changeContainer.innerHTML = changeHtml;
+        });
+
+        html += '</div></div></div>';
+        return html;
     }
 
     getPolicyName(slug) {
@@ -1360,15 +1467,79 @@ document.addEventListener('DOMContentLoaded', () => {
     window.policyDashboard = new PolicyWatcherDashboard();
 });
 
+// Modal functions for insight cards
+function openPlatformActivityModal() {
+    const modal = document.getElementById('platform-activity-modal');
+    const content = document.getElementById('platform-activity-modal-content');
+    
+    // Populate modal content
+    const dashboard = window.policyDashboard;
+    if (dashboard) {
+        content.innerHTML = dashboard.generatePlatformActivityModalContent();
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closePlatformActivityModal() {
+    document.getElementById('platform-activity-modal').style.display = 'none';
+}
+
+function openLatestUpdateModal() {
+    const modal = document.getElementById('latest-update-modal');
+    const content = document.getElementById('latest-update-modal-content');
+    
+    // Populate modal content
+    const dashboard = window.policyDashboard;
+    if (dashboard) {
+        content.innerHTML = dashboard.generateLatestUpdateModalContent();
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closeLatestUpdateModal() {
+    document.getElementById('latest-update-modal').style.display = 'none';
+}
+
+function openSystemHealthModal() {
+    const modal = document.getElementById('system-health-modal');
+    const content = document.getElementById('system-health-modal-content');
+    
+    // Populate modal content
+    const dashboard = window.policyDashboard;
+    if (dashboard) {
+        content.innerHTML = dashboard.generateSystemHealthModalContent();
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closeSystemHealthModal() {
+    document.getElementById('system-health-modal').style.display = 'none';
+}
+
 // Global modal close functionality
 window.onclick = function(event) {
     const policyModal = document.getElementById('policy-summary-modal');
     const runLogModal = document.getElementById('run-log-modal');
+    const platformActivityModal = document.getElementById('platform-activity-modal');
+    const latestUpdateModal = document.getElementById('latest-update-modal');
+    const systemHealthModal = document.getElementById('system-health-modal');
     
     if (event.target === policyModal) {
         closePolicyModal();
     }
     if (event.target === runLogModal) {
         runLogModal.style.display = 'none';
+    }
+    if (event.target === platformActivityModal) {
+        closePlatformActivityModal();
+    }
+    if (event.target === latestUpdateModal) {
+        closeLatestUpdateModal();
+    }
+    if (event.target === systemHealthModal) {
+        closeSystemHealthModal();
     }
 }

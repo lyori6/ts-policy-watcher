@@ -37,46 +37,37 @@
 
         <!-- Insight Cards -->
         <div class="insights-grid">
-            <div class="insight-card risk-card">
-                <div class="insight-header">
-                    <div class="icon-container risk">
-                        <i class="fas fa-shield-alt"></i>
+            <div class="insight-card intel-card" onclick="openPlatformActivityModal()">
+                <div class="insight-content">
+                    <div class="insight-icon">
+                        <i class="fas fa-chart-bar"></i>
                     </div>
-                    <div class="header-text">
-                        <h3>Risk Updates</h3>
-                        <span class="card-subtitle">Monitor competitive stability</span>
+                    <div class="insight-info">
+                        <h3>Platform Activity</h3>
+                        <div class="insight-status" id="platform-activity-status">Loading...</div>
                     </div>
-                </div>
-                <div class="insight-body" id="insight-trend-alert">
-                    <p>Loading market risk analysis...</p>
                 </div>
             </div>
-            <div class="insight-card intel-card">
-                <div class="insight-header">
-                    <div class="icon-container intel">
-                        <i class="fas fa-chart-line"></i>
+            <div class="insight-card change-card" onclick="openLatestUpdateModal()">
+                <div class="insight-content">
+                    <div class="insight-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="header-text">
-                        <h3>Competitive Intelligence</h3>
-                        <span class="card-subtitle">Platform change frequency (30 days)</span>
+                    <div class="insight-info">
+                        <h3>Latest Update</h3>
+                        <div class="insight-status" id="latest-update-status">Loading...</div>
                     </div>
-                </div>
-                <div class="insight-body" id="insight-platform-activity">
-                    <p>Loading competitive landscape...</p>
                 </div>
             </div>
-            <div class="insight-card change-card">
-                <div class="insight-header">
-                    <div class="icon-container change">
-                        <i class="fas fa-bolt"></i>
+            <div class="insight-card system-card" onclick="openSystemHealthModal()">
+                <div class="insight-content">
+                    <div class="insight-icon">
+                        <i class="fas fa-server"></i>
                     </div>
-                    <div class="header-text">
-                        <h3>Latest Key Change</h3>
-                        <span class="card-subtitle">Most recent policy update</span>
+                    <div class="insight-info">
+                        <h3>System Health</h3>
+                        <div class="insight-status" id="system-health-status">Loading...</div>
                     </div>
-                </div>
-                <div class="insight-body" id="insight-latest-change">
-                    <p>Loading latest policy changes...</p>
                 </div>
             </div>
         </div>
@@ -270,6 +261,45 @@
                         <i class="fas fa-clock"></i> View History
                     </a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platform Activity Modal -->
+    <div id="platform-activity-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-bar"></i> Platform Activity Details</h2>
+                <span class="close-button" onclick="closePlatformActivityModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="platform-activity-modal-content">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Update Modal -->
+    <div id="latest-update-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-clock"></i> Latest Policy Update</h2>
+                <span class="close-button" onclick="closeLatestUpdateModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="latest-update-modal-content">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Health Modal -->
+    <div id="system-health-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-server"></i> System Health Details</h2>
+                <span class="close-button" onclick="closeSystemHealthModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="system-health-modal-content">Loading...</div>
             </div>
         </div>
     </div>

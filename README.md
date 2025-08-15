@@ -50,6 +50,12 @@ python scripts/diff_and_notify.py
 - **Development**: Preview deployments generated from `dev` branch PRs
 - **Local**: Open `dashboard/index.html` in a browser
 
+**🆕 Enhanced Dashboard Features**:
+- **Executive Status Cards**: Clean, minimal cards showing platform activity, latest updates, and system health
+- **Modal Deep-Dives**: Click any card for detailed insights without cluttering the main view
+- **Improved Policy Matrix**: Full-width platform headers with better visual separation
+- **Responsive Design**: Optimized for desktop, tablet, and mobile viewing
+
 ## Development Workflow
 
 This project uses a **dev branch workflow** with Vercel preview deployments for safe development.

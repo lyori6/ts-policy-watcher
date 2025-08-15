@@ -615,8 +615,9 @@ main {
 /* Insights Grid */
 .insights-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+    width: 100%;
 }
 
 .insight-card {
@@ -625,33 +626,62 @@ main {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.04);
     display: flex;
-    flex-direction: column;
+    align-items: center;
     transition: all 0.2s ease;
     position: relative;
-    min-height: 180px;
-    overflow: hidden;
+    min-height: 80px;
+    cursor: pointer;
+    width: 100%;
 }
 
 .insight-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
 }
 
-.insight-header {
+.insight-content {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
-    padding: 1.25rem 1.25rem 1rem 1.25rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    width: 100%;
+    min-width: 0;
 }
 
-.insight-body {
-    padding: 1rem 1.25rem 1.25rem 1.25rem;
-    line-height: 1.6;
+.insight-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    color: var(--secondary-color);
+}
+
+.insight-info {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.insight-info h3 {
+    color: #111827;
     font-size: 0.9rem;
-    color: #374151;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.insight-status {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.3;
 }
 
 /* Focus Areas Summary Styles */
@@ -680,38 +710,7 @@ main {
     font-weight: 500;
 }
 
-.insight-header {
-    display: flex;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e8eef3;
-}
-
-.insight-header i {
-    font-size: 1.5rem;
-    color: var(--secondary-color);
-    margin-right: 1rem;
-    width: 30px;
-    text-align: center;
-}
-
-.insight-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.insight-body {
-    padding: 1.5rem;
-    font-size: 0.95rem;
-    color: #555;
-    flex-grow: 1;
-}
-
-.insight-body p {
-    margin: 0;
-}
+/* Legacy CSS removed - now using simplified card structure */
 
 .empty-state h3 {
     color: var(--primary-color);
@@ -1070,27 +1069,24 @@ main {
 .icon-container {
     width: 40px;
     height: 40px;
-    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
     flex-shrink: 0;
-}
-
-.icon-container.risk {
-    background: #fee2e2;
-    color: #dc2626;
+    color: var(--dark-gray);
 }
 
 .icon-container.intel {
-    background: #dbeafe;
-    color: #2563eb;
+    color: var(--secondary-color);
 }
 
 .icon-container.change {
-    background: #fef3c7;
-    color: #d97706;
+    color: var(--warning-color);
+}
+
+.icon-container.system {
+    color: var(--success-color);
 }
 
 .header-text {
@@ -1100,14 +1096,7 @@ main {
     flex: 1;
 }
 
-.insight-header h3 {
-    color: #111827;
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.2;
-    margin: 0;
-    letter-spacing: -0.01em;
-}
+/* Legacy header styles removed */
 
 .card-subtitle {
     font-size: 0.8rem;
@@ -1117,16 +1106,211 @@ main {
 }
 
 /* Enhanced card types - Apple-inspired minimal approach */
-.risk-card:hover {
-    border-color: rgba(220, 38, 38, 0.1);
+/* Removed individual card hover effects */
+
+/* Removed old expansion styles - now using modals */
+
+/* Modal Content Styles */
+.platform-activity-details .activity-summary {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
 }
 
-.intel-card:hover {
-    border-color: rgba(37, 99, 235, 0.1);
+.platform-breakdown {
+    display: grid;
+    gap: 1rem;
 }
 
-.change-card:hover {
-    border-color: rgba(217, 119, 6, 0.1);
+.platform-detail {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.platform-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.platform-header h4 {
+    flex: 1;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.change-count {
+    background: var(--secondary-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.platform-stats {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.75rem;
+}
+
+.recent-changes .change-item {
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.no-changes {
+    font-size: 0.8rem;
+    color: #999;
+    font-style: italic;
+}
+
+.latest-update-details .update-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    gap: 2rem;
+}
+
+.platform-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+}
+
+.platform-info i {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-top: 0.25rem;
+}
+
+.platform-info div {
+    flex: 1;
+}
+
+.platform-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    line-height: 1.3;
+}
+
+.platform-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.update-header .action-btn {
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.update-content h4 {
+    margin: 0 0 1rem 0;
+    color: var(--primary-color);
+}
+
+.update-summary {
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.system-health-details .health-overview {
+    margin-bottom: 2rem;
+}
+
+.status-indicator {
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.status-indicator.operational {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-indicator.degraded {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-indicator.down, .status-indicator.issues {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-indicator h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.status-indicator p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+.recent-runs h4 {
+    margin: 0 0 1rem 0;
+    color: var(--primary-color);
+}
+
+.runs-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.run-item {
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid;
+}
+
+.run-item.success {
+    background: #f0fdf4;
+    border-left-color: #22c55e;
+}
+
+.run-item.warning {
+    background: #fffbeb;
+    border-left-color: #f59e0b;
+}
+
+.run-item.error {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+.run-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.run-time {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.run-status {
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+.run-stats {
+    font-size: 0.8rem;
+    color: #666;
 }
 
 .chart-placeholder {
@@ -1359,6 +1543,11 @@ main {
     .platform-content {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
+    
+    .insights-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1399,17 +1588,10 @@ main {
     }
     
     .insight-card {
-        min-height: 160px;
+        min-height: 80px;
     }
     
-    .insight-header {
-        padding: 1rem 1rem 0.75rem 1rem;
-    }
-    
-    .insight-body {
-        padding: 0.75rem 1rem 1rem 1rem;
-        font-size: 0.85rem;
-    }
+    /* Legacy mobile styles removed */
     
     .intelligence-panel {
         padding: 1rem;
@@ -1736,6 +1918,9 @@ main {
     border-collapse: collapse;
     background: white;
     font-size: 0.9rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .matrix-table th {
@@ -1756,6 +1941,11 @@ main {
     border-bottom: 1px solid #e0e6ed;
     vertical-align: top;
     line-height: 1.5;
+    border-right: 1px solid #f8f9fa;
+}
+
+.matrix-table td:last-child {
+    border-right: none;
 }
 
 .matrix-table tbody tr:hover {
@@ -1763,23 +1953,47 @@ main {
 }
 
 .platform-section {
-    background: linear-gradient(135deg, #ecf0f1, #d5dbdb) !important;
+    background: #f8f9fa !important;
 }
 
 .platform-section:hover {
-    background: linear-gradient(135deg, #d5dbdb, #bdc3c7) !important;
+    background: #e9ecef !important;
 }
 
-.platform-header {
+.platform-section td {
+    background: #f8f9fa !important;
+}
+
+.platform-section:hover td {
+    background: #e9ecef !important;
+}
+
+.platform-section .platform-header {
+    width: 100% !important;
     padding: 1rem !important;
     font-size: 1.1rem;
     color: var(--primary-color);
-    border-bottom: 2px solid var(--secondary-color) !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: left;
 }
 
-.platform-header i {
-    margin-right: 0.5rem;
+.platform-section .platform-header strong {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.platform-section .platform-header i {
+    margin-right: 0.75rem;
     color: var(--secondary-color);
+    font-size: 1.2rem;
+}
+
+.platform-header-empty {
+    padding: 1rem !important;
+    border: none !important;
+    background: transparent !important;
 }
 
 .matrix-table .status-badge {
