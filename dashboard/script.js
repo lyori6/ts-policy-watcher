@@ -31,9 +31,9 @@ class PolicyWatcherDashboard {
         const hostname = window.location.hostname;
         const url = window.location.href;
         
-        // TEMPORARY: Force dev branch for local testing of Meta fix
-        if (hostname === 'localhost' || hostname === '' || url.startsWith('file://')) {
-            console.log('🔧 LOCAL TESTING: Forcing dev branch data');
+        // Local development: Use dev branch for testing
+        if (hostname === 'localhost' || hostname === '127.0.0.1' || url.startsWith('file://')) {
+            console.log('🔧 LOCAL DEVELOPMENT: Using dev branch data');
             return 'dev';
         }
         
