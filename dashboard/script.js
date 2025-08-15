@@ -344,19 +344,46 @@ class PolicyWatcherDashboard {
         const tabsContainer = document.getElementById('platform-tabs');
         const platforms = ['all', ...new Set(this.platformData.map(p => p.platform))];
         
-        const tabsHtml = platforms.map(platform => `
-            <button class="platform-tab ${platform === this.currentPlatform ? 'active' : ''}" 
-                    data-platform="${platform}">
-                ${platform === 'all' ? 'All Platforms' : platform}
-            </button>
-        `).join('');
+        // Platform icon mapping
+        const platformIcons = {
+            'all': 'fas fa-globe',
+            'meta': 'fab fa-meta',
+            'instagram': 'fab fa-instagram',
+            'tiktok': 'fab fa-tiktok',
+            'youtube': 'fab fa-youtube',
+            'whatnot': 'fas fa-gavel',
+            'twitter': 'fab fa-twitter',
+            'x': 'fab fa-x-twitter',
+            'facebook': 'fab fa-facebook',
+            'discord': 'fab fa-discord',
+            'twitch': 'fab fa-twitch',
+            'linkedin': 'fab fa-linkedin',
+            'reddit': 'fab fa-reddit',
+            'snapchat': 'fab fa-snapchat',
+            'pinterest': 'fab fa-pinterest',
+            'default': 'fas fa-building'
+        };
+        
+        const tabsHtml = platforms.map(platform => {
+            const platformName = platform === 'all' ? 'All Platforms' : platform;
+            const iconClass = platformIcons[platform.toLowerCase()] || platformIcons['default'];
+            
+            return `
+                <button class="platform-tab ${platform === this.currentPlatform ? 'active' : ''}" 
+                        data-platform="${platform}">
+                    <i class="${iconClass}"></i>
+                    <span class="platform-name">${platformName}</span>
+                </button>
+            `;
+        }).join('');
 
         tabsContainer.innerHTML = tabsHtml;
 
         // Add event listeners
         tabsContainer.querySelectorAll('.platform-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                this.currentPlatform = e.target.dataset.platform;
+                const button = e.target.closest('.platform-tab');
+                this.currentPlatform = button.dataset.platform;
                 this.renderPolicyExplorer();
             });
         });
