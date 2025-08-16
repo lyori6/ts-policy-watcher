@@ -1437,18 +1437,22 @@ class PolicyWatcherDashboard {
         this.stickyState.platformSelectorHeight = platformSelectorRect.height;
         this.stickyState.platformSelectorOffset = window.scrollY + platformSelectorRect.top;
 
-        // Update CSS custom property for spacer height
+        // Update CSS custom properties
         document.documentElement.style.setProperty(
             '--platform-selector-height', 
             `${this.stickyState.platformSelectorHeight}px`
         );
+        document.documentElement.style.setProperty(
+            '--main-nav-height', 
+            `${this.stickyState.mainNavHeight}px`
+        );
     }
 
     handleStickyBehavior() {
-        const { platformSelector, platformSelectorSpacer } = this.stickyElements;
+        const { mainNav, platformSelector, platformSelectorSpacer } = this.stickyElements;
         const { isSticky, platformSelectorOffset, mainNavHeight } = this.stickyState;
 
-        if (!platformSelector || !platformSelectorSpacer) return;
+        if (!platformSelector || !platformSelectorSpacer || !mainNav) return;
 
         // Only handle sticky behavior if we're on Policy Explorer tab
         const isPolicyExplorerActive = document.getElementById('platforms')?.classList.contains('active');
@@ -1461,8 +1465,11 @@ class PolicyWatcherDashboard {
         }
 
         const scrollY = window.scrollY;
-        // Adjust threshold for smaller screens
-        const threshold = window.innerWidth <= 768 ? mainNavHeight * 0.5 : mainNavHeight;
+        const isMobile = window.innerWidth <= 768;
+        
+        // On mobile, platform selector becomes sticky when scrolled past
+        // On desktop, use the original threshold logic  
+        const threshold = isMobile ? mainNavHeight : mainNavHeight;
         const shouldBeSticky = scrollY > (platformSelectorOffset - threshold);
 
         if (shouldBeSticky && !isSticky) {
@@ -1471,6 +1478,11 @@ class PolicyWatcherDashboard {
             platformSelector.classList.add('sticky');
             platformSelectorSpacer.classList.add('active');
             
+            // On mobile, hide main nav when platform selector is sticky
+            if (isMobile) {
+                mainNav.classList.add('hidden-by-platform');
+            }
+            
         } else if (!shouldBeSticky && isSticky) {
             // Return platform selector to normal position
             this.resetStickyState();
@@ -1478,11 +1490,16 @@ class PolicyWatcherDashboard {
     }
 
     resetStickyState() {
-        const { platformSelector, platformSelectorSpacer } = this.stickyElements;
+        const { mainNav, platformSelector, platformSelectorSpacer } = this.stickyElements;
         
         this.stickyState.isSticky = false;
         platformSelector?.classList.remove('sticky');
         platformSelectorSpacer?.classList.remove('active');
+        
+        // Show main nav when resetting
+        if (window.innerWidth <= 768) {
+            mainNav?.classList.remove('hidden-by-platform');
+        }
     }
 
     // Insight Card Keyboard Accessibility
