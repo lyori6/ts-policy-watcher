@@ -593,7 +593,8 @@ class PolicyWatcherDashboard {
             'TikTok': 'fab fa-tiktok',
             'YouTube': 'fab fa-youtube',
             'Meta': 'fab fa-meta', 
-            'Whatnot': 'fas fa-gavel'
+            'Whatnot': 'fas fa-gavel',
+            'Twitch': 'fab fa-twitch'
         };
         return icons[platform] || 'fas fa-globe';
     }
