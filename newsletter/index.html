@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Watch Newsletter</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="newsletter-card">
+            <div class="icon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <h1>Stay Updated</h1>
+            <p class="subtitle">Get notified when platform policies change that could impact your business</p>
+            
+            <form id="newsletterForm" class="newsletter-form">
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    <button type="submit" id="submitBtn">
+                        <span class="btn-text">Subscribe</span>
+                        <span class="btn-loading" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
+                </div>
+                <p class="privacy-note">
+                    <i class="fas fa-shield-alt"></i>
+                    We respect your privacy. Unsubscribe at any time.
+                </p>
+            </form>
+            
+            <div class="success-message" id="successMessage" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <h3>Welcome aboard!</h3>
+                <p>Thanks for subscribing. You'll get notified when important policy changes happen.</p>
+            </div>
+            
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Oops! Something went wrong</h3>
+                <p>Please try again or contact us directly.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Monitoring policies from TikTok, YouTube, Meta, Whatnot, and Twitch</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
