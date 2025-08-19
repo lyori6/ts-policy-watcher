@@ -1032,6 +1032,7 @@ class PolicyWatcherDashboard {
         if (slug.startsWith('whatnot-')) return 'Whatnot';
         if (slug.startsWith('youtube-')) return 'YouTube';
         if (slug.startsWith('instagram-') || slug.startsWith('meta-')) return 'Meta';
+        if (slug.startsWith('twitch-')) return 'Twitch';
         return 'Unknown';
     }
 

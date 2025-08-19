@@ -212,6 +212,8 @@ def group_changes_by_platform(changes):
             platform = 'YouTube'
         elif 'whatnot' in policy_name:
             platform = 'Whatnot'
+        elif 'twitch' in policy_name:
+            platform = 'Twitch'
             
         if platform not in platform_groups:
             platform_groups[platform] = []
