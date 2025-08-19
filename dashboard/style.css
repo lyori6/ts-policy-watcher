@@ -96,7 +96,6 @@ header {
     font-weight: 700;
     color: white;
     margin-bottom: 0.8rem;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     line-height: 1;
     display: block;
     height: 1.4rem;
@@ -113,6 +112,10 @@ header {
 
 .status-item.issues .status-icon {
     color: #ef4444;  /* Red for issues */
+}
+
+.status-item.issues .status-number {
+    color: #fca5a5;  /* Light red for issue icons */
 }
 
 .status-label {
@@ -828,181 +831,6 @@ main {
     color: var(--secondary-color);
 }
 
-/* Intelligence Panel Styles */
-.intelligence-panel {
-    padding: 1.5rem 2rem 2rem 2rem;
-    background-color: #f0f4f8;
-    border-bottom: 1px solid #e0e0e0;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-
-/* Insights Grid */
-.insights-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    width: 100%;
-}
-
-.insight-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    display: flex;
-    align-items: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    min-height: 80px;
-    cursor: pointer;
-    width: 100%;
-    overflow: hidden;
-}
-
-/* Enhanced hover state with better visibility */
-.insight-card:hover {
-    box-shadow: 0 8px 30px rgba(52, 152, 219, 0.25), 0 4px 16px rgba(0, 0, 0, 0.12);
-    border-color: rgba(52, 152, 219, 0.3);
-    transform: translateY(-4px) scale(1.02);
-    background: linear-gradient(135deg, #ffffff 0%, rgba(52, 152, 219, 0.08) 100%);
-}
-
-/* Add a subtle glow effect on hover */
-.insight-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(52, 152, 219, 0.1) 0%, 
-        rgba(52, 152, 219, 0.05) 50%, 
-        transparent 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 12px;
-    pointer-events: none;
-}
-
-.insight-card:hover::before {
-    opacity: 1;
-}
-
-/* Active/click state */
-.insight-card:active {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 4px 20px rgba(52, 152, 219, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Focus state for keyboard accessibility */
-.insight-card:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3), 0 8px 30px rgba(52, 152, 219, 0.25);
-    border-color: rgba(52, 152, 219, 0.4);
-    transform: translateY(-2px) scale(1.01);
-}
-
-
-.insight-content {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    width: 100%;
-    min-width: 0;
-}
-
-.insight-icon {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    flex-shrink: 0;
-    color: var(--secondary-color);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
-}
-
-.insight-card:hover .insight-icon {
-    color: #1f5f99;
-    transform: scale(1.2) rotate(5deg);
-    text-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
-}
-
-.insight-info {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-}
-
-.insight-info h3 {
-    color: #111827;
-    font-size: 0.9rem;
-    font-weight: 600;
-    line-height: 1.2;
-    margin: 0 0 0.25rem 0;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
-}
-
-.insight-status {
-    font-size: 0.8rem;
-    color: #666;
-    line-height: 1.3;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
-}
-
-/* Enhanced text hover effects */
-.insight-card:hover .insight-info h3 {
-    color: #1f5f99;
-    transform: translateX(2px);
-}
-
-.insight-card:hover .insight-status {
-    color: #2980b9;
-    transform: translateX(2px);
-}
-
-/* Add a subtle shine effect on hover */
-.insight-card:hover .insight-content {
-    position: relative;
-}
-
-.insight-card:hover .insight-content::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.3) 50%, 
-        transparent 100%);
-    animation: shine 0.6s ease-out;
-}
-
-@keyframes shine {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
-}
 
 /* Focus Areas Summary Styles */
 .focus-summary {
@@ -1864,10 +1692,6 @@ main {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
     
-    .insights-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.25rem;
-    }
 }
 
 @media (max-width: 768px) {
@@ -1895,27 +1719,14 @@ main {
     
     .status-number, .status-icon {
         font-size: 1.4rem;
+        height: 1.4rem;
     }
     
     .status-label {
         font-size: 0.6rem;
     }
     
-    /* Mobile-optimized insights grid */
-    .insights-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .insight-card {
-        min-height: 80px;
-    }
-    
     /* Legacy mobile styles removed */
-    
-    .intelligence-panel {
-        padding: 1rem;
-    }
     
     .overview-grid {
         grid-template-columns: 1fr;
@@ -2341,7 +2152,8 @@ main {
 
 .matrix-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     background: white;
     font-size: 0.9rem;
     border: 1px solid #e9ecef;
@@ -2352,7 +2164,7 @@ main {
 .matrix-table th {
     background: linear-gradient(135deg, var(--primary-color), var(--dark-gray));
     color: white;
-    padding: 1rem 0.8rem;
+    padding: 1.2rem 0.8rem;
     text-align: left;
     font-weight: 600;
     font-size: 0.85rem;
@@ -2363,10 +2175,10 @@ main {
 }
 
 .matrix-table td {
-    padding: 0.8rem;
+    padding: 1.2rem 0.8rem;
     border-bottom: 1px solid #e0e6ed;
     vertical-align: top;
-    line-height: 1.5;
+    line-height: 1.6;
     border-right: 1px solid #f8f9fa;
 }
 
@@ -2394,26 +2206,83 @@ main {
     background: #e9ecef !important;
 }
 
-.platform-section .platform-header {
+.platform-section {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.platform-section:hover {
+    background: #e9ecef !important;
+}
+
+.platform-section:hover .platform-header-full {
+    background: #e9ecef !important;
+    border-color: var(--secondary-color) !important;
+}
+
+.platform-section .platform-header-full {
     width: 100% !important;
-    padding: 1rem !important;
+    padding: 1.4rem 1.5rem !important;
     font-size: 1.1rem;
     color: var(--primary-color);
-    border: none !important;
-    background: transparent !important;
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    border-bottom: 2px solid var(--secondary-color) !important;
     text-align: left;
 }
 
-.platform-section .platform-header strong {
+.platform-header-content {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
+    min-height: 44px;
 }
 
-.platform-section .platform-header i {
+.platform-title {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.platform-title i {
     margin-right: 0.75rem;
     color: var(--secondary-color);
     font-size: 1.2rem;
+}
+
+.platform-chevron {
+    color: #6c757d;
+    font-size: 1rem;
+    font-weight: normal;
+    transition: transform 0.3s ease;
+    margin-left: auto;
+    margin-right: 1rem;
+    min-width: 20px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.platform-section:hover .platform-title {
+    color: var(--secondary-color);
+}
+
+.platform-accordion-header.collapsed .platform-chevron i {
+    transform: rotate(-90deg);
+}
+
+.platform-policies {
+    transition: opacity 0.3s ease;
+}
+
+.platform-policies.collapsed {
+    display: none;
 }
 
 .platform-header-empty {
@@ -2496,9 +2365,39 @@ main {
         font-size: 1rem;
     }
     
+    .platform-title {
+        font-size: 0.95rem;
+    }
+    
+    .platform-chevron {
+        margin-right: 1rem;
+        font-size: 0.9rem;
+        font-weight: normal;
+        min-width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+    
+    .platform-header-content {
+        gap: 0.5rem;
+    }
+    
     .export-btn {
         padding: 0.5rem 1rem;
         font-size: 0.8rem;
+    }
+    
+    /* Make platform headers more touch-friendly on mobile */
+    .platform-section {
+        min-height: 48px;
+    }
+    
+    .platform-section .platform-header-full {
+        padding: 1rem !important;
+        font-size: 1rem;
     }
 }
 

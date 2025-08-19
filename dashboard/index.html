@@ -25,53 +25,14 @@
                         <span class="status-label">Minutes Since Check</span>
                     </div>
                     <div class="status-item" id="header-system-status">
-                        <span class="status-icon" id="header-status-icon"><i class="fas fa-question-circle"></i></span>
-                        <span class="status-label" id="header-status-text">Operational</span>
+                        <span class="status-number" id="header-status-number">-</span>
+                        <span class="status-label" id="header-status-label">Minutes to Next Check</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <section id="intelligence-panel" class="intelligence-panel">
-
-        <!-- Insight Cards -->
-        <div class="insights-grid">
-            <div class="insight-card intel-card" onclick="openPlatformActivityModal()" tabindex="0" role="button" aria-label="Platform Activity Details">
-                <div class="insight-content">
-                    <div class="insight-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div class="insight-info">
-                        <h3>Platform Activity</h3>
-                        <div class="insight-status" id="platform-activity-status">Loading...</div>
-                    </div>
-                </div>
-            </div>
-            <div class="insight-card change-card" onclick="openLatestUpdateModal()" tabindex="0" role="button" aria-label="Latest Update Details">
-                <div class="insight-content">
-                    <div class="insight-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="insight-info">
-                        <h3>Latest Update</h3>
-                        <div class="insight-status" id="latest-update-status">Loading...</div>
-                    </div>
-                </div>
-            </div>
-            <div class="insight-card system-card" onclick="openSystemHealthModal()" tabindex="0" role="button" aria-label="System Health Details">
-                <div class="insight-content">
-                    <div class="insight-icon">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div class="insight-info">
-                        <h3>System Health</h3>
-                        <div class="insight-status" id="system-health-status">Loading...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <nav class="main-nav">
         <button class="nav-tab active" data-tab="matrix">
@@ -267,43 +228,7 @@
         </div>
     </div>
 
-    <!-- Platform Activity Modal -->
-    <div id="platform-activity-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-chart-bar"></i> Platform Activity Details</h2>
-                <span class="close-button" onclick="closePlatformActivityModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div id="platform-activity-modal-content">Loading...</div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Latest Update Modal -->
-    <div id="latest-update-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-clock"></i> Latest Policy Update</h2>
-                <span class="close-button" onclick="closeLatestUpdateModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div id="latest-update-modal-content">Loading...</div>
-            </div>
-        </div>
-    </div>
 
-    <!-- System Health Modal -->
-    <div id="system-health-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-server"></i> System Health Details</h2>
-                <span class="close-button" onclick="closeSystemHealthModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div id="system-health-modal-content">Loading...</div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

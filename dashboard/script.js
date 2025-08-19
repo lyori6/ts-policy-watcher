@@ -535,25 +535,29 @@ class PolicyWatcherDashboard {
             
             console.log(`✅ Rendering ${platform} with policies:`, platformPolicies.map(p => p.name));
 
-            // Platform header
+            // Platform header with accordion functionality
             const platformIcon = this.getPlatformIcon(platform);
             matrixHtml += `
-                <tr class="platform-section">
-                    <td class="platform-header">
-                        <strong><i class="${platformIcon}"></i> ${platform}</strong>
+                <tr class="platform-section platform-accordion-header" onclick="togglePlatformAccordion('${platform}')">
+                    <td class="platform-header-full" colspan="8">
+                        <div class="platform-header-content">
+                            <span class="platform-title">
+                                <i class="${platformIcon}"></i> ${platform} (${platformPolicies.length})
+                            </span>
+                            <span class="platform-chevron">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
                     </td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
                 </tr>
             `;
 
-            // Platform policies
-            platformPolicies.forEach(policy => {
+            // Platform policies - wrap in collapsible container
+            platformPolicies.forEach((policy, index) => {
+                // Add opening div for first policy row
+                if (index === 0) {
+                    matrixHtml += `<!-- Platform ${platform} Policies Start -->`;
+                }
                 const summaryData = this.summariesData[policy.slug] || {};
                 const lastUpdated = summaryData.last_updated ? 
                     this.formatRelativeTime(summaryData.last_updated) : 'No data';
@@ -571,7 +575,7 @@ class PolicyWatcherDashboard {
                     `<span class="link-btn disabled">N/A</span>`;
 
                 matrixHtml += `
-                    <tr>
+                    <tr class="platform-policies platform-${platform.toLowerCase()}-policies">
                         <td>${platform}</td>
                         <td>${policy.name}</td>
                         <td><span class="status-badge ${hasData}">${statusText}</span></td>
@@ -586,6 +590,24 @@ class PolicyWatcherDashboard {
         });
 
         tbody.innerHTML = matrixHtml;
+        
+        // Initialize all platforms as expanded by default
+        this.initializeAccordionState();
+    }
+
+    initializeAccordionState() {
+        // Set initial state - all platforms expanded by default
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta', 'Twitch'];
+        platforms.forEach(platform => {
+            const policies = document.querySelectorAll(`.platform-${platform.toLowerCase()}-policies`);
+            const header = document.querySelector(`[onclick="togglePlatformAccordion('${platform}')"]`);
+            
+            if (header && policies.length > 0) {
+                // All platforms start expanded
+                policies.forEach(row => row.style.display = 'table-row');
+                header.classList.remove('collapsed');
+            }
+        });
     }
 
     getPlatformIcon(platform) {
@@ -724,7 +746,7 @@ class PolicyWatcherDashboard {
         const statusElement = document.getElementById('platform-activity-status');
         if (!statusElement) return;
 
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta', 'Twitch'];
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
@@ -820,7 +842,7 @@ class PolicyWatcherDashboard {
     }
 
     generatePlatformActivityModalContent() {
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta', 'Twitch'];
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
@@ -928,7 +950,7 @@ class PolicyWatcherDashboard {
                             <p>${latestChange.platform} • Updated ${timeAgo}</p>
                         </div>
                     </div>
-                    <button onclick="closeLatestUpdateModal(); openPolicyModal('${latestChange.slug}');" class="action-btn primary-btn">
+                    <button onclick="openPolicyModal('${latestChange.slug}');" class="action-btn primary-btn">
                         <i class="fas fa-external-link-alt"></i> View Full Policy
                     </button>
                 </div>
@@ -1062,9 +1084,44 @@ class PolicyWatcherDashboard {
         return totalChanges / this.runData.length;
     }
 
+    calculateSecondsUntilNextCheck() {
+        const now = new Date();
+        const utcHour = now.getUTCHours();
+        
+        // System runs every 6 hours at: 00:00, 06:00, 12:00, 18:00 UTC
+        const scheduleHours = [0, 6, 12, 18];
+        
+        // Find the next scheduled run hour
+        let nextRunHour = scheduleHours.find(hour => hour > utcHour);
+        let nextRunDate = new Date(now);
+        
+        if (nextRunHour === undefined) {
+            // If no more runs today, next run is at 00:00 tomorrow
+            nextRunHour = 0;
+            nextRunDate.setUTCDate(nextRunDate.getUTCDate() + 1);
+        }
+        
+        nextRunDate.setUTCHours(nextRunHour, 0, 0, 0);
+        
+        const secondsUntilNext = Math.round((nextRunDate - now) / 1000);
+        return Math.max(0, secondsUntilNext); // Ensure non-negative
+    }
+
+    formatCountdownDisplay(totalSeconds) {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        
+        if (hours > 0) {
+            return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        } else {
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+    }
+
     calculatePlatformStats() {
         const stats = {};
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta', 'Twitch'];
         
         // Initialize platform stats
         platforms.forEach(platform => {
@@ -1241,56 +1298,88 @@ class PolicyWatcherDashboard {
     }
 
     updateSystemStatus() {
-        // Update header status indicator with simplified operational status
+        // Update header status indicator - show minutes until next check when healthy, issues when problems exist
         const headerIndicator = document.getElementById('header-system-status');
-        const headerIcon = document.getElementById('header-status-icon');
-        const headerText = document.getElementById('header-status-text');
-
+        const headerNumber = document.getElementById('header-status-number');
+        const headerLabel = document.getElementById('header-status-label');
+        
         if (!this.runLogData || this.runLogData.length === 0) {
-            if (headerIndicator && headerIcon && headerText) {
-                headerIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
-                headerText.textContent = 'Unknown';
+            if (headerNumber && headerLabel) {
+                headerNumber.textContent = '-';
+                headerLabel.textContent = 'No Data';
             }
             return;
         }
-
+        
         const lastRun = this.runLogData[0];
         const lastRunTime = new Date(this.cleanTimestamp(lastRun.timestamp_utc));
         const now = new Date();
         const hoursSinceLastRun = (now - lastRunTime) / (1000 * 60 * 60);
         
-        // Simplified operational status based on content monitoring
-        let overallStatus = 'operational';
-        let iconHtml = '<i class="fas fa-check-circle"></i>';
-        let statusText = 'Operational';
+        // Check if system has issues
+        let hasIssues = false;
+        let issueType = '';
         let tooltipText = '';
         
-        // Check if system is operational based on recent successful runs
         if (hoursSinceLastRun > 12) {
             // System hasn't run in over 12 hours - likely an issue
-            overallStatus = 'issues';
-            iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
-            statusText = 'System Issues';
-            tooltipText = `Last successful run: ${Math.round(hoursSinceLastRun)} hours ago\nExpected: Every 6 hours`;
+            hasIssues = true;
+            issueType = 'System Offline';
+            tooltipText = `Last run: ${Math.round(hoursSinceLastRun)} hours ago\nExpected: Every 6 hours`;
         } else if (lastRun.status !== 'success' || (lastRun.errors && lastRun.errors.length > 0)) {
             // Recent run had issues
-            overallStatus = 'issues';
-            iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
-            statusText = 'Issues Detected';
+            hasIssues = true;
+            issueType = 'Issues Detected';
             tooltipText = `Last run status: ${lastRun.status}\nErrors: ${lastRun.errors ? lastRun.errors.length : 0}`;
+        }
+        
+        if (hasIssues) {
+            // Show issue status instead of countdown
+            if (headerNumber && headerLabel) {
+                headerNumber.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                headerLabel.textContent = issueType;
+                headerIndicator.title = tooltipText;
+                headerIndicator.className = 'status-item issues';
+            }
         } else {
-            // System is operational - content monitoring working properly
-            tooltipText = `Monitoring ${this.platformData.length} policies\nLast successful run: ${Math.round(hoursSinceLastRun * 60)} minutes ago\nNext run: ~${6 - Math.round(hoursSinceLastRun)} hours`;
+            // System is healthy - show countdown until next check
+            const secondsUntilNext = this.calculateSecondsUntilNextCheck();
+            const countdownDisplay = this.formatCountdownDisplay(secondsUntilNext);
+            if (headerNumber && headerLabel) {
+                headerNumber.textContent = countdownDisplay;
+                headerLabel.textContent = 'Time to Next Check';
+                headerIndicator.title = `Monitoring ${this.platformData.length} policies\nLast run: ${Math.round(hoursSinceLastRun * 60)} minutes ago\nNext check in: ${countdownDisplay}`;
+                headerIndicator.className = 'status-item operational';
+                
+                // Start countdown timer for visual effect
+                this.startCountdownTimer();
+            }
         }
+    }
 
-        if (headerIndicator && headerIcon && headerText) {
-            headerIcon.innerHTML = iconHtml;
-            headerText.textContent = statusText;
-            headerIndicator.title = tooltipText;
-            
-            // Update CSS class for styling
-            headerIndicator.className = `status-item ${overallStatus}`;
+    startCountdownTimer() {
+        // Clear any existing timer
+        if (this.countdownTimer) {
+            clearInterval(this.countdownTimer);
         }
+        
+        // Simple countdown - update every second
+        this.countdownTimer = setInterval(() => {
+            const headerNumber = document.getElementById('header-status-number');
+            if (headerNumber && !headerNumber.innerHTML.includes('fa-exclamation-triangle')) {
+                const secondsUntilNext = this.calculateSecondsUntilNextCheck();
+                const countdownDisplay = this.formatCountdownDisplay(secondsUntilNext);
+                headerNumber.textContent = countdownDisplay;
+                
+                // If we've reached 0, refresh the page to get latest data
+                if (secondsUntilNext <= 0) {
+                    clearInterval(this.countdownTimer);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 5000);
+                }
+            }
+        }, 1000); // Update every second
     }
 
     showErrorState() {
@@ -1624,6 +1713,30 @@ function dismissHealthAlert() {
     }
 }
 
+// Global function for toggling platform accordion
+function togglePlatformAccordion(platform) {
+    const policies = document.querySelectorAll(`.platform-${platform.toLowerCase()}-policies`);
+    const header = document.querySelector(`[onclick="togglePlatformAccordion('${platform}')"]`);
+    
+    if (header && policies.length > 0) {
+        const isCollapsed = header.classList.contains('collapsed');
+        
+        if (isCollapsed) {
+            // Expand - show all policy rows
+            policies.forEach(row => {
+                row.style.display = 'table-row';
+            });
+            header.classList.remove('collapsed');
+        } else {
+            // Collapse - hide all policy rows
+            policies.forEach(row => {
+                row.style.display = 'none';
+            });
+            header.classList.add('collapsed');
+        }
+    }
+}
+
 // Global function for exporting matrix to CSV
 function exportMatrix() {
     const table = document.getElementById('policy-matrix-table');
@@ -1667,79 +1780,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.policyDashboard = new PolicyWatcherDashboard();
 });
 
-// Modal functions for insight cards
-function openPlatformActivityModal() {
-    const modal = document.getElementById('platform-activity-modal');
-    const content = document.getElementById('platform-activity-modal-content');
-    
-    // Populate modal content
-    const dashboard = window.policyDashboard;
-    if (dashboard) {
-        content.innerHTML = dashboard.generatePlatformActivityModalContent();
-    }
-    
-    modal.style.display = 'block';
-}
-
-function closePlatformActivityModal() {
-    document.getElementById('platform-activity-modal').style.display = 'none';
-}
-
-function openLatestUpdateModal() {
-    const modal = document.getElementById('latest-update-modal');
-    const content = document.getElementById('latest-update-modal-content');
-    
-    // Populate modal content
-    const dashboard = window.policyDashboard;
-    if (dashboard) {
-        content.innerHTML = dashboard.generateLatestUpdateModalContent();
-    }
-    
-    modal.style.display = 'block';
-}
-
-function closeLatestUpdateModal() {
-    document.getElementById('latest-update-modal').style.display = 'none';
-}
-
-function openSystemHealthModal() {
-    const modal = document.getElementById('system-health-modal');
-    const content = document.getElementById('system-health-modal-content');
-    
-    // Populate modal content
-    const dashboard = window.policyDashboard;
-    if (dashboard) {
-        content.innerHTML = dashboard.generateSystemHealthModalContent();
-    }
-    
-    modal.style.display = 'block';
-}
-
-function closeSystemHealthModal() {
-    document.getElementById('system-health-modal').style.display = 'none';
-}
 
 // Global modal close functionality
 window.onclick = function(event) {
     const policyModal = document.getElementById('policy-summary-modal');
     const runLogModal = document.getElementById('run-log-modal');
-    const platformActivityModal = document.getElementById('platform-activity-modal');
-    const latestUpdateModal = document.getElementById('latest-update-modal');
-    const systemHealthModal = document.getElementById('system-health-modal');
     
     if (event.target === policyModal) {
         closePolicyModal();
     }
     if (event.target === runLogModal) {
         runLogModal.style.display = 'none';
-    }
-    if (event.target === platformActivityModal) {
-        closePlatformActivityModal();
-    }
-    if (event.target === latestUpdateModal) {
-        closeLatestUpdateModal();
-    }
-    if (event.target === systemHealthModal) {
-        closeSystemHealthModal();
     }
 }
