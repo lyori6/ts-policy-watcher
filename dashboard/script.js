@@ -514,7 +514,7 @@ class PolicyWatcherDashboard {
             return;
         }
 
-        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta'];
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta', 'Twitch'];
         let matrixHtml = '';
 
         console.log('🔍 Matrix rendering debug:', {
