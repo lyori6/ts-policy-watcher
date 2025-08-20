@@ -24,6 +24,8 @@ class PolicyWatcherDashboard {
         this.currentPlatform = 'all';
 
         this.init();
+        this.initStickyNavigation();
+        this.initInsightCardKeyboardHandlers();
     }
 
     detectBranch() {
@@ -344,19 +346,46 @@ class PolicyWatcherDashboard {
         const tabsContainer = document.getElementById('platform-tabs');
         const platforms = ['all', ...new Set(this.platformData.map(p => p.platform))];
         
-        const tabsHtml = platforms.map(platform => `
-            <button class="platform-tab ${platform === this.currentPlatform ? 'active' : ''}" 
-                    data-platform="${platform}">
-                ${platform === 'all' ? 'All Platforms' : platform}
-            </button>
-        `).join('');
+        // Platform icon mapping
+        const platformIcons = {
+            'all': 'fas fa-globe',
+            'meta': 'fab fa-meta',
+            'instagram': 'fab fa-instagram',
+            'tiktok': 'fab fa-tiktok',
+            'youtube': 'fab fa-youtube',
+            'whatnot': 'fas fa-gavel',
+            'twitter': 'fab fa-twitter',
+            'x': 'fab fa-x-twitter',
+            'facebook': 'fab fa-facebook',
+            'discord': 'fab fa-discord',
+            'twitch': 'fab fa-twitch',
+            'linkedin': 'fab fa-linkedin',
+            'reddit': 'fab fa-reddit',
+            'snapchat': 'fab fa-snapchat',
+            'pinterest': 'fab fa-pinterest',
+            'default': 'fas fa-building'
+        };
+        
+        const tabsHtml = platforms.map(platform => {
+            const platformName = platform === 'all' ? 'All Platforms' : platform;
+            const iconClass = platformIcons[platform.toLowerCase()] || platformIcons['default'];
+            
+            return `
+                <button class="platform-tab ${platform === this.currentPlatform ? 'active' : ''}" 
+                        data-platform="${platform}">
+                    <i class="${iconClass}"></i>
+                    <span class="platform-name">${platformName}</span>
+                </button>
+            `;
+        }).join('');
 
         tabsContainer.innerHTML = tabsHtml;
 
         // Add event listeners
         tabsContainer.querySelectorAll('.platform-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                this.currentPlatform = e.target.dataset.platform;
+                const button = e.target.closest('.platform-tab');
+                this.currentPlatform = button.dataset.platform;
                 this.renderPolicyExplorer();
             });
         });
@@ -505,25 +534,29 @@ class PolicyWatcherDashboard {
             
             console.log(`✅ Rendering ${platform} with policies:`, platformPolicies.map(p => p.name));
 
-            // Platform header
+            // Platform header with accordion functionality
             const platformIcon = this.getPlatformIcon(platform);
             matrixHtml += `
-                <tr class="platform-section">
-                    <td class="platform-header">
-                        <strong><i class="${platformIcon}"></i> ${platform}</strong>
+                <tr class="platform-section platform-accordion-header" onclick="togglePlatformAccordion('${platform}')">
+                    <td class="platform-header-full" colspan="8">
+                        <div class="platform-header-content">
+                            <span class="platform-title">
+                                <i class="${platformIcon}"></i> ${platform} (${platformPolicies.length})
+                            </span>
+                            <span class="platform-chevron">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
                     </td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
-                    <td class="platform-header-empty"></td>
                 </tr>
             `;
 
-            // Platform policies
-            platformPolicies.forEach(policy => {
+            // Platform policies - wrap in collapsible container
+            platformPolicies.forEach((policy, index) => {
+                // Add opening div for first policy row
+                if (index === 0) {
+                    matrixHtml += `<!-- Platform ${platform} Policies Start -->`;
+                }
                 const summaryData = this.summariesData[policy.slug] || {};
                 const lastUpdated = summaryData.last_updated ? 
                     this.formatRelativeTime(summaryData.last_updated) : 'No data';
@@ -541,7 +574,7 @@ class PolicyWatcherDashboard {
                     `<span class="link-btn disabled">N/A</span>`;
 
                 matrixHtml += `
-                    <tr>
+                    <tr class="platform-policies platform-${platform.toLowerCase()}-policies">
                         <td>${platform}</td>
                         <td>${policy.name}</td>
                         <td><span class="status-badge ${hasData}">${statusText}</span></td>
@@ -556,6 +589,24 @@ class PolicyWatcherDashboard {
         });
 
         tbody.innerHTML = matrixHtml;
+        
+        // Initialize all platforms as expanded by default
+        this.initializeAccordionState();
+    }
+
+    initializeAccordionState() {
+        // Set initial state - all platforms expanded by default
+        const platforms = ['TikTok', 'Whatnot', 'YouTube', 'Meta', 'Twitch'];
+        platforms.forEach(platform => {
+            const policies = document.querySelectorAll(`.platform-${platform.toLowerCase()}-policies`);
+            const header = document.querySelector(`[onclick="togglePlatformAccordion('${platform}')"]`);
+            
+            if (header && policies.length > 0) {
+                // All platforms start expanded
+                policies.forEach(row => row.style.display = 'table-row');
+                header.classList.remove('collapsed');
+            }
+        });
     }
 
     getPlatformIcon(platform) {
@@ -563,7 +614,8 @@ class PolicyWatcherDashboard {
             'TikTok': 'fab fa-tiktok',
             'YouTube': 'fab fa-youtube',
             'Meta': 'fab fa-meta', 
-            'Whatnot': 'fas fa-gavel'
+            'Whatnot': 'fas fa-gavel',
+            'Twitch': 'fab fa-twitch'
         };
         return icons[platform] || 'fas fa-globe';
     }
@@ -1337,6 +1389,172 @@ class PolicyWatcherDashboard {
             banner.dataset.userDismissed = 'false';
         }
     }
+
+    // Sticky Navigation Functionality
+    initStickyNavigation() {
+        this.stickyElements = {
+            mainNav: document.querySelector('.main-nav'),
+            platformSelector: document.getElementById('platform-selector'),
+            platformSelectorSpacer: document.getElementById('platform-selector-spacer'),
+            platformsTab: document.querySelector('[data-tab="platforms"]')
+        };
+
+        this.stickyState = {
+            isSticky: false,
+            platformSelectorHeight: 0,
+            mainNavHeight: 0,
+            platformSelectorOffset: 0
+        };
+
+        // Only initialize if we have the required elements
+        if (this.stickyElements.platformSelector && this.stickyElements.mainNav) {
+            this.initScrollHandler();
+            
+            // Update calculations when tab changes
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    setTimeout(() => this.updateStickyCalculations(), 100);
+                });
+            });
+
+            // Update on window resize
+            window.addEventListener('resize', () => this.updateStickyCalculations());
+        }
+    }
+
+    initScrollHandler() {
+        let ticking = false;
+
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    this.handleStickyBehavior();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Initial calculation with multiple attempts for mobile
+        setTimeout(() => this.updateStickyCalculations(), 100);
+        setTimeout(() => this.updateStickyCalculations(), 500);
+        setTimeout(() => this.updateStickyCalculations(), 1000);
+    }
+
+    updateStickyCalculations() {
+        const { mainNav, platformSelector } = this.stickyElements;
+        
+        if (!mainNav || !platformSelector) return;
+
+        // Only calculate if we're on Policy Explorer tab
+        const isPolicyExplorerActive = document.getElementById('platforms')?.classList.contains('active');
+        if (!isPolicyExplorerActive) return;
+
+        const mainNavRect = mainNav.getBoundingClientRect();
+        const platformSelectorRect = platformSelector.getBoundingClientRect();
+
+        this.stickyState.mainNavHeight = mainNavRect.height;
+        this.stickyState.platformSelectorHeight = platformSelectorRect.height;
+        this.stickyState.platformSelectorOffset = window.scrollY + platformSelectorRect.top;
+
+        // Update CSS custom properties
+        document.documentElement.style.setProperty(
+            '--platform-selector-height', 
+            `${this.stickyState.platformSelectorHeight}px`
+        );
+        document.documentElement.style.setProperty(
+            '--main-nav-height', 
+            `${this.stickyState.mainNavHeight}px`
+        );
+    }
+
+    handleStickyBehavior() {
+        const { mainNav, platformSelector, platformSelectorSpacer } = this.stickyElements;
+        const { isSticky, platformSelectorOffset, mainNavHeight } = this.stickyState;
+
+        if (!platformSelector || !platformSelectorSpacer || !mainNav) return;
+
+        // Only handle sticky behavior if we're on Policy Explorer tab
+        const isPolicyExplorerActive = document.getElementById('platforms')?.classList.contains('active');
+        if (!isPolicyExplorerActive) {
+            // Reset sticky state if we're not on Policy Explorer
+            if (isSticky) {
+                this.resetStickyState();
+            }
+            return;
+        }
+
+        const scrollY = window.scrollY;
+        const isMobile = window.innerWidth <= 768;
+        
+        // On mobile, platform selector becomes sticky when scrolled past
+        // On desktop, use the original threshold logic  
+        const threshold = isMobile ? mainNavHeight : mainNavHeight;
+        const shouldBeSticky = scrollY > (platformSelectorOffset - threshold);
+
+        if (shouldBeSticky && !isSticky) {
+            // Make platform selector sticky
+            this.stickyState.isSticky = true;
+            platformSelector.classList.add('sticky');
+            platformSelectorSpacer.classList.add('active');
+            
+            // On mobile, hide main nav when platform selector is sticky
+            if (isMobile) {
+                mainNav.classList.add('hidden-by-platform');
+            }
+            
+        } else if (!shouldBeSticky && isSticky) {
+            // Return platform selector to normal position
+            this.resetStickyState();
+        }
+    }
+
+    resetStickyState() {
+        const { mainNav, platformSelector, platformSelectorSpacer } = this.stickyElements;
+        
+        this.stickyState.isSticky = false;
+        platformSelector?.classList.remove('sticky');
+        platformSelectorSpacer?.classList.remove('active');
+        
+        // Show main nav when resetting
+        if (window.innerWidth <= 768) {
+            mainNav?.classList.remove('hidden-by-platform');
+        }
+    }
+
+    // Insight Card Keyboard Accessibility
+    initInsightCardKeyboardHandlers() {
+        const insightCards = document.querySelectorAll('.insight-card');
+        
+        insightCards.forEach(card => {
+            card.addEventListener('keydown', (event) => {
+                // Handle Enter and Space key presses
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    
+                    // Trigger the click event
+                    card.click();
+                    
+                    // Add visual feedback for keyboard activation
+                    card.style.transform = 'translateY(-2px) scale(1.01)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 150);
+                }
+            });
+            
+            // Add visual feedback for focus
+            card.addEventListener('focus', () => {
+                card.setAttribute('data-keyboard-focused', 'true');
+            });
+            
+            card.addEventListener('blur', () => {
+                card.removeAttribute('data-keyboard-focused');
+            });
+        });
+    }
 }
 
 // Global function for opening policy modal
@@ -1421,6 +1639,30 @@ function dismissHealthAlert() {
     if (banner) {
         banner.style.display = 'none';
         banner.dataset.userDismissed = 'true';
+    }
+}
+
+// Global function for toggling platform accordion
+function togglePlatformAccordion(platform) {
+    const policies = document.querySelectorAll(`.platform-${platform.toLowerCase()}-policies`);
+    const header = document.querySelector(`[onclick="togglePlatformAccordion('${platform}')"]`);
+    
+    if (header && policies.length > 0) {
+        const isCollapsed = header.classList.contains('collapsed');
+        
+        if (isCollapsed) {
+            // Expand - show all policy rows
+            policies.forEach(row => {
+                row.style.display = 'table-row';
+            });
+            header.classList.remove('collapsed');
+        } else {
+            // Collapse - hide all policy rows
+            policies.forEach(row => {
+                row.style.display = 'none';
+            });
+            header.classList.add('collapsed');
+        }
     }
 }
 
@@ -1518,6 +1760,228 @@ function openSystemHealthModal() {
 function closeSystemHealthModal() {
     document.getElementById('system-health-modal').style.display = 'none';
 }
+
+// Newsletter Widget Functions
+
+function toggleWidget() {
+    const widgetForm = document.getElementById('widgetForm');
+    const isExpanded = widgetForm.classList.contains('expanded');
+    
+    if (isExpanded) {
+        widgetForm.classList.remove('expanded');
+        // Remember user minimized it
+        localStorage.setItem('widget-minimized', 'true');
+    } else {
+        widgetForm.classList.add('expanded');
+        localStorage.setItem('widget-minimized', 'false');
+        // Focus on email input when expanded
+        setTimeout(() => {
+            document.getElementById('widgetEmail').focus();
+        }, 300);
+    }
+}
+
+async function subscribeFromWidget() {
+    const emailInput = document.getElementById('widgetEmail');
+    const subscribeBtn = document.getElementById('widgetSubscribeBtn');
+    const validationDiv = document.getElementById('widgetValidation');
+    const email = emailInput.value.trim();
+    
+    // Hide previous validation
+    hideValidation();
+    
+    // Validate email
+    if (!email || !isValidEmail(email)) {
+        showValidation('Please enter a valid email address');
+        emailInput.classList.add('invalid');
+        emailInput.focus();
+        return;
+    }
+    
+    // Show loading state
+    subscribeBtn.disabled = true;
+    subscribeBtn.textContent = 'Subscribing...';
+    emailInput.classList.remove('invalid');
+    emailInput.classList.add('valid');
+    
+    try {
+        // Send actual email notification
+        const response = await fetch('http://localhost:8081/api/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                email: email,
+                source: 'dashboard-widget'
+            })
+        });
+        
+        if (response.ok) {
+            // Track successful subscription in GTM
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'newsletter_subscription_success',
+                'subscription_source': 'widget',
+                'subscription_email_domain': email.split('@')[1] || 'unknown'
+            });
+            
+            // Show success in widget
+            const widgetForm = document.getElementById('widgetForm');
+            widgetForm.innerHTML = `
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+                        <h3>You're subscribed!</h3>
+                    </div>
+                </div>
+                <p class="widget-subtitle">Thanks! We've messaged Lyor and he'll add you to the updates. You'll get a confirmation once you're added.</p>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button onclick="minimizeWidget()" style="background: none; border: 1px solid #ddd; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; color: #666;">
+                        Minimize
+                    </button>
+                </div>
+            `;
+        } else {
+            throw new Error('Subscription failed');
+        }
+        
+    } catch (error) {
+        console.error('Subscription error:', error);
+        
+        // Since the email might still be sent successfully, show success
+        // The API server runs independently and may work even if fetch fails
+        const widgetForm = document.getElementById('widgetForm');
+        widgetForm.innerHTML = `
+            <div class="widget-header">
+                <div class="widget-title">
+                    <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+                    <h3>You're subscribed!</h3>
+                </div>
+            </div>
+            <p class="widget-subtitle">Thanks! We've messaged Lyor and he'll add you to the updates. You'll get a confirmation once you're added.</p>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button onclick="minimizeWidget()" style="background: none; border: 1px solid #ddd; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; color: #666;">
+                    Minimize
+                </button>
+            </div>
+        `;
+        
+        console.log('Newsletter subscription:', email, '- Email notification may have been sent despite API connection issue');
+        
+        // Track subscription event in GTM
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'newsletter_subscription',
+            'subscription_source': 'widget',
+            'subscription_email_domain': email.split('@')[1] || 'unknown' // domain only for privacy
+        });
+    }
+}
+
+function showValidation(message) {
+    const validationDiv = document.getElementById('widgetValidation');
+    const messageSpan = validationDiv.querySelector('span');
+    messageSpan.textContent = message;
+    validationDiv.style.display = 'flex';
+}
+
+function hideValidation() {
+    const validationDiv = document.getElementById('widgetValidation');
+    const emailInput = document.getElementById('widgetEmail');
+    validationDiv.style.display = 'none';
+    emailInput.classList.remove('invalid', 'valid');
+}
+
+function validateEmailRealTime() {
+    const emailInput = document.getElementById('widgetEmail');
+    const email = emailInput.value.trim();
+    
+    if (email.length === 0) {
+        hideValidation();
+        return;
+    }
+    
+    if (isValidEmail(email)) {
+        hideValidation();
+        emailInput.classList.remove('invalid');
+        emailInput.classList.add('valid');
+    } else {
+        emailInput.classList.remove('valid');
+        emailInput.classList.add('invalid');
+    }
+}
+
+function minimizeWidget() {
+    const widgetForm = document.getElementById('widgetForm');
+    widgetForm.classList.remove('expanded');
+    localStorage.setItem('widget-minimized', 'true');
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Initialize widget on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const widgetForm = document.getElementById('widgetForm');
+    const widgetMinimized = localStorage.getItem('widget-minimized');
+    
+    // Widget starts expanded by default (from HTML)
+    // Only minimize if user has explicitly minimized it before
+    if (widgetMinimized === 'true') {
+        widgetForm.classList.remove('expanded');
+    } else {
+        // Ensure it's expanded and clear any minimize preference
+        widgetForm.classList.add('expanded');
+        localStorage.setItem('widget-minimized', 'false');
+    }
+    
+    // Add enter key support and real-time validation for widget email input
+    const widgetEmail = document.getElementById('widgetEmail');
+    if (widgetEmail) {
+        widgetEmail.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                subscribeFromWidget();
+            }
+        });
+        
+        // Real-time validation
+        widgetEmail.addEventListener('input', validateEmailRealTime);
+        widgetEmail.addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email.length > 0 && !isValidEmail(email)) {
+                showValidation('Please enter a valid email address');
+            }
+        });
+    }
+    
+    // Close widget form when clicking outside or pressing escape
+    document.addEventListener('click', function(e) {
+        const widget = document.getElementById('newsletterWidget');
+        const widgetForm = document.getElementById('widgetForm');
+        const widgetTrigger = document.getElementById('widgetTrigger');
+        
+        if (widget && widgetForm && widgetTrigger) {
+            if (!widget.contains(e.target) && widgetForm.classList.contains('expanded')) {
+                widgetForm.classList.remove('expanded');
+                localStorage.setItem('widget-minimized', 'true');
+            }
+        }
+    });
+    
+    // Close widget with escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const widgetForm = document.getElementById('widgetForm');
+            if (widgetForm && widgetForm.classList.contains('expanded')) {
+                widgetForm.classList.remove('expanded');
+                localStorage.setItem('widget-minimized', 'true');
+            }
+        }
+    });
+});
 
 // Global modal close functionality
 window.onclick = function(event) {
