@@ -1714,6 +1714,74 @@ function dismissHealthAlert() {
     }
 }
 
+// Global function for toggling platform accordion
+function togglePlatformAccordion(platform) {
+    const policies = document.querySelectorAll(`.platform-${platform.toLowerCase()}-policies`);
+    const header = document.querySelector(`[onclick="togglePlatformAccordion('${platform}')"]`);
+    
+    if (header && policies.length > 0) {
+        const isCollapsed = header.classList.contains('collapsed');
+        
+        if (isCollapsed) {
+            // Expand - show all policy rows
+            policies.forEach(row => {
+                row.style.display = 'table-row';
+            });
+            header.classList.remove('collapsed');
+        } else {
+            // Collapse - hide all policy rows
+            policies.forEach(row => {
+                row.style.display = 'none';
+            });
+            header.classList.add('collapsed');
+        }
+    }
+}
+
+// Global function for exporting matrix to CSV
+function exportMatrix() {
+    const table = document.getElementById('policy-matrix-table');
+    const rows = table.querySelectorAll('tbody tr:not(.platform-section)');
+    
+    // CSV headers
+    const headers = ['Platform', 'Policy Name', 'Status', 'Coverage Areas', 'Key Features', 'Enforcement Actions', 'Last Updated', 'URL'];
+    let csvContent = headers.join(',') + '\n';
+    
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 7) {
+            const rowData = [
+                `"${cells[0].textContent.trim()}"`,
+                `"${cells[1].textContent.trim()}"`,
+                `"${cells[2].textContent.trim()}"`,
+                `"${cells[3].textContent.trim()}"`,
+                `"${cells[4].textContent.trim()}"`,
+                `"${cells[5].textContent.trim()}"`,
+                `"${cells[6].textContent.trim()}"`,
+                `"${cells[7].querySelector('a') ? cells[7].querySelector('a').href : ''}"`
+            ];
+            csvContent += rowData.join(',') + '\n';
+        }
+    });
+    
+    // Create and download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `policy-matrix-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Initialize dashboard when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.policyDashboard = new PolicyWatcherDashboard();
+});
+
+
 // Newsletter Widget Functions
 
 function toggleWidget() {
@@ -1881,11 +1949,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const widgetForm = document.getElementById('widgetForm');
     const widgetMinimized = localStorage.getItem('widget-minimized');
     
-    // If user previously minimized it, keep it minimized
+    // Widget starts expanded by default (from HTML)
+    // Only minimize if user has explicitly minimized it before
     if (widgetMinimized === 'true') {
         widgetForm.classList.remove('expanded');
+    } else {
+        // Ensure it's expanded and clear any minimize preference
+        widgetForm.classList.add('expanded');
+        localStorage.setItem('widget-minimized', 'false');
     }
-    // Otherwise, widget starts expanded by default (from HTML)
     
     // Add enter key support and real-time validation for widget email input
     const widgetEmail = document.getElementById('widgetEmail');
@@ -1906,7 +1978,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Close widget form when clicking outside
+    // Close widget form when clicking outside or pressing escape
     document.addEventListener('click', function(e) {
         const widget = document.getElementById('newsletterWidget');
         const widgetForm = document.getElementById('widgetForm');
@@ -1919,75 +1991,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-});
-
-// Global function for toggling platform accordion
-function togglePlatformAccordion(platform) {
-    const policies = document.querySelectorAll(`.platform-${platform.toLowerCase()}-policies`);
-    const header = document.querySelector(`[onclick="togglePlatformAccordion('${platform}')"]`);
     
-    if (header && policies.length > 0) {
-        const isCollapsed = header.classList.contains('collapsed');
-        
-        if (isCollapsed) {
-            // Expand - show all policy rows
-            policies.forEach(row => {
-                row.style.display = 'table-row';
-            });
-            header.classList.remove('collapsed');
-        } else {
-            // Collapse - hide all policy rows
-            policies.forEach(row => {
-                row.style.display = 'none';
-            });
-            header.classList.add('collapsed');
-        }
-    }
-}
-
-// Global function for exporting matrix to CSV
-function exportMatrix() {
-    const table = document.getElementById('policy-matrix-table');
-    const rows = table.querySelectorAll('tbody tr:not(.platform-section)');
-    
-    // CSV headers
-    const headers = ['Platform', 'Policy Name', 'Status', 'Coverage Areas', 'Key Features', 'Enforcement Actions', 'Last Updated', 'URL'];
-    let csvContent = headers.join(',') + '\n';
-    
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        if (cells.length >= 7) {
-            const rowData = [
-                `"${cells[0].textContent.trim()}"`,
-                `"${cells[1].textContent.trim()}"`,
-                `"${cells[2].textContent.trim()}"`,
-                `"${cells[3].textContent.trim()}"`,
-                `"${cells[4].textContent.trim()}"`,
-                `"${cells[5].textContent.trim()}"`,
-                `"${cells[6].textContent.trim()}"`,
-                `"${cells[7].querySelector('a') ? cells[7].querySelector('a').href : ''}"`
-            ];
-            csvContent += rowData.join(',') + '\n';
+    // Close widget with escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const widgetForm = document.getElementById('widgetForm');
+            if (widgetForm && widgetForm.classList.contains('expanded')) {
+                widgetForm.classList.remove('expanded');
+                localStorage.setItem('widget-minimized', 'true');
+            }
         }
     });
-    
-    // Create and download CSV file
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `policy-matrix-${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Initialize dashboard when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.policyDashboard = new PolicyWatcherDashboard();
 });
-
 
 // Global modal close functionality
 window.onclick = function(event) {
