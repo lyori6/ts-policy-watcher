@@ -1,0 +1,364 @@
+{
+  "timestamp": "2025-08-19T16:47:40.717820",
+  "tests": {
+    "gtm_script_in_head": {
+      "passed": true,
+      "details": {
+        "total_scripts": 4,
+        "gtm_script_found": true,
+        "contains_gtm_id": true,
+        "contains_datalayer": true,
+        "script_preview": "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\n    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\n    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=t..."
+      },
+      "error": null
+    },
+    "gtm_noscript_iframe": {
+      "passed": false,
+      "details": null,
+      "error": null
+    },
+    "datalayer_initialization": {
+      "passed": true,
+      "details": {
+        "exists": true,
+        "isArray": true,
+        "length": 3,
+        "content": [
+          {
+            "gtm.start": 1755647262774,
+            "event": "gtm.js",
+            "gtm.uniqueEventId": 3
+          },
+          {
+            "event": "gtm.dom",
+            "gtm.uniqueEventId": 4
+          },
+          {
+            "event": "gtm.load",
+            "gtm.uniqueEventId": 5
+          }
+        ]
+      },
+      "error": null
+    },
+    "gtm_network_requests": {
+      "passed": true,
+      "details": {
+        "gtm_requests": 1,
+        "ga_requests": 0,
+        "gtm_urls": [
+          "https://www.googletagmanager.com/gtm.js?id=GTM-NDXP433F"
+        ],
+        "successful_requests": [
+          {
+            "url": "https://www.googletagmanager.com/gtm.js?id=GTM-NDXP433F",
+            "method": "GET",
+            "status": 200,
+            "type": "script",
+            "timestamp": "2025-08-19T16:47:42.928740"
+          }
+        ]
+      },
+      "error": null
+    },
+    "newsletter_subscription_event": {
+      "passed": true,
+      "details": {
+        "initial_datalayer_length": 3,
+        "final_datalayer_info": {
+          "total_length": 4,
+          "newsletter_events": [
+            {
+              "event": "newsletter_subscription",
+              "subscription_source": "widget",
+              "subscription_email_domain": "example.com",
+              "gtm.uniqueEventId": 6
+            }
+          ],
+          "recent_events": [
+            {
+              "gtm.start": 1755647262774,
+              "event": "gtm.js",
+              "gtm.uniqueEventId": 3
+            },
+            {
+              "event": "gtm.dom",
+              "gtm.uniqueEventId": 4
+            },
+            {
+              "event": "gtm.load",
+              "gtm.uniqueEventId": 5
+            },
+            {
+              "event": "newsletter_subscription",
+              "subscription_source": "widget",
+              "subscription_email_domain": "example.com",
+              "gtm.uniqueEventId": 6
+            }
+          ]
+        },
+        "events_fired": 1
+      },
+      "error": null
+    },
+    "console_error_check": {
+      "passed": true,
+      "details": {
+        "total_gtm_logs": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "info_count": 1,
+        "errors": [],
+        "warnings": [],
+        "info": [
+          {
+            "type": "log",
+            "message": "Noscript 0 innerHTML: <iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-NDXP433F\"\n    height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe>",
+            "timestamp": "2025-08-19T16:47:46.360547"
+          }
+        ]
+      },
+      "error": null
+    }
+  },
+  "console_logs": [
+    {
+      "type": "log",
+      "message": "\ud83d\udd27 LOCAL DEVELOPMENT: Using dev branch data",
+      "timestamp": "2025-08-19T16:47:42.899567"
+    },
+    {
+      "type": "log",
+      "message": "\ud83c\udf10 Dashboard using branch: dev",
+      "timestamp": "2025-08-19T16:47:42.900109"
+    },
+    {
+      "type": "log",
+      "message": "Data loaded successfully: {runs: 25, summaries: 26, platforms: 26, healthData: loaded, healthAlerts: 0}",
+      "timestamp": "2025-08-19T16:47:42.978028"
+    },
+    {
+      "type": "log",
+      "message": "\ud83d\udd0d Matrix rendering debug: {totalPlatformData: 26, platformsToRender: Array(5), platformDataSample: Array(3)}",
+      "timestamp": "2025-08-19T16:47:42.982273"
+    },
+    {
+      "type": "log",
+      "message": "\ud83d\udd0d Platform: TikTok - Found 4 policies",
+      "timestamp": "2025-08-19T16:47:43.004763"
+    },
+    {
+      "type": "log",
+      "message": "\u2705 Rendering TikTok with policies: [Community Guidelines, Moderating on TikTok LIVE, TikTok Shop Prohibited Products, Blocking Users]",
+      "timestamp": "2025-08-19T16:47:43.005004"
+    },
+    {
+      "type": "log",
+      "message": "\ud83d\udd0d Platform: Whatnot - Found 8 policies",
+      "timestamp": "2025-08-19T16:47:43.005256"
+    },
+    {
+      "type": "log",
+      "message": "\u2705 Rendering Whatnot with policies: [Community Guidelines, Hate and Harassment Policy, Prohibited Items, How To Report A User, Blocking a User, What Actions We Take, Whatnot Buyer Protection Policy, Moderator Guidelines]",
+      "timestamp": "2025-08-19T16:47:43.005980"
+    },
+    {
+      "type": "log",
+      "message": "\ud83d\udd0d Platform: YouTube - Found 4 policies",
+      "timestamp": "2025-08-19T16:47:43.007100"
+    },
+    {
+      "type": "log",
+      "message": "\u2705 Rendering YouTube with policies: [Community Guidelines, Harassment & Cyberbullying, Shopping Ads Policies, Hiding Users From Channel]",
+      "timestamp": "2025-08-19T16:47:43.007737"
+    },
+    {
+      "type": "log",
+      "message": "\ud83d\udd0d Platform: Meta - Found 4 policies",
+      "timestamp": "2025-08-19T16:47:43.008152"
+    },
+    {
+      "type": "log",
+      "message": "\u2705 Rendering Meta with policies: [Community Guidelines, How to appeal content decision, Commerce Policies, Blocking People]",
+      "timestamp": "2025-08-19T16:47:43.008420"
+    },
+    {
+      "type": "log",
+      "message": "\ud83d\udd0d Platform: Twitch - Found 6 policies",
+      "timestamp": "2025-08-19T16:47:43.008695"
+    },
+    {
+      "type": "log",
+      "message": "\u2705 Rendering Twitch with policies: [Community Guidelines, Terms of Service, Terms of Sale, Monetized Streamer Agreement, Privacy Policy, DMCA Guidelines]",
+      "timestamp": "2025-08-19T16:47:43.009387"
+    },
+    {
+      "type": "log",
+      "message": "Found noscript tags: 1",
+      "timestamp": "2025-08-19T16:47:46.360275"
+    },
+    {
+      "type": "log",
+      "message": "Noscript 0 innerHTML: <iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-NDXP433F\"\n    height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe>",
+      "timestamp": "2025-08-19T16:47:46.360547"
+    },
+    {
+      "type": "error",
+      "message": "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+      "timestamp": "2025-08-19T16:47:49.767164"
+    },
+    {
+      "type": "error",
+      "message": "Subscription error: TypeError: Failed to fetch\n    at subscribeFromWidget (http://localhost:8000/dashboard/script.js:1762:32)\n    at HTMLButtonElement.onclick (http://localhost:8000/dashboard/:94:81)",
+      "timestamp": "2025-08-19T16:47:49.768041"
+    },
+    {
+      "type": "log",
+      "message": "Newsletter subscription: test@example.com - Email notification may have been sent despite API connection issue",
+      "timestamp": "2025-08-19T16:47:49.768650"
+    }
+  ],
+  "network_requests": [
+    {
+      "url": "http://localhost:8000/dashboard/",
+      "method": "GET",
+      "status": 200,
+      "type": "document",
+      "timestamp": "2025-08-19T16:47:42.770439"
+    },
+    {
+      "url": "http://localhost:8000/dashboard/style.css",
+      "method": "GET",
+      "status": 200,
+      "type": "stylesheet",
+      "timestamp": "2025-08-19T16:47:42.781427"
+    },
+    {
+      "url": "http://localhost:8000/dashboard/script.js",
+      "method": "GET",
+      "status": 200,
+      "type": "script",
+      "timestamp": "2025-08-19T16:47:42.782043"
+    },
+    {
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css",
+      "method": "GET",
+      "status": 200,
+      "type": "stylesheet",
+      "timestamp": "2025-08-19T16:47:42.852596"
+    },
+    {
+      "url": "https://www.googletagmanager.com/gtm.js?id=GTM-NDXP433F",
+      "method": "GET",
+      "status": 200,
+      "type": "script",
+      "timestamp": "2025-08-19T16:47:42.928740"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main/url_health.json",
+      "method": "GET",
+      "status": 200,
+      "type": "fetch",
+      "timestamp": "2025-08-19T16:47:42.972600"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main/run_log.json",
+      "method": "GET",
+      "status": 200,
+      "type": "fetch",
+      "timestamp": "2025-08-19T16:47:42.974159"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main/summaries.json",
+      "method": "GET",
+      "status": 200,
+      "type": "fetch",
+      "timestamp": "2025-08-19T16:47:42.974945"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main/health_alerts.json",
+      "method": "GET",
+      "status": 200,
+      "type": "fetch",
+      "timestamp": "2025-08-19T16:47:42.975705"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/lyori6/ts-policy-watcher/main/platform_urls.json",
+      "method": "GET",
+      "status": 200,
+      "type": "fetch",
+      "timestamp": "2025-08-19T16:47:42.976482"
+    },
+    {
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/webfonts/fa-solid-900.woff2",
+      "method": "GET",
+      "status": 200,
+      "type": "font",
+      "timestamp": "2025-08-19T16:47:43.010223"
+    },
+    {
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/webfonts/fa-brands-400.woff2",
+      "method": "GET",
+      "status": 200,
+      "type": "font",
+      "timestamp": "2025-08-19T16:47:43.055974"
+    },
+    {
+      "url": "https://www.clarity.ms/tag/sxiak8g6i8?ref=gtm",
+      "method": "GET",
+      "status": 200,
+      "type": "script",
+      "timestamp": "2025-08-19T16:47:43.263979"
+    },
+    {
+      "url": "https://scripts.clarity.ms/0.8.25/clarity.js",
+      "method": "GET",
+      "status": 200,
+      "type": "script",
+      "timestamp": "2025-08-19T16:47:43.356946"
+    },
+    {
+      "url": "https://c.clarity.ms/c.gif",
+      "method": "GET",
+      "status": 302,
+      "type": "image",
+      "timestamp": "2025-08-19T16:47:43.476280"
+    },
+    {
+      "url": "https://c.bing.com/c.gif?ctsa=mr&CtsSyncId=AD614FA2F4C5477FB6D6AE538AFB5CFD&RedC=c.clarity.ms&MXFR=383F907B3EFB612E0C1086363AFB6F0C",
+      "method": "GET",
+      "status": 302,
+      "type": "image",
+      "timestamp": "2025-08-19T16:47:43.566738"
+    },
+    {
+      "url": "https://c.clarity.ms/c.gif?ctsa=mr&CtsSyncId=AD614FA2F4C5477FB6D6AE538AFB5CFD&MUID=3A6952B16DB16585137844FC6CEF642E",
+      "method": "GET",
+      "status": 200,
+      "type": "image",
+      "timestamp": "2025-08-19T16:47:43.602413"
+    },
+    {
+      "url": "https://y.clarity.ms/collect",
+      "method": "POST",
+      "status": 204,
+      "type": "xhr",
+      "timestamp": "2025-08-19T16:47:43.828782"
+    },
+    {
+      "url": "https://y.clarity.ms/collect",
+      "method": "POST",
+      "status": 204,
+      "type": "xhr",
+      "timestamp": "2025-08-19T16:47:45.156582"
+    },
+    {
+      "url": "https://y.clarity.ms/collect",
+      "method": "POST",
+      "status": 204,
+      "type": "xhr",
+      "timestamp": "2025-08-19T16:47:48.160573"
+    }
+  ],
+  "errors": []
+}

@@ -1771,6 +1771,14 @@ async function subscribeFromWidget() {
         });
         
         if (response.ok) {
+            // Track successful subscription in GTM
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'newsletter_subscription_success',
+                'subscription_source': 'widget',
+                'subscription_email_domain': email.split('@')[1] || 'unknown'
+            });
+            
             // Show success in widget
             const widgetForm = document.getElementById('widgetForm');
             widgetForm.innerHTML = `
@@ -1813,6 +1821,14 @@ async function subscribeFromWidget() {
         `;
         
         console.log('Newsletter subscription:', email, '- Email notification may have been sent despite API connection issue');
+        
+        // Track subscription event in GTM
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'newsletter_subscription',
+            'subscription_source': 'widget',
+            'subscription_email_domain': email.split('@')[1] || 'unknown' // domain only for privacy
+        });
     }
 }
 
