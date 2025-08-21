@@ -73,7 +73,19 @@ class PolicyWatcherDashboard {
         const historyFilter = document.getElementById('history-filter');
         if (historyFilter) {
             historyFilter.addEventListener('change', (e) => {
-                this.renderHistoryTable(e.target.value);
+                const filterValue = e.target.value;
+                
+                // If pagination exists, update filter; otherwise render normally
+                if (this.historyPagination) {
+                    const filterFunction = filterValue === 'all' ? 
+                        null : 
+                        (run) => filterValue === 'success' ? run.status === 'success' : run.status !== 'success';
+                    
+                    this.historyPagination.setData(this.runData, filterFunction);
+                    this.currentHistoryFilter = filterValue;
+                } else {
+                    this.renderHistoryTable(filterValue);
+                }
             });
         }
     }
@@ -166,42 +178,9 @@ class PolicyWatcherDashboard {
     updateHeaderStats() {
         // Update header status bar elements
         const headerTotalPolicies = document.getElementById('header-total-policies');
-        const headerLastCheck = document.getElementById('header-last-check');
         
         if (headerTotalPolicies) {
             headerTotalPolicies.textContent = this.platformData.length;
-        }
-
-        if (this.runLogData.length > 0) {
-            const cleanedTimestamp = this.cleanTimestamp(this.runLogData[0].timestamp_utc);
-            const lastRun = new Date(cleanedTimestamp);
-            const now = new Date();
-            
-            // Validate that the date is valid to prevent NaN
-            if (isNaN(lastRun.getTime())) {
-                if (headerLastCheck) {
-                    headerLastCheck.textContent = 'Invalid';
-                }
-            } else {
-                const minutesSince = Math.round((now - lastRun) / (1000 * 60));
-                const hoursSince = Math.round(minutesSince / 60);
-                
-                if (headerLastCheck) {
-                    // Display in a more user-friendly format
-                    if (minutesSince < 60) {
-                        headerLastCheck.textContent = `${minutesSince}`;
-                    } else if (hoursSince < 24) {
-                        headerLastCheck.textContent = `${hoursSince * 60}` // Show in minutes for consistency with label
-                    } else {
-                        const daysSince = Math.round(hoursSince / 24);
-                        headerLastCheck.textContent = `${daysSince * 24 * 60}` // Show very old times in minutes but cap display
-                    }
-                }
-            }
-        } else {
-            if (headerLastCheck) {
-                headerLastCheck.textContent = '-';
-            }
         }
         
         // Always update system status after data is loaded
@@ -220,14 +199,37 @@ class PolicyWatcherDashboard {
             return;
         }
 
-        const recentChanges = this.getRecentChanges();
+        // Initialize pagination if not exists
+        if (!this.changesPagination) {
+            this.changesPagination = new PaginationManager('recent-changes-list', {
+                itemsPerPage: 10,
+                renderCallback: (pageData) => this.renderChangesPage(pageData),
+                pageSizeOptions: [5, 10, 25]
+            });
+            
+            // Register in global instances
+            window.paginationInstances['recent-changes-list'] = this.changesPagination;
+        }
 
-        if (recentChanges.length === 0) {
-            container.innerHTML = '<p class="text-center" style="color: #666; font-style: italic;">No recent changes detected</p>';
+        const allChanges = this.getAllRecentChanges();
+        this.changesPagination.setData(allChanges);
+    }
+
+    renderChangesPage(changes) {
+        const container = document.getElementById('recent-changes-list');
+        if (!container) return;
+
+        if (changes.length === 0) {
+            const existingContent = container.querySelector('.changes-content');
+            if (existingContent) {
+                existingContent.innerHTML = '<p class="text-center" style="color: #666; font-style: italic;">No recent changes detected</p>';
+            } else {
+                container.insertAdjacentHTML('afterbegin', '<div class="changes-content"><p class="text-center" style="color: #666; font-style: italic;">No recent changes detected</p></div>');
+            }
             return;
         }
 
-        const changesHtml = recentChanges.map((change, index) => {
+        const changesHtml = changes.map((change, index) => {
             const summaryId = `summary-${Date.now()}-${index}`; // More unique IDs
             const shortSummary = this.truncateText(change.last_update_summary, 200);
             const hasMore = change.last_update_summary && change.last_update_summary.length > 200;
@@ -253,7 +255,13 @@ class PolicyWatcherDashboard {
             `;
         }).join('');
 
-        container.innerHTML = changesHtml;
+        // Update or create content container
+        let contentContainer = container.querySelector('.changes-content');
+        if (!contentContainer) {
+            container.insertAdjacentHTML('afterbegin', '<div class="changes-content"></div>');
+            contentContainer = container.querySelector('.changes-content');
+        }
+        contentContainer.innerHTML = changesHtml;
     }
 
 
@@ -386,73 +394,147 @@ class PolicyWatcherDashboard {
         tabsContainer.querySelectorAll('.platform-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 const button = e.target.closest('.platform-tab');
-                this.currentPlatform = button.dataset.platform;
-                this.renderPolicyExplorer();
+                const newPlatform = button.dataset.platform;
+                
+                // Update active tab
+                tabsContainer.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+                button.classList.add('active');
+                
+                this.currentPlatform = newPlatform;
+                
+                // If pagination exists, update filter; otherwise render normally
+                if (this.policiesPagination) {
+                    const filterFunction = newPlatform === 'all' ? 
+                        null : 
+                        (policy) => policy.platform === newPlatform;
+                    
+                    // Get all policies that have summaries
+                    let allPolicies = this.platformData.filter(policy => {
+                        const summaryData = this.summariesData[policy.slug];
+                        return summaryData && summaryData.initial_summary;
+                    });
+                    
+                    this.policiesPagination.setData(allPolicies, filterFunction);
+                } else {
+                    this.renderPoliciesByPlatform(newPlatform);
+                }
             });
         });
     }
 
     renderPoliciesByPlatform(selectedPlatform) {
         const container = document.getElementById('platform-content');
-        let filteredPolicies = selectedPlatform === 'all' ? 
-            this.platformData : 
-            this.platformData.filter(p => p.platform === selectedPlatform);
+        
+        // Initialize pagination if not exists
+        if (!this.policiesPagination) {
+            this.policiesPagination = new PaginationManager('platform-content-wrapper', {
+                itemsPerPage: 8,
+                renderCallback: (pageData) => this.renderPoliciesPage(pageData),
+                pageSizeOptions: [6, 8, 12, 24]
+            });
+            
+            // Register in global instances
+            window.paginationInstances['platform-content-wrapper'] = this.policiesPagination;
+        }
 
-        // Filter out policies without summaries to keep the view clean
-        filteredPolicies = filteredPolicies.filter(policy => {
+        // Get all policies and filter them
+        let allPolicies = this.platformData.filter(policy => {
             const summaryData = this.summariesData[policy.slug];
             return summaryData && summaryData.initial_summary;
         });
 
-        if (filteredPolicies.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-file-alt"></i>
-                    <h3>No Policy Summaries Available</h3>
-                    <p>Summaries will appear here once the AI analysis pipeline processes new policy changes.</p>
+        // Apply platform filter
+        const filterFunction = selectedPlatform === 'all' ? 
+            null : 
+            (policy) => policy.platform === selectedPlatform;
+
+        this.policiesPagination.setData(allPolicies, filterFunction);
+    }
+
+    renderPoliciesPage(policies) {
+        const container = document.getElementById('platform-content');
+        if (!container) return;
+
+        if (policies.length === 0) {
+            const emptyStateHtml = `
+                <div class="policies-content">
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>No Policy Summaries Available</h3>
+                        <p>Summaries will appear here once the AI analysis pipeline processes new policy changes.</p>
+                    </div>
                 </div>
             `;
+            
+            // Update or create content container
+            let contentContainer = container.querySelector('.policies-content');
+            if (contentContainer) {
+                contentContainer.outerHTML = emptyStateHtml;
+            } else {
+                container.insertAdjacentHTML('afterbegin', emptyStateHtml);
+            }
             return;
         }
 
-        const policiesHtml = filteredPolicies.map(policy => {
+        const policiesHtml = policies.map((policy, index) => {
             const summaryData = this.summariesData[policy.slug] || {};
             const lastUpdated = summaryData.last_updated ? 
                 this.formatRelativeTime(summaryData.last_updated) : 'Never';
             
+            // Create unique IDs for expandable content
+            const summaryId = `policy-summary-${policy.slug}-${index}`;
+            const shortSummary = this.truncateText(summaryData.initial_summary, 80);
+            const hasMore = summaryData.initial_summary && summaryData.initial_summary.length > 80;
+            
             return `
                 <div class="policy-card" onclick="openPolicyModal('${policy.slug}')" style="cursor: pointer;">
                     <div class="policy-header">
-                        <h4>${policy.name}</h4>
-                        <span class="update-badge">${lastUpdated}</span>
+                        <div class="policy-title-section">
+                            <h4>${policy.name}</h4>
+                            <div class="policy-meta">
+                                <span class="platform-badge">
+                                    <i class="${this.getPlatformIcon(policy.platform)}"></i>
+                                    ${policy.platform}
+                                </span>
+                                <span class="update-badge">${lastUpdated}</span>
+                            </div>
+                        </div>
+                        <a href="${policy.url}" target="_blank" class="policy-link-btn" 
+                           title="Visit ${policy.platform} policy page" onclick="event.stopPropagation();">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
                     </div>
                     
                     <div class="summary-preview">
-                        <div class="summary-excerpt">
-                            ${this.renderMarkdown(this.truncateText(summaryData.initial_summary, 150))}
+                        <div class="summary-excerpt" id="${summaryId}">
+                            ${this.renderMarkdown(shortSummary)}
+                            ${hasMore ? `<button class="read-more-btn" onclick="event.stopPropagation(); togglePolicySummary('${summaryId}')" type="button"><i class="fas fa-chevron-down"></i> Read more</button>` : ''}
                         </div>
+                        ${hasMore ? `<div class="summary-full" id="${summaryId}-full" style="display: none;">
+                            ${this.renderMarkdown(summaryData.initial_summary)}
+                            <button class="read-more-btn expanded" onclick="event.stopPropagation(); togglePolicySummary('${summaryId}')" type="button"><i class="fas fa-chevron-up"></i> Show less</button>
+                        </div>` : ''}
                     </div>
                     
                     ${summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.' ? `
                         <div class="summary update-summary">
                             <div class="update-label">
-                                <i class="fas fa-exclamation-circle"></i> Latest Change
+                                <i class="fas fa-clock"></i> Latest Update
                             </div>
-                            ${this.renderMarkdown(this.truncateText(summaryData.last_update_summary, 200))}
+                            ${this.renderMarkdown(this.truncateText(summaryData.last_update_summary, 150))}
                         </div>
                     ` : ''}
-                    
-                    <div class="policy-actions">
-                        <a href="${policy.url}" target="_blank" class="action-btn primary-btn" 
-                           title="Visit current policy page" onclick="event.stopPropagation();">
-                            <i class="fas fa-external-link-alt"></i> Visit ${policy.platform} Policy Page
-                        </a>
-                    </div>
                 </div>
             `;
         }).join('');
 
-        container.innerHTML = policiesHtml;
+        // Update or create content container
+        let contentContainer = container.querySelector('.policies-content');
+        if (!contentContainer) {
+            container.insertAdjacentHTML('afterbegin', '<div class="policies-content"></div>');
+            contentContainer = container.querySelector('.policies-content');
+        }
+        contentContainer.innerHTML = policiesHtml;
     }
 
     renderHistory() {
@@ -460,21 +542,37 @@ class PolicyWatcherDashboard {
     }
 
     renderHistoryTable(filter) {
-        const tbody = document.getElementById('history-tbody');
-        let filteredRuns = this.runData;
-
-        if (filter !== 'all') {
-            filteredRuns = this.runData.filter(run => 
-                filter === 'success' ? run.status === 'success' : run.status !== 'success'
-            );
+        // Initialize pagination if not exists
+        if (!this.historyPagination) {
+            this.historyPagination = new PaginationManager('history-table-container', {
+                itemsPerPage: 15,
+                renderCallback: (pageData) => this.renderHistoryPage(pageData),
+                pageSizeOptions: [10, 15, 25, 50]
+            });
+            
+            // Register in global instances
+            window.paginationInstances['history-table-container'] = this.historyPagination;
         }
 
-        if (filteredRuns.length === 0) {
+        // Apply filter and update pagination
+        const filterFunction = filter === 'all' ? 
+            null : 
+            (run) => filter === 'success' ? run.status === 'success' : run.status !== 'success';
+
+        this.historyPagination.setData(this.runData, filterFunction);
+        this.currentHistoryFilter = filter; // Store current filter for future reference
+    }
+
+    renderHistoryPage(runs) {
+        const tbody = document.getElementById('history-tbody');
+        if (!tbody) return;
+
+        if (runs.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center">No runs found</td></tr>';
             return;
         }
 
-        const rowsHtml = filteredRuns.map((run, index) => {
+        const rowsHtml = runs.map((run, index) => {
             const statusClass = this.getStatusClass(run.status);
             const timeAgo = this.formatRelativeTime(run.timestamp_utc);
             
@@ -1027,6 +1125,18 @@ class PolicyWatcherDashboard {
         return policy ? policy.name : 'Unknown Policy';
     }
 
+    getPlatformIcon(platformName) {
+        const iconMap = {
+            'TikTok': 'fab fa-tiktok',
+            'Meta': 'fab fa-meta', 
+            'Instagram': 'fab fa-instagram',
+            'YouTube': 'fab fa-youtube',
+            'Twitch': 'fab fa-twitch',
+            'Whatnot': 'fas fa-shopping-cart'
+        };
+        return iconMap[platformName] || 'fas fa-shield-alt';
+    }
+
     findPlatformName(slug) {
         if (slug.startsWith('tiktok-')) return 'TikTok';
         if (slug.startsWith('whatnot-')) return 'Whatnot';
@@ -1050,6 +1160,12 @@ class PolicyWatcherDashboard {
     }
 
     getRecentChanges() {
+        // Keep this method for backward compatibility, but limit to 5 items
+        return this.getAllRecentChanges().slice(0, 5);
+    }
+
+    getAllRecentChanges() {
+        // New method that returns all changes without limiting
         return Object.entries(this.summariesData)
             .filter(([slug, policy]) => {
                 // Filter out test policies and only include real policy updates
@@ -1062,8 +1178,7 @@ class PolicyWatcherDashboard {
                 slug: slug,
                 platform: this.findPlatformName(slug)
             }))
-            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
-            .slice(0, 5);
+            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated));
     }
 
     calculateUptime() {
@@ -1247,8 +1362,48 @@ class PolicyWatcherDashboard {
         return text.substring(0, maxLength) + '...';
     }
 
+    filterAIGeneratedText(text) {
+        if (!text) return '';
+        
+        // Patterns to remove AI-generated filler text
+        const aiPatterns = [
+            // Remove "Here's a concise summary..." patterns
+            /^Here's a concise summary.*?for a product manager[^:]*:?\s*/im,
+            /^As a Trust & Safety analyst,? here is a concise summary.*?for a Product Manager[^:]*:?\s*/im,
+            /^concise summary.*?for a product manager[^:]*:?\s*/im,
+            
+            // Remove highlighting patterns
+            /highlighting key changes?[^:]*:?\s*/im,
+            /highlighting.*?implications[^:]*:?\s*/im,
+            
+            // Remove meta descriptions about the diff
+            /This diff (represents|introduces|shows).*?\.\s*/im,
+            /^Based on this diff[^:]*:?\s*/im,
+            
+            // Remove separator lines and dashes  
+            /^---+\s*$/gm,
+            /^\*\*\*+\s*$/gm,
+            
+            // Clean up excessive newlines
+            /\n{3,}/g
+        ];
+        
+        let cleanedText = text;
+        
+        // Apply each pattern
+        aiPatterns.forEach(pattern => {
+            cleanedText = cleanedText.replace(pattern, pattern === /\n{3,}/g ? '\n\n' : '');
+        });
+        
+        // Trim and return
+        return cleanedText.trim();
+    }
+
     renderMarkdown(text) {
         if (!text) return '';
+        
+        // Filter out AI-generated filler text
+        text = this.filterAIGeneratedText(text);
         
         // Enhanced markdown rendering for better formatting
         let html = text
@@ -1349,7 +1504,7 @@ class PolicyWatcherDashboard {
             if (headerNumber && headerLabel) {
                 headerNumber.textContent = countdownDisplay;
                 headerLabel.textContent = 'Time to Next Check';
-                headerIndicator.title = `Monitoring ${this.platformData.length} policies\nLast run: ${Math.round(hoursSinceLastRun * 60)} minutes ago\nNext check in: ${countdownDisplay}`;
+                headerIndicator.title = `Monitoring ${this.platformData.length} policies\nNext check in: ${countdownDisplay}`;
                 headerIndicator.className = 'status-item operational';
                 
                 // Start countdown timer for visual effect
@@ -1364,7 +1519,7 @@ class PolicyWatcherDashboard {
             clearInterval(this.countdownTimer);
         }
         
-        // Simple countdown - update every second
+        // Simple countdown - update every second (only countdown, not minutes since)
         this.countdownTimer = setInterval(() => {
             const headerNumber = document.getElementById('header-status-number');
             if (headerNumber && !headerNumber.innerHTML.includes('fa-exclamation-triangle')) {
@@ -1482,6 +1637,15 @@ class PolicyWatcherDashboard {
             // Update calculations when tab changes
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
+                    // Determine destination tab
+                    const targetTab = tab.getAttribute('data-tab');
+                    // If leaving Policy Explorer, reset sticky immediately
+                    if (targetTab !== 'platforms') {
+                        this.resetStickyState();
+                    }
+                    // Immediate recalculation to minimize timing windows
+                    this.updateStickyCalculations();
+                    // Follow-up recalculation after layout settles
                     setTimeout(() => this.updateStickyCalculations(), 100);
                 });
             });
@@ -1568,11 +1732,7 @@ class PolicyWatcherDashboard {
             this.stickyState.isSticky = true;
             platformSelector.classList.add('sticky');
             platformSelectorSpacer.classList.add('active');
-            
-            // On mobile, hide main nav when platform selector is sticky
-            if (isMobile) {
-                mainNav.classList.add('hidden-by-platform');
-            }
+            // Do not hide main nav on mobile; keep it stable
             
         } else if (!shouldBeSticky && isSticky) {
             // Return platform selector to normal position
@@ -1587,10 +1747,7 @@ class PolicyWatcherDashboard {
         platformSelector?.classList.remove('sticky');
         platformSelectorSpacer?.classList.remove('active');
         
-        // Show main nav when resetting
-        if (window.innerWidth <= 768) {
-            mainNav?.classList.remove('hidden-by-platform');
-        }
+        // No-op for main nav visibility; keep it always visible
     }
 
     // Insight Card Keyboard Accessibility
@@ -2003,6 +2160,258 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Pagination Manager Class
+class PaginationManager {
+    constructor(containerId, options = {}) {
+        this.containerId = containerId;
+        this.currentPage = 1;
+        this.itemsPerPage = options.itemsPerPage || 10;
+        this.totalItems = 0;
+        this.data = [];
+        this.filteredData = [];
+        this.renderCallback = options.renderCallback;
+        this.onPageChange = options.onPageChange;
+        
+        // Page size options
+        this.pageSizeOptions = options.pageSizeOptions || [10, 25, 50];
+        
+        // Create pagination container
+        this.createPaginationContainer();
+    }
+    
+    createPaginationContainer() {
+        const container = document.getElementById(this.containerId);
+        if (!container) return;
+        
+        // Remove existing pagination if any
+        const existingPagination = container.querySelector('.pagination-container');
+        if (existingPagination) {
+            existingPagination.remove();
+        }
+        
+        // Create new pagination container
+        const paginationHtml = `
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <span id="${this.containerId}-pagination-info">Showing 0-0 of 0 items</span>
+                </div>
+                <div class="pagination-controls" id="${this.containerId}-pagination-controls">
+                    <!-- Pagination buttons will be inserted here -->
+                </div>
+                <div class="items-per-page">
+                    <label for="${this.containerId}-page-size">Show:</label>
+                    <select id="${this.containerId}-page-size">
+                        ${this.pageSizeOptions.map(size => 
+                            `<option value="${size}" ${size === this.itemsPerPage ? 'selected' : ''}>${size}</option>`
+                        ).join('')}
+                    </select>
+                    <span>per page</span>
+                </div>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', paginationHtml);
+        
+        // Add event listeners
+        this.setupEventListeners();
+    }
+    
+    setupEventListeners() {
+        // Page size selector
+        const pageSizeSelect = document.getElementById(`${this.containerId}-page-size`);
+        if (pageSizeSelect) {
+            pageSizeSelect.addEventListener('change', (e) => {
+                this.itemsPerPage = parseInt(e.target.value);
+                this.currentPage = 1;
+                this.render();
+            });
+        }
+    }
+    
+    setData(data, filterFunction = null) {
+        this.data = data;
+        this.filteredData = filterFunction ? data.filter(filterFunction) : data;
+        this.totalItems = this.filteredData.length;
+        this.currentPage = 1;
+        this.render();
+    }
+    
+    updateFilter(filterFunction) {
+        this.filteredData = filterFunction ? this.data.filter(filterFunction) : this.data;
+        this.totalItems = this.filteredData.length;
+        this.currentPage = 1;
+        this.render();
+    }
+    
+    getCurrentPageData() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredData.slice(start, end);
+    }
+    
+    getTotalPages() {
+        return Math.ceil(this.totalItems / this.itemsPerPage);
+    }
+    
+    goToPage(page) {
+        const totalPages = this.getTotalPages();
+        if (page >= 1 && page <= totalPages) {
+            this.currentPage = page;
+            this.render();
+            
+            if (this.onPageChange) {
+                this.onPageChange(page, this.getCurrentPageData());
+            }
+        }
+    }
+    
+    nextPage() {
+        this.goToPage(this.currentPage + 1);
+    }
+    
+    prevPage() {
+        this.goToPage(this.currentPage - 1);
+    }
+    
+    render() {
+        this.updatePaginationInfo();
+        this.updatePaginationControls();
+        
+        if (this.renderCallback) {
+            this.renderCallback(this.getCurrentPageData());
+        }
+    }
+    
+    updatePaginationInfo() {
+        const infoElement = document.getElementById(`${this.containerId}-pagination-info`);
+        if (!infoElement) return;
+        
+        if (this.totalItems === 0) {
+            infoElement.textContent = 'No items to display';
+            return;
+        }
+        
+        const start = (this.currentPage - 1) * this.itemsPerPage + 1;
+        const end = Math.min(this.currentPage * this.itemsPerPage, this.totalItems);
+        infoElement.textContent = `Showing ${start}-${end} of ${this.totalItems} items`;
+    }
+    
+    updatePaginationControls() {
+        const controlsElement = document.getElementById(`${this.containerId}-pagination-controls`);
+        if (!controlsElement) return;
+        
+        const totalPages = this.getTotalPages();
+        
+        if (totalPages <= 1) {
+            controlsElement.innerHTML = '';
+            return;
+        }
+        
+        let controlsHtml = '';
+        
+        // Previous button
+        controlsHtml += `
+            <button class="pagination-btn ${this.currentPage === 1 ? 'disabled' : ''}" 
+                    onclick="window.paginationInstances['${this.containerId}'].prevPage()" 
+                    ${this.currentPage === 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        
+        // Page numbers with smart ellipsis
+        const pageNumbers = this.getPageNumbers(totalPages);
+        pageNumbers.forEach((page, index) => {
+            if (page === '...') {
+                controlsHtml += '<span class="pagination-ellipsis">...</span>';
+            } else {
+                controlsHtml += `
+                    <button class="pagination-btn ${page === this.currentPage ? 'active' : ''}" 
+                            onclick="window.paginationInstances['${this.containerId}'].goToPage(${page})">
+                        ${page}
+                    </button>
+                `;
+            }
+        });
+        
+        // Next button
+        controlsHtml += `
+            <button class="pagination-btn ${this.currentPage === totalPages ? 'disabled' : ''}" 
+                    onclick="window.paginationInstances['${this.containerId}'].nextPage()" 
+                    ${this.currentPage === totalPages ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+        
+        controlsElement.innerHTML = controlsHtml;
+    }
+    
+    getPageNumbers(totalPages) {
+        const pages = [];
+        const current = this.currentPage;
+        
+        if (totalPages <= 7) {
+            // Show all pages if 7 or fewer
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+        } else {
+            // Always show first page
+            pages.push(1);
+            
+            if (current <= 4) {
+                // Near the beginning
+                for (let i = 2; i <= 5; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
+                pages.push(totalPages);
+            } else if (current >= totalPages - 3) {
+                // Near the end
+                pages.push('...');
+                for (let i = totalPages - 4; i <= totalPages; i++) {
+                    pages.push(i);
+                }
+            } else {
+                // In the middle
+                pages.push('...');
+                for (let i = current - 1; i <= current + 1; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
+                pages.push(totalPages);
+            }
+        }
+        
+        return pages;
+    }
+}
+
+// Global pagination instances registry
+window.paginationInstances = window.paginationInstances || {};
+
+// Global function for toggling policy summary expansion
+function togglePolicySummary(summaryId) {
+    const shortSummary = document.getElementById(summaryId);
+    const fullSummary = document.getElementById(summaryId + '-full');
+    
+    if (shortSummary && fullSummary) {
+        const isExpanded = fullSummary.style.display !== 'none';
+        
+        if (isExpanded) {
+            // Collapse
+            fullSummary.style.display = 'none';
+            shortSummary.style.display = 'block';
+        } else {
+            // Expand
+            shortSummary.style.display = 'none';
+            fullSummary.style.display = 'block';
+        }
+    }
+}
+
+// Make function globally available
+window.togglePolicySummary = togglePolicySummary;
 
 // Global modal close functionality
 window.onclick = function(event) {
