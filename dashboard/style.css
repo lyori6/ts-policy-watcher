@@ -1589,6 +1589,451 @@ main {
     color: var(--secondary-color);
 }
 
+/* Weekly Platform Chart - Modern Design */
+.weekly-chart-modern {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.chart-legend-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.legend-item-modern {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.legend-text {
+    font-weight: 500;
+    color: #333;
+}
+
+.chart-area {
+    display: flex;
+    gap: 1rem;
+    position: relative;
+}
+
+.chart-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 160px;
+    padding-right: 0.5rem;
+    border-right: 1px solid #e0e0e0;
+}
+
+.y-axis-label {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    line-height: 1;
+}
+
+.chart-main {
+    flex: 1;
+    position: relative;
+    height: 160px;
+}
+
+.chart-grid-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.grid-line {
+    height: 1px;
+    background: #f0f0f0;
+    width: 100%;
+}
+
+.chart-bars-container {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    height: 120px;
+    position: relative;
+    z-index: 2;
+    overflow-x: auto;
+    padding-bottom: 40px;
+}
+
+.week-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 60px;
+}
+
+.stacked-bar {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    width: 40px;
+    position: relative;
+}
+
+.bar-segment {
+    width: 100%;
+    min-height: 8px;
+    border-radius: 2px 2px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1px;
+}
+
+.bar-segment:hover {
+    transform: scaleX(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 10;
+    position: relative;
+}
+
+.bar-segment:first-child {
+    border-radius: 2px 2px 0 0;
+}
+
+.bar-segment:last-child {
+    border-radius: 0 0 2px 2px;
+    margin-bottom: 0;
+}
+
+.empty-week-indicator {
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.empty-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    border: 2px solid #f0f0f0;
+}
+
+.week-label-modern {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.week-total-modern {
+    font-size: 0.7rem;
+    color: #666;
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Chart responsive design */
+@media (max-width: 768px) {
+    .chart-legend-horizontal {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .chart-area {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .chart-y-axis {
+        flex-direction: row;
+        height: auto;
+        width: 100%;
+        padding: 0;
+        border: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .y-axis-label {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .chart-bars-container {
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    
+    .week-column {
+        min-width: 50px;
+    }
+    
+    .stacked-bar {
+        width: 35px;
+    }
+}
+
+/* Weekly Timeline Chart - Simple Line Graph */
+.weekly-timeline-chart {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.chart-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.chart-summary {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.total-changes {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2563eb;
+    background: #eff6ff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+}
+
+.week-range {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.timeline-container {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.timeline-svg {
+    border-radius: 8px;
+    background: #fafbfc;
+}
+
+.timeline-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.week-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.week-date {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.week-count {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+/* Responsive design for timeline chart */
+@media (max-width: 768px) {
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .chart-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .timeline-container svg {
+        width: 100%;
+        height: auto;
+    }
+    
+    .timeline-details {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .week-detail {
+        min-width: calc(50% - 0.25rem);
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Recent Changes - Clean Design */
+.change-item-clean {
+    background: white;
+    border: 1px solid #e8e9ea;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.change-item-clean:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.change-header-clean {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+}
+
+.platform-tag-clean {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.policy-name-clean {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.timestamp-clean {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.summary-container-clean {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.summary-clean {
+    margin-bottom: 0.5rem;
+}
+
+.summary-clean p {
+    margin: 0 0 0.5rem 0;
+}
+
+.summary-clean p:last-child {
+    margin-bottom: 0;
+}
+
+.read-more-btn-clean {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.read-more-btn-clean:hover {
+    opacity: 1;
+}
+
+/* Responsive design for clean changes */
+@media (max-width: 768px) {
+    .change-header-clean {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .platform-tag-clean {
+        align-self: flex-start;
+    }
+    
+    .timestamp-clean {
+        margin-top: 0;
+        align-self: flex-end;
+    }
+    
+    .change-item-clean {
+        padding: 1rem;
+    }
+}
+
 /* Risk Assessment Indicators */
 .risk-indicator {
     display: inline-block;

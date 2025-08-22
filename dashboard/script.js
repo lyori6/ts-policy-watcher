@@ -202,12 +202,12 @@ class PolicyWatcherDashboard {
             return;
         }
 
-        // Initialize pagination if not exists
+        // Initialize pagination with 3 items per page
         if (!this.changesPagination) {
             this.changesPagination = new PaginationManager('recent-changes-list', {
-                itemsPerPage: 10,
+                itemsPerPage: 3,
                 renderCallback: (pageData) => this.renderChangesPage(pageData),
-                pageSizeOptions: [5, 10, 25]
+                pageSizeOptions: [3, 5, 10]
             });
             
             // Register in global instances
@@ -233,27 +233,27 @@ class PolicyWatcherDashboard {
         }
 
         const changesHtml = changes.map((change, index) => {
-            const summaryId = `summary-${Date.now()}-${index}`; // More unique IDs
-            const shortSummary = this.truncateText(change.last_update_summary, 200);
-            const hasMore = change.last_update_summary && change.last_update_summary.length > 200;
+            const summaryId = `summary-${Date.now()}-${index}`;
+            const shortSummary = this.truncateText(change.last_update_summary, 120);
+            const hasMore = change.last_update_summary && change.last_update_summary.length > 120;
             
             return `
-                <div class="change-item ${hasMore ? 'expandable' : ''}" ${hasMore ? `data-summary-id="${summaryId}"` : ''}>
-                    <div class="change-header">
-                        <div class="platform-tag">${change.platform}</div>
-                        <h4>${change.policy_name}</h4>
+                <div class="change-item-clean ${hasMore ? 'expandable' : ''}" ${hasMore ? `data-summary-id="${summaryId}"` : ''}>
+                    <div class="change-header-clean">
+                        <div class="platform-tag-clean">${change.platform}</div>
+                        <h4 class="policy-name-clean">${change.policy_name}</h4>
+                        <div class="timestamp-clean">${this.formatRelativeTime(change.last_updated)}</div>
                     </div>
-                    <div class="summary-container">
-                        <div class="summary" id="${summaryId}">
+                    <div class="summary-container-clean">
+                        <div class="summary-clean" id="${summaryId}">
                             ${this.renderMarkdown(shortSummary)}
-                            ${hasMore ? '<button class="read-more-btn" onclick="toggleSummary(\'' + summaryId + '\')" type="button"><i class="fas fa-chevron-down"></i> Read more</button>' : ''}
+                            ${hasMore ? `<button class="read-more-btn-clean" onclick="toggleSummary('${summaryId}')" type="button">Read more</button>` : ''}
                         </div>
                         ${hasMore ? `<div class="summary-full" id="${summaryId}-full" style="display: none;">
                             ${this.renderMarkdown(change.last_update_summary)}
-                            <button class="read-more-btn expanded" onclick="toggleSummary('${summaryId}')" type="button"><i class="fas fa-chevron-up"></i> Read less</button>
+                            <button class="read-more-btn-clean expanded" onclick="toggleSummary('${summaryId}')" type="button">Read less</button>
                         </div>` : ''}
                     </div>
-                    <div class="timestamp">Updated ${this.formatRelativeTime(change.last_updated)}</div>
                 </div>
             `;
         }).join('');
@@ -600,6 +600,7 @@ class PolicyWatcherDashboard {
     }
 
     renderAnalytics() {
+        this.renderWeeklyPlatformChart();
         this.renderPlatformActivity();
         this.renderPerformanceTrends();
     }
@@ -764,6 +765,190 @@ class PolicyWatcherDashboard {
         }
         
         return actions.length > 0 ? actions.slice(0, 2).join(', ') : 'Standard enforcement';
+    }
+
+    renderWeeklyPlatformChart() {
+        const container = document.getElementById('weekly-platform-chart');
+        if (!container) {
+            console.error('❌ Weekly platform chart container not found');
+            return;
+        }
+
+        // Process weekly summaries data to extract platform changes by week
+        const weeklyPlatformData = this.processWeeklyPlatformData();
+        
+        if (!weeklyPlatformData || weeklyPlatformData.weeks.length === 0) {
+            container.innerHTML = `
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>No Weekly Data Available</h3>
+                    <p>Weekly platform change data will appear here once weekly summaries are generated.</p>
+                    <small>Run <code>python3 scripts/weekly_aggregator.py --manual</code> to generate weekly summaries.</small>
+                </div>
+            `;
+            return;
+        }
+
+        // Create a visual chart showing weekly changes by platform
+        const chartHtml = this.renderWeeklyPlatformChartVisual(weeklyPlatformData);
+        container.innerHTML = chartHtml;
+    }
+
+    processWeeklyPlatformData() {
+        // Get all weekly summary data (excluding metadata)
+        const weeks = Object.keys(this.weeklySummariesData)
+            .filter(key => !key.startsWith('_'))
+            .sort((a, b) => a.localeCompare(b)); // Oldest to newest for timeline
+
+        if (weeks.length === 0) {
+            return null;
+        }
+
+        // Extract platform changes for each week
+        const platformChanges = {};
+        const weekLabels = [];
+
+        weeks.forEach(weekKey => {
+            const weekData = this.weeklySummariesData[weekKey];
+            const weekStart = weekData.run_metadata.week_start;
+            const weekLabel = new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            weekLabels.push(weekLabel);
+
+            // Count changes by platform for this week
+            const weekPlatformCounts = {};
+            
+            if (weekData.changed_policies) {
+                weekData.changed_policies.forEach(change => {
+                    // Extract platform from policy_key
+                    const platform = this.extractPlatformFromPolicyKey(change.policy_key);
+                    weekPlatformCounts[platform] = (weekPlatformCounts[platform] || 0) + 1;
+                });
+            }
+
+            // Initialize all platforms for this week (so we have consistent data)
+            const allPlatforms = ['YouTube', 'Meta', 'TikTok', 'Twitch', 'Whatnot'];
+            allPlatforms.forEach(platform => {
+                if (!platformChanges[platform]) {
+                    platformChanges[platform] = [];
+                }
+                platformChanges[platform].push(weekPlatformCounts[platform] || 0);
+            });
+        });
+
+        return {
+            weeks: weekLabels,
+            platforms: platformChanges
+        };
+    }
+
+    extractPlatformFromPolicyKey(policyKey) {
+        // Map policy key prefixes to platform names
+        if (policyKey.startsWith('youtube-')) return 'YouTube';
+        if (policyKey.startsWith('meta-')) return 'Meta';
+        if (policyKey.startsWith('instagram-')) return 'Meta';
+        if (policyKey.startsWith('facebook-')) return 'Meta';
+        if (policyKey.startsWith('tiktok-')) return 'TikTok';
+        if (policyKey.startsWith('twitch-')) return 'Twitch';
+        if (policyKey.startsWith('whatnot-')) return 'Whatnot';
+        if (policyKey.startsWith('twitter-') || policyKey.startsWith('x-')) return 'X';
+        return 'Other';
+    }
+
+    renderWeeklyPlatformChartVisual(data) {
+        const { weeks, platforms } = data;
+        
+        // Calculate weekly totals for the trend line
+        const weeklyTotals = weeks.map((week, weekIndex) => {
+            return Object.values(platforms).reduce((sum, platformData) => sum + platformData[weekIndex], 0);
+        });
+        
+        const maxChanges = Math.max(...weeklyTotals, 1);
+        const totalChanges = weeklyTotals.reduce((sum, count) => sum + count, 0);
+        
+        // Create SVG line graph
+        const chartWidth = 600;
+        const chartHeight = 200;
+        const padding = 40;
+        const innerWidth = chartWidth - (padding * 2);
+        const innerHeight = chartHeight - (padding * 2);
+        
+        // Calculate points for the line
+        const points = weeklyTotals.map((count, index) => {
+            const x = padding + (index / (weeks.length - 1)) * innerWidth;
+            const y = padding + (1 - count / maxChanges) * innerHeight;
+            return { x, y, count, week: weeks[index] };
+        });
+        
+        // Create path string for the line
+        const pathData = points.map((point, index) => 
+            `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+        ).join(' ');
+        
+        return `
+            <div class="weekly-timeline-chart">
+                <div class="chart-header">
+                    <h3>Weekly Policy Changes</h3>
+                    <div class="chart-summary">
+                        <span class="total-changes">${totalChanges} total changes</span>
+                        <span class="week-range">${weeks.length} weeks</span>
+                    </div>
+                </div>
+                
+                <div class="timeline-container">
+                    <svg width="${chartWidth}" height="${chartHeight}" class="timeline-svg">
+                        <!-- Grid lines -->
+                        ${Array.from({length: 5}, (_, i) => {
+                            const y = padding + (i / 4) * innerHeight;
+                            const value = Math.round(maxChanges * (1 - i / 4));
+                            return `
+                                <line x1="${padding}" y1="${y}" x2="${chartWidth - padding}" y2="${y}" 
+                                      stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+                                <text x="${padding - 10}" y="${y + 4}" 
+                                      text-anchor="end" font-size="12" fill="#6b7280">${value}</text>
+                            `;
+                        }).join('')}
+                        
+                        <!-- Trend line -->
+                        <path d="${pathData}" 
+                              stroke="#2563eb" 
+                              stroke-width="3" 
+                              fill="none" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"/>
+                        
+                        <!-- Data points -->
+                        ${points.map(point => `
+                            <circle cx="${point.x}" cy="${point.y}" r="5" 
+                                    fill="#2563eb" stroke="white" stroke-width="2">
+                                <title>${point.week}: ${point.count} changes</title>
+                            </circle>
+                        `).join('')}
+                        
+                        <!-- Week labels -->
+                        ${points.map(point => `
+                            <text x="${point.x}" y="${chartHeight - 5}" 
+                                  text-anchor="middle" font-size="11" fill="#6b7280">
+                                ${point.week.split('_to_')[1].substring(5)}
+                            </text>
+                        `).join('')}
+                    </svg>
+                </div>
+                
+                <div class="timeline-details">
+                    ${points.map((point, index) => {
+                        const trend = index > 0 ? 
+                            (point.count > points[index-1].count ? '↗' : 
+                             point.count < points[index-1].count ? '↘' : '→') : '';
+                        return `
+                            <div class="week-detail">
+                                <span class="week-date">${point.week.split('_to_')[1]}</span>
+                                <span class="week-count">${point.count} ${trend}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
     }
 
     renderPlatformActivity() {
