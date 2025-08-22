@@ -68,6 +68,10 @@
                         <span class="status-number" id="header-status-number">-</span>
                         <span class="status-label" id="header-status-label">Minutes to Next Check</span>
                     </div>
+                    <div class="status-item diagnostics-button" onclick="window.dashboardInstance.showDiagnosticModal()" title="System Diagnostics (Press Ctrl+D)">
+                        <span class="status-number"><i class="fas fa-stethoscope"></i></span>
+                        <span class="status-label">Diagnostics</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,22 +268,43 @@
 
         <!-- Analytics Tab -->
         <section id="analytics" class="tab-content">
-            <div class="analytics-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-chart-line"></i> Change Frequency by Platform</h2>
-                    </div>
-                    <div class="card-body">
-                        <div id="platform-activity-chart"></div>
-                    </div>
+            <!-- Weekly Change Frequency Chart - Top Priority -->
+            <div class="card full-width">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Weekly Change Frequency by Platform</h2>
                 </div>
-                
+                <div class="card-body">
+                    <div id="weekly-platform-chart"></div>
+                </div>
+            </div>
+            
+            <!-- Recent Policy Changes Card -->
+            <div class="card recent-changes-card full-width">
+                <div class="card-header">
+                    <h2><i class="fas fa-history"></i> Recent Policy Changes</h2>
+                </div>
+                <div class="card-body">
+                    <div id="recent-changes-list">Loading...</div>
+                </div>
+            </div>
+            
+            <!-- Secondary Analytics Grid -->
+            <div class="analytics-grid">
                 <div class="card">
                     <div class="card-header">
                         <h2><i class="fas fa-clock"></i> Run Performance Trends</h2>
                     </div>
                     <div class="card-body">
                         <div id="performance-timeline"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Platform Activity Overview</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="platform-activity-chart"></div>
                     </div>
                 </div>
             </div>
@@ -314,16 +339,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Recent Policy Changes Card -->
-            <div class="card recent-changes-card full-width">
-                <div class="card-header">
-                    <h2><i class="fas fa-history"></i> Recent Policy Changes</h2>
-                </div>
-                <div class="card-body">
-                    <div id="recent-changes-list">Loading...</div>
                 </div>
             </div>
         </section>

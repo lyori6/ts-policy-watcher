@@ -1,0 +1,200 @@
+{
+  "timestamp": "2025-08-21T00:54:52.133Z",
+  "summary": {
+    "total_tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "errors": 0
+  },
+  "results": [
+    {
+      "viewport": "mobile",
+      "tab": "Policy Matrix",
+      "screenshot": "./visual_regression_tests/mobile_matrix.png",
+      "tests": [
+        {
+          "name": "Matrix Display",
+          "status": "pass",
+          "details": "Matrix table: true, Rows: 31"
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "tab": "ChangeLog",
+      "screenshot": "./visual_regression_tests/mobile_overview.png",
+      "tests": [
+        {
+          "name": "ChangeLog Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "tab": "Policy Explorer",
+      "screenshot": "./visual_regression_tests/mobile_platforms.png",
+      "tests": [
+        {
+          "name": "Policy Explorer Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        },
+        {
+          "name": "Platform Filtering",
+          "status": "pass",
+          "details": "Found 4 policy cards after filtering"
+        },
+        {
+          "name": "Read More Buttons",
+          "status": "pass",
+          "details": "Found 28 read more buttons"
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "tab": "Analytics & Logs",
+      "screenshot": "./visual_regression_tests/mobile_analytics.png",
+      "tests": [
+        {
+          "name": "System Logs Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        },
+        {
+          "name": "History Filtering",
+          "status": "pass",
+          "details": "Filter dropdown functional"
+        }
+      ]
+    },
+    {
+      "viewport": "tablet",
+      "tab": "Policy Matrix",
+      "screenshot": "./visual_regression_tests/tablet_matrix.png",
+      "tests": [
+        {
+          "name": "Matrix Display",
+          "status": "pass",
+          "details": "Matrix table: true, Rows: 31"
+        }
+      ]
+    },
+    {
+      "viewport": "tablet",
+      "tab": "ChangeLog",
+      "screenshot": "./visual_regression_tests/tablet_overview.png",
+      "tests": [
+        {
+          "name": "ChangeLog Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        }
+      ]
+    },
+    {
+      "viewport": "tablet",
+      "tab": "Policy Explorer",
+      "screenshot": "./visual_regression_tests/tablet_platforms.png",
+      "tests": [
+        {
+          "name": "Policy Explorer Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        },
+        {
+          "name": "Platform Filtering",
+          "status": "pass",
+          "details": "Found 4 policy cards after filtering"
+        },
+        {
+          "name": "Read More Buttons",
+          "status": "pass",
+          "details": "Found 28 read more buttons"
+        }
+      ]
+    },
+    {
+      "viewport": "tablet",
+      "tab": "Analytics & Logs",
+      "screenshot": "./visual_regression_tests/tablet_analytics.png",
+      "tests": [
+        {
+          "name": "System Logs Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        },
+        {
+          "name": "History Filtering",
+          "status": "pass",
+          "details": "Filter dropdown functional"
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "tab": "Policy Matrix",
+      "screenshot": "./visual_regression_tests/desktop_matrix.png",
+      "tests": [
+        {
+          "name": "Matrix Display",
+          "status": "pass",
+          "details": "Matrix table: true, Rows: 31"
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "tab": "ChangeLog",
+      "screenshot": "./visual_regression_tests/desktop_overview.png",
+      "tests": [
+        {
+          "name": "ChangeLog Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "tab": "Policy Explorer",
+      "screenshot": "./visual_regression_tests/desktop_platforms.png",
+      "tests": [
+        {
+          "name": "Policy Explorer Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        },
+        {
+          "name": "Platform Filtering",
+          "status": "pass",
+          "details": "Found 4 policy cards after filtering"
+        },
+        {
+          "name": "Read More Buttons",
+          "status": "pass",
+          "details": "Found 28 read more buttons"
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "tab": "Analytics & Logs",
+      "screenshot": "./visual_regression_tests/desktop_analytics.png",
+      "tests": [
+        {
+          "name": "System Logs Pagination",
+          "status": "pass",
+          "details": "Pagination container: true, Info element: true"
+        },
+        {
+          "name": "History Filtering",
+          "status": "pass",
+          "details": "Filter dropdown functional"
+        }
+      ]
+    }
+  ]
+}

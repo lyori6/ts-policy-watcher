@@ -166,15 +166,86 @@ class PolicyWatcherDashboard {
         }
     }
 
-    async fetchData(url) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.json();
-        } catch (error) {
-            console.error(`Failed to fetch ${url}:`, error);
-            return null;
+    async fetchData(url, retries = 3, retryDelay = 1000) {
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    const errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                    if (attempt === retries) {
+                        throw new Error(errorMessage);
+                    }
+                    console.warn(`Failed to fetch ${url} (attempt ${attempt}/${retries}): ${errorMessage}. Retrying...`);
+                    await this.delay(retryDelay * attempt); // Exponential backoff
+                    continue;
+                }
+                
+                const data = await response.json();
+                
+                // Validate JSON structure
+                if (data === null || data === undefined) {
+                    throw new Error(`Invalid JSON response: null or undefined`);
+                }
+                
+                // Log successful fetch on retry
+                if (attempt > 1) {
+                    console.log(`Successfully fetched ${url} on attempt ${attempt}`);
+                }
+                
+                return data;
+                
+            } catch (error) {
+                const isLastAttempt = attempt === retries;
+                const errorDetails = {
+                    url: url,
+                    attempt: attempt,
+                    totalRetries: retries,
+                    error: error.message,
+                    isNetworkError: error.name === 'TypeError',
+                    isJSONError: error.name === 'SyntaxError'
+                };
+                
+                if (isLastAttempt) {
+                    console.error(`Final attempt failed for ${url}:`, errorDetails);
+                    this.reportFetchError(url, errorDetails);
+                    return null;
+                } else {
+                    console.warn(`Fetch attempt ${attempt}/${retries} failed for ${url}:`, errorDetails);
+                    await this.delay(retryDelay * attempt);
+                }
+            }
         }
+        return null;
+    }
+    
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    reportFetchError(url, errorDetails) {
+        // Store error for diagnostics
+        if (!window.dashboardErrors) {
+            window.dashboardErrors = [];
+        }
+        
+        const errorReport = {
+            timestamp: new Date().toISOString(),
+            url: url,
+            details: errorDetails,
+            userAgent: navigator.userAgent,
+            connectionType: navigator.connection ? navigator.connection.effectiveType : 'unknown'
+        };
+        
+        window.dashboardErrors.push(errorReport);
+        
+        // Keep only last 10 errors to prevent memory issues
+        if (window.dashboardErrors.length > 10) {
+            window.dashboardErrors = window.dashboardErrors.slice(-10);
+        }
+        
+        // Show user-friendly error notification
+        this.showDataLoadError(url, errorDetails);
     }
 
     renderDashboard() {
@@ -600,9 +671,60 @@ class PolicyWatcherDashboard {
     }
 
     renderAnalytics() {
-        this.renderWeeklyPlatformChart();
-        this.renderPlatformActivity();
-        this.renderPerformanceTrends();
+        console.log('Rendering analytics with data:', {
+            runLogEntries: this.runLogData ? this.runLogData.length : 0,
+            summariesEntries: this.summariesData ? Object.keys(this.summariesData).length : 0,
+            weeklySummariesEntries: this.weeklySummariesData ? Object.keys(this.weeklySummariesData).length : 0,
+            platformEntries: this.platformData ? this.platformData.length : 0
+        });
+        
+        try {
+            this.renderWeeklyPlatformChart();
+            this.renderPlatformActivity();
+            this.renderPerformanceTrends();
+            this.renderRecentChanges();
+        } catch (error) {
+            console.error('Error rendering analytics:', error);
+            this.showAnalyticsError(error);
+        }
+    }
+    
+    showAnalyticsError(error) {
+        const analyticsSection = document.getElementById('analytics');
+        if (!analyticsSection) return;
+        
+        const errorHtml = `
+            <div class="card full-width">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line-down" style="font-size: 3rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
+                    <h3>Analytics Temporarily Unavailable</h3>
+                    <p>There was an issue loading the analytics data. This is usually temporary.</p>
+                    <div class="error-details" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+                        <strong>Error details:</strong><br>
+                        <code style="word-break: break-all;">${error.message}</code>
+                    </div>
+                    <div class="error-actions">
+                        <button class="btn btn-primary" onclick="window.dashboardInstance.renderAnalytics()" style="margin-right: 0.5rem;">
+                            <i class="fas fa-redo"></i> Retry Analytics
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.reload()">
+                            <i class="fas fa-sync"></i> Refresh Page
+                        </button>
+                    </div>
+                    <details style="margin-top: 1rem; text-align: left;">
+                        <summary>Troubleshooting Tips</summary>
+                        <ul>
+                            <li>Check that all data files are properly generated</li>
+                            <li>Verify your internet connection</li>
+                            <li>Try refreshing the page</li>
+                            <li>Check the browser console for more details</li>
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        `;
+        
+        analyticsSection.innerHTML = errorHtml;
     }
 
     renderMatrix() {
@@ -1740,6 +1862,284 @@ class PolicyWatcherDashboard {
         
         document.querySelector('main').innerHTML = errorMessage;
     }
+    
+    showDataLoadError(url, errorDetails) {
+        // Show a non-intrusive error notification for individual data loading failures
+        const errorId = `error-${Date.now()}`;
+        const fileName = url.split('/').pop();
+        
+        let errorType = 'Data Loading Error';
+        let suggestions = [];
+        
+        if (errorDetails.isNetworkError) {
+            errorType = 'Network Error';
+            suggestions = [
+                'Check your internet connection',
+                'Try refreshing the page',
+                'Verify the server is running'
+            ];
+        } else if (errorDetails.isJSONError) {
+            errorType = 'Data Format Error';
+            suggestions = [
+                'The data file may be corrupted',
+                'Try refreshing the page',
+                'Contact the administrator'
+            ];
+        } else if (errorDetails.error.includes('404')) {
+            errorType = 'File Not Found';
+            suggestions = [
+                'The data file may not exist yet',
+                'Run the data collection script',
+                'Check if the repository is properly configured'
+            ];
+        } else {
+            suggestions = [
+                'Try refreshing the page',
+                'Check the browser console for more details',
+                'Contact support if the problem persists'
+            ];
+        }
+        
+        const errorHtml = `
+            <div id="${errorId}" class="data-error-notification">
+                <div class="error-content">
+                    <div class="error-header">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <strong>${errorType}</strong>
+                        <button class="error-dismiss" onclick="document.getElementById('${errorId}').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="error-details">
+                        <p>Failed to load <code>${fileName}</code></p>
+                        <details>
+                            <summary>Error Details</summary>
+                            <ul>
+                                <li><strong>URL:</strong> ${url}</li>
+                                <li><strong>Error:</strong> ${errorDetails.error}</li>
+                                <li><strong>Attempts:</strong> ${errorDetails.totalRetries}</li>
+                            </ul>
+                        </details>
+                        <div class="error-suggestions">
+                            <strong>Suggestions:</strong>
+                            <ul>
+                                ${suggestions.map(s => `<li>${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <button class="retry-button" onclick="window.dashboardInstance.retryDataLoad('${url}')">
+                            <i class="fas fa-redo"></i> Retry Loading
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add error notification to page
+        let errorContainer = document.getElementById('error-notifications');
+        if (!errorContainer) {
+            errorContainer = document.createElement('div');
+            errorContainer.id = 'error-notifications';
+            errorContainer.className = 'error-notifications-container';
+            document.body.appendChild(errorContainer);
+        }
+        
+        errorContainer.insertAdjacentHTML('beforeend', errorHtml);
+        
+        // Auto-dismiss after 10 seconds
+        setTimeout(() => {
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.remove();
+            }
+        }, 10000);
+    }
+    
+    async retryDataLoad(url) {
+        console.log(`Retrying data load for: ${url}`);
+        
+        // Show loading indicator
+        const retryButtons = document.querySelectorAll(`button[onclick*="${url}"]`);
+        retryButtons.forEach(btn => {
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Retrying...';
+            btn.disabled = true;
+        });
+        
+        try {
+            const data = await this.fetchData(url);
+            
+            if (data) {
+                // Update the appropriate data property
+                if (url.includes('run_log.json')) {
+                    this.runLogData = data;
+                    this.runData = data;
+                } else if (url.includes('summaries.json')) {
+                    this.summariesData = data;
+                } else if (url.includes('weekly_summaries.json')) {
+                    this.weeklySummariesData = data;
+                } else if (url.includes('platform_urls.json')) {
+                    this.platformData = data;
+                }
+                
+                // Re-render affected components
+                this.renderDashboard();
+                
+                // Remove error notifications for this URL
+                const errorNotifications = document.querySelectorAll(`[id^="error-"][onclick*="${url}"]`);
+                errorNotifications.forEach(notification => notification.remove());
+                
+                console.log(`Successfully reloaded data from: ${url}`);
+            }
+        } catch (error) {
+            console.error(`Retry failed for ${url}:`, error);
+        } finally {
+            // Re-enable retry buttons
+            retryButtons.forEach(btn => {
+                btn.innerHTML = '<i class="fas fa-redo"></i> Retry Loading';
+                btn.disabled = false;
+            });
+        }
+    }
+    
+    // System Diagnostics and Monitoring
+    generateDiagnosticReport() {
+        const report = {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            connectionInfo: navigator.connection ? {
+                effectiveType: navigator.connection.effectiveType,
+                downlink: navigator.connection.downlink,
+                rtt: navigator.connection.rtt
+            } : 'unavailable',
+            memoryInfo: performance.memory ? {
+                usedJSHeapSize: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024) + ' MB',
+                totalJSHeapSize: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024) + ' MB'
+            } : 'unavailable',
+            dataStatus: {
+                runLog: {
+                    loaded: !!this.runLogData,
+                    entries: this.runLogData ? this.runLogData.length : 0
+                },
+                summaries: {
+                    loaded: !!this.summariesData,
+                    entries: this.summariesData ? Object.keys(this.summariesData).length : 0
+                },
+                weeklySummaries: {
+                    loaded: !!this.weeklySummariesData,
+                    entries: this.weeklySummariesData ? Object.keys(this.weeklySummariesData).filter(k => !k.startsWith('_')).length : 0
+                },
+                platformData: {
+                    loaded: !!this.platformData,
+                    entries: this.platformData ? this.platformData.length : 0
+                }
+            },
+            errors: window.dashboardErrors || [],
+            performanceEntries: performance.getEntriesByType('navigation').map(entry => ({
+                type: entry.type,
+                loadEventEnd: Math.round(entry.loadEventEnd),
+                domContentLoadedEventEnd: Math.round(entry.domContentLoadedEventEnd),
+                connectEnd: Math.round(entry.connectEnd),
+                responseEnd: Math.round(entry.responseEnd)
+            }))
+        };
+        
+        return report;
+    }
+    
+    showDiagnosticModal() {
+        const report = this.generateDiagnosticReport();
+        const modalHtml = `
+            <div id="diagnostic-modal" class="modal" style="display: block;">
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-stethoscope"></i> System Diagnostics</h2>
+                        <span class="close-button" onclick="document.getElementById('diagnostic-modal').remove()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="diagnostic-sections">
+                            <div class="diagnostic-section">
+                                <h3><i class="fas fa-database"></i> Data Status</h3>
+                                <div class="status-grid">
+                                    ${Object.entries(report.dataStatus).map(([key, status]) => `
+                                        <div class="status-item ${status.loaded ? 'success' : 'error'}">
+                                            <strong>${key.replace(/([A-Z])/g, ' $1').toLowerCase().replace(/^./, str => str.toUpperCase())}</strong>
+                                            <span class="status-indicator">
+                                                <i class="fas fa-${status.loaded ? 'check-circle' : 'times-circle'}"></i>
+                                                ${status.loaded ? `${status.entries} entries` : 'Not loaded'}
+                                            </span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="diagnostic-section">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Recent Errors (${report.errors.length})</h3>
+                                ${report.errors.length > 0 ? `
+                                    <div class="error-list">
+                                        ${report.errors.slice(-5).map(error => `
+                                            <div class="error-item">
+                                                <div class="error-timestamp">${new Date(error.timestamp).toLocaleString()}</div>
+                                                <div class="error-url">${error.url.split('/').pop()}</div>
+                                                <div class="error-message">${error.details.error}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : '<p class="no-errors">No recent errors detected.</p>'}
+                            </div>
+                            
+                            <div class="diagnostic-section">
+                                <h3><i class="fas fa-tachometer-alt"></i> Performance</h3>
+                                <div class="performance-grid">
+                                    <div class="perf-item">
+                                        <strong>Page Load</strong>
+                                        <span>${report.performanceEntries[0] ? Math.round(report.performanceEntries[0].loadEventEnd) + 'ms' : 'N/A'}</span>
+                                    </div>
+                                    <div class="perf-item">
+                                        <strong>DOM Ready</strong>
+                                        <span>${report.performanceEntries[0] ? Math.round(report.performanceEntries[0].domContentLoadedEventEnd) + 'ms' : 'N/A'}</span>
+                                    </div>
+                                    <div class="perf-item">
+                                        <strong>Memory Usage</strong>
+                                        <span>${report.memoryInfo !== 'unavailable' ? report.memoryInfo.usedJSHeapSize : 'N/A'}</span>
+                                    </div>
+                                    <div class="perf-item">
+                                        <strong>Connection</strong>
+                                        <span>${report.connectionInfo !== 'unavailable' ? report.connectionInfo.effectiveType : 'N/A'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="diagnostic-actions">
+                            <button class="btn btn-primary" onclick="navigator.clipboard.writeText(JSON.stringify(${JSON.stringify(report)}, null, 2)); alert('Diagnostic report copied to clipboard!')">
+                                <i class="fas fa-copy"></i> Copy Full Report
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.dashboardInstance.clearErrors()">
+                                <i class="fas fa-broom"></i> Clear Error History
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.location.reload()">
+                                <i class="fas fa-sync"></i> Reload Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+    
+    clearErrors() {
+        window.dashboardErrors = [];
+        console.log('Error history cleared');
+        
+        // Remove error notifications
+        const errorContainer = document.getElementById('error-notifications');
+        if (errorContainer) {
+            errorContainer.innerHTML = '';
+        }
+        
+        alert('Error history has been cleared.');
+    }
 
     // Health Alert Management
     checkAndShowHealthAlerts() {
@@ -2825,3 +3225,36 @@ window.onclick = function(event) {
         runLogModal.style.display = 'none';
     }
 }
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(event) {
+    // Ctrl+D - Show diagnostics modal
+    if (event.ctrlKey && event.key === 'd') {
+        event.preventDefault();
+        if (window.dashboardInstance) {
+            window.dashboardInstance.showDiagnosticModal();
+        }
+    }
+    
+    // Escape - Close any open modal
+    if (event.key === 'Escape') {
+        const modals = document.querySelectorAll('.modal[style*="display: block"], .modal[style="display: block;"]');
+        modals.forEach(modal => {
+            if (modal.id === 'diagnostic-modal' || modal.id === 'policy-summary-modal' || modal.id === 'run-log-modal') {
+                modal.remove ? modal.remove() : (modal.style.display = 'none');
+            }
+        });
+    }
+    
+    // F5 - Refresh data (but not page)
+    if (event.key === 'F5' && !event.shiftKey) {
+        event.preventDefault();
+        if (window.dashboardInstance) {
+            console.log('Refreshing dashboard data...');
+            window.dashboardInstance.loadAllData().then(() => {
+                window.dashboardInstance.renderDashboard();
+                console.log('Dashboard data refreshed');
+            });
+        }
+    }
+});

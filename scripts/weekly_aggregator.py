@@ -180,38 +180,140 @@ class WeeklyAggregator:
             changes_summary=changes_summary
         )
         
-        return self.call_ai_api(prompt)
+        ai_summary = self.call_ai_api(prompt)
+        
+        # Check if AI summary generation failed and provide fallback
+        if ai_summary.startswith("Error generating AI summary"):
+            print(f"WARNING: AI summary generation failed, using fallback summary", file=sys.stderr)
+            return self.generate_fallback_summary(weekly_changes, run_type)
+        
+        return ai_summary
 
-    def call_ai_api(self, prompt):
-        """Call Gemini API with fallback to backup key."""
+    def call_ai_api(self, prompt, max_retries=3):
+        """Call Gemini API with improved error handling and fallback to backup key."""
         if not self.current_api_key:
             return "Error: No GEMINI_API_KEY configured."
         
         genai.configure(api_key=self.current_api_key)
         model = genai.GenerativeModel('gemini-2.5-flash')
         
-        try:
-            response = model.generate_content(prompt)
-            return response.text
-        except Exception as e:
-            error_str = str(e)
-            print(f"ERROR: Gemini API call failed: {error_str}", file=sys.stderr)
-            
-            # Try backup key if quota exceeded
-            if ("429" in error_str or "quota" in error_str.lower()) and not self.using_backup_key and GEMINI_API_KEY_2:
-                print("Switching to backup API key...", file=sys.stderr)
-                self.current_api_key = GEMINI_API_KEY_2
-                self.using_backup_key = True
-                genai.configure(api_key=self.current_api_key)
-                
-                try:
-                    response = model.generate_content(prompt)
-                    print("Successfully used backup API key", file=sys.stderr)
+        for attempt in range(max_retries):
+            try:
+                response = model.generate_content(prompt)
+                if response and response.text:
                     return response.text
-                except Exception as backup_error:
-                    print(f"ERROR: Backup API key failed: {backup_error}", file=sys.stderr)
-            
-            return f"Error generating AI summary: {error_str}"
+                else:
+                    raise Exception("Empty response from Gemini API")
+                    
+            except Exception as e:
+                error_str = str(e)
+                is_final_attempt = attempt == max_retries - 1
+                
+                print(f"ERROR: Gemini API call failed (attempt {attempt + 1}/{max_retries}): {error_str}", file=sys.stderr)
+                
+                # Check if this is a quota/rate limit error
+                is_quota_error = any(keyword in error_str.lower() for keyword in ["429", "quota", "rate", "limit"])
+                
+                # Try backup key if quota exceeded and we haven't tried it yet
+                if is_quota_error and not self.using_backup_key and GEMINI_API_KEY_2:
+                    print("Switching to backup API key...", file=sys.stderr)
+                    self.current_api_key = GEMINI_API_KEY_2
+                    self.using_backup_key = True
+                    genai.configure(api_key=self.current_api_key)
+                    
+                    try:
+                        response = model.generate_content(prompt)
+                        if response and response.text:
+                            print("Successfully used backup API key", file=sys.stderr)
+                            return response.text
+                        else:
+                            raise Exception("Empty response from backup API key")
+                    except Exception as backup_error:
+                        print(f"ERROR: Backup API key failed: {backup_error}", file=sys.stderr)
+                        if is_final_attempt:
+                            return f"Error generating AI summary: Both primary and backup API keys failed. Primary error: {error_str}, Backup error: {backup_error}"
+                        continue
+                
+                # For non-quota errors or if we're on final attempt, apply exponential backoff
+                if not is_final_attempt:
+                    import time
+                    wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s, 4s
+                    print(f"Retrying in {wait_time} seconds...", file=sys.stderr)
+                    time.sleep(wait_time)
+                else:
+                    # Final attempt failed - provide helpful error message
+                    if is_quota_error:
+                        return f"Error generating AI summary: API quota exceeded. Please check your Gemini API quota and billing. Original error: {error_str}"
+                    else:
+                        return f"Error generating AI summary after {max_retries} attempts: {error_str}"
+        
+        return f"Error generating AI summary: Maximum retries ({max_retries}) exceeded"
+
+    def generate_fallback_summary(self, weekly_changes, run_type):
+        """Generate a basic summary when AI generation fails."""
+        # Count changes by platform
+        platform_changes = {}
+        total_changes = 0
+        
+        for change in weekly_changes:
+            total_changes += len(change['changed_files'])
+            for file_path in change['changed_files']:
+                policy_key = file_path.split('/')[-2] if '/' in file_path else file_path
+                # Extract platform from policy key (e.g., "tiktok-community-guidelines" -> "TikTok")
+                platform = policy_key.split('-')[0].capitalize()
+                if platform in ['Tiktok']: platform = 'TikTok'
+                elif platform in ['Youtube']: platform = 'YouTube'
+                elif platform in ['Meta', 'Instagram', 'Facebook']: platform = 'Meta'
+                elif platform in ['Whatnot']: platform = 'Whatnot'
+                elif platform in ['Twitch']: platform = 'Twitch'
+                
+                platform_changes[platform] = platform_changes.get(platform, 0) + 1
+        
+        # Generate fallback summary
+        week_range = f"{self.week_start.strftime('%B %d')} to {self.week_ending.strftime('%B %d, %Y')}"
+        
+        fallback_summary = f"""# Weekly Trust & Safety Policy Summary
+
+**Week Period:** {week_range}
+**Run Information:** {run_type} run generated on {self.run_date.strftime('%B %d, %Y at %H:%M UTC')}
+**Note:** This summary was generated using fallback mode due to AI service unavailability.
+
+---
+
+## Executive Summary
+
+During the week of {week_range}, a total of **{total_changes} policy changes** were detected across **{len(platform_changes)} platform(s)**.
+
+## Platform Activity
+
+"""
+        
+        for platform, count in sorted(platform_changes.items(), key=lambda x: x[1], reverse=True):
+            fallback_summary += f"* **{platform}:** {count} change(s) detected\n"
+        
+        fallback_summary += f"""
+
+## Changes Summary
+
+The following policy changes were detected during this period:
+
+"""
+        
+        for change in weekly_changes:
+            commit_date = change['commit']['date']
+            for file_path in change['changed_files']:
+                policy_key = file_path.split('/')[-2] if '/' in file_path else file_path
+                policy_name = policy_key.replace('-', ' ').title()
+                fallback_summary += f"* **{policy_name}** (Updated: {commit_date[:10]})\n"
+        
+        fallback_summary += f"""
+
+---
+
+*This summary was automatically generated in fallback mode. For detailed analysis, please run the weekly aggregator again when AI services are available.*
+"""
+        
+        return fallback_summary
 
     def save_weekly_summary(self, summary_text, weekly_changes):
         """Save the weekly summary with metadata."""
