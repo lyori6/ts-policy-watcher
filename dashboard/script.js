@@ -5,14 +5,16 @@ class PolicyWatcherDashboard {
         // Dynamically determine branch based on deployment URL
         const branch = this.detectBranch();
         
-        // GitHub raw content URLs (pin data to main for consistency across branches)
+        // GitHub raw content URLs (always use live data from repo)
         this.DATA_BRANCH = 'main';
         this.DATA_RAW_BASE = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${this.DATA_BRANCH}`;
+        
         this.LOG_FILE_PATH = `${this.DATA_RAW_BASE}/run_log.json`;
         this.SUMMARIES_PATH = `${this.DATA_RAW_BASE}/summaries.json`;
         this.PLATFORM_URLS_PATH = `${this.DATA_RAW_BASE}/platform_urls.json`;
         this.HEALTH_DATA_PATH = `${this.DATA_RAW_BASE}/url_health.json`;
         this.HEALTH_ALERTS_PATH = `${this.DATA_RAW_BASE}/health_alerts.json`;
+        this.WEEKLY_SUMMARIES_PATH = `${this.DATA_RAW_BASE}/weekly_summaries.json`;
         
         console.log(`🌐 Dashboard using branch: ${branch}`);
 
@@ -22,6 +24,8 @@ class PolicyWatcherDashboard {
         this.summariesData = {};
         this.platformData = [];
         this.healthData = null;  // URL health monitoring data
+        this.weeklySummariesData = {};  // Weekly summaries data
+        this.currentWeek = null;  // Currently selected week
         this.currentPlatform = 'all';
 
         this.init();
@@ -106,8 +110,8 @@ class PolicyWatcherDashboard {
             case 'matrix':
                 this.renderMatrix();
                 break;
-            case 'overview':
-                this.renderOverview();
+            case 'weekly':
+                this.renderWeeklyUpdate();
                 break;
             case 'platforms':
                 this.renderPolicyExplorer();
@@ -115,18 +119,20 @@ class PolicyWatcherDashboard {
             case 'analytics':
                 this.renderAnalytics();
                 this.renderHistory(); // Also load system logs
+                this.renderRecentChanges(); // Render recent changes in analytics
                 break;
         }
     }
 
     async loadAllData() {
         try {
-            const [runLogResponse, summariesResponse, platformsResponse, healthResponse, healthAlertsResponse] = await Promise.all([
+            const [runLogResponse, summariesResponse, platformsResponse, healthResponse, healthAlertsResponse, weeklySummariesResponse] = await Promise.all([
                 this.fetchData(this.LOG_FILE_PATH),
                 this.fetchData(this.SUMMARIES_PATH),
                 this.fetchData(this.PLATFORM_URLS_PATH),
                 this.fetchData(this.HEALTH_DATA_PATH),
-                this.fetchData(this.HEALTH_ALERTS_PATH)
+                this.fetchData(this.HEALTH_ALERTS_PATH),
+                this.fetchData(this.WEEKLY_SUMMARIES_PATH)
             ]);
 
             this.runLogData = runLogResponse || [];
@@ -135,6 +141,7 @@ class PolicyWatcherDashboard {
             this.platformData = platformsResponse || [];
             this.healthData = healthResponse || null;
             this.healthAlerts = healthAlertsResponse || [];
+            this.weeklySummariesData = weeklySummariesResponse || {};
 
             console.log('Data loaded successfully:', {
                 runs: this.runLogData.length,
@@ -142,6 +149,7 @@ class PolicyWatcherDashboard {
                 platforms: this.platformData.length,
                 healthData: this.healthData ? 'loaded' : 'not available',
                 healthAlerts: this.healthAlerts ? this.healthAlerts.length : 0,
+                weeklySummaries: Object.keys(this.weeklySummariesData).filter(k => !k.startsWith('_')).length,
                 systemUptime: this.healthData?.system_health?.system_uptime || 'N/A',
                 lastRunStatus: this.runLogData.length > 0 ? this.runLogData[0].status : 'no data'
             });
@@ -172,7 +180,7 @@ class PolicyWatcherDashboard {
     renderDashboard() {
         this.updateHeaderStats();
         this.renderMatrix(); // Start with Policy Matrix as default tab
-        this.renderOverview(); // Prepare overview data too
+        this.renderWeeklyUpdate(); // Prepare weekly data
     }
 
     updateHeaderStats() {
@@ -185,11 +193,6 @@ class PolicyWatcherDashboard {
         
         // Always update system status after data is loaded
         this.updateSystemStatus();
-    }
-
-    renderOverview() {
-        this.renderRecentChanges();
-        this.renderIntelligencePanel();
     }
 
     renderRecentChanges() {
@@ -1781,6 +1784,201 @@ class PolicyWatcherDashboard {
             });
         });
     }
+
+    // Weekly Update Methods
+    renderWeeklyUpdate() {
+        this.populateWeekSelector();
+        this.renderLatestWeeklySummary();
+    }
+
+    populateWeekSelector() {
+        const weekSelector = document.getElementById('week-selector');
+        if (!weekSelector) return;
+
+        // Get all available weeks (excluding metadata)
+        const weeks = Object.keys(this.weeklySummariesData)
+            .filter(key => !key.startsWith('_'))
+            .sort((a, b) => b.localeCompare(a)); // Most recent first
+
+        weekSelector.innerHTML = '';
+
+        if (weeks.length === 0) {
+            weekSelector.innerHTML = '<option value="">No weekly summaries available</option>';
+            return;
+        }
+
+        weeks.forEach((weekKey, index) => {
+            const weekData = this.weeklySummariesData[weekKey];
+            const metadata = weekData.run_metadata;
+            const startDate = new Date(metadata.week_start);
+            const endDate = new Date(metadata.week_end);
+            
+            const option = document.createElement('option');
+            option.value = weekKey;
+            option.textContent = `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            
+            if (index === 0) {
+                option.selected = true;
+                this.currentWeek = weekKey;
+            }
+            
+            weekSelector.appendChild(option);
+        });
+
+        // Add event listener for week selection
+        weekSelector.addEventListener('change', (e) => {
+            this.currentWeek = e.target.value;
+            this.displayWeeklySummary(this.currentWeek);
+        });
+    }
+
+    renderLatestWeeklySummary() {
+        const weeks = Object.keys(this.weeklySummariesData)
+            .filter(key => !key.startsWith('_'))
+            .sort((a, b) => b.localeCompare(a));
+
+        if (weeks.length > 0) {
+            this.currentWeek = weeks[0];
+            this.displayWeeklySummary(this.currentWeek);
+        } else {
+            this.displayNoWeeklyData();
+        }
+    }
+
+    displayWeeklySummary(weekKey) {
+        if (!weekKey || !this.weeklySummariesData[weekKey]) {
+            this.displayNoWeeklyData();
+            return;
+        }
+
+        const weekData = this.weeklySummariesData[weekKey];
+        const metadata = weekData.run_metadata;
+
+        // Update metadata display
+        this.updateWeeklyMetadata(metadata);
+
+        // Update stats
+        this.updateWeeklyStats(weekData);
+
+        // Update summary content
+        this.updateWeeklySummaryContent(weekData.summary);
+    }
+
+    updateWeeklyMetadata(metadata) {
+        const metadataContainer = document.getElementById('weekly-metadata');
+        if (!metadataContainer) return;
+
+        const startDate = new Date(metadata.week_start);
+        const endDate = new Date(metadata.week_end);
+        const runDate = new Date(metadata.run_date);
+
+        const runTypeClass = metadata.run_type === 'manual' ? 'manual' : 'scheduled';
+        const runTypeText = metadata.run_type === 'manual' ? 'Manual Test Run' : 'Scheduled Friday Run';
+
+        metadataContainer.innerHTML = `
+            <div class="weekly-info">
+                <div class="weekly-date-range">
+                    Week of ${startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </div>
+                <div class="weekly-generated-date">
+                    Generated on ${runDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${runDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} UTC
+                </div>
+            </div>
+            <div class="run-type-badge ${runTypeClass}">
+                ${runTypeText}
+            </div>
+        `;
+    }
+
+    updateWeeklyStats(weekData) {
+        // Update changes count
+        const changesCountEl = document.getElementById('weekly-changes-count');
+        if (changesCountEl) {
+            changesCountEl.textContent = weekData.changes_count || 0;
+        }
+
+        // Update platforms count
+        const platformsCountEl = document.getElementById('weekly-platforms-count');
+        if (platformsCountEl && weekData.changed_policies) {
+            const uniquePlatforms = new Set();
+            weekData.changed_policies.forEach(policy => {
+                const platform = policy.policy_key.split('-')[0];
+                uniquePlatforms.add(platform);
+            });
+            platformsCountEl.textContent = uniquePlatforms.size;
+        }
+
+        // Update run date
+        const runDateEl = document.getElementById('weekly-run-date');
+        if (runDateEl && weekData.run_metadata) {
+            const runDate = new Date(weekData.run_metadata.run_date);
+            runDateEl.textContent = runDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+    }
+
+    updateWeeklySummaryContent(summaryText) {
+        const contentContainer = document.getElementById('weekly-summary-content');
+        if (!contentContainer) return;
+
+        if (!summaryText || summaryText.trim() === '') {
+            contentContainer.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-info-circle"></i>
+                    <p>No summary available for this week.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Convert markdown to HTML (basic conversion)
+        const htmlContent = this.markdownToHtml(summaryText);
+        contentContainer.innerHTML = `<div class="weekly-summary-content">${htmlContent}</div>`;
+    }
+
+    markdownToHtml(markdown) {
+        // Basic markdown conversion for weekly summaries
+        return markdown
+            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+            .replace(/^\* (.*$)/gim, '<li>$1</li>')
+            .replace(/^\- (.*$)/gim, '<li>$1</li>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/^(?!<[h1-6]|<li|<\/li|<p|<\/p)(.+)$/gim, '<p>$1</p>')
+            .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+            .replace(/<\/ul>\s*<ul>/g, '');
+    }
+
+    displayNoWeeklyData() {
+        const contentContainer = document.getElementById('weekly-summary-content');
+        const metadataContainer = document.getElementById('weekly-metadata');
+        
+        if (contentContainer) {
+            contentContainer.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-calendar-times"></i>
+                    <p>No weekly summaries available yet. Run the weekly aggregator to generate summaries.</p>
+                </div>
+            `;
+        }
+
+        if (metadataContainer) {
+            metadataContainer.innerHTML = `
+                <div class="weekly-info">
+                    <div class="weekly-date-range">No weekly data available</div>
+                    <div class="weekly-generated-date">Run the weekly aggregator to generate summaries</div>
+                </div>
+            `;
+        }
+
+        // Reset stats
+        ['weekly-changes-count', 'weekly-platforms-count', 'weekly-run-date'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = '-';
+        });
+    }
 }
 
 // Global function for opening policy modal
@@ -1935,7 +2133,8 @@ function exportMatrix() {
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.policyDashboard = new PolicyWatcherDashboard();
+    window.dashboardInstance = new PolicyWatcherDashboard();
+    window.policyDashboard = window.dashboardInstance; // Keep for compatibility
 });
 
 
@@ -2409,6 +2608,22 @@ function togglePolicySummary(summaryId) {
         }
     }
 }
+
+// Global weekly refresh function
+window.refreshWeeklyData = function() {
+    if (window.dashboardInstance) {
+        console.log('Refreshing weekly data...');
+        window.dashboardInstance.fetchData(window.dashboardInstance.WEEKLY_SUMMARIES_PATH)
+            .then(data => {
+                window.dashboardInstance.weeklySummariesData = data || {};
+                window.dashboardInstance.renderWeeklyUpdate();
+                console.log('✅ Weekly data refreshed');
+            })
+            .catch(error => {
+                console.error('❌ Failed to refresh weekly data:', error);
+            });
+    }
+};
 
 // Make function globally available
 window.togglePolicySummary = togglePolicySummary;

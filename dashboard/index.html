@@ -108,8 +108,8 @@
         <button class="nav-tab active" data-tab="matrix">
             <i class="fas fa-table"></i> Policy Matrix
         </button>
-        <button class="nav-tab" data-tab="overview">
-            <i class="fas fa-history"></i> ChangeLog
+        <button class="nav-tab" data-tab="weekly">
+            <i class="fas fa-calendar-week"></i> Weekly Update
         </button>
         <button class="nav-tab" data-tab="platforms">
             <i class="fas fa-building"></i> Policy Explorer
@@ -173,14 +173,70 @@
             </div>
         </section>
 
-        <!-- Overview Tab -->
-        <section id="overview" class="tab-content">
-            <div class="card recent-changes-card full-width">
-                <div class="card-header">
-                    <h2><i class="fas fa-history"></i> Recent Policy Changes</h2>
+        <!-- Weekly Update Tab -->
+        <section id="weekly" class="tab-content">
+            <div class="weekly-header">
+                <div class="weekly-header-main">
+                    <h2><i class="fas fa-calendar-week"></i> Weekly Policy Summary</h2>
+                    <div class="weekly-controls">
+                        <select id="week-selector" class="week-selector">
+                            <option value="">Loading weeks...</option>
+                        </select>
+                        <button class="refresh-btn" onclick="refreshWeeklyData()" title="Refresh">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div id="recent-changes-list">Loading...</div>
+                <div class="weekly-metadata" id="weekly-metadata">
+                    <!-- Run metadata will be populated by JS -->
+                </div>
+            </div>
+            
+            <div class="weekly-content">
+                <div class="card weekly-summary-card full-width">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Summary</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="weekly-summary-content">
+                            <div class="loading-state">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Loading weekly summary...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="weekly-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="weekly-changes-count">-</div>
+                            <div class="stat-label">Policy Changes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="weekly-platforms-count">-</div>
+                            <div class="stat-label">Platforms Affected</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="weekly-run-date">-</div>
+                            <div class="stat-label">Last Generated</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -258,6 +314,16 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Recent Policy Changes Card -->
+            <div class="card recent-changes-card full-width">
+                <div class="card-header">
+                    <h2><i class="fas fa-history"></i> Recent Policy Changes</h2>
+                </div>
+                <div class="card-body">
+                    <div id="recent-changes-list">Loading...</div>
                 </div>
             </div>
         </section>

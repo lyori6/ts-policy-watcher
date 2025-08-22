@@ -1,0 +1,123 @@
+# .github/workflows/weekly-summary.yml
+
+name: 'Weekly Policy Summary'
+
+on:
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      week_ending:
+        description: 'Week ending date (YYYY-MM-DD, optional)'
+        required: false
+        type: string
+
+  # Automated weekly schedule - Fridays at 12:00 PM Pacific (19:00 UTC)
+  schedule:
+    - cron: '0 19 * * 5'
+
+concurrency:
+  group: weekly-summary-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  weekly-summary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      # Step 1: Check out the repository code
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for weekly changes
+
+      # Step 2: Set up Python environment
+      - name: 'Set up Python 3.11'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install dependencies
+      - name: 'Install Dependencies'
+        run: |
+          pip install -r requirements.txt
+
+      # Step 4: Generate weekly summary
+      - name: 'Generate Weekly Policy Summary'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          SEND_IMMEDIATE_EMAILS: "false"  # Enable weekly emails
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Running manual weekly summary..."
+            if [ -n "${{ github.event.inputs.week_ending }}" ]; then
+              python scripts/weekly_aggregator.py --manual --week-ending="${{ github.event.inputs.week_ending }}"
+            else
+              python scripts/weekly_aggregator.py --manual
+            fi
+          else
+            echo "Running scheduled weekly summary..."
+            python scripts/weekly_aggregator.py
+          fi
+
+      # Step 5: Commit the weekly summary
+      - name: 'Commit Weekly Summary'
+        id: commit
+        run: |
+          git config user.name "Policy Watch Bot"
+          git config user.email "bot@github.com"
+          git add weekly_summaries.json
+          # Check if there are changes to commit
+          if ! git diff --staged --quiet; then
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              git commit -m "WEEKLY: Manual weekly summary generated"
+            else
+              git commit -m "WEEKLY: Automated weekly summary for $(date +'%Y-%m-%d')"
+            fi
+            echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            echo "changes_made=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No changes to commit."
+            echo "commit_sha=" >> "$GITHUB_OUTPUT"
+            echo "changes_made=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Step 6: Pull latest changes to avoid conflicts
+      - name: 'Pull Latest Changes'
+        if: steps.commit.outputs.changes_made == 'true'
+        run: |
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            echo "Found uncommitted changes, stashing them temporarily"
+            git stash push -m "Temporary stash before rebase"
+            git pull origin main --rebase
+            git stash pop
+          else
+            git pull origin main --rebase
+          fi
+
+      # Step 7: Push the changes back to the main branch
+      - name: 'Push Weekly Summary'
+        if: steps.commit.outputs.changes_made == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+
+      # Step 8: Summary output
+      - name: 'Weekly Summary Complete'
+        run: |
+          if [ "${{ steps.commit.outputs.changes_made }}" = "true" ]; then
+            echo "✅ Weekly summary generated and committed"
+          else
+            echo "ℹ️ Weekly summary generated but no new data to commit"
+          fi
+          
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "🔧 Manual run completed"
+          else
+            echo "📅 Scheduled weekly run completed"
+          fi
