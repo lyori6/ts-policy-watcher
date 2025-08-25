@@ -136,5 +136,186 @@
         "commit_hash": "2e333c52608164ac99372b28fd079f82e97a74b7"
       }
     ]
+  },
+  "2025-08-16_to_2025-08-22": {
+    "run_metadata": {
+      "run_date": "2025-08-25T04:35:18.096667+00:00",
+      "run_type": "manual",
+      "week_start": "2025-08-16",
+      "week_end": "2025-08-22",
+      "generated_by": "manual_test"
+    },
+    "summary": "**Trust & Safety Weekly Policy Summary**\n**Week Period:** August 16, 2025 to August 22, 2025\n**Report Generated:** August 25, 2025 at 04:35 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week was marked by significant proactive policy updates from Twitch, particularly a broad expansion of its Community Guidelines. Key takeaways include:\n\n*   **Major Twitch Safety Expansion:** Twitch introduced comprehensive updates to its Community Guidelines, significantly broadening enforcement scope to include severe off-service conduct, clarifying rules around self-destructive behavior, and instituting stricter youth safety measures.\n*   **YouTube Feedback Channel Removal:** YouTube removed a user feedback mechanism from its \"hiding users\" feature page, potentially reducing direct user signal for product and T&S teams.\n*   **Other Minor & Initial Policies:** Twitch made minor formatting changes to its Monetized Streamer Agreement, and several key Twitch policies (DMCA, Privacy, Terms of Sale, Terms of Service) were observed as \"initial versions\" within the tracking system this week, indicating new formal establishment or first-time tracking.\n\n### 2. Platform Highlights\n\n#### Twitch\n\n*   **Community Guidelines (Multiple updates from Aug 18 - Aug 22):** A substantial overhaul of Twitch's Community Guidelines was rolled out through several updates this week.\n    *   **Expanded Off-Service Conduct Policy:** Twitch can now take action against severe harmful behaviors (e.g., deadly violence, doxxing, swatting, sexual exploitation of youth) occurring *off-platform* but impacting the Twitch community. A new **Off-Service Investigations Team (OSIT@twitch.tv)** has been established for reporting.\n    *   **Enhanced Self-Destructive Behavior Guidelines:** Clearer examples and explicit prohibitions were added for content glorifying self-harm, misuse of substances, dangerous/distracted driving, and monetized activities encouraging physical harm.\n    *   **Stricter Youth Safety Clarifications:** Explicitly prohibits sexual framing of child-like fictional anime characters (\"lolis\"/\"shotas\"), including for VTubers. Humor regarding sexual relations to minors or falsely stating age under 13 will lead to permanent account deactivation.\n    *   **Introduction to Safety & Enforcement Notes:** A detailed introduction to Twitch's safety philosophy and a section explaining \"Enforcement Notes\" (additional examples to clarify existing policies) were added.\n    *   **Expanded Resource Navigation:** The safety portal's navigation was enhanced with more granular links to detailed guidelines and resources.\n    *   **Impact:** Broader enforcement scope, increased clarity, potential for increased reporting and moderation load, and product implications for reporting flows and moderation tools.\n*   **Monetized Streamer Agreement (Aug 19):**\n    *   **Change:** Cosmetic change in heading levels (from `<h2>` to `<h3>`) for main sections.\n    *   **Impact:** No substantive policy changes affecting eligibility, revenue, or terms.\n*   **DMCA Guidelines, Privacy Policy, Terms of Sale, Terms of Service (Aug 19):**\n    *   **Change:** These policies were logged as \"Initial version\" within the tracking system.\n    *   **Impact:** This indicates these foundational policies are newly established, or have been formally documented/tracked within the system this week. Product teams should be aware of their existence and content as a basis for platform operations and user interactions.\n\n#### YouTube\n\n*   **Hiding Users (Multiple updates from Aug 17 - Aug 22):**\n    *   **Change:** The user feedback form (including issue reporting and free-text suggestions) was completely removed from the \"hiding users\" feature page.\n    *   **Impact:** Eliminates a direct user feedback channel for this feature, leading to a loss of user signal that could inform T&S policy enforcement, identify usability issues, or highlight friction points related to content moderation tools.\n*   **Harassment Policy (Aug 20):**\n    *   **Change:** Added a \"Was this helpful?\" survey and \"Need more help?\" links section to the policy page footer. No changes to the policy content itself.\n    *   **Impact:** Improved user experience for those seeking clarity or additional help. No impact on policy interpretation or enforcement.\n\n### 3. Risk Assessment\n\n*   **HIGH - Twitch Community Guidelines (Off-Service Conduct & Youth Safety):**\n    *   **Risk:** The expanded off-service conduct policy significantly broadens Twitch's intervention capability, potentially leading to increased public scrutiny, complex investigations, and a higher volume of severe reports. Stricter youth safety rules (especially regarding fictional characters and age misrepresentation) carry high reputational and legal risks if not enforced accurately and consistently.\n    *   **Immediate Action Required:** Product and Engineering teams should urgently review reporting flows and moderation tooling requirements to support the new Off-Service Investigations Team and handle anticipated increased report volume and complexity. Legal and Policy teams should ensure robust internal guidelines and external communications are in place.\n*   **MODERATE - YouTube Hiding Users (Removal of Feedback Channel):**\n    *   **Risk:** The loss of direct user feedback for a moderation-related feature can obscure emerging issues, user dissatisfaction, or unintended consequences of the \"hiding users\" functionality. This could lead to a degradation of the user experience or missed opportunities for T&S policy improvements.\n    *   **Immediate Action Required:** Product Manager should investigate the rationale behind the removal and explore alternative mechanisms for gathering user feedback on this feature, particularly from the perspective of safety and moderation effectiveness.\n\n### 4. Trends Analysis\n\n*   **Proactive Safety & Expanded Scope:** Twitch's comprehensive update, particularly the explicit enforcement of severe off-platform conduct, indicates a growing industry trend towards platforms taking a more proactive and expansive role in protecting their communities, even beyond their direct digital borders. This reflects increasing expectations from users, regulators, and the public for platforms to ensure user safety holistically.\n*   **Clarity and Granularity in Policy:** Twitch's introduction of \"Enforcement Notes\" and enhanced resource navigation, alongside more detailed examples for self-destructive and youth safety behaviors, points to an ongoing effort to reduce ambiguity in policies. This aims to improve user understanding, compliance, and consistency in enforcement.\n*   **Operational Demands & Tooling Needs:** Major policy expansions, like Twitch's, inherently increase the operational burden on Trust & Safety teams (reporting, investigation, enforcement). This will drive demand for robust product tooling, advanced detection mechanisms, and scalable human moderation capabilities.\n*   **User Feedback & Data Signal Management:** While Twitch enhanced its policy clarity, YouTube's removal of a feedback channel highlights varying approaches to user signal collection. Losing direct feedback can create blind spots, underscoring the importance of intentional strategies for gathering and leveraging user insights for safety and product improvement.",
+    "changes_count": 21,
+    "changed_policies": [
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-24 02:11:23 +0000",
+        "commit_hash": "26b2b32ee189189fcac432c27060705c1411846d"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-23 18:33:41 +0000",
+        "commit_hash": "b01f4c764b481057722d4b8e6766d797a78fc0ad"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-23 06:36:09 +0000",
+        "commit_hash": "7a857cd7d150782f2d46227951e257f4a8f00512"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-23 01:54:38 +0000",
+        "commit_hash": "6ae8fcccce57917eb8baf14f2de0853e833034c2"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2025-08-23 01:54:38 +0000",
+        "commit_hash": "6ae8fcccce57917eb8baf14f2de0853e833034c2"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-22 18:36:53 +0000",
+        "commit_hash": "aed73bfb93f4cc4b73d6b8d58c01c33de7f6e732"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-22 12:52:53 +0000",
+        "commit_hash": "b5ce0f5e34f228970be78af99568a8972420ebc0"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-22 06:39:13 +0000",
+        "commit_hash": "1767816d1ea2c3bea12fe7b89528338ad74d62c3"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-22 01:57:52 +0000",
+        "commit_hash": "e6458c8f46515f61c2d5432b285d41b346eebb83"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-21 18:36:43 +0000",
+        "commit_hash": "5fad05e21ab8b008720cb7c5d4f198dce9b46909"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-21 12:54:06 +0000",
+        "commit_hash": "241fc68cb4232a38fa9a6592ac4b5bf4d3ecb0bb"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-21 06:49:30 +0000",
+        "commit_hash": "92c336a83d28934134f7130f9040f44516d54ccc"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-21 01:57:45 +0000",
+        "commit_hash": "a2b612700781698a4e27d037d2811e5177752042"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-20 18:50:22 +0000",
+        "commit_hash": "0995a3fadeddace692f8e2e1fead05b92c1d11bc"
+      },
+      {
+        "policy_key": "youtube-harassment-policy",
+        "file_path": "snapshots/production/youtube-harassment-policy/snapshot.html",
+        "commit_date": "2025-08-20 01:58:19 +0000",
+        "commit_hash": "5a093575895291e741a80fa20c345e71fcf949c9"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-19 18:35:50 +0000",
+        "commit_hash": "d27efd6820689e108941c8364107a3abd73a7fae"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-19 06:41:14 +0000",
+        "commit_hash": "5b253c6acf264828931332fe71ce4f85fcf14f04"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-19 06:41:14 +0000",
+        "commit_hash": "5b253c6acf264828931332fe71ce4f85fcf14f04"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-18 21:37:18 -0700",
+        "commit_hash": "d3bf7598365ec3d2ca5b68ea296d9bef81aa6474"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-18 19:47:41 -0700",
+        "commit_hash": "a7526e85a6849d594bb07ad235590546b97d70ac"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-19 02:24:32 +0000",
+        "commit_hash": "a16c80b363248ca8dccb046872f982fbe96c272d"
+      },
+      {
+        "policy_key": "twitch-dmca-guidelines",
+        "file_path": "snapshots/production/twitch-dmca-guidelines/snapshot.html",
+        "commit_date": "2025-08-19 02:24:32 +0000",
+        "commit_hash": "a16c80b363248ca8dccb046872f982fbe96c272d"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2025-08-19 02:24:32 +0000",
+        "commit_hash": "a16c80b363248ca8dccb046872f982fbe96c272d"
+      },
+      {
+        "policy_key": "twitch-privacy-policy",
+        "file_path": "snapshots/production/twitch-privacy-policy/snapshot.html",
+        "commit_date": "2025-08-19 02:24:32 +0000",
+        "commit_hash": "a16c80b363248ca8dccb046872f982fbe96c272d"
+      },
+      {
+        "policy_key": "twitch-terms-of-sale",
+        "file_path": "snapshots/production/twitch-terms-of-sale/snapshot.html",
+        "commit_date": "2025-08-19 02:24:32 +0000",
+        "commit_hash": "a16c80b363248ca8dccb046872f982fbe96c272d"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2025-08-19 02:24:32 +0000",
+        "commit_hash": "a16c80b363248ca8dccb046872f982fbe96c272d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-17 18:36:25 +0000",
+        "commit_hash": "aa306d8f9b012ac9ebd08396bd835c4c06c3c0b1"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-17 12:52:17 +0000",
+        "commit_hash": "2e333c52608164ac99372b28fd079f82e97a74b7"
+      }
+    ]
   }
 }
