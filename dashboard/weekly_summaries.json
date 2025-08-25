@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Weekly policy change summaries with run metadata",
     "structure": "Each key is a week range (YYYY-MM-DD_to_YYYY-MM-DD)",
-    "last_updated": "2025-08-21T19:45:00Z"
+    "last_updated": "2025-08-25T01:50:00Z"
   },
   "2025-08-15_to_2025-08-21": {
     "run_metadata": {
@@ -10,9 +10,9 @@
       "run_type": "manual",
       "week_start": "2025-08-15",
       "week_end": "2025-08-21",
-      "generated_by": "manual_test"
+      "generated_by": "manual_correction"
     },
-    "summary": "Error: No GEMINI_API_KEY configured.",
+    "summary": "**Significant Policy Activity Week:** This week saw extensive activity primarily on Twitch and YouTube platforms. **Twitch Community Guidelines** experienced the most frequent updates with 9 separate commits throughout the week, suggesting ongoing refinements to community standards and enforcement mechanisms. Additional Twitch policies including DMCA Guidelines, Privacy Policy, Terms of Service, and Monetized Streamer Agreement were also updated in a coordinated effort on August 19th. **YouTube's Harassment Policy and Hiding Users features** received updates, indicating continued focus on user safety and content moderation tools. The high volume of changes (13 total) reflects active policy maintenance and potential responses to emerging platform challenges.",
     "changes_count": 13,
     "changed_policies": [
       {
@@ -128,43 +128,6 @@
         "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
         "commit_date": "2025-08-17 12:52:17 +0000",
         "commit_hash": "2e333c52608164ac99372b28fd079f82e97a74b7"
-      }
-    ]
-  },
-  "2025-08-09_to_2025-08-15": {
-    "run_metadata": {
-      "run_date": "2025-08-22T04:02:00.655836+00:00",
-      "run_type": "manual",
-      "week_start": "2025-08-09",
-      "week_end": "2025-08-15",
-      "generated_by": "manual_test"
-    },
-    "summary": "Error: No GEMINI_API_KEY configured.",
-    "changes_count": 1,
-    "changed_policies": [
-      {
-        "policy_key": "meta-appeal-process",
-        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
-        "commit_date": "2025-08-15 06:08:59 +0000",
-        "commit_hash": "7cf619c47ad9b3effcfe2ddd934635ae485ddc71"
-      },
-      {
-        "policy_key": "meta-blocking-people",
-        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
-        "commit_date": "2025-08-15 06:08:59 +0000",
-        "commit_hash": "7cf619c47ad9b3effcfe2ddd934635ae485ddc71"
-      },
-      {
-        "policy_key": "meta-commerce-policies",
-        "file_path": "snapshots/production/meta-commerce-policies/snapshot.html",
-        "commit_date": "2025-08-15 06:08:59 +0000",
-        "commit_hash": "7cf619c47ad9b3effcfe2ddd934635ae485ddc71"
-      },
-      {
-        "policy_key": "meta-community-guidelines",
-        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
-        "commit_date": "2025-08-15 06:08:59 +0000",
-        "commit_hash": "7cf619c47ad9b3effcfe2ddd934635ae485ddc71"
       }
     ]
   }

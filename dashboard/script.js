@@ -383,9 +383,9 @@ class PolicyWatcherDashboard {
             }
         }
 
-        let sectionHtml = '<div class="card block-mute-card">';
-        sectionHtml += '<div class="card-header"><h2><i class="fas fa-shield-alt"></i> Block & Moderation Controls</h2></div>';
-        sectionHtml += '<div class="card-body"><div class="block-mute-grid">';
+        let sectionHtml = '<div class="block-mute-section">';
+        sectionHtml += '<h2><i class="fas fa-shield-alt"></i> Block & Moderation Controls</h2>';
+        sectionHtml += '<div class="block-mute-grid">';
 
         // Blocking section
         if (blockingPolicies.length > 0) {
@@ -421,7 +421,7 @@ class PolicyWatcherDashboard {
             sectionHtml += '</div></div>';
         }
 
-        sectionHtml += '</div></div></div>';
+        sectionHtml += '</div></div>';
         sectionContainer.innerHTML = sectionHtml;
     }
 
@@ -928,19 +928,24 @@ class PolicyWatcherDashboard {
 
         // Extract platform changes for each week
         const platformChanges = {};
-        const weekLabels = [];
+        const weekData = [];
 
         weeks.forEach(weekKey => {
-            const weekData = this.weeklySummariesData[weekKey];
-            const weekStart = weekData.run_metadata.week_start;
+            const weekInfo = this.weeklySummariesData[weekKey];
+            const weekStart = weekInfo.run_metadata.week_start;
             const weekLabel = new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            weekLabels.push(weekLabel);
+            
+            // Store both the original key and formatted label
+            weekData.push({
+                key: weekKey,
+                label: weekLabel
+            });
 
             // Count changes by platform for this week
             const weekPlatformCounts = {};
             
-            if (weekData.changed_policies) {
-                weekData.changed_policies.forEach(change => {
+            if (weekInfo.changed_policies) {
+                weekInfo.changed_policies.forEach(change => {
                     // Extract platform from policy_key
                     const platform = this.extractPlatformFromPolicyKey(change.policy_key);
                     weekPlatformCounts[platform] = (weekPlatformCounts[platform] || 0) + 1;
@@ -958,7 +963,7 @@ class PolicyWatcherDashboard {
         });
 
         return {
-            weeks: weekLabels,
+            weeks: weekData,
             platforms: platformChanges
         };
     }
@@ -998,7 +1003,13 @@ class PolicyWatcherDashboard {
         const points = weeklyTotals.map((count, index) => {
             const x = padding + (index / (weeks.length - 1)) * innerWidth;
             const y = padding + (1 - count / maxChanges) * innerHeight;
-            return { x, y, count, week: weeks[index] };
+            return { 
+                x, 
+                y, 
+                count, 
+                weekKey: weeks[index].key,
+                weekLabel: weeks[index].label
+            };
         });
         
         // Create path string for the line
@@ -1042,7 +1053,7 @@ class PolicyWatcherDashboard {
                         ${points.map(point => `
                             <circle cx="${point.x}" cy="${point.y}" r="5" 
                                     fill="#2563eb" stroke="white" stroke-width="2">
-                                <title>${point.week}: ${point.count} changes</title>
+                                <title>${point.weekKey}: ${point.count} changes</title>
                             </circle>
                         `).join('')}
                         
@@ -1050,7 +1061,7 @@ class PolicyWatcherDashboard {
                         ${points.map(point => `
                             <text x="${point.x}" y="${chartHeight - 5}" 
                                   text-anchor="middle" font-size="11" fill="#6b7280">
-                                ${point.week.split('_to_')[1].substring(5)}
+                                ${point.weekLabel}
                             </text>
                         `).join('')}
                     </svg>
@@ -1063,7 +1074,7 @@ class PolicyWatcherDashboard {
                              point.count < points[index-1].count ? '↘' : '→') : '';
                         return `
                             <div class="week-detail">
-                                <span class="week-date">${point.week.split('_to_')[1]}</span>
+                                <span class="week-date">${point.weekLabel}</span>
                                 <span class="week-count">${point.count} ${trend}</span>
                             </div>
                         `;
@@ -1512,9 +1523,22 @@ class PolicyWatcherDashboard {
 
     calculateSecondsUntilNextCheck() {
         const now = new Date();
-        const utcHour = now.getUTCHours();
         
-        // System runs every 6 hours at: 00:00, 06:00, 12:00, 18:00 UTC
+        // If we have run data, calculate based on last actual run time + 6 hours
+        if (this.runData && this.runData.length > 0) {
+            const lastRun = this.runData[0];
+            const lastRunTime = new Date(lastRun.timestamp_utc);
+            
+            // Next run should be 6 hours after the last run
+            const nextRunTime = new Date(lastRunTime);
+            nextRunTime.setHours(nextRunTime.getHours() + 6);
+            
+            const secondsUntilNext = Math.round((nextRunTime - now) / 1000);
+            return Math.max(0, secondsUntilNext); // Ensure non-negative
+        }
+        
+        // Fallback to theoretical schedule if no run data available
+        const utcHour = now.getUTCHours();
         const scheduleHours = [0, 6, 12, 18];
         
         // Find the next scheduled run hour
@@ -3195,20 +3219,6 @@ function togglePolicySummary(summaryId) {
 }
 
 // Global weekly refresh function
-window.refreshWeeklyData = function() {
-    if (window.dashboardInstance) {
-        console.log('Refreshing weekly data...');
-        window.dashboardInstance.fetchData(window.dashboardInstance.WEEKLY_SUMMARIES_PATH)
-            .then(data => {
-                window.dashboardInstance.weeklySummariesData = data || {};
-                window.dashboardInstance.renderWeeklyUpdate();
-                console.log('✅ Weekly data refreshed');
-            })
-            .catch(error => {
-                console.error('❌ Failed to refresh weekly data:', error);
-            });
-    }
-};
 
 // Make function globally available
 window.togglePolicySummary = togglePolicySummary;
