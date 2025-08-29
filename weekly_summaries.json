@@ -317,5 +317,192 @@
         "commit_hash": "2e333c52608164ac99372b28fd079f82e97a74b7"
       }
     ]
+  },
+  "2025-08-23_to_2025-08-29": {
+    "run_metadata": {
+      "run_date": "2025-08-29T19:14:58.813546+00:00",
+      "run_type": "scheduled",
+      "week_start": "2025-08-23",
+      "week_end": "2025-08-29",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Policy Summary**\n\n**Week Period:** August 23, 2025 to August 29, 2025\n**Generated On:** August 29, 2025 at 19:14 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates are primarily driven by **Twitch's extensive localization efforts for its legal documents into Dutch**, significantly enhancing accessibility for users in the Netherlands. A key operational consideration for Twitch is the **future effective date of February 4, 2025, for the Dutch Terms of Service**, requiring proactive planning. Separately, **YouTube removed a direct user feedback channel** from its \"Hiding Users\" feature, which may impact product visibility and user satisfaction.\n\n### 2. Platform Highlights\n\n*   **Twitch:**\n    *   **Comprehensive Dutch Localization (DMCA, Monetized Streamer Agreement, Privacy Policy, Terms of Sale, Terms of Service):** All major legal documents (DMCA Guidelines, Monetized Streamer Agreement, Privacy Policy, Terms of Sale, and Terms of Service) have been fully translated into Dutch (`nl-nl`). This includes full content translation, UI element localization (e.g., \"Languages\" to \"Talen\"), and updating all internal links to point to their Dutch versions.\n    *   **Terms of Service - Future Effective Date:** The newly localized Dutch Terms of Service specify a \"Last modified on\" date of **February 4, 2025**, indicating a future activation date for these terms.\n    *   **Community Guidelines - UI/UX Enhancements:** The Community Guidelines page received multiple front-end updates throughout the week. While the policy content remains unchanged, these updates introduced a `Loading` state, a more graceful CSS error message with a `Refresh` link, and minor HTML artifact removals, improving user experience and page resilience.\n\n*   **YouTube:**\n    *   **Removal of User Feedback Form (\"Hiding Users\" feature):** The dedicated user feedback form within the \"hiding users\" feature has been completely removed. This form previously allowed users to report specific issues with the feature or provide general suggestions.\n\n### 3. Risk Assessment\n\n*   **High Priority:**\n    *   **Twitch Terms of Service (Dutch) Future Effective Date (Feb 4, 2025):**\n        *   **Risk:** Failure to communicate proactively to Dutch users and adequately train Trust & Safety/support teams on the new terms before this date could lead to widespread confusion, user dissatisfaction, and inconsistent policy enforcement.\n        *   **Action for PM:** Collaborate with Legal, Marketing, and T&S Operations to develop a communication plan for Dutch users and a training strategy for internal teams well in advance of February 4, 2025.\n    *   **YouTube \"Hiding Users\" Feedback Form Removal:**\n        *   **Risk:** Eliminates a direct, structured channel for user feedback on a specific product feature. This could lead to a decreased ability to identify and address user pain points, reduced product visibility for issues, and potential degradation of user experience without a clear alternative feedback mechanism.\n        *   **Action for PM:** Investigate the rationale behind this removal. Identify alternative feedback channels for this feature or consider re-implementing a feedback mechanism if user satisfaction or issue identification for \"Hiding Users\" declines. Monitor user sentiment related to this feature closely.\n\n*   **Low Priority:**\n    *   **Twitch Dutch Localization (General):** While a positive step, ongoing monitoring for translation accuracy and legal compliance within the Dutch jurisdiction is crucial to avoid future legal or user experience issues.\n\n### 4. Trends Analysis\n\n*   **Aggressive Localization:** Twitch's comprehensive localization of multiple critical legal documents into Dutch signifies a strategic push into specific regional markets. This trend aligns with global platforms seeking to improve user trust, accessibility, and legal compliance in diverse linguistic territories.\n*   **User Feedback Channel Optimization/Rationalization:** YouTube's removal of a specific user feedback form suggests a review of feedback collection strategies. This could indicate a shift towards more centralized feedback mechanisms, a focus on specific high-priority feedback, or an effort to streamline data intake. However, it also highlights the inherent trade-off between simplifying feedback processes and potentially losing granular, feature-specific user insights.\n*   **Enhanced UI/UX for Policy Documentation:** Twitch's updates to the Community Guidelines page (loading states, error handling) indicate an ongoing commitment to improving the usability and reliability of legal and policy content delivery, recognizing that these pages are crucial touchpoints for user understanding and platform transparency.",
+    "changes_count": 22,
+    "changed_policies": [
+      {
+        "policy_key": "twitch-dmca-guidelines",
+        "file_path": "snapshots/production/twitch-dmca-guidelines/snapshot.html",
+        "commit_date": "2025-08-29 18:32:51 +0000",
+        "commit_hash": "ebb36afbb79ecd2d3507d880ddc237115c9f3fb0"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2025-08-29 18:32:51 +0000",
+        "commit_hash": "ebb36afbb79ecd2d3507d880ddc237115c9f3fb0"
+      },
+      {
+        "policy_key": "twitch-privacy-policy",
+        "file_path": "snapshots/production/twitch-privacy-policy/snapshot.html",
+        "commit_date": "2025-08-29 18:32:51 +0000",
+        "commit_hash": "ebb36afbb79ecd2d3507d880ddc237115c9f3fb0"
+      },
+      {
+        "policy_key": "twitch-terms-of-sale",
+        "file_path": "snapshots/production/twitch-terms-of-sale/snapshot.html",
+        "commit_date": "2025-08-29 18:32:51 +0000",
+        "commit_hash": "ebb36afbb79ecd2d3507d880ddc237115c9f3fb0"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2025-08-29 18:32:51 +0000",
+        "commit_hash": "ebb36afbb79ecd2d3507d880ddc237115c9f3fb0"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-29 12:56:12 +0000",
+        "commit_hash": "84f0946c0cbe6e87371847bdb6eefc3859799ff5"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-29 06:38:38 +0000",
+        "commit_hash": "f048b1afdd2ee8a8e0de463817a43ac30355ffbf"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-29 01:54:17 +0000",
+        "commit_hash": "38abee5b3e73b131389233e37c3adadfb47ad7f9"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-28 18:36:40 +0000",
+        "commit_hash": "07f5713c7d1a07894cd3df4d701ff59826a6b7f8"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-28 06:37:51 +0000",
+        "commit_hash": "08ad500b00d7e12f0b7779f90510fbd7e1013252"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-28 06:37:51 +0000",
+        "commit_hash": "08ad500b00d7e12f0b7779f90510fbd7e1013252"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-28 01:55:13 +0000",
+        "commit_hash": "d284326e6b3a95fb55f50d626938de886df816d3"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-27 18:37:11 +0000",
+        "commit_hash": "961f1e257c6c700334c6ff4b673dcaf053697e65"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-27 12:53:30 +0000",
+        "commit_hash": "b873d3ff4b700e066d37834d312adbd221ea7ffb"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-27 06:37:55 +0000",
+        "commit_hash": "9eddd3a5aefcca4ec3dc7b91eb87a03c0a3ed0ab"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-27 01:56:12 +0000",
+        "commit_hash": "468fd95a7c2fd016d5680c994f82375072b37363"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-26 18:36:55 +0000",
+        "commit_hash": "92bbeb51fb177b19dee091ec19375ec0f0a120ad"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-26 12:56:13 +0000",
+        "commit_hash": "555930c62d5bd1ea414dffb4da8e8451a4ce74a4"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-26 06:39:44 +0000",
+        "commit_hash": "6780b8e39d689c34ac1d99031c18b46d28dabd96"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-26 06:39:44 +0000",
+        "commit_hash": "6780b8e39d689c34ac1d99031c18b46d28dabd96"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-26 01:59:53 +0000",
+        "commit_hash": "bc95c65f0044a254b294e2379496ee67071a7b50"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-08-26 01:59:53 +0000",
+        "commit_hash": "bc95c65f0044a254b294e2379496ee67071a7b50"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-25 18:38:38 +0000",
+        "commit_hash": "b40bb43a43161fbe4c3d4a286d5e01765a65c754"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-25 12:54:45 +0000",
+        "commit_hash": "b18a36e425d8ab15276f8b4e977b95baa647495b"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-25 02:03:39 +0000",
+        "commit_hash": "7f035d48281933ac28e1fe3772bf5af72fb3aa64"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-24 18:35:52 +0000",
+        "commit_hash": "4b89e673e36ce8adea44ddb052767542c536b5ea"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-24 12:48:49 +0000",
+        "commit_hash": "0ec1999d108563cf12ab2a15cb05b4d44f428380"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-24 06:36:02 +0000",
+        "commit_hash": "dcedf2911a6c571d703c13ebf9a2ea92dece19b9"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-08-24 02:11:23 +0000",
+        "commit_hash": "26b2b32ee189189fcac432c27060705c1411846d"
+      }
+    ]
   }
 }
