@@ -32,6 +32,7 @@ current_api_key = GEMINI_API_KEY
 using_backup_key = False
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
+DISABLE_DAILY_EMAILS = os.environ.get("DISABLE_DAILY_EMAILS", "false").lower() == "true"
 
 def get_changed_files(commit_sha):
     """Gets a list of snapshot files from a specific commit SHA."""
@@ -322,6 +323,10 @@ def load_health_alerts():
 
 def send_email_notification(changes, health_alerts=None):
     """Sends a concise email notification with grouped policy changes and health alerts."""
+    if DISABLE_DAILY_EMAILS:
+        print("Daily emails disabled via DISABLE_DAILY_EMAILS environment variable. Skipping email notification.")
+        return
+        
     if not RESEND_API_KEY or not RECIPIENT_EMAIL:
         print("ERROR: Resend API Key or Recipient Email not configured. Skipping email.", file=sys.stderr)
         return

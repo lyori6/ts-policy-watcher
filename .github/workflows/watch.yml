@@ -104,6 +104,7 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
           COMMIT_SHA: ${{ steps.commit.outputs.commit_sha }}
+          DISABLE_DAILY_EMAILS: "true"  # Disable immediate email notifications
         run: python scripts/diff_and_notify.py
 
       # Step 10: Commit the generated summaries and run log
