@@ -1,0 +1,29 @@
+{
+  "name": "ts-policy-watcher",
+  "version": "1.0.0",
+  "description": "An automated competitive intelligence system that monitors competitor Trust & Safety policies, detects meaningful changes, and delivers AI-powered summaries to product teams.",
+  "main": "screenshot.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyori6/ts-policy-watcher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lyori6/ts-policy-watcher/issues"
+  },
+  "homepage": "https://github.com/lyori6/ts-policy-watcher#readme",
+  "dependencies": {
+    "puppeteer": "^24.17.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}

@@ -941,14 +941,29 @@ class PolicyWatcherDashboard {
                 label: weekLabel
             });
 
-            // Count changes by platform for this week
+            // Count UNIQUE policies changed by platform for this week
+            // Fix: Use Set to deduplicate policy_key entries (multiple commits for same policy = 1 change)
             const weekPlatformCounts = {};
             
             if (weekInfo.changed_policies) {
+                // Group by platform first, then deduplicate policy keys within each platform
+                const platformPolicyKeys = {};
+                
                 weekInfo.changed_policies.forEach(change => {
-                    // Extract platform from policy_key
                     const platform = this.extractPlatformFromPolicyKey(change.policy_key);
-                    weekPlatformCounts[platform] = (weekPlatformCounts[platform] || 0) + 1;
+                    
+                    // Initialize platform set if doesn't exist
+                    if (!platformPolicyKeys[platform]) {
+                        platformPolicyKeys[platform] = new Set();
+                    }
+                    
+                    // Add policy key to set (automatically deduplicates)
+                    platformPolicyKeys[platform].add(change.policy_key);
+                });
+                
+                // Count unique policies per platform
+                Object.keys(platformPolicyKeys).forEach(platform => {
+                    weekPlatformCounts[platform] = platformPolicyKeys[platform].size;
                 });
             }
 
@@ -1020,9 +1035,9 @@ class PolicyWatcherDashboard {
         return `
             <div class="weekly-timeline-chart">
                 <div class="chart-header">
-                    <h3>Weekly Policy Changes</h3>
+                    <h3>Weekly Unique Policy Changes</h3>
                     <div class="chart-summary">
-                        <span class="total-changes">${totalChanges} total changes</span>
+                        <span class="total-changes">${totalChanges} unique policies changed</span>
                         <span class="week-range">${weeks.length} weeks</span>
                     </div>
                 </div>
