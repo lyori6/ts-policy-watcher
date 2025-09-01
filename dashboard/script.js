@@ -1007,10 +1007,16 @@ class PolicyWatcherDashboard {
         const maxChanges = Math.max(...weeklyTotals, 1);
         const totalChanges = weeklyTotals.reduce((sum, count) => sum + count, 0);
         
-        // Create SVG line graph
-        const chartWidth = 600;
-        const chartHeight = 200;
-        const padding = 40;
+        // Create responsive SVG line graph
+        // Use container-based sizing instead of fixed dimensions
+        const isMobile = window.innerWidth <= 768;
+        const isTablet = window.innerWidth <= 1024;
+        
+        // Dynamic chart dimensions based on screen size
+        const chartWidth = isMobile ? Math.min(window.innerWidth - 40, 400) : 
+                          isTablet ? 500 : 600;
+        const chartHeight = isMobile ? 150 : 200;
+        const padding = isMobile ? 25 : 40;
         const innerWidth = chartWidth - (padding * 2);
         const innerHeight = chartHeight - (padding * 2);
         
@@ -1043,7 +1049,7 @@ class PolicyWatcherDashboard {
                 </div>
                 
                 <div class="timeline-container">
-                    <svg width="${chartWidth}" height="${chartHeight}" class="timeline-svg">
+                    <svg width="${chartWidth}" height="${chartHeight}" viewBox="0 0 ${chartWidth} ${chartHeight}" class="timeline-svg responsive-chart">
                         <!-- Grid lines -->
                         ${Array.from({length: 5}, (_, i) => {
                             const y = padding + (i / 4) * innerHeight;
@@ -1064,39 +1070,253 @@ class PolicyWatcherDashboard {
                               stroke-linecap="round" 
                               stroke-linejoin="round"/>
                         
-                        <!-- Data points -->
+                        <!-- Data points - Touch-friendly on mobile -->
                         ${points.map(point => `
-                            <circle cx="${point.x}" cy="${point.y}" r="5" 
-                                    fill="#2563eb" stroke="white" stroke-width="2">
+                            <circle cx="${point.x}" cy="${point.y}" r="${isMobile ? '7' : '5'}" 
+                                    fill="#2563eb" stroke="white" stroke-width="2"
+                                    class="chart-data-point">
                                 <title>${point.weekKey}: ${point.count} changes</title>
                             </circle>
                         `).join('')}
                         
-                        <!-- Week labels -->
-                        ${points.map(point => `
-                            <text x="${point.x}" y="${chartHeight - 5}" 
-                                  text-anchor="middle" font-size="11" fill="#6b7280">
-                                ${point.weekLabel}
-                            </text>
-                        `).join('')}
+                        <!-- Week labels - Smart mobile display -->
+                        ${points.map((point, index) => {
+                            // Smart date display: show fewer labels on mobile to prevent crowding
+                            const shouldShow = isMobile ? 
+                                (index === 0 || index === points.length - 1 || index % Math.ceil(points.length / 3) === 0) :
+                                isTablet ? (index % Math.ceil(points.length / 6) === 0) :
+                                true;
+                            
+                            return shouldShow ? `
+                                <text x="${point.x}" y="${chartHeight - 5}" 
+                                      text-anchor="middle" font-size="${isMobile ? '9' : '11'}" fill="#6b7280">
+                                    ${point.weekLabel}
+                                </text>
+                            ` : '';
+                        }).join('')}
                     </svg>
                 </div>
                 
-                <div class="timeline-details">
-                    ${points.map((point, index) => {
-                        const trend = index > 0 ? 
-                            (point.count > points[index-1].count ? '↗' : 
-                             point.count < points[index-1].count ? '↘' : '→') : '';
-                        return `
-                            <div class="week-detail">
-                                <span class="week-date">${point.weekLabel}</span>
-                                <span class="week-count">${point.count} ${trend}</span>
-                            </div>
-                        `;
-                    }).join('')}
+                <div class="sustainable-timeline-details">
+                    <!-- Professional Summary Statistics -->
+                    <div class="timeline-stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">${totalChanges}</div>
+                            <div class="stat-label">Total Changes</div>
+                            <div class="stat-sublabel">${weeks.length} weeks tracked</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${Math.max(...weeklyTotals)}</div>
+                            <div class="stat-label">Peak Week</div>
+                            <div class="stat-sublabel">${points.find(p => p.count === Math.max(...weeklyTotals))?.weekLabel || 'N/A'}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${(totalChanges / weeks.length).toFixed(1)}</div>
+                            <div class="stat-label">Avg/Week</div>
+                            <div class="stat-sublabel">over ${weeks.length} weeks</div>
+                        </div>
+                        <div class="stat-card trend-card">
+                            <div class="stat-value">${weeklyTotals[weeklyTotals.length-1] || 0}</div>
+                            <div class="stat-label">Latest Week</div>
+                            <div class="stat-sublabel">${points[points.length-1]?.weekLabel || 'N/A'}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sustainable Data Table - Professional Approach -->
+                    <div class="timeline-data-controls">
+                        <div class="data-range-selector">
+                            <button class="range-btn active" onclick="window.dashboardInstance.showTimelineRange(this, 'recent')">
+                                Last 8 Weeks
+                            </button>
+                            <button class="range-btn" onclick="window.dashboardInstance.showTimelineRange(this, 'quarter')">
+                                Last 3 Months
+                            </button>
+                            <button class="range-btn" onclick="window.dashboardInstance.showTimelineRange(this, 'all')">
+                                All Time
+                            </button>
+                        </div>
+                        <div class="data-search">
+                            <input type="text" placeholder="Search by date..." class="search-input" 
+                                   onkeyup="window.dashboardInstance.filterTimelineData(this.value)">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-data-table">
+                        <div class="table-header">
+                            <span class="col-date">Date</span>
+                            <span class="col-changes">Changes</span>
+                            <span class="col-trend">Trend</span>
+                            <span class="col-action">Details</span>
+                        </div>
+                        <div class="table-body" id="timeline-table-body">
+                            ${this.generateTimelineTableRows(points, weeklyTotals, 'recent')}
+                        </div>
+                    </div>
+                    
+                    ${weeks.length > 8 ? `
+                        <div class="table-pagination">
+                            <span class="pagination-info">Showing recent 8 weeks of ${weeks.length} total</span>
+                            <button class="pagination-btn" onclick="window.dashboardInstance.showTimelineRange(document.querySelector('.range-btn.active'), 'all')">
+                                View All ${weeks.length} Weeks
+                            </button>
+                        </div>
+                    ` : ''}
                 </div>
             </div>
         `;
+    }
+
+    generateTimelineTableRows(points, weeklyTotals, range = 'recent') {
+        const filteredPoints = this.filterPointsByRange(points, range);
+        
+        return filteredPoints.map((point, index) => {
+            const trend = index > 0 ? 
+                (point.count > filteredPoints[index-1].count ? '↗️ +' : 
+                 point.count < filteredPoints[index-1].count ? '↘️ ' : '→') : '—';
+            
+            const trendClass = index > 0 ? 
+                (point.count > filteredPoints[index-1].count ? 'trend-up' : 
+                 point.count < filteredPoints[index-1].count ? 'trend-down' : 'trend-stable') : 'trend-neutral';
+                 
+            return `
+                <div class="table-row" data-week="${point.weekKey}">
+                    <span class="col-date">${point.weekLabel}</span>
+                    <span class="col-changes">
+                        <span class="changes-count">${point.count}</span>
+                        <span class="changes-unit">changes</span>
+                    </span>
+                    <span class="col-trend ${trendClass}">${trend}</span>
+                    <span class="col-action">
+                        <button class="detail-btn" onclick="window.dashboardInstance.showWeekDetails('${point.weekKey}')">
+                            <i class="fas fa-info-circle"></i> View
+                        </button>
+                    </span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    filterPointsByRange(points, range) {
+        switch(range) {
+            case 'recent':
+                return points.slice(-8); // Last 8 weeks
+            case 'quarter':
+                return points.slice(-12); // Last 12 weeks (3 months)
+            case 'all':
+                return points;
+            default:
+                return points.slice(-8);
+        }
+    }
+
+    showTimelineRange(buttonElement, range) {
+        // Update active button
+        document.querySelectorAll('.range-btn').forEach(btn => btn.classList.remove('active'));
+        buttonElement.classList.add('active');
+        
+        // Get current data
+        const weeklyPlatformData = this.processWeeklyPlatformData();
+        if (!weeklyPlatformData) return;
+        
+        const { weeks, platforms } = weeklyPlatformData;
+        const weeklyTotals = weeks.map((week, weekIndex) => {
+            return Object.values(platforms).reduce((sum, platformData) => sum + platformData[weekIndex], 0);
+        });
+        
+        const points = weeklyTotals.map((count, index) => {
+            return { 
+                count, 
+                weekKey: weeks[index].key,
+                weekLabel: weeks[index].label
+            };
+        });
+        
+        // Update table body
+        const tableBody = document.getElementById('timeline-table-body');
+        if (tableBody) {
+            tableBody.innerHTML = this.generateTimelineTableRows(points, weeklyTotals, range);
+        }
+        
+        // Update pagination info
+        const paginationInfo = document.querySelector('.pagination-info');
+        if (paginationInfo) {
+            const filteredCount = this.filterPointsByRange(points, range).length;
+            paginationInfo.textContent = `Showing ${filteredCount} weeks of ${points.length} total`;
+        }
+    }
+
+    filterTimelineData(searchTerm) {
+        const rows = document.querySelectorAll('.table-row');
+        const term = searchTerm.toLowerCase();
+        
+        rows.forEach(row => {
+            const dateText = row.querySelector('.col-date').textContent.toLowerCase();
+            const weekKey = row.getAttribute('data-week').toLowerCase();
+            
+            if (dateText.includes(term) || weekKey.includes(term)) {
+                row.style.display = 'flex';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    showWeekDetails(weekKey) {
+        // Find the week data
+        const weekData = this.weeklySummariesData[weekKey];
+        if (!weekData) {
+            alert('Week details not available');
+            return;
+        }
+        
+        // Create modal content
+        const modalContent = `
+            <div class="week-detail-modal">
+                <div class="modal-header">
+                    <h3>Week Details: ${weekKey}</h3>
+                    <button class="close-modal" onclick="this.closest('.week-detail-modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="week-overview">
+                        <div class="overview-stat">
+                            <strong>${weekData.changes_count || 0}</strong>
+                            <span>Total Changes</span>
+                        </div>
+                        <div class="overview-stat">
+                            <strong>${weekData.changed_policies ? weekData.changed_policies.length : 0}</strong>
+                            <span>Policy Updates</span>
+                        </div>
+                        <div class="overview-stat">
+                            <strong>${weekData.changed_policies ? new Set(weekData.changed_policies.map(p => p.policy_key.split('-')[0])).size : 0}</strong>
+                            <span>Platforms</span>
+                        </div>
+                    </div>
+                    ${weekData.changed_policies ? `
+                        <div class="policy-changes-list">
+                            <h4>Policy Changes This Week</h4>
+                            ${weekData.changed_policies.slice(0, 10).map(policy => `
+                                <div class="policy-change-item">
+                                    <strong>${policy.policy_key.replace(/-/g, ' ')}</strong>
+                                    <small>${new Date(policy.commit_date).toLocaleDateString()}</small>
+                                </div>
+                            `).join('')}
+                            ${weekData.changed_policies.length > 10 ? `<p><em>... and ${weekData.changed_policies.length - 10} more</em></p>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        modalOverlay.innerHTML = modalContent;
+        modalOverlay.onclick = (e) => {
+            if (e.target === modalOverlay) modalOverlay.remove();
+        };
+        
+        document.body.appendChild(modalOverlay);
     }
 
     renderPlatformActivity() {
