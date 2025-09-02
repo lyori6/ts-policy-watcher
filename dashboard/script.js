@@ -1759,20 +1759,8 @@ class PolicyWatcherDashboard {
     calculateSecondsUntilNextCheck() {
         const now = new Date();
         
-        // If we have run data, calculate based on last actual run time + 6 hours
-        if (this.runData && this.runData.length > 0) {
-            const lastRun = this.runData[0];
-            const lastRunTime = new Date(lastRun.timestamp_utc);
-            
-            // Next run should be 6 hours after the last run
-            const nextRunTime = new Date(lastRunTime);
-            nextRunTime.setHours(nextRunTime.getHours() + 6);
-            
-            const secondsUntilNext = Math.round((nextRunTime - now) / 1000);
-            return Math.max(0, secondsUntilNext); // Ensure non-negative
-        }
-        
-        // Fallback to theoretical schedule if no run data available
+        // If we have run data, calculate based on theoretical 6-hour schedule
+        // Use schedule-based calculation instead of last-run + 6 hours to handle missed runs
         const utcHour = now.getUTCHours();
         const scheduleHours = [0, 6, 12, 18];
         
@@ -1786,10 +1774,11 @@ class PolicyWatcherDashboard {
             nextRunDate.setUTCDate(nextRunDate.getUTCDate() + 1);
         }
         
+        // Set the next run time to the exact scheduled hour
         nextRunDate.setUTCHours(nextRunHour, 0, 0, 0);
         
         const secondsUntilNext = Math.round((nextRunDate - now) / 1000);
-        return Math.max(0, secondsUntilNext); // Ensure non-negative
+        return Math.max(0, secondsUntilNext);
     }
 
     formatCountdownDisplay(totalSeconds) {
@@ -2096,12 +2085,19 @@ class PolicyWatcherDashboard {
                 const countdownDisplay = this.formatCountdownDisplay(secondsUntilNext);
                 headerNumber.textContent = countdownDisplay;
                 
-                // If we've reached 0, refresh the page to get latest data
+                // If we've reached 0, check if enough time has passed before refreshing
                 if (secondsUntilNext <= 0) {
                     clearInterval(this.countdownTimer);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    // Only refresh if we've been at 0 for more than 30 seconds to avoid refresh loops
+                    if (!this.refreshTimeout) {
+                        this.refreshTimeout = setTimeout(() => {
+                            // Double-check that we still need to refresh
+                            const recheckSeconds = this.calculateSecondsUntilNextCheck();
+                            if (recheckSeconds <= 0) {
+                                window.location.reload();
+                            }
+                        }, 30000); // 30 seconds instead of 5
+                    }
                 }
             }
         }, 1000); // Update every second
