@@ -5,12 +5,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/360061224972-Prohibited-or-Restricted-Items-on-Whatnot",
       "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:54.518260Z",
+      "last_success": "2025-09-17T12:51:38.513068Z",
       "last_failure": "2025-08-08T19:36:12.134500Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:38.513068Z",
+          "status": "degraded",
+          "http_status": 200,
+          "response_time_ms": 2009,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:54.518260Z",
           "status": "degraded",
@@ -242,14 +250,6 @@
           "response_time_ms": 3513,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:24.520387Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 5088,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -258,12 +258,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/29262074925069-Hate-and-Harassment-Policy",
       "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:54.459905Z",
+      "last_success": "2025-09-17T12:51:38.656714Z",
       "last_failure": "2025-08-08T19:36:12.149306Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:38.656714Z",
+          "status": "degraded",
+          "http_status": 200,
+          "response_time_ms": 2174,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:54.459905Z",
           "status": "degraded",
@@ -495,14 +503,6 @@
           "response_time_ms": 3811,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:24.523299Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 5039,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -511,12 +511,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/360061197472-Whatnot-Community-Guidelines",
       "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:54.594079Z",
+      "last_success": "2025-09-17T12:51:38.541053Z",
       "last_failure": "2025-09-09T18:32:06.321855Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 128,
+      "total_checks": 134,
+      "success_count": 129,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:38.541053Z",
+          "status": "degraded",
+          "http_status": 200,
+          "response_time_ms": 2005,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:54.594079Z",
           "status": "degraded",
@@ -748,14 +756,6 @@
           "response_time_ms": 3719,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:24.450048Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 4948,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -763,13 +763,21 @@
       "slug": "tiktok-community-guidelines",
       "platform": "TikTok",
       "url": "https://www.tiktok.com/community-guidelines/en/",
-      "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:54.741228Z",
+      "current_status": "healthy",
+      "last_success": "2025-09-17T12:51:38.371435Z",
       "last_failure": "2025-08-08T19:36:12.181369Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:38.371435Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1741,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:54.741228Z",
           "status": "degraded",
@@ -1001,14 +1009,6 @@
           "response_time_ms": 3672,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:24.405488Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 4869,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -1016,13 +1016,21 @@
       "slug": "tiktok-live-moderation",
       "platform": "TikTok",
       "url": "https://support.tiktok.com/en/live-gifts-wallet/tiktok-live/moderating-on-tiktok-live",
-      "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:54.566932Z",
+      "current_status": "healthy",
+      "last_success": "2025-09-17T12:51:38.496271Z",
       "last_failure": "2025-08-08T19:36:12.389895Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:38.496271Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1998,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:54.566932Z",
           "status": "degraded",
@@ -1254,14 +1262,6 @@
           "response_time_ms": 3742,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:24.457324Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 4978,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -1270,12 +1270,20 @@
       "platform": "TikTok",
       "url": "https://seller-us.tiktok.com/university/rule-detail/10003057?identity=1",
       "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:57.058008Z",
+      "last_success": "2025-09-17T12:51:40.780849Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 133,
+      "total_checks": 134,
+      "success_count": 134,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.780849Z",
+          "status": "degraded",
+          "http_status": 200,
+          "response_time_ms": 2152,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:57.058008Z",
           "status": "degraded",
@@ -1507,14 +1515,6 @@
           "response_time_ms": 2069,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.290755Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1735,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -1522,13 +1522,21 @@
       "slug": "meta-community-guidelines",
       "platform": "Meta",
       "url": "https://transparency.meta.com/policies/community-standards/",
-      "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:57.100081Z",
+      "current_status": "healthy",
+      "last_success": "2025-09-17T12:51:40.762833Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 133,
+      "total_checks": 134,
+      "success_count": 134,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.762833Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1895,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:57.100081Z",
           "status": "degraded",
@@ -1760,14 +1768,6 @@
           "response_time_ms": 1664,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:27.196490Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 2505,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -1775,13 +1775,21 @@
       "slug": "meta-appeal-process",
       "platform": "Meta",
       "url": "https://help.instagram.com/675885993348720",
-      "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:56.869923Z",
+      "current_status": "healthy",
+      "last_success": "2025-09-17T12:51:40.847744Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 133,
+      "total_checks": 134,
+      "success_count": 134,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.847744Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1954,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:56.869923Z",
           "status": "degraded",
@@ -2013,14 +2021,6 @@
           "response_time_ms": 1989,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.783562Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1947,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -2029,12 +2029,20 @@
       "platform": "TikTok",
       "url": "https://support.tiktok.com/en/using-tiktok/followers-and-following/blocking-the-users",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:56.567028Z",
+      "last_success": "2025-09-17T12:51:40.393496Z",
       "last_failure": "2025-08-08T19:36:12.727610Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.393496Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1684,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:56.567028Z",
           "status": "healthy",
@@ -2266,14 +2274,6 @@
           "response_time_ms": 1831,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.011072Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1436,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -2282,12 +2282,20 @@
       "platform": "YouTube",
       "url": "https://www.youtube.com/howyoutubeworks/our-policies/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:56.962542Z",
+      "last_success": "2025-09-17T12:51:40.756011Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 133,
+      "total_checks": 134,
+      "success_count": 134,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.756011Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 208,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:56.962542Z",
           "status": "healthy",
@@ -2519,14 +2527,6 @@
           "response_time_ms": 210,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.422062Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 137,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -2536,11 +2536,19 @@
       "url": "https://support.google.com/youtube/answer/2802268",
       "current_status": "failed",
       "last_success": null,
-      "last_failure": "2025-09-17T06:35:57.037638Z",
-      "consecutive_failures": 133,
-      "total_checks": 133,
+      "last_failure": "2025-09-17T12:51:40.983309Z",
+      "consecutive_failures": 134,
+      "total_checks": 134,
       "success_count": 0,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.983309Z",
+          "status": "failed",
+          "http_status": 404,
+          "response_time_ms": 147,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:57.037638Z",
           "status": "failed",
@@ -2772,14 +2780,6 @@
           "response_time_ms": 102,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.451298Z",
-          "status": "failed",
-          "http_status": 404,
-          "response_time_ms": 101,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -2788,12 +2788,20 @@
       "platform": "Meta",
       "url": "https://www.facebook.com/policies_center/commerce",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:56.451035Z",
+      "last_success": "2025-09-17T12:51:40.462356Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 133,
+      "total_checks": 134,
+      "success_count": 134,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.462356Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1422,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:56.451035Z",
           "status": "healthy",
@@ -3025,14 +3033,6 @@
           "response_time_ms": 2323,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.210605Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1521,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -3041,12 +3041,20 @@
       "platform": "Meta",
       "url": "https://help.instagram.com/426700567389543",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:58.112742Z",
+      "last_success": "2025-09-17T12:51:41.849427Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 133,
+      "total_checks": 134,
+      "success_count": 134,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:41.849427Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1341,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:58.112742Z",
           "status": "healthy",
@@ -3278,14 +3286,6 @@
           "response_time_ms": 2129,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:28.664354Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 2399,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -3295,11 +3295,19 @@
       "url": "https://support.google.com/merchants/answer/6149970",
       "current_status": "failed",
       "last_success": null,
-      "last_failure": "2025-09-17T06:35:57.185516Z",
-      "consecutive_failures": 133,
-      "total_checks": 133,
+      "last_failure": "2025-09-17T12:51:40.980009Z",
+      "consecutive_failures": 134,
+      "total_checks": 134,
       "success_count": 0,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:40.980009Z",
+          "status": "failed",
+          "http_status": 404,
+          "response_time_ms": 146,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:57.185516Z",
           "status": "failed",
@@ -3531,14 +3539,6 @@
           "response_time_ms": 295,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:26.728370Z",
-          "status": "failed",
-          "http_status": 404,
-          "response_time_ms": 161,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -3547,12 +3547,20 @@
       "platform": "YouTube",
       "url": "https://support.google.com/youtube/answer/9482361",
       "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:59.310924Z",
+      "last_success": "2025-09-17T12:51:43.063111Z",
       "last_failure": "2025-08-08T19:36:13.944816Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:43.063111Z",
+          "status": "degraded",
+          "http_status": 200,
+          "response_time_ms": 2120,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:59.310924Z",
           "status": "degraded",
@@ -3784,14 +3792,6 @@
           "response_time_ms": 1870,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:28.243180Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1638,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -3800,12 +3800,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/5380381014925-How-To-Report-A-User-How-We-Investigate",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:58.698274Z",
+      "last_success": "2025-09-17T12:51:42.875371Z",
       "last_failure": "2025-08-08T19:36:14.320529Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:42.875371Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1826,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:58.698274Z",
           "status": "healthy",
@@ -4037,14 +4045,6 @@
           "response_time_ms": 1880,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:28.940412Z",
-          "status": "degraded",
-          "http_status": 200,
-          "response_time_ms": 2029,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -4052,13 +4052,21 @@
       "slug": "whatnot-blocking-a-user",
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/9816865522317-Blocking-a-User",
-      "current_status": "degraded",
-      "last_success": "2025-09-17T06:35:59.346922Z",
+      "current_status": "healthy",
+      "last_success": "2025-09-17T12:51:43.095117Z",
       "last_failure": "2025-08-08T19:36:14.512195Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:43.095117Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1831,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:59.346922Z",
           "status": "degraded",
@@ -4290,14 +4298,6 @@
           "response_time_ms": 2077,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:28.806562Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1836,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -4306,12 +4306,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/5380505120269-What-Actions-We-Take",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:58.922823Z",
+      "last_success": "2025-09-17T12:51:42.708542Z",
       "last_failure": "2025-08-08T19:36:14.539807Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:42.708542Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1466,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:58.922823Z",
           "status": "healthy",
@@ -4543,14 +4551,6 @@
           "response_time_ms": 1706,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:29.064119Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1680,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -4559,12 +4559,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/360061194552-Whatnot-Buyer-Protection-Policy",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:35:59.967850Z",
+      "last_success": "2025-09-17T12:51:43.755724Z",
       "last_failure": "2025-08-08T19:36:14.558419Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:43.755724Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1593,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:35:59.967850Z",
           "status": "healthy",
@@ -4796,14 +4804,6 @@
           "response_time_ms": 1457,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:30.011174Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1586,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -4812,12 +4812,20 @@
       "platform": "Whatnot",
       "url": "https://help.whatnot.com/hc/en-us/articles/6212550318477-Moderator-Guidelines",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:00.559371Z",
+      "last_success": "2025-09-17T12:51:44.834561Z",
       "last_failure": "2025-08-08T19:36:14.732963Z",
       "consecutive_failures": 0,
-      "total_checks": 133,
-      "success_count": 130,
+      "total_checks": 134,
+      "success_count": 131,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:44.834561Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1912,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:00.559371Z",
           "status": "healthy",
@@ -5049,14 +5057,6 @@
           "response_time_ms": 1637,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:30.529364Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1701,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -5065,12 +5065,20 @@
       "platform": "Twitch",
       "url": "https://www.twitch.tv/p/legal/community-guidelines/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:00.425978Z",
+      "last_success": "2025-09-17T12:51:44.146134Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 119,
-      "success_count": 119,
+      "total_checks": 120,
+      "success_count": 120,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:44.146134Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1126,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:00.425978Z",
           "status": "healthy",
@@ -5302,14 +5310,6 @@
           "response_time_ms": 1575,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:30.167494Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1208,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -5318,12 +5318,20 @@
       "platform": "Twitch",
       "url": "https://www.twitch.tv/p/legal/terms-of-sale/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:00.779700Z",
+      "last_success": "2025-09-17T12:51:44.312941Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 119,
-      "success_count": 119,
+      "total_checks": 120,
+      "success_count": 120,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:44.312941Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1053,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:00.779700Z",
           "status": "healthy",
@@ -5555,14 +5563,6 @@
           "response_time_ms": 1463,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:30.479807Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1174,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -5571,12 +5571,20 @@
       "platform": "Twitch",
       "url": "https://www.twitch.tv/p/legal/terms-of-service/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:00.571024Z",
+      "last_success": "2025-09-17T12:51:44.228212Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 119,
-      "success_count": 119,
+      "total_checks": 120,
+      "success_count": 120,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:44.228212Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1026,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:00.571024Z",
           "status": "healthy",
@@ -5808,14 +5816,6 @@
           "response_time_ms": 1687,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:30.248411Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 1137,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -5824,12 +5824,20 @@
       "platform": "Twitch",
       "url": "https://www.twitch.tv/p/legal/monetized-streamer-agreement/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:01.193258Z",
+      "last_success": "2025-09-17T12:51:44.949222Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 119,
-      "success_count": 119,
+      "total_checks": 120,
+      "success_count": 120,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:44.949222Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 1017,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:01.193258Z",
           "status": "healthy",
@@ -6061,14 +6069,6 @@
           "response_time_ms": 1324,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:31.045951Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 942,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -6077,12 +6077,20 @@
       "platform": "Twitch",
       "url": "https://www.twitch.tv/p/legal/privacy-policy/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:01.429910Z",
+      "last_success": "2025-09-17T12:51:45.128352Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 119,
-      "success_count": 119,
+      "total_checks": 120,
+      "success_count": 120,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:45.128352Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 903,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:01.429910Z",
           "status": "healthy",
@@ -6314,14 +6322,6 @@
           "response_time_ms": 1242,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:31.096473Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 855,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     },
@@ -6330,12 +6330,20 @@
       "platform": "Twitch",
       "url": "https://www.twitch.tv/p/legal/dmca-guidelines/",
       "current_status": "healthy",
-      "last_success": "2025-09-17T06:36:01.442144Z",
+      "last_success": "2025-09-17T12:51:45.227956Z",
       "last_failure": null,
       "consecutive_failures": 0,
-      "total_checks": 119,
-      "success_count": 119,
+      "total_checks": 120,
+      "success_count": 120,
       "health_history": [
+        {
+          "timestamp": "2025-09-17T12:51:45.227956Z",
+          "status": "healthy",
+          "http_status": 200,
+          "response_time_ms": 920,
+          "error_message": null,
+          "ssl_valid": true
+        },
         {
           "timestamp": "2025-09-17T06:36:01.442144Z",
           "status": "healthy",
@@ -6567,25 +6575,17 @@
           "response_time_ms": 1021,
           "error_message": null,
           "ssl_valid": true
-        },
-        {
-          "timestamp": "2025-09-10T01:49:31.331719Z",
-          "status": "healthy",
-          "http_status": 200,
-          "response_time_ms": 999,
-          "error_message": null,
-          "ssl_valid": true
         }
       ]
     }
   },
   "system_health": {
     "total_urls": 26,
-    "healthy_urls": 14,
-    "degraded_urls": 10,
+    "healthy_urls": 19,
+    "degraded_urls": 5,
     "failed_urls": 2,
     "unknown_urls": 0,
     "system_uptime": 92.31,
-    "last_check": "2025-09-17T06:36:01.451771Z"
+    "last_check": "2025-09-17T12:51:45.237700Z"
   }
 }
