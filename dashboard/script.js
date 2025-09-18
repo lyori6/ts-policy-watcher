@@ -1922,7 +1922,7 @@ class PolicyWatcherDashboard {
 
     filterAIGeneratedText(text) {
         if (!text) return '';
-        
+
         // Patterns to remove AI-generated filler text
         const aiPatterns = [
             // Remove "Here's a concise summary..." patterns
@@ -1957,9 +1957,99 @@ class PolicyWatcherDashboard {
         return cleanedText.trim();
     }
 
+    renderPolicyHistoryTimeline(historyEntries, slug) {
+        if (!Array.isArray(historyEntries) || historyEntries.length === 0) {
+            return '';
+        }
+
+        const entries = historyEntries.filter(entry => entry && entry.summary);
+        if (entries.length === 0) {
+            return '';
+        }
+
+        const hasNonInitialEntry = entries.some(entry => (entry.change_type || 'update').toLowerCase() !== 'initial');
+        if (!hasNonInitialEntry) {
+            return '';
+        }
+
+        const defaultSnapshotPath = `snapshots/production/${slug}/snapshot.html`;
+
+        const buildTimestampLabel = (timestamp) => {
+            if (!timestamp) {
+                return 'Timestamp unavailable';
+            }
+
+            const cleanedTimestamp = this.cleanTimestamp(timestamp);
+            const parsedDate = new Date(cleanedTimestamp);
+
+            if (isNaN(parsedDate.getTime())) {
+                return 'Timestamp unavailable';
+            }
+
+            const absolute = parsedDate.toLocaleString();
+            const relative = this.formatRelativeTime(cleanedTimestamp);
+
+            return relative && relative !== 'Invalid date'
+                ? `${absolute} (${relative})`
+                : absolute;
+        };
+
+        const commitBaseUrl = 'https://github.com/lyori6/ts-policy-watcher/commit/';
+
+        let html = '<div class="modal-history">';
+        html += '<h3><i class="fas fa-clock"></i> Update History</h3>';
+        html += '<ul class="history-timeline">';
+
+        entries.forEach((entry, index) => {
+            const changeType = (entry.change_type || 'update').toLowerCase();
+            const isInitial = changeType === 'initial';
+            const isLatest = index === 0 && !isInitial;
+            const typeLabel = isInitial ? 'Initial Version' : isLatest ? 'Latest Update' : 'Update';
+            const timestampLabel = buildTimestampLabel(entry.timestamp);
+
+            const snapshotPath = entry.snapshot_path || defaultSnapshotPath;
+            const hasCommit = Boolean(entry.commit);
+            const commitUrl = hasCommit ? `${commitBaseUrl}${entry.commit}` : null;
+            const commitLabel = hasCommit ? entry.commit.substring(0, 7) : null;
+            const snapshotUrl = hasCommit
+                ? `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${entry.commit}/${snapshotPath}`
+                : null;
+
+            let linkHtml = '';
+            if (commitUrl || snapshotUrl || !hasCommit) {
+                linkHtml += '<div class="history-entry-links">';
+                if (commitUrl) {
+                    linkHtml += `<a href="${commitUrl}" target="_blank" rel="noopener noreferrer"><i class="fas fa-code-branch"></i> Commit ${commitLabel}</a>`;
+                }
+                if (snapshotUrl) {
+                    linkHtml += `<a href="${snapshotUrl}" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-alt"></i> Snapshot</a>`;
+                } else if (!hasCommit) {
+                    linkHtml += '<span class="history-entry-link-disabled"><i class="fas fa-file-alt"></i> Snapshot unavailable — see GitHub history</span>';
+                }
+                linkHtml += '</div>';
+            }
+
+            html += `<li class="history-entry${isInitial ? ' initial' : ''}${isLatest ? ' latest' : ''}">`;
+            html += '<div class="history-entry-header">';
+            html += `<span class="history-entry-type">${typeLabel}</span>`;
+            html += `<span class="history-entry-time">${timestampLabel}</span>`;
+            html += '</div>';
+            html += `<div class="history-entry-body">${this.renderMarkdown(entry.summary)}</div>`;
+            if (linkHtml) {
+                html += linkHtml;
+            }
+            html += '</li>';
+        });
+
+        html += '</ul>';
+        html += '</div>';
+
+        return html;
+    }
+
     renderMarkdown(text) {
         if (!text) return '';
-        
+
         // Filter out AI-generated filler text
         text = this.filterAIGeneratedText(text);
         
@@ -2832,35 +2922,56 @@ function openPolicyModal(slug) {
     // Get dashboard instance to access data
     const dashboard = window.policyDashboard;
     if (!dashboard) return;
-    
+
     const policy = dashboard.platformData.find(p => p.slug === slug);
     const summaryData = dashboard.summariesData[slug] || {};
-    
+    const historyEntries = Array.isArray(summaryData.history) ? summaryData.history : [];
+    const latestHistoryEntry = historyEntries.find(entry => entry && entry.summary && (entry.change_type || '').toLowerCase() !== 'initial');
+
     if (!policy) return;
-    
+
     // Update modal content
     title.innerHTML = `<i class="fas fa-file-text"></i> ${policy.name} - ${dashboard.findPlatformName(slug)}`;
-    
+
     let modalHtml = '';
     if (summaryData.initial_summary) {
         modalHtml += '<div class="modal-summary">';
         modalHtml += '<h3>Policy Summary</h3>';
         modalHtml += dashboard.renderMarkdown(summaryData.initial_summary);
         modalHtml += '</div>';
-        
-        if (summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.') {
+
+        if (latestHistoryEntry) {
+            const timestampLabel = latestHistoryEntry.timestamp ?
+                `${dashboard.formatDateTime(latestHistoryEntry.timestamp)} (${dashboard.formatRelativeTime(latestHistoryEntry.timestamp)})` :
+                'Timestamp unavailable';
+
+            modalHtml += '<div class="modal-update">';
+            modalHtml += '<h3><i class="fas fa-exclamation-circle"></i> Recent Changes</h3>';
+            modalHtml += dashboard.renderMarkdown(latestHistoryEntry.summary);
+            modalHtml += `<div class="update-timestamp">Updated: ${timestampLabel}</div>`;
+            modalHtml += '</div>';
+        } else if (summaryData.last_update_summary && summaryData.last_update_summary !== 'Initial version.') {
+            const fallbackTimestamp = summaryData.last_updated ?
+                `${dashboard.formatDateTime(summaryData.last_updated)} (${dashboard.formatRelativeTime(summaryData.last_updated)})` :
+                'Timestamp unavailable';
+
             modalHtml += '<div class="modal-update">';
             modalHtml += '<h3><i class="fas fa-exclamation-circle"></i> Recent Changes</h3>';
             modalHtml += dashboard.renderMarkdown(summaryData.last_update_summary);
-            modalHtml += `<div class="update-timestamp">Updated: ${dashboard.formatRelativeTime(summaryData.last_updated)}</div>`;
+            modalHtml += `<div class="update-timestamp">Updated: ${fallbackTimestamp}</div>`;
             modalHtml += '</div>';
         }
     } else {
         modalHtml = '<p>No summary available for this policy yet.</p>';
     }
-    
+
+    const timelineHtml = dashboard.renderPolicyHistoryTimeline(historyEntries, slug);
+    if (timelineHtml) {
+        modalHtml += timelineHtml;
+    }
+
     content.innerHTML = modalHtml;
-    
+
     // Update action links
     visitLink.href = policy.url;
     // Point to GitHub file history on main for explicitness and stability

@@ -2615,6 +2615,129 @@ main {
     font-size: 1.1rem;
 }
 
+.modal-history {
+    background: #f8faff;
+    border: 1px solid #dbe6ff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-history h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+}
+
+.history-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.history-entry {
+    position: relative;
+    padding-left: 1.75rem;
+    border-left: 2px solid rgba(44, 62, 80, 0.15);
+}
+
+.history-entry::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(44, 62, 80, 0.1);
+}
+
+.history-entry.latest::before {
+    background: var(--secondary-color);
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+}
+
+.history-entry.initial::before {
+    background: rgba(44, 62, 80, 0.4);
+}
+
+.history-entry-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.history-entry-type {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+.history-entry.latest .history-entry-type {
+    color: var(--secondary-color);
+}
+
+.history-entry.initial .history-entry-type {
+    color: rgba(44, 62, 80, 0.7);
+}
+
+.history-entry-time {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.history-entry-body {
+    color: #2c3e50;
+}
+
+.history-entry-body ul {
+    margin: 0.75rem 0 0.75rem 1.25rem;
+}
+
+.history-entry-links {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.history-entry-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.history-entry-link-disabled {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: rgba(44, 62, 80, 0.6);
+    font-weight: 600;
+}
+
+.history-entry-links a:hover {
+    text-decoration: underline;
+}
+
+.history-entry-links i {
+    font-size: 0.9rem;
+}
+
 .modal-actions {
     display: flex;
     gap: 1rem;

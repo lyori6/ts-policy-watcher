@@ -20,6 +20,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_API_KEY_2 = os.environ.get("GEMINI_API_KEY_2")
 RUN_LOG_FILE = "run_log.json"
 SUMMARIES_FILE = "summaries.json"
+MAX_HISTORY_ENTRIES = int(os.environ.get("SUMMARY_HISTORY_LIMIT", "12"))
 PROMPT_TEMPLATE = """As a Trust & Safety analyst, provide a concise summary for a product manager. {instruction}
 
 Policy content:
@@ -33,6 +34,117 @@ using_backup_key = False
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
 DISABLE_DAILY_EMAILS = os.environ.get("DISABLE_DAILY_EMAILS", "false").lower() == "true"
+
+
+def get_current_timestamp():
+    """Return a normalized UTC timestamp string."""
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
+
+
+def get_default_snapshot_path(slug: str) -> str:
+    """Return the default snapshot path for a policy slug."""
+    return f"snapshots/production/{slug}/snapshot.html"
+
+
+def sanitize_history_entries(history, default_path):
+    """Ensure history entries are consistently structured."""
+    if not isinstance(history, list):
+        return []
+
+    sanitized = []
+    seen_keys = set()
+
+    for entry in history:
+        if not isinstance(entry, dict):
+            continue
+
+        entry_copy = entry.copy()
+        entry_copy.setdefault("change_type", "update")
+        entry_copy.setdefault("snapshot_path", default_path)
+
+        key = (
+            entry_copy.get("commit"),
+            entry_copy.get("timestamp"),
+            entry_copy.get("summary")
+        )
+
+        if key in seen_keys:
+            continue
+
+        seen_keys.add(key)
+        sanitized.append(entry_copy)
+
+    return sanitized[:MAX_HISTORY_ENTRIES]
+
+
+def ensure_history_container(policy_record, slug, include_initial=True):
+    """Normalize history list and optionally seed an initial entry."""
+    default_path = get_default_snapshot_path(slug)
+    history = sanitize_history_entries(policy_record.get("history"), default_path)
+
+    if include_initial and policy_record.get("initial_summary") and not any(
+        entry.get("change_type") == "initial" for entry in history
+    ):
+        history.append({
+            "summary": policy_record["initial_summary"],
+            "change_type": "initial",
+            "timestamp": policy_record.get("initial_summary_generated_at"),
+            "snapshot_path": default_path
+        })
+
+    policy_record["history"] = history
+    return history
+
+
+def append_history_entry(policy_record, slug, *, summary_text, change_type,
+                         commit_sha=None, file_path=None, timestamp=None,
+                         previous_summary=None, previous_timestamp=None):
+    """Append a normalized entry to the policy history."""
+    default_path = get_default_snapshot_path(slug)
+    history = ensure_history_container(
+        policy_record,
+        slug,
+        include_initial=(change_type != "initial")
+    )
+
+    # Seed with previous update if history is empty and we have past data
+    if previous_summary and previous_summary != "Initial version.":
+        if not any(entry.get("summary") == previous_summary for entry in history):
+            history.append({
+                "summary": previous_summary,
+                "change_type": "update",
+                "timestamp": previous_timestamp,
+                "snapshot_path": default_path
+            })
+
+    if timestamp is None:
+        timestamp = get_current_timestamp()
+
+    entry = {
+        "summary": summary_text,
+        "change_type": change_type,
+        "timestamp": timestamp,
+        "snapshot_path": file_path or default_path
+    }
+
+    if commit_sha:
+        entry["commit"] = commit_sha
+
+    # Avoid duplicate entries when rerunning the same commit
+    if commit_sha and any(item.get("commit") == commit_sha for item in history):
+        policy_record["history"] = history[:MAX_HISTORY_ENTRIES]
+        return
+
+    if not commit_sha and any(
+        item.get("summary") == entry["summary"] and
+        item.get("timestamp") == entry["timestamp"]
+        for item in history
+    ):
+        policy_record["history"] = history[:MAX_HISTORY_ENTRIES]
+        return
+
+    history.insert(0, entry)
+    policy_record["history"] = history[:MAX_HISTORY_ENTRIES]
 
 def get_changed_files(commit_sha):
     """Gets a list of snapshot files from a specific commit SHA."""
@@ -464,19 +576,45 @@ def main():
                 slug = os.path.basename(os.path.dirname(file_path))
                 is_new_policy = slug not in summaries_data
                 summary_text = process_changed_file(file_path, is_new_policy, commit_sha)
-                
+
                 if summary_text:
+                    timestamp = get_current_timestamp()
                     if is_new_policy:
                         summaries_data[slug] = {
                             "policy_name": slug.replace('-', ' ').title(),
                             "initial_summary": summary_text,
                             "last_update_summary": "Initial version.",
-                            "last_updated": datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+                            "last_updated": timestamp,
+                            "initial_summary_generated_at": timestamp
                         }
+                        append_history_entry(
+                            summaries_data[slug],
+                            slug,
+                            summary_text=summary_text,
+                            change_type="initial",
+                            commit_sha=commit_sha,
+                            file_path=file_path,
+                            timestamp=timestamp
+                        )
                         print(f"Generated initial summary for new policy: {slug}")
                     else:
+                        previous_summary = summaries_data[slug].get('last_update_summary')
+                        previous_timestamp = summaries_data[slug].get('last_updated')
+
+                        append_history_entry(
+                            summaries_data[slug],
+                            slug,
+                            summary_text=summary_text,
+                            change_type="update",
+                            commit_sha=commit_sha,
+                            file_path=file_path,
+                            timestamp=timestamp,
+                            previous_summary=previous_summary,
+                            previous_timestamp=previous_timestamp
+                        )
+
                         summaries_data[slug]['last_update_summary'] = summary_text
-                        summaries_data[slug]['last_updated'] = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+                        summaries_data[slug]['last_updated'] = timestamp
                         print(f"Generated update summary for existing policy: {slug}")
                     update_count += 1
                     email_notifications.append({

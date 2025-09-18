@@ -55,6 +55,7 @@ python scripts/diff_and_notify.py
 - **Modal Deep-Dives**: Click any card for detailed insights without cluttering the main view
 - **Improved Policy Matrix**: Full-width platform headers with better visual separation
 - **Responsive Design**: Optimized for desktop, tablet, and mobile viewing
+- **Update History Timeline**: Each policy modal now includes a chronological view of AI summaries, with direct links to the snapshot and commit that triggered the change
 
 ## Development Workflow
 
