@@ -1,0 +1,1153 @@
+{
+  "config": {
+    "configFile": "/Users/lyor/ts-policy-watcher/playwright.config.js",
+    "rootDir": "/Users/lyor/ts-policy-watcher/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/Users/lyor/ts-policy-watcher/tests/global-setup.js",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "testEnvironment": "production",
+      "targetUrl": "https://ts-policy-watcher.vercel.app",
+      "testSuiteVersion": "1.0.0",
+      "timestamp": "2025-09-19T02:55:10.138Z",
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "./test-results/playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "./test-results/results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "/Users/lyor/ts-policy-watcher/tests/custom-reporter.js",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "firefox-desktop",
+        "name": "firefox-desktop",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "webkit-desktop",
+        "name": "webkit-desktop",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "mobile-safari",
+        "name": "mobile-safari",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "tablet",
+        "name": "tablet",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "performance-slow-3g",
+        "name": "performance-slow-3g",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/lyor/ts-policy-watcher/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "testEnvironment": "production",
+          "targetUrl": "https://ts-policy-watcher.vercel.app",
+          "testSuiteVersion": "1.0.0",
+          "timestamp": "2025-09-19T02:55:10.138Z",
+          "actualWorkers": 1
+        },
+        "id": "visual-regression",
+        "name": "visual-regression",
+        "testDir": "/Users/lyor/ts-policy-watcher/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "cron-workflow-e2e.spec.js",
+      "file": "cron-workflow-e2e.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Policy Watcher Cron Job E2E Tests",
+          "file": "cron-workflow-e2e.spec.js",
+          "line": 19,
+          "column": 6,
+          "specs": [
+            {
+              "title": "validates automation workflow creates CHORE commits on main branch",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Setting up E2E test environment...\n"
+                        },
+                        {
+                          "text": "Found 3 CHORE commits on main branch\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:10.491Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-e7188a434f3910c081c8",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 26,
+              "column": 3
+            },
+            {
+              "title": "validates policy-changes branch excludes automation commits",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 43,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:57:35",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 35,
+                          "line": 57
+                        },
+                        "snippet": "  55 |\n  56 |       // Policy-changes branch should have NO CHORE commits\n> 57 |       expect(choreCommits.length).toBe(0);\n     |                                   ^\n  58 |       console.log('✓ Policy-changes branch contains no automation noise');\n  59 |\n  60 |       // Should contain meaningful commits"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 35,
+                            "line": 57
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m\n\n  55 |\n  56 |       // Policy-changes branch should have NO CHORE commits\n> 57 |       expect(choreCommits.length).toBe(0);\n     |                                   ^\n  58 |       console.log('✓ Policy-changes branch contains no automation noise');\n  59 |\n  60 |       // Should contain meaningful commits\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:57:35"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Switched to branch 'policy-changes'\n"
+                        },
+                        {
+                          "text": "Switched to branch 'main'\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:10.525Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Policy-W-48099-excludes-automation-commits-chromium-desktop/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 35,
+                        "line": 57
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 41,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:57:35",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 35,
+                          "line": 57
+                        },
+                        "snippet": "  55 |\n  56 |       // Policy-changes branch should have NO CHORE commits\n> 57 |       expect(choreCommits.length).toBe(0);\n     |                                   ^\n  58 |       console.log('✓ Policy-changes branch contains no automation noise');\n  59 |\n  60 |       // Should contain meaningful commits"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 35,
+                            "line": 57
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m\n\n  55 |\n  56 |       // Policy-changes branch should have NO CHORE commits\n> 57 |       expect(choreCommits.length).toBe(0);\n     |                                   ^\n  58 |       console.log('✓ Policy-changes branch contains no automation noise');\n  59 |\n  60 |       // Should contain meaningful commits\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:57:35"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Setting up E2E test environment...\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "Switched to branch 'policy-changes'\n"
+                        },
+                        {
+                          "text": "Switched to branch 'main'\n"
+                        }
+                      ],
+                      "retry": 1,
+                      "startTime": "2025-09-19T02:55:10.876Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Policy-W-48099-excludes-automation-commits-chromium-desktop-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 35,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-7f0f1abe1c13bb701c62",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 48,
+              "column": 3
+            },
+            {
+              "title": "validates summaries.json structure and content",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Setting up E2E test environment...\n"
+                        },
+                        {
+                          "text": "✓ Summaries.json contains 26 policies with valid structure\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:11.231Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-5bd3f8ff3f46d9f3ef35",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 74,
+              "column": 3
+            },
+            {
+              "title": "validates run_log.json tracking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✓ Run log contains 25 entries with valid structure\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:11.252Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-680eeb8427b33689dcf9",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 107,
+              "column": 3
+            },
+            {
+              "title": "validates weekly_summaries.json structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "ℹ Weekly summaries file not found - this is acceptable for test environments\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:11.260Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-e49ffa6d274a3c15c4a4",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 129,
+              "column": 3
+            },
+            {
+              "title": "validates snapshot files exist and have content",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✓ Validated 3 snapshot files\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:11.268Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-f29dcf3aacd5c62c445d",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 155,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Dashboard Integration Tests",
+          "file": "cron-workflow-e2e.spec.js",
+          "line": 180,
+          "column": 6,
+          "specs": [
+            {
+              "title": "validates dashboard can load with current data structure",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11071,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:188:16",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 16,
+                          "line": 188
+                        },
+                        "snippet": "  186 |\n  187 |     // Wait for dashboard to load\n> 188 |     await page.waitForSelector('.dashboard-container', { timeout: 10000 });\n      |                ^\n  189 |\n  190 |     // Check for key dashboard elements\n  191 |     await expect(page.locator('.dashboard-container')).toBeVisible();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 16,
+                            "line": 188
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n\n  186 |\n  187 |     // Wait for dashboard to load\n> 188 |     await page.waitForSelector('.dashboard-container', { timeout: 10000 });\n      |                ^\n  189 |\n  190 |     // Check for key dashboard elements\n  191 |     await expect(page.locator('.dashboard-container')).toBeVisible();\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:188:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:11.283Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 16,
+                        "line": 188
+                      }
+                    },
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10763,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:188:16",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 16,
+                          "line": 188
+                        },
+                        "snippet": "  186 |\n  187 |     // Wait for dashboard to load\n> 188 |     await page.waitForSelector('.dashboard-container', { timeout: 10000 });\n      |                ^\n  189 |\n  190 |     // Check for key dashboard elements\n  191 |     await expect(page.locator('.dashboard-container')).toBeVisible();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 16,
+                            "line": 188
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n\n  186 |\n  187 |     // Wait for dashboard to load\n> 188 |     await page.waitForSelector('.dashboard-container', { timeout: 10000 });\n      |                ^\n  189 |\n  190 |     // Check for key dashboard elements\n  191 |     await expect(page.locator('.dashboard-container')).toBeVisible();\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:188:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-09-19T02:55:24.099Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-41bcf-with-current-data-structure-chromium-desktop-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 16,
+                        "line": 188
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-1cc793850058b7bc1932",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "validates policy modal opens and shows history timeline",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10772,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:205:16",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 16,
+                          "line": 205
+                        },
+                        "snippet": "  203 |     await page.goto(`file://${dashboardPath}`);\n  204 |\n> 205 |     await page.waitForSelector('.dashboard-container');\n      |                ^\n  206 |\n  207 |     // Click on first policy card\n  208 |     const firstCard = page.locator('.policy-card').first();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 16,
+                            "line": 205
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n\n  203 |     await page.goto(`file://${dashboardPath}`);\n  204 |\n> 205 |     await page.waitForSelector('.dashboard-container');\n      |                ^\n  206 |\n  207 |     // Click on first policy card\n  208 |     const firstCard = page.locator('.policy-card').first();\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:205:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:35.409Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 16,
+                        "line": 205
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10782,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:205:16",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 16,
+                          "line": 205
+                        },
+                        "snippet": "  203 |     await page.goto(`file://${dashboardPath}`);\n  204 |\n> 205 |     await page.waitForSelector('.dashboard-container');\n      |                ^\n  206 |\n  207 |     // Click on first policy card\n  208 |     const firstCard = page.locator('.policy-card').first();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 16,
+                            "line": 205
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n\n  203 |     await page.goto(`file://${dashboardPath}`);\n  204 |\n> 205 |     await page.waitForSelector('.dashboard-container');\n      |                ^\n  206 |\n  207 |     // Click on first policy card\n  208 |     const firstCard = page.locator('.policy-card').first();\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:205:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-09-19T02:55:46.781Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-a11ac--and-shows-history-timeline-chromium-desktop-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 16,
+                        "line": 205
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-1e2bfcf649b72f6fa362",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 201,
+              "column": 3
+            },
+            {
+              "title": "validates dashboard responsiveness",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10784,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:245:18",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 18,
+                          "line": 245
+                        },
+                        "snippet": "  243 |       await page.goto(`file://${dashboardPath}`);\n  244 |\n> 245 |       await page.waitForSelector('.dashboard-container');\n      |                  ^\n  246 |\n  247 |       // Verify dashboard is functional at this viewport\n  248 |       await expect(page.locator('.dashboard-container')).toBeVisible();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 18,
+                            "line": 245
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n\n  243 |       await page.goto(`file://${dashboardPath}`);\n  244 |\n> 245 |       await page.waitForSelector('.dashboard-container');\n      |                  ^\n  246 |\n  247 |       // Verify dashboard is functional at this viewport\n  248 |       await expect(page.locator('.dashboard-container')).toBeVisible();\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:245:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:55:58.165Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 18,
+                        "line": 245
+                      }
+                    },
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10803,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:245:18",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 18,
+                          "line": 245
+                        },
+                        "snippet": "  243 |       await page.goto(`file://${dashboardPath}`);\n  244 |\n> 245 |       await page.waitForSelector('.dashboard-container');\n      |                  ^\n  246 |\n  247 |       // Verify dashboard is functional at this viewport\n  248 |       await expect(page.locator('.dashboard-container')).toBeVisible();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 18,
+                            "line": 245
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n\n\n  243 |       await page.goto(`file://${dashboardPath}`);\n  244 |\n> 245 |       await page.waitForSelector('.dashboard-container');\n      |                  ^\n  246 |\n  247 |       // Verify dashboard is functional at this viewport\n  248 |       await expect(page.locator('.dashboard-container')).toBeVisible();\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:245:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-09-19T02:56:09.541Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Dashboar-4a6c4-es-dashboard-responsiveness-chromium-desktop-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 18,
+                        "line": 245
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-1fc15a931c5438625eb9",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 231,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Branch Management Validation",
+          "file": "cron-workflow-e2e.spec.js",
+          "line": 261,
+          "column": 6,
+          "specs": [
+            {
+              "title": "validates workflow maintains two branches correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 70,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:277:43",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 43,
+                          "line": 277
+                        },
+                        "snippet": "  275 |\n  276 |       // Policy-changes should have fewer commits (filtered)\n> 277 |       expect(parseInt(policyCommitCount)).toBeLessThanOrEqual(parseInt(mainCommitCount));\n      |                                           ^\n  278 |\n  279 |       console.log(`✓ Main branch: ${mainCommitCount} commits, Policy-changes: ${policyCommitCount} commits`);\n  280 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 43,
+                            "line": 277
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m\n\n  275 |\n  276 |       // Policy-changes should have fewer commits (filtered)\n> 277 |       expect(parseInt(policyCommitCount)).toBeLessThanOrEqual(parseInt(mainCommitCount));\n      |                                           ^\n  278 |\n  279 |       console.log(`✓ Main branch: ${mainCommitCount} commits, Policy-changes: ${policyCommitCount} commits`);\n  280 |\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:277:43"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Switched to branch 'policy-changes'\n"
+                        },
+                        {
+                          "text": "Switched to branch 'main'\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:56:20.932Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Branch-M-fb1d0-ains-two-branches-correctly-chromium-desktop/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 43,
+                        "line": 277
+                      }
+                    },
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 53,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:277:43",
+                        "location": {
+                          "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                          "column": 43,
+                          "line": 277
+                        },
+                        "snippet": "  275 |\n  276 |       // Policy-changes should have fewer commits (filtered)\n> 277 |       expect(parseInt(policyCommitCount)).toBeLessThanOrEqual(parseInt(mainCommitCount));\n      |                                           ^\n  278 |\n  279 |       console.log(`✓ Main branch: ${mainCommitCount} commits, Policy-changes: ${policyCommitCount} commits`);\n  280 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                            "column": 43,
+                            "line": 277
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m\n\n  275 |\n  276 |       // Policy-changes should have fewer commits (filtered)\n> 277 |       expect(parseInt(policyCommitCount)).toBeLessThanOrEqual(parseInt(mainCommitCount));\n      |                                           ^\n  278 |\n  279 |       console.log(`✓ Main branch: ${mainCommitCount} commits, Policy-changes: ${policyCommitCount} commits`);\n  280 |\n    at /Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js:277:43"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Switched to branch 'policy-changes'\n"
+                        },
+                        {
+                          "text": "Switched to branch 'main'\n"
+                        }
+                      ],
+                      "retry": 1,
+                      "startTime": "2025-09-19T02:56:21.305Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/lyor/ts-policy-watcher/test-results/cron-workflow-e2e-Branch-M-fb1d0-ains-two-branches-correctly-chromium-desktop-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lyor/ts-policy-watcher/tests/cron-workflow-e2e.spec.js",
+                        "column": 43,
+                        "line": 277
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-e12fce62fd0484405f35",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 263,
+              "column": 3
+            },
+            {
+              "title": "validates GitHub Actions workflow file exists",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✓ Policy changes workflow file exists and is configured correctly\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-19T02:56:21.661Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c30f35f8f20ac3f87507-7b64d6a6620d9ec59368",
+              "file": "cron-workflow-e2e.spec.js",
+              "line": 286,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-19T02:55:10.143Z",
+    "duration": 71537.716,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}

@@ -2863,8 +2863,7 @@ function openPolicyModal(slug) {
     
     // Update action links
     visitLink.href = policy.url;
-    // Point to GitHub file history on policy-changes branch for clean history without automation noise
-    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/commits/policy-changes/snapshots/production/${slug}/snapshot.html`;
+    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/commits/main/snapshots/production/${slug}/snapshot.html`;
     historyLink.target = '_blank';
     historyLink.rel = 'noopener noreferrer';
     

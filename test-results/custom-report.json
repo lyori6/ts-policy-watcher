@@ -1,0 +1,118 @@
+{
+  "tests": [
+    {
+      "title": "validates automation workflow creates CHORE commits on main branch",
+      "status": "passed",
+      "duration": 18,
+      "timestamp": "2025-09-19T02:55:10.526Z"
+    },
+    {
+      "title": "validates policy-changes branch excludes automation commits",
+      "status": "failed",
+      "duration": 43,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m",
+      "timestamp": "2025-09-19T02:55:10.580Z"
+    },
+    {
+      "title": "validates policy-changes branch excludes automation commits",
+      "status": "failed",
+      "duration": 41,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m13\u001b[39m",
+      "timestamp": "2025-09-19T02:55:10.940Z"
+    },
+    {
+      "title": "validates summaries.json structure and content",
+      "status": "passed",
+      "duration": 5,
+      "timestamp": "2025-09-19T02:55:11.252Z"
+    },
+    {
+      "title": "validates run_log.json tracking",
+      "status": "passed",
+      "duration": 4,
+      "timestamp": "2025-09-19T02:55:11.260Z"
+    },
+    {
+      "title": "validates weekly_summaries.json structure",
+      "status": "passed",
+      "duration": 2,
+      "timestamp": "2025-09-19T02:55:11.268Z"
+    },
+    {
+      "title": "validates snapshot files exist and have content",
+      "status": "passed",
+      "duration": 11,
+      "timestamp": "2025-09-19T02:55:11.283Z"
+    },
+    {
+      "title": "validates dashboard can load with current data structure",
+      "status": "failed",
+      "duration": 11071,
+      "error": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+      "timestamp": "2025-09-19T02:55:23.799Z"
+    },
+    {
+      "title": "validates dashboard can load with current data structure",
+      "status": "failed",
+      "duration": 10763,
+      "error": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+      "timestamp": "2025-09-19T02:55:35.113Z"
+    },
+    {
+      "title": "validates policy modal opens and shows history timeline",
+      "status": "failed",
+      "duration": 10772,
+      "error": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+      "timestamp": "2025-09-19T02:55:46.429Z"
+    },
+    {
+      "title": "validates policy modal opens and shows history timeline",
+      "status": "failed",
+      "duration": 10782,
+      "error": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+      "timestamp": "2025-09-19T02:55:57.814Z"
+    },
+    {
+      "title": "validates dashboard responsiveness",
+      "status": "failed",
+      "duration": 10784,
+      "error": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+      "timestamp": "2025-09-19T02:56:09.196Z"
+    },
+    {
+      "title": "validates dashboard responsiveness",
+      "status": "failed",
+      "duration": 10803,
+      "error": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.dashboard-container') to be visible\u001b[22m\n",
+      "timestamp": "2025-09-19T02:56:20.585Z"
+    },
+    {
+      "title": "validates workflow maintains two branches correctly",
+      "status": "failed",
+      "duration": 70,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m",
+      "timestamp": "2025-09-19T02:56:21.015Z"
+    },
+    {
+      "title": "validates workflow maintains two branches correctly",
+      "status": "failed",
+      "duration": 53,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m406\u001b[39m\nReceived:    \u001b[31m407\u001b[39m",
+      "timestamp": "2025-09-19T02:56:21.373Z"
+    },
+    {
+      "title": "validates GitHub Actions workflow file exists",
+      "status": "passed",
+      "duration": 5,
+      "timestamp": "2025-09-19T02:56:21.673Z"
+    }
+  ],
+  "summary": {
+    "total": 16,
+    "passed": 6,
+    "failed": 10,
+    "skipped": 0
+  },
+  "duration": 71595,
+  "timestamp": "2025-09-19T02:56:21.737Z"
+}
