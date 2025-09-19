@@ -2,8 +2,8 @@
 
 **A comprehensive guide for developers and maintainers. This document details the system's architecture, setup, deployment, and operational history.**
 
-**Last Updated:** 2025-08-15
-**Status:** System is fully operational with enhanced dashboard UI/UX. Recent improvements include executive-level status cards and modal-based deep dives.
+**Last Updated:** 2025-09-18
+**Status:** System is fully operational with enhanced dashboard UI/UX and clean policy history system. Recent improvements include smart branch strategy for filtering automation noise from meaningful policy changes.
 
 ---
 
@@ -497,6 +497,168 @@ The system now correctly generates and sends detailed policy summaries like:
 - `.env.local`: Added for local development with API keys
 - `load_env.sh`: Created for easy environment setup
 - `.gitignore`: Updated to exclude local secrets
+
+---
+
+## 6. Policy History System & Smart Branch Strategy (September 2025)
+
+### 6.1. Problem Solved: Automation Noise in Policy History
+
+**Core Issue:**
+- GitHub Actions create "CHORE:" commits every 6 hours with snapshot updates
+- These automation commits cluttered the policy history, making it hard to see actual policy evolution
+- Dashboard history links pointed to noisy commit logs instead of meaningful changes
+
+**Impact:**
+- Users saw technical automation noise instead of policy changes
+- Difficult to track actual policy evolution over time
+- History links in dashboard were not useful for understanding policy development
+
+### 6.2. Smart Branch Strategy Implementation
+
+**Solution Overview:**
+The system now maintains two separate branches with distinct purposes:
+
+1. **`main` branch**: Contains ALL commits (automation + human changes)
+   - Receives 6-hour automation commits with "CHORE:" prefix
+   - Used for system operations and full history
+   - GitHub Actions workflow targets this branch
+
+2. **`policy-changes` branch**: Contains ONLY meaningful policy evolution
+   - Filters out automation "CHORE:" commits
+   - Shows clean timeline of actual policy changes
+   - Dashboard history links point here for clean user experience
+
+**Architecture:**
+```
+GitHub Actions (6hr) → main branch
+        ↓
+   CHORE commits
+        ↓
+   Auto-filtering → policy-changes branch
+        ↓
+   Clean history → Dashboard links
+```
+
+### 6.3. Implementation Details
+
+**Automated Branch Maintenance:**
+- **Workflow File**: `.github/workflows/maintain-policy-changes-branch.yml`
+- **Trigger**: Runs on every push to main branch
+- **Logic**: Cherry-picks only commits with meaningful prefixes:
+  - `FIX:` - Bug fixes and corrections
+  - `FEAT:` - New features and enhancements
+  - `REFACTOR:` - Code improvements
+  - `MOBILE FIX:` - Mobile-specific fixes
+  - `ANALYTICS FIX:` - Analytics improvements
+  - `CRITICAL FIX:` - Critical issue resolutions
+  - `DISABLE:`, `UPDATE:`, `ADD:` - Other meaningful changes
+
+**Excluded Patterns:**
+- `CHORE: Update T&S policy snapshots and health data`
+- `CHORE: Update policy summaries and run log`
+- Any commit starting with "CHORE:"
+
+**Dashboard Integration:**
+- **File**: `dashboard/script.js:2867`
+- **Old**: `commits/main/snapshots/production/${slug}/snapshot.html`
+- **New**: `commits/policy-changes/snapshots/production/${slug}/snapshot.html`
+- **Result**: Users see clean policy evolution timeline
+
+### 6.4. Enhanced Timeline Features (PR #3 Integration)
+
+**In-Dashboard History Timeline:**
+- Each policy modal includes chronological timeline of changes
+- Shows AI-generated summaries with timestamps
+- Direct links to specific snapshots and commits
+- Suppresses timeline when all entries are "initial" versions
+- Smart snapshot link handling (shows "unavailable" for entries without commits)
+
+**Timeline Structure:**
+```json
+{
+  "history": [
+    {
+      "summary": "Policy update description",
+      "change_type": "update|initial",
+      "timestamp": "2025-09-18T12:00:00Z",
+      "snapshot_path": "snapshots/production/platform/snapshot.html",
+      "commit": "abc123def456"
+    }
+  ]
+}
+```
+
+### 6.5. Comprehensive Testing Suite
+
+**E2E Test Coverage:**
+- **File**: `tests/cron-workflow-e2e.spec.js`
+- **Validates**:
+  - Automation workflow creates CHORE commits on main
+  - Policy-changes branch excludes automation noise
+  - Data structure integrity (summaries.json, run_log.json)
+  - Dashboard integration and responsiveness
+  - Branch management and filtering accuracy
+
+**Test Categories:**
+1. **Workflow Validation**: Ensures automation creates expected commit patterns
+2. **Branch Filtering**: Verifies policy-changes branch contains only meaningful commits
+3. **Data Integrity**: Validates JSON structure and content quality
+4. **Dashboard Integration**: Tests UI functionality and responsiveness
+5. **Branch Management**: Confirms dual-branch strategy works correctly
+
+### 6.6. Deployment Strategy
+
+**Dev Environment Testing:**
+- Deploy policy-changes branch to dev environment first
+- Validate dashboard shows clean history links
+- Test E2E workflow with sample commits
+- Verify automation workflow maintains both branches correctly
+
+**Production Deployment:**
+1. Merge smart branch strategy changes to main
+2. GitHub Actions automatically creates/maintains policy-changes branch
+3. Dashboard immediately benefits from clean history links
+4. No downtime or migration required
+
+### 6.7. Monitoring & Maintenance
+
+**Key Metrics to Monitor:**
+- Commit count ratio: main vs policy-changes branch
+- Cherry-pick success rate in workflow
+- Dashboard history link functionality
+- User engagement with timeline features
+
+**Maintenance Tasks:**
+- Monitor workflow logs for cherry-pick conflicts
+- Ensure policy-changes branch stays current
+- Review commit patterns to adjust filtering if needed
+- Validate dashboard history links remain functional
+
+**Troubleshooting:**
+- If policy-changes branch falls behind: Re-run workflow manually
+- If cherry-pick fails: Check for complex merge conflicts in automation commits
+- If dashboard links break: Verify branch exists and has correct structure
+
+### 6.8. Benefits Achieved
+
+**For Users:**
+- ✅ Clean policy history without automation noise
+- ✅ Meaningful timeline showing actual policy evolution
+- ✅ Direct links to relevant commits and snapshots
+- ✅ Better understanding of policy development over time
+
+**For System:**
+- ✅ Maintains full automation history on main branch
+- ✅ No disruption to existing automation workflows
+- ✅ Automated maintenance of clean history branch
+- ✅ Comprehensive test coverage for reliability
+
+**For Maintenance:**
+- ✅ Clear separation of automation vs. policy changes
+- ✅ Easy to identify meaningful commits vs. system updates
+- ✅ Automated filtering reduces manual curation need
+- ✅ Scalable solution that works with any commit volume
 - `platform_urls.json`: Cleaned up test endpoints for production
 
 **Documentation:**
@@ -1072,5 +1234,98 @@ dashboard/ ← run_log.json + summaries.json ← scripts/diff_and_notify.py
 - Changed platform headers from `colspan="8"` to individual cells for proper styling
 - Ensured full-width gray backgrounds for platform sections
 - Added subtle visual improvements for better readability
+
+---
+
+## 11. Production Issues & Critical Fixes (September 2025)
+
+### 11.1. Countdown Timer "0 0 0" Display Bug (RESOLVED)
+
+**Issue Discovered: September 2, 2025**
+- **Problem**: Dashboard status bar consistently displayed "0:00" instead of proper countdown to next scheduled run
+- **User Impact**: Confusing "0 0 0" display and constant page refreshing every 5 seconds
+- **Root Cause**: Logic flaw in `calculateSecondsUntilNextCheck()` function (dashboard/script.js:1759)
+
+**Technical Analysis:**
+- **Original Logic**: Calculated next run as "last run time + 6 hours"
+- **Issue**: When scheduled runs were missed/delayed, next run time was in the past, returning 0 seconds
+- **Side Effect**: 0:00 display triggered auto-refresh loop (script.js:2100-2104) every 5 seconds
+- **Detection**: Comprehensive Playwright-based end-to-end testing identified the issue
+
+**Resolution Implemented:**
+```javascript
+// BEFORE: Last-run based calculation (problematic)
+if (this.runLogData && this.runLogData.length > 0) {
+    const lastRun = this.runLogData[0];
+    const nextRunTime = new Date(lastRunTime);
+    nextRunTime.setHours(nextRunTime.getHours() + 6);
+}
+
+// AFTER: Schedule-based calculation (robust)
+const utcHour = now.getUTCHours();
+const scheduleHours = [0, 6, 12, 18];
+let nextRunHour = scheduleHours.find(hour => hour > utcHour);
+// Find next scheduled run time regardless of last actual run
+```
+
+**Additional Fixes:**
+- **Improved Refresh Logic**: Changed auto-refresh from 5 seconds to 30 seconds with validation
+- **Data Consistency**: Fixed `runData` vs `runLogData` reference inconsistency
+- **Enhanced Timeout**: Added conditions to prevent unnecessary page refreshes
+
+**Testing & Validation:**
+- **Comprehensive E2E Testing**: Created Playwright test suite targeting production environment
+- **Issue Reproduction**: Successfully reproduced and analyzed the countdown bug
+- **Fix Verification**: Manual calculation confirmed proper countdown display (e.g., "4:34:00" until next 6:00 AM UTC run)
+- **Cross-Browser Testing**: Verified fix works across Chrome, Firefox, Safari
+
+**Files Modified:**
+- `dashboard/script.js`: Updated `calculateSecondsUntilNextCheck()` and `startCountdownTimer()` functions
+- **Test Infrastructure**: Added comprehensive testing suite with status bar debugging capabilities
+
+**Deployment:**
+- **Commit**: 63b7f18 - "FIX: Resolve countdown timer '0 0 0' display issue"
+- **Status**: Successfully deployed to production via Vercel auto-deployment
+- **Result**: Status bar now shows proper countdown (e.g., "4:34:00") to next scheduled run
+
+**Prevention Measures:**
+- **Monitoring**: Created production end-to-end test suite for ongoing validation
+- **Documentation**: Comprehensive analysis preserved in test-results/PRODUCTION-ISSUE-ANALYSIS-REPORT.md
+- **Architecture**: Schedule-based approach is more robust against missed runs or delays
+
+### 11.2. End-to-End Testing Infrastructure Added
+
+**New Testing Capabilities:**
+- **Playwright Configuration**: Multi-browser, multi-device testing setup
+- **Production Monitoring**: Real-time status bar debugging and validation
+- **Visual Regression**: Screenshot comparison across browsers and devices
+- **Performance Testing**: Load time and resource monitoring
+- **Automated Test Runner**: HTML reporting with comprehensive analysis
+
+**Test Suite Files Created:**
+```
+playwright.config.js          - Multi-project browser configuration
+tests/production-e2e.spec.js   - Full dashboard functionality testing
+tests/status-bar-debug.spec.js - Specific countdown timer validation
+tests/visual-regression.spec.js - Cross-browser screenshot comparison
+tests/performance.spec.js      - Load time and resource monitoring
+tests/test-runner.js           - Automated execution with HTML reports
+```
+
+**Testing Results:**
+- **Issue Detection**: Successfully identified and analyzed the countdown timer bug
+- **Production Validation**: Confirmed dashboard loading and navigation functionality
+- **Cross-Browser**: Verified consistent behavior across Chrome, Firefox, Safari
+- **Mobile Testing**: Validated responsive design on mobile and tablet devices
+
+**Ongoing Value:**
+- **Continuous Monitoring**: Tests can be run against production URL for health checks
+- **Regression Prevention**: Visual regression tests prevent future UI issues
+- **Performance Baseline**: Monitors dashboard load times and resource usage
+- **Documentation**: Comprehensive test results and analysis for future debugging
+
+This comprehensive testing infrastructure ensures production issues are quickly identified and resolved, preventing user-impacting bugs from persisting undetected.
+
+---
 
 This guide provides comprehensive context for any AI agent to quickly understand, maintain, and extend the T&S Policy Watcher system effectively.

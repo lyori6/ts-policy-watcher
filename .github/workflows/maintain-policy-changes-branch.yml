@@ -1,0 +1,119 @@
+# .github/workflows/maintain-policy-changes-branch.yml
+
+name: 'Maintain Policy Changes Branch'
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  update-policy-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for cherry-picking
+
+      - name: 'Configure Git'
+        run: |
+          git config user.name "Policy Watch Bot"
+          git config user.email "bot@github.com"
+
+      - name: 'Create or update policy-changes branch'
+        run: |
+          # Check if policy-changes branch exists remotely
+          if git ls-remote --heads origin policy-changes | grep -q policy-changes; then
+            echo "policy-changes branch exists, checking it out"
+            git checkout policy-changes
+            git pull origin policy-changes
+          else
+            echo "Creating new policy-changes branch"
+            git checkout -b policy-changes
+            # Start from an early meaningful commit, not from the very beginning
+            # Find the first non-CHORE commit to use as the base
+            FIRST_MEANINGFUL_COMMIT=$(git log --oneline --grep="^(?!CHORE:)" --grep="FIX:\|FEAT:\|REFACTOR:\|MOBILE FIX:\|ANALYTICS FIX:\|CRITICAL FIX:\|DISABLE:" | tail -1 | cut -d' ' -f1)
+            if [ -n "$FIRST_MEANINGFUL_COMMIT" ]; then
+              echo "Starting policy-changes branch from commit: $FIRST_MEANINGFUL_COMMIT"
+              git reset --hard $FIRST_MEANINGFUL_COMMIT
+            fi
+          fi
+
+      - name: 'Cherry-pick meaningful commits from main'
+        run: |
+          # Get the latest commit on policy-changes branch
+          LAST_POLICY_COMMIT=$(git rev-parse HEAD)
+
+          # Switch to main to get the latest commits
+          git checkout main
+
+          # Find commits on main that are newer than the last policy-changes commit
+          # and are NOT automation commits (exclude CHORE: prefixed commits)
+          echo "Looking for meaningful commits since $LAST_POLICY_COMMIT"
+
+          # Get commits that are:
+          # 1. After the last policy-changes commit
+          # 2. NOT prefixed with "CHORE:"
+          # 3. ARE prefixed with meaningful prefixes
+          MEANINGFUL_COMMITS=$(git log --oneline ${LAST_POLICY_COMMIT}..HEAD \
+            --grep="^FIX:" --grep="^FEAT:" --grep="^REFACTOR:" \
+            --grep="^MOBILE FIX:" --grep="^ANALYTICS FIX:" --grep="^CRITICAL FIX:" \
+            --grep="^DISABLE:" --grep="^UPDATE:" --grep="^ADD:" \
+            --reverse | cut -d' ' -f1)
+
+          if [ -z "$MEANINGFUL_COMMITS" ]; then
+            echo "No meaningful commits to cherry-pick"
+            exit 0
+          fi
+
+          # Switch back to policy-changes branch
+          git checkout policy-changes
+
+          # Cherry-pick each meaningful commit
+          echo "Cherry-picking commits: $MEANINGFUL_COMMITS"
+          for commit in $MEANINGFUL_COMMITS; do
+            echo "Cherry-picking commit: $commit"
+            if git cherry-pick $commit; then
+              echo "Successfully cherry-picked $commit"
+            else
+              echo "Failed to cherry-pick $commit, attempting to resolve conflicts"
+              # For policy changes, we generally want to keep the new version
+              git add snapshots/ summaries.json run_log.json url_health.json weekly_summaries.json 2>/dev/null || true
+              git add dashboard/ docs/ scripts/ 2>/dev/null || true
+
+              # Check if there are still conflicts
+              if git status --porcelain | grep -q "^UU\|^AA\|^DD"; then
+                echo "Unresolvable conflicts in commit $commit, skipping"
+                git cherry-pick --abort
+                continue
+              else
+                git cherry-pick --continue
+                echo "Resolved conflicts and completed cherry-pick for $commit"
+              fi
+            fi
+          done
+
+      - name: 'Push policy-changes branch'
+        run: |
+          git checkout policy-changes
+          if git diff --quiet HEAD HEAD~1 2>/dev/null; then
+            echo "No changes to push"
+          else
+            echo "Pushing policy-changes branch"
+            git push origin policy-changes
+          fi
+
+      - name: 'Summary'
+        run: |
+          git checkout policy-changes
+          echo "Policy-changes branch updated successfully"
+          echo "Latest commits on policy-changes:"
+          git log --oneline -5
