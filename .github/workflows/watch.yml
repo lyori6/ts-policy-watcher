@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
+    env:
+      WORKFLOW_BRANCH: ${{ github.ref_name }}
     
     steps:
       # Step 1: Check out the repository code
@@ -81,15 +84,16 @@ jobs:
           if ! git diff --quiet || ! git diff --staged --quiet; then
             echo "Found uncommitted changes, stashing them temporarily"
             git stash push -m "Temporary stash before rebase"
-            git pull origin main --rebase
+            git pull origin "$WORKFLOW_BRANCH" --rebase
             git stash pop
           else
-            git pull origin main --rebase
+            git pull origin "$WORKFLOW_BRANCH" --rebase
           fi
 
       # Step 8: Push the changes back to the main branch
       # This uses a dedicated action to handle pushing the commits.
       - name: 'Push Changes'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -134,13 +138,14 @@ jobs:
           if ! git diff --quiet || ! git diff --staged --quiet; then
             echo "Found uncommitted changes, stashing them temporarily"
             git stash push -m "Temporary stash before final rebase"
-            git pull origin main --rebase
+            git pull origin "$WORKFLOW_BRANCH" --rebase
             git stash pop
           else
-            git pull origin main --rebase
+            git pull origin "$WORKFLOW_BRANCH" --rebase
           fi
 
       - name: 'Push Summary Changes'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
