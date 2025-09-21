@@ -100,6 +100,7 @@ jobs:
           branch: main
 
       - name: 'Push Changes (data-updates)'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -152,6 +153,7 @@ jobs:
           branch: main
 
       - name: 'Push Summary Changes (data-updates)'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
