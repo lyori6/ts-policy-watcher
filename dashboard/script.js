@@ -3212,13 +3212,59 @@ class PolicyWatcherDashboard {
     }
 }
 
-// Global function for opening policy modal
-function openPolicyModal(slug) {
-    const modal = document.getElementById('policy-summary-modal');
+function ensurePolicySummaryModalElements() {
+    let modal = document.getElementById('policy-summary-modal');
+    if (!modal) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+            <div id="policy-summary-modal" class="modal">
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h2 id="policy-modal-title"><i class="fas fa-file-text"></i> Policy Summary</h2>
+                        <span class="close-button" onclick="closePolicyModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div id="policy-modal-content">Loading...</div>
+                        <div class="modal-actions">
+                            <a id="policy-modal-visit" href="#" target="_blank" class="action-btn primary-btn">
+                                <i class="fas fa-external-link-alt"></i> Visit Policy Page
+                            </a>
+                            <a id="policy-modal-history" href="#" target="_blank" class="action-btn secondary-btn">
+                                <i class="fas fa-clock"></i> View History
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        const fragment = wrapper.firstElementChild;
+        if (fragment) {
+            document.body.appendChild(fragment);
+            modal = fragment;
+        }
+    }
+
     const title = document.getElementById('policy-modal-title');
     const content = document.getElementById('policy-modal-content');
     const visitLink = document.getElementById('policy-modal-visit');
     const historyLink = document.getElementById('policy-modal-history');
+
+    if (!modal || !title || !content || !visitLink || !historyLink) {
+        return null;
+    }
+
+    return { modal, title, content, visitLink, historyLink };
+}
+
+// Global function for opening policy modal
+function openPolicyModal(slug) {
+    const summaryElements = ensurePolicySummaryModalElements();
+    if (!summaryElements) {
+        console.warn('Policy summary modal elements missing.');
+        return;
+    }
+
+    const { modal, title, content, visitLink, historyLink } = summaryElements;
     
     // Get dashboard instance to access data
     const dashboard = window.policyDashboard;
@@ -3226,8 +3272,11 @@ function openPolicyModal(slug) {
     
     const policy = dashboard.platformData.find(p => p.slug === slug);
     const summaryData = dashboard.summariesData[slug] || {};
-    
-    if (!policy) return;
+
+    if (!policy) {
+        console.warn(`Policy not found for slug '${slug}'. Known slugs:`, dashboard.platformData.map(p => p.slug));
+        return;
+    }
     
     // Update modal content
     title.innerHTML = `<i class="fas fa-file-text"></i> ${policy.name} - ${dashboard.findPlatformName(slug)}`;
@@ -3405,6 +3454,10 @@ document.addEventListener('DOMContentLoaded', () => {
             window.policyDashboard.closeHistoryModal();
         }
     });
+});
+
+window.addEventListener('load', () => {
+    ensurePolicySummaryModalElements();
 });
 
 
