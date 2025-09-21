@@ -12,6 +12,11 @@ class PolicyWatcherDashboard {
         // GitHub raw content URLs (always use live data from repo)
         this.DATA_BRANCH = this.resolveDataBranch(branch);
         this.DATA_RAW_BASE = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${this.DATA_BRANCH}`;
+        this.SNAPSHOT_ENV_DIR = this.DATA_BRANCH === 'dev' ? 'development' : 'production';
+        this.historyManifestCache = new Map();
+        this.historyContentCache = new Map();
+        this.historyModalEnabled = this.determineHistoryModalEnabled();
+        this.activeHistorySlug = null;
         
         this.LOG_FILE_PATH = `${this.DATA_RAW_BASE}/run_log.json`;
         this.SUMMARIES_PATH = `${this.DATA_RAW_BASE}/summaries.json`;
@@ -113,6 +118,53 @@ class PolicyWatcherDashboard {
             console.warn('Unable to parse dataBranch override from URL:', error);
             return null;
         }
+    }
+
+    getBooleanQueryOverride(paramName) {
+        try {
+            const searchParams = new URLSearchParams(window.location.search);
+            const rawValue = searchParams.get(paramName) ?? searchParams.get(paramName.toLowerCase());
+            if (rawValue === null) {
+                return null;
+            }
+            const normalized = rawValue.trim().toLowerCase();
+            if (["1", "true", "on", "yes"].includes(normalized)) {
+                return true;
+            }
+            if (["0", "false", "off", "no"].includes(normalized)) {
+                return false;
+            }
+            return null;
+        } catch (error) {
+            console.warn(`Unable to parse boolean override for ${paramName}:`, error);
+            return null;
+        }
+    }
+
+    determineHistoryModalEnabled() {
+        const queryOverride = this.getBooleanQueryOverride('historyModal');
+        if (queryOverride !== null) {
+            return queryOverride;
+        }
+
+        if (typeof window !== 'undefined' && window.__POLICY_HISTORY_ENABLED__ !== undefined) {
+            return Boolean(window.__POLICY_HISTORY_ENABLED__);
+        }
+
+        // Default: enable for dev/data-updates, keep off for main
+        return this.DATA_BRANCH === 'dev' || this.DATA_BRANCH === 'data-updates';
+    }
+
+    getHistoryBaseUrl() {
+        return `${this.DATA_RAW_BASE}/snapshots/${this.SNAPSHOT_ENV_DIR}/history`;
+    }
+
+    getHistoryManifestUrl(slug) {
+        return `${this.getHistoryBaseUrl()}/${slug}/index.json`;
+    }
+
+    getHistoryEntryUrl(slug, fileName) {
+        return `${this.getHistoryBaseUrl()}/${slug}/${fileName}`;
     }
 
     async init() {
@@ -2875,6 +2927,289 @@ class PolicyWatcherDashboard {
             if (el) el.textContent = '-';
         });
     }
+
+    async openPolicyHistoryModal(slug) {
+        if (!this.historyModalEnabled) {
+            window.open(this.getGithubHistoryUrl(slug), '_blank', 'noopener');
+            return;
+        }
+
+        this.activeHistorySlug = slug;
+
+        const elements = this.getHistoryModalElements();
+        if (!elements.modal) {
+            console.warn('History modal elements missing.');
+            return;
+        }
+
+        const policy = this.platformData.find(p => p.slug === slug);
+        const policyName = policy ? policy.name : slug;
+        if (elements.title) {
+            elements.title.innerHTML = `<i class="fas fa-clock"></i> History — ${policyName}`;
+        }
+
+        this.renderHistoryModalLoading();
+        elements.modal.style.display = 'block';
+
+        try {
+            const manifest = await this.fetchHistoryManifest(slug);
+            if (!manifest || manifest.length === 0) {
+                this.renderHistoryEmptyState(slug);
+                return;
+            }
+
+            this.renderHistoryList(manifest, slug);
+            await this.handleHistoryEntrySelection(slug, manifest[0]);
+        } catch (error) {
+            console.error('Failed to load policy history', error);
+            this.renderHistoryErrorState(slug);
+        }
+    }
+
+    closeHistoryModal() {
+        const elements = this.getHistoryModalElements();
+        if (elements.modal) {
+            elements.modal.style.display = 'none';
+        }
+        this.activeHistorySlug = null;
+    }
+
+    getHistoryModalElements() {
+        return {
+            modal: document.getElementById('policy-history-modal'),
+            title: document.getElementById('policy-history-title'),
+            list: document.getElementById('policy-history-list'),
+            content: document.getElementById('policy-history-content')
+        };
+    }
+
+    renderHistoryModalLoading() {
+        const { list, content } = this.getHistoryModalElements();
+        if (list) {
+            list.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading history…</p>
+                </div>
+            `;
+        }
+
+        if (content) {
+            content.innerHTML = `
+                <div class="history-placeholder">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Select a version to view the cleaned snapshot.</p>
+                </div>
+            `;
+        }
+    }
+
+    renderHistoryEmptyState(slug) {
+        const { list, content } = this.getHistoryModalElements();
+        if (list) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-archive"></i>
+                    <p>No saved versions yet for this policy.</p>
+                </div>
+            `;
+        }
+
+        if (content) {
+            const fallbackLink = this.getGithubHistoryUrl(slug);
+            content.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-info-circle"></i>
+                    <p>History will appear here after the next automation run that exports cleaned snapshots.</p>
+                    <a class="action-btn secondary-btn" href="${fallbackLink}" target="_blank" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i> View GitHub history
+                    </a>
+                </div>
+            `;
+        }
+    }
+
+    renderHistoryErrorState(slug) {
+        const { list, content } = this.getHistoryModalElements();
+        if (list) {
+            list.innerHTML = `
+                <div class="empty-state error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Unable to load history right now.</p>
+                </div>
+            `;
+        }
+
+        if (content) {
+            const fallbackLink = this.getGithubHistoryUrl(slug);
+            content.innerHTML = `
+                <div class="empty-state error">
+                    <p>Something went wrong while fetching the history data.</p>
+                    <a class="action-btn secondary-btn" href="${fallbackLink}" target="_blank" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i> View on GitHub
+                    </a>
+                </div>
+            `;
+        }
+    }
+
+    renderHistoryList(manifest, slug) {
+        const { list } = this.getHistoryModalElements();
+        if (!list) {
+            return;
+        }
+
+        list.innerHTML = '';
+
+        manifest.forEach((entry) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'history-entry-button';
+            button.dataset.file = entry.file;
+
+            const label = this.escapeHtml(entry.label || entry.timestamp || entry.file);
+            const timeAgo = entry.timestamp ? this.formatRelativeTime(entry.timestamp) : '';
+            const commitLabel = entry.commit ? `Commit ${entry.commit}` : '';
+            const metaParts = [timeAgo, commitLabel].filter(Boolean);
+
+            button.innerHTML = `
+                <span class="history-entry-label">${label}</span>
+                ${metaParts.length ? `<span class="history-entry-meta">${metaParts.join(' • ')}</span>` : ''}
+            `;
+
+            button.addEventListener('click', () => {
+                this.handleHistoryEntrySelection(slug, entry);
+            });
+
+            list.appendChild(button);
+        });
+    }
+
+    setActiveHistoryEntry(fileName) {
+        const { list } = this.getHistoryModalElements();
+        if (!list) return;
+
+        list.querySelectorAll('.history-entry-button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.file === fileName);
+        });
+    }
+
+    async handleHistoryEntrySelection(slug, entry) {
+        const { content } = this.getHistoryModalElements();
+        if (!content || !entry || !entry.file) {
+            return;
+        }
+
+        this.setActiveHistoryEntry(entry.file);
+
+        content.innerHTML = `
+            <div class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading cleaned snapshot…</p>
+            </div>
+        `;
+
+        try {
+            const text = await this.fetchHistoryEntry(slug, entry.file);
+            this.renderHistoryContent(entry, text);
+        } catch (error) {
+            console.error('Failed to load history entry', error);
+            content.innerHTML = `
+                <div class="empty-state error">
+                    <p>Unable to load this version. You can still view the raw snapshot on GitHub.</p>
+                    <a class="action-btn secondary-btn" href="${this.getGithubHistoryUrl(slug)}" target="_blank" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i> View on GitHub
+                    </a>
+                </div>
+            `;
+        }
+    }
+
+    renderHistoryContent(entry, text) {
+        const { content } = this.getHistoryModalElements();
+        if (!content) return;
+
+        const escapedText = this.escapeHtml(text || '');
+        const relativeTime = entry.timestamp ? this.formatRelativeTime(entry.timestamp) : '';
+
+        const commitLink = entry.commit_full
+            ? `https://github.com/lyori6/ts-policy-watcher/commit/${entry.commit_full}`
+            : null;
+        const commitShort = entry.commit ? this.escapeHtml(entry.commit) : null;
+
+        content.innerHTML = `
+            <div class="history-entry-header">
+                <h3>${this.escapeHtml(entry.label || 'Saved version')}</h3>
+                <div class="history-entry-subtitle">
+                    ${relativeTime ? `<span><i class="far fa-clock"></i> ${relativeTime}</span>` : ''}
+                    ${commitLink && commitShort ? `<a href="${commitLink}" target="_blank" rel="noopener"><i class="fab fa-github"></i> ${commitShort}</a>` : ''}
+                </div>
+            </div>
+            <pre class="history-entry-text">${escapedText}</pre>
+        `;
+    }
+
+    async fetchHistoryManifest(slug) {
+        if (this.historyManifestCache.has(slug)) {
+            return this.historyManifestCache.get(slug);
+        }
+
+        const url = this.getHistoryManifestUrl(slug);
+
+        try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (response.status === 404) {
+                this.historyManifestCache.set(slug, []);
+                return [];
+            }
+
+            if (!response.ok) {
+                throw new Error(`History manifest request failed (${response.status})`);
+            }
+
+            const data = await response.json();
+            if (!Array.isArray(data)) {
+                throw new Error('History manifest had unexpected format');
+            }
+
+            this.historyManifestCache.set(slug, data);
+            return data;
+        } catch (error) {
+            this.historyManifestCache.delete(slug);
+            throw error;
+        }
+    }
+
+    async fetchHistoryEntry(slug, fileName) {
+        if (!this.historyContentCache.has(slug)) {
+            this.historyContentCache.set(slug, new Map());
+        }
+
+        const slugCache = this.historyContentCache.get(slug);
+        if (slugCache.has(fileName)) {
+            return slugCache.get(fileName);
+        }
+
+        const url = this.getHistoryEntryUrl(slug, fileName);
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+            throw new Error(`History entry request failed (${response.status})`);
+        }
+
+        const text = await response.text();
+        slugCache.set(fileName, text);
+        return text;
+    }
+
+    getGithubHistoryUrl(slug) {
+        return `https://github.com/lyori6/ts-policy-watcher/commits/main/snapshots/production/${slug}/snapshot.html`;
+    }
+
+    escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = value ?? '';
+        return div.innerHTML;
+    }
 }
 
 // Global function for opening policy modal
@@ -2919,9 +3254,22 @@ function openPolicyModal(slug) {
     
     // Update action links
     visitLink.href = policy.url;
-    historyLink.href = `https://github.com/lyori6/ts-policy-watcher/commits/main/snapshots/production/${slug}/snapshot.html`;
-    historyLink.target = '_blank';
-    historyLink.rel = 'noopener noreferrer';
+
+    if (dashboard.historyModalEnabled) {
+        historyLink.href = '#';
+        historyLink.removeAttribute('target');
+        historyLink.removeAttribute('rel');
+        historyLink.onclick = (event) => {
+            event.preventDefault();
+            dashboard.openPolicyHistoryModal(slug);
+        };
+        historyLink.classList.remove('disabled');
+    } else {
+        historyLink.onclick = null;
+        historyLink.href = dashboard.getGithubHistoryUrl(slug);
+        historyLink.target = '_blank';
+        historyLink.rel = 'noopener noreferrer';
+    }
     
     modal.style.display = 'block';
 }
@@ -2930,6 +3278,18 @@ function openPolicyModal(slug) {
 function closePolicyModal() {
     const modal = document.getElementById('policy-summary-modal');
     modal.style.display = 'none';
+}
+
+function closePolicyHistoryModal() {
+    const dashboard = window.policyDashboard;
+    if (dashboard) {
+        dashboard.closeHistoryModal();
+    } else {
+        const modal = document.getElementById('policy-history-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
 }
 
 // Global function for toggling summary expansion
@@ -3030,6 +3390,21 @@ function exportMatrix() {
 document.addEventListener('DOMContentLoaded', () => {
     window.dashboardInstance = new PolicyWatcherDashboard();
     window.policyDashboard = window.dashboardInstance; // Keep for compatibility
+
+    const historyModal = document.getElementById('policy-history-modal');
+    if (historyModal) {
+        historyModal.addEventListener('click', (event) => {
+            if (event.target === historyModal && window.policyDashboard) {
+                window.policyDashboard.closeHistoryModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && window.policyDashboard) {
+            window.policyDashboard.closeHistoryModal();
+        }
+    });
 });
 
 

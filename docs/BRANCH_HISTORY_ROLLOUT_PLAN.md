@@ -1,8 +1,8 @@
 # Branch & Policy History Rollout Plan
 
 **Owner:** Codex (with Lyor)
-**Last Updated:** 2025-09-19
-**Status:** In Progress (Stage 6)
+**Last Updated:** 2025-09-22
+**Status:** ✅ Stage 6 validated (ready for Stage 7 planning)
 
 ---
 
@@ -106,13 +106,16 @@
 
 ### Stage 7 – Policy History UI (Preview First)
 - **Changes**
-  - Introduce new modal/tab that consumes cleaned artifacts (starting with timeline list, diff later).
-  - Only enable UI in dev/previews until validated.
+  - Extend the Stage 6 exporter so the history-only pass writes a capped manifest (`snapshots/history/<slug>/index.json`) and up to five `clean` snapshots per policy, committed to `data-updates` only.
+  - Replace the current "View History" GitHub link inside Policy Explorer with an in-app modal: the button remains in-place, but now loads the manifest, shows human-friendly version labels, and fetches the selected `clean.txt` lazily.
+  - Introduce a feature flag (default off in production) controlling the modal so dev/previews can exercise the flow before we promote it.
+  - Auto-enable the modal for `dev` / `data-updates` branches; support manual override via `?historyModal=on|off` for smoke tests and future production flips.
 - **Verification**
-  - Puppeteer script extended to validate new modal opens and data renders.
-  - Manual QA + stakeholder review.
+  - Local: run `DEVELOPMENT_MODE=1 ENABLE_HISTORY_EXPORT=1 HISTORY_EXPORT_ONLY=1 venv/bin/python scripts/fetch.py`, confirm `snapshots/development/history/...` contains ≤5 entries per slug and the modal renders them correctly.
+  - Workflow: ensure the data-updates export pass commits only history/manifests when content changes and trims older entries.
+  - Preview: deploy with the flag enabled, extend Puppeteer smoke to click "View History" and assert modal content; follow with manual QA/stakeholder review.
 - **Fallback**
-  - Feature flag UI off for production.
+  - Disable the feature flag to restore the existing GitHub link; exporter remains gated by `ENABLE_HISTORY_EXPORT` so production stays unaffected.
 
 ---
 
@@ -172,8 +175,8 @@ Adjust pacing based on findings; do not advance to the next stage until verifica
 1. ✅ Implement Stage 1 in a feature branch.
 2. ✅ Build Puppeteer smoke script (usable from Stage 1 onwards).
 3. ✅ Update watcher workflow for dual pushes; trigger manual run and compare `main` vs `data-updates`.
-4. 🚧 Stage 6 validation: trigger workflow with the new history-export pass, verify `clean.txt` commits stay on `data-updates`, and spot-check trimmed artifacts.
-5. Share plan for sign-off, then proceed sequentially.
+4. ✅ Stage 6 validation: two-pass workflow proven; clean artifacts confirmed on `data-updates` only.
+5. 🚧 Stage 7 validation: enable history modal in preview, run updated smoke test, and gather stakeholder feedback before production flag flip.
 
 ---
 
@@ -196,3 +199,19 @@ Adjust pacing based on findings; do not advance to the next stage until verifica
   - Next: safe to wire `ENABLE_HISTORY_EXPORT=1` in workflow for `data-updates`-only path; keep it off for `main` runs. Suggested approach: duplicate the fetch step — one guarded with `if: ${{ env.WORKFLOW_BRANCH == 'main' }}` and no flag, and a second guarded `if: ${{ env.WORKFLOW_BRANCH == 'main' }}` for the `data-updates` push context with `env: ENABLE_HISTORY_EXPORT: '1'` — or set the env globally and use a branch check to export only on `data-updates`.
 - **2025-09-22:** Stage 6 cleanup refinements — `clean_html()` now accepts the slug, trims Meta/Twitch nav chrome, filters YouTube survey text, and keeps TikTok outputs populated; added a `HISTORY_EXPORT_ONLY` pass so workflows can emit `clean.txt` from existing snapshots without a second run log entry.
 - **2025-09-22:** `.github/workflows/watch.yml` updated for the two-pass rollout: main commit stays HTML-only, then a history-export-only pass stages `clean.*` and force-pushes to `data-updates`.
+  - Validation (2025-09-22 workflow_dispatch #102):
+    - origin/main tip → `7242bb9a2ef9d522f4cd3add64278418864a048b` (`CHORE: Update policy summaries and run log`) — HTML-only commit path.
+    - origin/data-updates tip → `b64031d11da72dfa5e14ceeee944e794723641e5` (`CHORE: Export cleaned policy snapshots`) — `snapshots/**/clean.txt` only; force-push succeeded.
+    - Spot-check sizes: Meta ≈ 6 KB, Twitch ≈ 84 KB, TikTok ≈ 9.6 KB (content trimmed as expected).
+    - Outcome: Stage 6 complete; proceed to Stage 7 UI planning.
+- **2025-09-22:** Stage 7 planning — agreed to replace the Policy Explorer GitHub link with a feature-flagged modal backed by capped history manifests (five versions per policy). Implementation tracked in `POLICY_HISTORY_IMPLEMENTATION_PLAN.md`.
+- **2025-09-22:** Stage 7 exporter update — `run_history_export_only_mode` now writes `snapshots/<env>/history/<slug>/index.json` plus timestamped `clean` copies (max five per slug) and the workflow’s second pass stages the history directories alongside `clean.txt`.
+- **2025-09-22:** Stage 7 UI foundation — Policy Explorer "View History" button now opens a feature-flagged modal (enabled on dev/data-updates) that reads `index.json` manifests, lists human-friendly versions, and renders cleaned text with GitHub fallback. Puppeteer smoke extended to exercise the modal when enabled.
+  - Validation (main vs. data-updates):
+    - origin/main tip: `7242bb9a2ef9d522f4cd3add64278418864a048b` — "CHORE: Update policy summaries and run log" (HTML-only path + summaries/log step). Matches first pass expectation.
+    - origin/data-updates tip: `b64031d11da72dfa5e14ceeee944e794723641e5` — "CHORE: Export cleaned policy snapshots"; file list shows only `snapshots/**/clean.txt` additions.
+    - Spot-checks (data-updates):
+      - `snapshots/production/meta-community-guidelines/clean.txt` ≈ 6.0 KB — header/nav largely trimmed; content begins at policy rationale; residual long lines acceptable.
+      - `snapshots/production/twitch-community-guidelines/clean.txt` ≈ 83.9 KB — long but readable; intro + enforcement sections preserved; nav chrome stripped.
+      - `snapshots/production/tiktok-community-guidelines/clean.txt` ≈ 9.6 KB — populated with section TOC and headings; acceptable signal; may refine further in later pass.
+    - Notes: First commit pushed to `main`; follow-up clean artifacts committed and force-pushed to `data-updates` only, as designed.
