@@ -3,10 +3,14 @@
 class PolicyWatcherDashboard {
     constructor() {
         // Dynamically determine branch based on deployment URL
+        this.DEFAULT_DATA_BRANCH = 'main';
+        this.SUPPORTED_DATA_BRANCHES = ['main', 'dev', 'data-updates'];
+
         const branch = this.detectBranch();
-        
+        this.DEPLOYMENT_BRANCH = branch;
+
         // GitHub raw content URLs (always use live data from repo)
-        this.DATA_BRANCH = 'main';
+        this.DATA_BRANCH = this.resolveDataBranch(branch);
         this.DATA_RAW_BASE = `https://raw.githubusercontent.com/lyori6/ts-policy-watcher/${this.DATA_BRANCH}`;
         
         this.LOG_FILE_PATH = `${this.DATA_RAW_BASE}/run_log.json`;
@@ -16,7 +20,11 @@ class PolicyWatcherDashboard {
         this.HEALTH_ALERTS_PATH = `${this.DATA_RAW_BASE}/health_alerts.json`;
         this.WEEKLY_SUMMARIES_PATH = `${this.DATA_RAW_BASE}/weekly_summaries.json`;
         
-        console.log(`🌐 Dashboard using branch: ${branch}`);
+        if (this.DATA_BRANCH !== this.DEFAULT_DATA_BRANCH) {
+            console.log(`🌐 Dashboard using branch: ${branch} (data source: ${this.DATA_BRANCH})`);
+        } else {
+            console.log(`🌐 Dashboard using branch: ${branch}`);
+        }
 
         // Data containers
         this.runLogData = [];
@@ -57,6 +65,54 @@ class PolicyWatcherDashboard {
         
         // Default to main branch for production
         return 'main';
+    }
+
+    resolveDataBranch(detectedBranch) {
+        const override = this.getDataBranchOverride();
+        if (override) {
+            const normalizedOverride = override.toLowerCase();
+            if (this.SUPPORTED_DATA_BRANCHES.includes(normalizedOverride)) {
+                console.log(`🔄 Data branch override via query string: ${normalizedOverride}`);
+                return normalizedOverride;
+            }
+            console.warn(`⚠️ Unsupported dataBranch override '${override}'. Falling back to ${this.DEFAULT_DATA_BRANCH}.`);
+            return this.DEFAULT_DATA_BRANCH;
+        }
+
+        const hostname = window.location.hostname || '';
+        const normalizedHost = hostname.toLowerCase();
+
+        const isLocalhost = normalizedHost === 'localhost' || normalizedHost === '127.0.0.1';
+        if (isLocalhost) {
+            return 'dev';
+        }
+
+        const isVercelPreview = normalizedHost.includes('git-') && normalizedHost.endsWith('.vercel.app');
+        if (isVercelPreview) {
+            return 'data-updates';
+        }
+
+        const normalizedBranch = (detectedBranch || '').toLowerCase();
+        if (this.SUPPORTED_DATA_BRANCHES.includes(normalizedBranch)) {
+            return normalizedBranch;
+        }
+
+        if (normalizedBranch.startsWith('git-') && normalizedBranch.endsWith('-dev')) {
+            // Handle Vercel preview aliases if they sneak through
+            return 'dev';
+        }
+
+        return this.DEFAULT_DATA_BRANCH;
+    }
+
+    getDataBranchOverride() {
+        try {
+            const searchParams = new URLSearchParams(window.location.search);
+            return searchParams.get('dataBranch') || searchParams.get('data_branch');
+        } catch (error) {
+            console.warn('Unable to parse dataBranch override from URL:', error);
+            return null;
+        }
     }
 
     async init() {

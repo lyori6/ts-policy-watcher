@@ -7,6 +7,9 @@
     "test": "tests"
   },
   "scripts": {
+    "dev": "cd dashboard && python3 -m http.server 3000",
+    "smoke": "node scripts/puppeteer-smoke.js http://localhost:3000 --screenshot=smoke.png",
+    "smoke:preview": "node scripts/puppeteer-smoke.js $PREVIEW_URL --screenshot=smoke-preview.png",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

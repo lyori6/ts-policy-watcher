@@ -95,6 +95,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
+      - name: 'Push Changes (data-updates)'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: data-updates
+
       # Step 9: Detect changes, generate summary, and set outputs
       - name: 'Detect Changes and Notify'
         id: diff
@@ -139,3 +145,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
+
+      - name: 'Push Summary Changes (data-updates)'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: data-updates
