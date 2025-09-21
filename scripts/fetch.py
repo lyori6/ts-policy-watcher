@@ -9,6 +9,8 @@ from datetime import datetime, UTC
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 from bs4 import BeautifulSoup
 
+PUNCTUATION_MARKERS = ('.', '!', '?')
+
 # --- Configuration ---
 USER_AGENT = "TrustAndSafety-Policy-Watcher/1.0 (https://github.com/your-repo/ts-policy-watcher; mailto:your-email@example.com)"
 URL_CONFIG_FILE = Path("platform_urls.json")
@@ -64,6 +66,69 @@ def get_snapshot_base_directory():
 # Dynamic snapshots directory based on environment
 SNAPSHOTS_DIR = get_snapshot_base_directory()
 
+
+def is_env_flag_enabled(name: str) -> bool:
+    """Return True when the given environment variable is set to a truthy value."""
+    raw_value = os.getenv(name)
+    if raw_value is None:
+        return False
+    return raw_value.strip().lower() not in {"", "0", "false", "no", "off"}
+
+
+HISTORY_EXPORT_ENABLED = is_env_flag_enabled("ENABLE_HISTORY_EXPORT")
+CLEAN_SNAPSHOT_FILENAME = "clean.txt"
+HISTORY_EXPORT_ONLY_MODE = is_env_flag_enabled("HISTORY_EXPORT_ONLY")
+
+
+def export_clean_snapshot_if_enabled(slug: str, cleaned_content: str, slug_dir: Path) -> None:
+    """Persist a cleaned snapshot when history export is enabled."""
+    if not HISTORY_EXPORT_ENABLED:
+        return
+
+    clean_path = slug_dir / CLEAN_SNAPSHOT_FILENAME
+    try:
+        existed_before = clean_path.exists()
+        if existed_before:
+            existing_clean = clean_path.read_text(encoding="utf-8")
+            if existing_clean == cleaned_content:
+                return
+
+        clean_path.write_text(cleaned_content, encoding="utf-8")
+        action = "Initialized" if not existed_before else "Updated"
+        print(f"  - HISTORY EXPORT: {action} clean snapshot at {clean_path}")
+    except Exception as e:
+        print(f"    - WARNING: Failed to write clean snapshot for {slug}: {e}", file=sys.stderr)
+
+
+def run_history_export_only_mode() -> None:
+    """Generate clean artifacts from existing snapshots without refetching."""
+    if not HISTORY_EXPORT_ENABLED:
+        print("History export flag not set; skipping clean artifact generation.")
+        return
+
+    base_dir = SNAPSHOTS_DIR
+    if not base_dir.exists():
+        print(f"No snapshots directory found at {base_dir}. Nothing to export.")
+        return
+
+    snapshot_files = sorted(base_dir.glob("*/snapshot.html"))
+    if not snapshot_files:
+        print(f"No snapshot.html files found under {base_dir}.")
+        return
+
+    print(f"History export-only mode: processing {len(snapshot_files)} snapshots in {base_dir}.")
+
+    for snapshot_path in snapshot_files:
+        slug = snapshot_path.parent.name
+        try:
+            html_content = snapshot_path.read_text(encoding="utf-8")
+        except Exception as exc:  # noqa: BLE001
+            print(f"    - WARNING: Failed to read {snapshot_path}: {exc}", file=sys.stderr)
+            continue
+
+        cleaned = clean_html(html_content, slug)
+        export_clean_snapshot_if_enabled(slug, cleaned, snapshot_path.parent)
+
 def fetch_with_httpx(url: str) -> str:
     """Fetches page content using the lightweight httpx library."""
     headers = {"User-Agent": USER_AGENT}
@@ -93,7 +158,71 @@ def fetch_with_playwright(url: str) -> str:
             browser.close()
         return content
 
-def clean_html(html_content: str) -> str:
+def lines_without_noise(lines, slug: str | None) -> list[str]:
+    """Filter out nav-heavy lines and platform-specific noise."""
+
+    dynamic_nav_patterns = [
+        'SearchClear searchClose searchMain menu',
+        'Google Help',
+        'Help Center',
+        'Google apps',
+        'Community Standards | Transparency Center',
+        'Preferred Language',
+        'Was it helpful?',
+        'Submit Feedback',
+        'Next article',
+        'TikTokCompany',
+        'Product feedbackHow do you think we can improve?',
+        'Sorry to interrupt',
+    ]
+
+    slug_specific_patterns = {
+        'youtube-': ['Do not share any personal info'],
+        'twitch-': [
+            'English',
+            'twitch.tv ↗',
+            'Search',
+            'Enter a search term and use arrow keys to navigate results. Press enter to select.',
+            'Loading×Sorry to interrupt',
+        ],
+        'tiktok-': ['Yes', 'No', 'Read next'],
+    }
+
+    if slug:
+        for prefix, patterns in slug_specific_patterns.items():
+            if slug.startswith(prefix):
+                dynamic_nav_patterns.extend(patterns)
+                break
+
+    cleaned = []
+    for line in lines:
+        if not line:
+            continue
+        if any(pattern in line for pattern in dynamic_nav_patterns):
+            continue
+        # Drop language grids or nav blobs (very long lines with almost no spaces)
+        if len(line) > 180 and line.count(' ') < 4:
+            continue
+        cleaned.append(line)
+
+    return cleaned
+
+
+def trim_leading_navigation(lines: list[str], slug: str | None) -> list[str]:
+    """Remove leading navigational headings until real sentences appear."""
+    if slug and slug.startswith('meta-'):
+        for idx, line in enumerate(lines):
+            if 'The Community Standards outline' in line:
+                return lines[idx:]
+
+    for idx, line in enumerate(lines):
+        if any(marker in line for marker in PUNCTUATION_MARKERS):
+            start = max(0, idx - 1)
+            return lines[start:]
+    return lines
+
+
+def clean_html(html_content: str, slug: str | None = None) -> str:
     """
     Cleans HTML content by removing noisy tags and normalizing whitespace.
     For Google/YouTube help pages, it specifically targets the main article body
@@ -154,21 +283,30 @@ def clean_html(html_content: str) -> str:
     ]
     
     # Split text into lines and filter out navigation patterns
-    text = target_soup.get_text()
-    lines = text.splitlines()
-    filtered_lines = []
-    
-    for line in lines:
-        line = line.strip()
-        if line and not any(pattern in line for pattern in dynamic_nav_patterns):
-            filtered_lines.append(line)
-    
-    # Return early with filtered content
+    text = target_soup.get_text(separator="\n")
+    lines = [" ".join(part.strip() for part in line.split()) for line in text.splitlines()]
+
+    filtered_lines = lines_without_noise(lines, slug)
+
+    if slug and (slug.startswith('meta-') or slug.startswith('twitch-')):
+        filtered_lines = trim_leading_navigation(filtered_lines, slug)
+
+    if not filtered_lines:
+        # Fallback to raw text when filters are overly aggressive
+        return text.strip()
+
     return "\n".join(filtered_lines)
 
 def main():
     """Main function to orchestrate the fetching process."""
     print("--- Starting Fetcher Script ---")
+    if HISTORY_EXPORT_ENABLED:
+        print("History export enabled: clean artifacts will be written alongside snapshots.")
+
+    if HISTORY_EXPORT_ONLY_MODE:
+        print("History export-only flag detected; skipping network fetch and exporting existing snapshots.")
+        run_history_export_only_mode()
+        return
     
     # Track run statistics
     run_start_time = datetime.now(UTC)
@@ -250,14 +388,14 @@ def main():
                 output_path.parent.mkdir(parents=True, exist_ok=True)
 
                 is_new_policy = not output_path.exists()
-                cleaned_new = clean_html(content)
+                cleaned_new = clean_html(content, slug)
 
                 if is_new_policy:
                     output_path.write_text(content, encoding="utf-8")
                     print(f"  - NEW: Saved initial snapshot for {slug} at {output_path}")
                 else:
                     old_content = output_path.read_text(encoding="utf-8")
-                    cleaned_old = clean_html(old_content)
+                    cleaned_old = clean_html(old_content, slug)
 
                     # Debug mode: Save raw HTML files for comparison if DEBUG_FETCH is set
                     if os.environ.get("DEBUG_FETCH"):
@@ -281,6 +419,8 @@ def main():
                         output_path.write_text(content, encoding="utf-8")
                         changes_found += 1
                         print(f"  - SUCCESS: Snapshot updated for {slug} at {output_path}")
+
+                export_clean_snapshot_if_enabled(slug, cleaned_new, output_path.parent)
             except Exception as e:
                 print(f"    - CRITICAL: Failed to write file for {url}. Reason: {e}", file=sys.stderr)
                 failures.append({"url": url, "platform": slug, "reason": f"File write error: {e}"})

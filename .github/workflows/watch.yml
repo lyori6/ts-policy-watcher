@@ -160,3 +160,48 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: data-updates
           force: true
+
+      - name: 'Run Fetcher Script (history export)'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
+        env:
+          ENABLE_HISTORY_EXPORT: "1"
+          HISTORY_EXPORT_ONLY: "1"
+        run: python scripts/fetch.py
+
+      - name: 'Commit Clean Artifacts'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
+        run: |
+          git config user.name "Policy Watch Bot"
+          git config user.email "bot@github.com"
+          shopt -s globstar nullglob
+          CLEAN_FILES=(snapshots/**/clean.*)
+          if [ ${#CLEAN_FILES[@]} -eq 0 ]; then
+            echo "No clean artifacts to commit."
+            exit 0
+          fi
+          git add "${CLEAN_FILES[@]}"
+          if ! git diff --staged --quiet; then
+            git commit -m "CHORE: Export cleaned policy snapshots"
+          else
+            echo "No clean artifact changes to commit."
+          fi
+
+      - name: 'Pull Latest data-updates Before Push'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
+        run: |
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            echo "Found uncommitted changes, stashing them temporarily"
+            git stash push -m "Temporary stash before data-updates rebase"
+            git pull origin data-updates --rebase
+            git stash pop
+          else
+            git pull origin data-updates --rebase
+          fi
+
+      - name: 'Push Clean Artifacts (data-updates)'
+        if: ${{ env.WORKFLOW_BRANCH == 'main' }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: data-updates
+          force: true

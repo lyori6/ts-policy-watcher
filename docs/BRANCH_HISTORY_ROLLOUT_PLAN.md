@@ -2,7 +2,7 @@
 
 **Owner:** Codex (with Lyor)
 **Last Updated:** 2025-09-19
-**Status:** In Progress (Stage 2)
+**Status:** In Progress (Stage 6)
 
 ---
 
@@ -46,7 +46,7 @@
   - Revert `script.js` change or toggle branch override flag.
 
 ### Stage 2 – Dual-Target Workflow Push
-**Status:** 🚧 In Progress (branch-aware workflow awaiting main validation)
+**Status:** ✅ Completed (data-updates synced from main with forced push)
 - **Changes**
   - Modify `.github/workflows/watch.yml` to push automation commits to _both_ `main` and new `data-updates` (sequenced: commit once, push twice, or use `git push origin HEAD:main HEAD:data-updates`).
   - Ensure branch exists (`git push origin main:data-updates`).
@@ -58,6 +58,7 @@
   - Comment out extra push step.
 
 ### Stage 3 – Preview Builds on `data-updates`
+**Status:** ✅ Completed (preview verified manually)
 - **Changes**
   - In `dashboard/script.js`, extend branch detection so Vercel previews map to `data-updates` instead of `main` once Stage 2 proves stable.
   - Optional: expose query param override (e.g., `?dataBranch=foo`) for manual testing.
@@ -170,8 +171,9 @@ Adjust pacing based on findings; do not advance to the next stage until verifica
 ## 9. Next Actions
 1. ✅ Implement Stage 1 in a feature branch.
 2. ✅ Build Puppeteer smoke script (usable from Stage 1 onwards).
-3. 🚧 Update watcher workflow for dual pushes; trigger manual run and compare `main` vs `data-updates` (pending).
-4. Share plan for sign-off, then proceed sequentially.
+3. ✅ Update watcher workflow for dual pushes; trigger manual run and compare `main` vs `data-updates`.
+4. 🚧 Stage 6 validation: trigger workflow with the new history-export pass, verify `clean.txt` commits stay on `data-updates`, and spot-check trimmed artifacts.
+5. Share plan for sign-off, then proceed sequentially.
 
 ---
 
@@ -179,3 +181,18 @@ Adjust pacing based on findings; do not advance to the next stage until verifica
 - **2025-09-19:** Stage 1 complete — dashboard now branch-aware in dev/previews; Puppeteer smoke test added and validated locally.
 - **2025-09-19:** Stage 2 underway — workflow patched to push automation commits to both `main` and `data-updates`; awaiting main-branch workflow run for parity confirmation.
 - **2025-09-19:** Legacy `maintain-policy-changes-branch` workflow removed to eliminate cherry-pick conflicts; `watch.yml` now guards branch-specific pushes.
+- **2025-09-19:** Stage 2 verified — main workflow run forced `data-updates` to latest snapshot; branches aligned for preview rollout.
+- **2025-09-21:** Stage 3 completed — Vercel preview confirmed to load `data-updates` data (manual verification due to Puppeteer sandbox limits); production smoke manually validated.
+- **2025-09-22:** Stage 6 artifact writer implemented behind `ENABLE_HISTORY_EXPORT`; local dry run verifies creation/update of `clean.txt` alongside snapshots without impacting production runs.
+- **2025-09-21:** Stage 6 pilot run (local): executed `ENABLE_HISTORY_EXPORT=1 venv/bin/python scripts/fetch.py`.
+  - Observations (sampled `snapshots/production/*/clean.txt`):
+    - Twitch (`snapshots/production/twitch-community-guidelines/clean.txt`) ~86 KB; content includes navigation and long enforcement notes. Usable but a bit noisy; consider tightening `clean_html()` to strip header language and sidebar/nav blocks for Twitch.
+    - YouTube (`snapshots/production/youtube-hiding-users/clean.txt`) is concise and readable but includes footer survey strings (e.g., "Do not share any personal info..."). Low-priority cleanup.
+    - Meta (`snapshots/production/meta-community-guidelines/clean.txt`) contains a very large language switcher/menu and Transparency Center nav; significant noise at the top. We should add targeted filters for Meta’s language grid and nav.
+    - Whatnot (`snapshots/production/whatnot-community-guidelines/clean.txt`) is dense text; largely readable with minimal chrome. Acceptable signal-to-noise.
+    - TikTok (`snapshots/production/tiktok-community-guidelines/clean.txt`) is currently empty (0-length). Likely due to article body selector mismatch or heavy client rendering. Needs a TikTok-specific selector/path in `clean_html()` or fallback to full-page text when no `articleBody` is found.
+  - Env routing note: since neither `DEVELOPMENT_MODE` nor `DEBUG_FETCH` was set, artifacts were written under `snapshots/production/`. `snapshots/development/` exists but is empty. For dev-only trials, run with `DEVELOPMENT_MODE=1` to target `snapshots/development/`.
+  - Run results: 26 pages checked, 2 changes found, 0 failures. Clean artifacts were initialized/updated alongside snapshots.
+  - Next: safe to wire `ENABLE_HISTORY_EXPORT=1` in workflow for `data-updates`-only path; keep it off for `main` runs. Suggested approach: duplicate the fetch step — one guarded with `if: ${{ env.WORKFLOW_BRANCH == 'main' }}` and no flag, and a second guarded `if: ${{ env.WORKFLOW_BRANCH == 'main' }}` for the `data-updates` push context with `env: ENABLE_HISTORY_EXPORT: '1'` — or set the env globally and use a branch check to export only on `data-updates`.
+- **2025-09-22:** Stage 6 cleanup refinements — `clean_html()` now accepts the slug, trims Meta/Twitch nav chrome, filters YouTube survey text, and keeps TikTok outputs populated; added a `HISTORY_EXPORT_ONLY` pass so workflows can emit `clean.txt` from existing snapshots without a second run log entry.
+- **2025-09-22:** `.github/workflows/watch.yml` updated for the two-pass rollout: main commit stays HTML-only, then a history-export-only pass stages `clean.*` and force-pushes to `data-updates`.
