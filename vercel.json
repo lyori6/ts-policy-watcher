@@ -4,5 +4,8 @@
       "source": "/",
       "destination": "/dashboard/index.html"
     }
-  ]
+  ],
+  "env": {
+    "NEXT_PUBLIC_ENABLE_POLICY_HISTORY": "false"
+  }
 }

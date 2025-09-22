@@ -10,6 +10,9 @@ from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 from bs4 import BeautifulSoup
 
 PUNCTUATION_MARKERS = ('.', '!', '?')
+HISTORY_SUBDIR_NAME = "history"
+HISTORY_MANIFEST_FILENAME = "index.json"
+MAX_HISTORY_ENTRIES = 5
 
 # --- Configuration ---
 USER_AGENT = "TrustAndSafety-Policy-Watcher/1.0 (https://github.com/your-repo/ts-policy-watcher; mailto:your-email@example.com)"
@@ -100,6 +103,118 @@ def export_clean_snapshot_if_enabled(slug: str, cleaned_content: str, slug_dir: 
         print(f"    - WARNING: Failed to write clean snapshot for {slug}: {e}", file=sys.stderr)
 
 
+def load_history_manifest(manifest_path: Path) -> list[dict]:
+    if not manifest_path.exists():
+        return []
+    try:
+        raw_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if isinstance(raw_data, list):
+            return raw_data
+
+        # Backwards compatibility with legacy manifest structure {"slug": ..., "versions": [...]}
+        if isinstance(raw_data, dict) and "versions" in raw_data:
+            converted: list[dict] = []
+            for legacy_entry in raw_data.get("versions", []):
+                file_name = legacy_entry.get("path") or legacy_entry.get("file")
+                if not file_name:
+                    continue
+
+                version_id = legacy_entry.get("version_id") or ""
+                iso_timestamp = ""
+                label = version_id
+
+                if version_id:
+                    try:
+                        dt = datetime.strptime(version_id, "%Y%m%dT%H%M%SZ").replace(tzinfo=UTC)
+                        iso_timestamp = dt.isoformat().replace('+00:00', 'Z')
+                        label = dt.strftime("%b %d, %Y · %H:%M UTC")
+                    except ValueError:
+                        iso_timestamp = ""
+                        label = version_id
+
+                converted.append({
+                    "timestamp": iso_timestamp,
+                    "label": label,
+                    "file": file_name
+                })
+
+            save_history_manifest(manifest_path, converted)
+            return converted
+
+        return []
+    except json.JSONDecodeError as exc:
+        print(f"    - WARNING: History manifest corrupted at {manifest_path}: {exc}. Rebuilding.", file=sys.stderr)
+        return []
+
+
+def save_history_manifest(manifest_path: Path, manifest: list[dict]) -> None:
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+
+def update_history_artifacts(slug: str, cleaned_content: str, snapshots_dir: Path) -> None:
+    if not HISTORY_EXPORT_ENABLED:
+        return
+
+    history_root = snapshots_dir / HISTORY_SUBDIR_NAME / slug
+    manifest_path = history_root / HISTORY_MANIFEST_FILENAME
+
+    try:
+        history_root.mkdir(parents=True, exist_ok=True)
+        manifest = load_history_manifest(manifest_path)
+
+        # Skip new entry if latest stored content matches the cleaned content
+        if manifest:
+            latest_file = manifest[0].get("file")
+            if latest_file:
+                latest_path = history_root / latest_file
+                if latest_path.exists():
+                    existing_text = latest_path.read_text(encoding="utf-8")
+                    if existing_text == cleaned_content:
+                        return
+
+        timestamp = datetime.now(UTC)
+        iso_timestamp = timestamp.isoformat().replace('+00:00', 'Z')
+        label = timestamp.strftime("%b %d, %Y · %H:%M UTC")
+
+        base_filename = timestamp.strftime("%Y%m%dT%H%M%SZ")
+        file_name = f"{base_filename}.txt"
+        file_path = history_root / file_name
+        suffix = 1
+        while file_path.exists():
+            suffix += 1
+            file_name = f"{base_filename}-{suffix}.txt"
+            file_path = history_root / file_name
+
+        file_path.write_text(cleaned_content, encoding="utf-8")
+
+        entry: dict[str, str] = {
+            "timestamp": iso_timestamp,
+            "label": label,
+            "file": file_name,
+        }
+
+        commit_sha = os.getenv("GITHUB_SHA")
+        if commit_sha:
+            entry["commit"] = commit_sha[:7]
+            entry["commit_full"] = commit_sha
+
+        manifest.insert(0, entry)
+
+        # Enforce retention cap
+        while len(manifest) > MAX_HISTORY_ENTRIES:
+            removed = manifest.pop()
+            removed_file = removed.get("file")
+            if removed_file:
+                removed_path = history_root / removed_file
+                if removed_path.exists():
+                    removed_path.unlink()
+
+        save_history_manifest(manifest_path, manifest)
+        print(f"  - HISTORY EXPORT: Added entry for {slug} ({file_name})")
+    except Exception as exc:  # noqa: BLE001
+        print(f"    - WARNING: Failed to update history for {slug}: {exc}", file=sys.stderr)
+
+
 def run_history_export_only_mode() -> None:
     """Generate clean artifacts from existing snapshots without refetching."""
     if not HISTORY_EXPORT_ENABLED:
@@ -128,6 +243,8 @@ def run_history_export_only_mode() -> None:
 
         cleaned = clean_html(html_content, slug)
         export_clean_snapshot_if_enabled(slug, cleaned, snapshot_path.parent)
+
+        update_history_artifacts(slug, cleaned, SNAPSHOTS_DIR)
 
 def fetch_with_httpx(url: str) -> str:
     """Fetches page content using the lightweight httpx library."""

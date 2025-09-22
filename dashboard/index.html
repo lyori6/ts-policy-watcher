@@ -374,6 +374,30 @@
         </div>
     </div>
 
+    <!-- Policy History Modal -->
+    <div id="policy-history-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="policy-history-title"><i class="fas fa-clock"></i> Policy History</h2>
+                <span class="close-button" onclick="closePolicyHistoryModal()">&times;</span>
+            </div>
+            <div class="modal-body history-modal-body">
+                <div class="history-version-list">
+                    <div id="policy-history-list" class="history-placeholder">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading history…</p>
+                    </div>
+                </div>
+                <div class="history-entry-content" id="policy-history-content">
+                    <div class="history-placeholder">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Select a version to view the cleaned snapshot.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 </body>
