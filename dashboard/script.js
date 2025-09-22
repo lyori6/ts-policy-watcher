@@ -17,6 +17,7 @@ class PolicyWatcherDashboard {
         this.historyContentCache = new Map();
         this.historyModalEnabled = this.determineHistoryModalEnabled();
         this.activeHistorySlug = null;
+        this.summaryModalWasVisibleBeforeHistory = false;
         
         this.LOG_FILE_PATH = `${this.DATA_RAW_BASE}/run_log.json`;
         this.SUMMARIES_PATH = `${this.DATA_RAW_BASE}/summaries.json`;
@@ -2942,6 +2943,15 @@ class PolicyWatcherDashboard {
             return;
         }
 
+        const summaryModal = document.getElementById('policy-summary-modal');
+        if (summaryModal && summaryModal.style.display === 'block') {
+            this.summaryModalWasVisibleBeforeHistory = true;
+            summaryModal.dataset.hiddenByHistory = 'true';
+            summaryModal.style.display = 'none';
+        } else {
+            this.summaryModalWasVisibleBeforeHistory = false;
+        }
+
         const policy = this.platformData.find(p => p.slug === slug);
         const policyName = policy ? policy.name : slug;
         if (elements.title) {
@@ -2971,6 +2981,16 @@ class PolicyWatcherDashboard {
         if (elements.modal) {
             elements.modal.style.display = 'none';
         }
+
+        if (this.summaryModalWasVisibleBeforeHistory) {
+            const summaryModal = document.getElementById('policy-summary-modal');
+            if (summaryModal && summaryModal.dataset.hiddenByHistory === 'true') {
+                summaryModal.style.display = 'block';
+                delete summaryModal.dataset.hiddenByHistory;
+            }
+        }
+
+        this.summaryModalWasVisibleBeforeHistory = false;
         this.activeHistorySlug = null;
     }
 
@@ -3326,7 +3346,11 @@ function openPolicyModal(slug) {
 // Global function for closing policy modal
 function closePolicyModal() {
     const modal = document.getElementById('policy-summary-modal');
+    if (!modal) return;
     modal.style.display = 'none';
+    if (modal.dataset.hiddenByHistory) {
+        delete modal.dataset.hiddenByHistory;
+    }
 }
 
 function closePolicyHistoryModal() {
