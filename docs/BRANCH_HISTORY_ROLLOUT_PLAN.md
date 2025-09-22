@@ -176,7 +176,7 @@ Adjust pacing based on findings; do not advance to the next stage until verifica
 2. ✅ Build Puppeteer smoke script (usable from Stage 1 onwards).
 3. ✅ Update watcher workflow for dual pushes; trigger manual run and compare `main` vs `data-updates`.
 4. ✅ Stage 6 validation: two-pass workflow proven; clean artifacts confirmed on `data-updates` only.
-5. 🚧 Stage 7 validation: enable history modal in preview, run updated smoke test, and gather stakeholder feedback before production flag flip.
+5. 🚧 Stage 8 rollout prep: monitor production deployment with history modal enabled, document initial checks, and define rollback/monitoring cadence.
 
 ---
 
@@ -215,3 +215,7 @@ Adjust pacing based on findings; do not advance to the next stage until verifica
       - `snapshots/production/twitch-community-guidelines/clean.txt` ≈ 83.9 KB — long but readable; intro + enforcement sections preserved; nav chrome stripped.
       - `snapshots/production/tiktok-community-guidelines/clean.txt` ≈ 9.6 KB — populated with section TOC and headings; acceptable signal; may refine further in later pass.
     - Notes: First commit pushed to `main`; follow-up clean artifacts committed and force-pushed to `data-updates` only, as designed.
+- **2025-09-22:** Stage 7 preview validation — Vercel preview `feature-stage7-history-modal` (`https://ts-policy-watcher-git-feature-stage7-hi-c72c87-lyori6s-projects.vercel.app/?historyModal=on&dataBranch=data-updates`) exercised locally; summary/history modals confirmed (including z-index fix). Updated Puppeteer smoke runs to completion (logs analytics/history warnings when data absent) and `smoke-local.png` captured. History manifests still missing for most slugs on `data-updates` until the Stage 7 exporter runs on `main`.
+- **2025-09-22:** Stage 7 preview validation — Vercel preview `feature-stage7-history-modal` (`https://ts-policy-watcher-git-feature-stage7-hi-c72c87-lyori6s-projects.vercel.app/?historyModal=on&dataBranch=data-updates`) exercised locally; summary/history modals confirmed (including z-index fix). Updated Puppeteer smoke runs to completion (logs analytics/history warnings when data absent) and `smoke-local.png` captured.
+- **2025-09-23:** History seeding complete — ran `T&S Policy Watcher v1` on `main` (run ID `workflow_dispatch #104`); `data-updates` commit `73d1210` now carries `snapshots/production/history/**` for all slugs (Node check: `Missing history manifests: []`).
+- **2025-09-23:** Production validation — Puppeteer smoke against `https://ts-policy-watcher.vercel.app/?historyModal=on&dataBranch=data-updates` succeeded (warnings only when analytics/history tables are empty); screenshot saved as `smoke-prod.png`. Manual QA confirmed z-index fix and history entries across platforms.
