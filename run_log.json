@@ -1,5 +1,15 @@
 [
   {
+    "timestamp_utc": "2025-09-27T12:44:22.197636Z",
+    "status": "partial_failure",
+    "pages_checked": 26,
+    "changes_found": 2,
+    "errors": [
+      "Attempt 1/2 FAILED for whatnot-hate-and-harassment. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-prohibited-items. Error Type: 403_forbidden. Reason: HTTP 403: "
+    ]
+  },
+  {
     "timestamp_utc": "2025-09-27T06:33:08.757171Z",
     "status": "success",
     "pages_checked": 26,
@@ -186,13 +196,6 @@
     "status": "success",
     "pages_checked": 26,
     "changes_found": 0,
-    "errors": []
-  },
-  {
-    "timestamp_utc": "2025-09-21T21:18:25.821854Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 1,
     "errors": []
   }
 ]
