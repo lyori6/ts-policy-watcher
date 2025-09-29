@@ -74,6 +74,7 @@ class PolicyWatcherDashboard {
     }
 
     resolveDataBranch(detectedBranch) {
+        // 1) Query-string override (?dataBranch=...)
         const override = this.getDataBranchOverride();
         if (override) {
             const normalizedOverride = override.toLowerCase();
@@ -83,6 +84,16 @@ class PolicyWatcherDashboard {
             }
             console.warn(`⚠️ Unsupported dataBranch override '${override}'. Falling back to ${this.DEFAULT_DATA_BRANCH}.`);
             return this.DEFAULT_DATA_BRANCH;
+        }
+
+        // 2) Global window override (e.g., set in index.html or injected at deploy time)
+        if (typeof window !== 'undefined' && window.__DATA_BRANCH__) {
+            const winBranch = String(window.__DATA_BRANCH__).toLowerCase();
+            if (this.SUPPORTED_DATA_BRANCHES.includes(winBranch)) {
+                console.log(`🔄 Data branch override via window.__DATA_BRANCH__: ${winBranch}`);
+                return winBranch;
+            }
+            console.warn(`⚠️ Unsupported window.__DATA_BRANCH__='${window.__DATA_BRANCH__}'. Falling back.`);
         }
 
         const hostname = window.location.hostname || '';
@@ -95,6 +106,11 @@ class PolicyWatcherDashboard {
 
         const isVercelPreview = normalizedHost.includes('git-') && normalizedHost.endsWith('.vercel.app');
         if (isVercelPreview) {
+            return 'data-updates';
+        }
+
+        // 4) Production host mapping: use data-updates for production by default (Stage 5)
+        if (normalizedHost === 'ts-policy-watcher.vercel.app') {
             return 'data-updates';
         }
 
