@@ -1,5 +1,12 @@
 [
   {
+    "timestamp_utc": "2025-09-30T18:33:18.199777Z",
+    "status": "success",
+    "pages_checked": 26,
+    "changes_found": 2,
+    "errors": []
+  },
+  {
     "timestamp_utc": "2025-09-30T12:52:43.250667Z",
     "status": "success",
     "pages_checked": 26,
@@ -168,20 +175,6 @@
     "status": "partial_failure",
     "pages_checked": 26,
     "changes_found": 0,
-    "errors": [
-      "Attempt 2/2 FAILED for twitch-community-guidelines. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/community-guidelines/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/community-guidelines/\", waiting until \"domcontentloaded\"\n",
-      "Attempt 2/2 FAILED for twitch-terms-of-service. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/terms-of-service/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/terms-of-service/\", waiting until \"domcontentloaded\"\n",
-      "Attempt 2/2 FAILED for twitch-terms-of-sale. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/terms-of-sale/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/terms-of-sale/\", waiting until \"domcontentloaded\"\n",
-      "Attempt 2/2 FAILED for twitch-monetized-streamer-agreement. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/monetized-streamer-agreement/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/monetized-streamer-agreement/\", waiting until \"domcontentloaded\"\n",
-      "Attempt 2/2 FAILED for twitch-privacy-policy. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/privacy-policy/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/privacy-policy/\", waiting until \"domcontentloaded\"\n",
-      "Attempt 2/2 FAILED for twitch-dmca-guidelines. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/dmca-guidelines/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/dmca-guidelines/\", waiting until \"domcontentloaded\"\n"
-    ]
-  },
-  {
-    "timestamp_utc": "2025-09-24T12:52:31.635538Z",
-    "status": "partial_failure",
-    "pages_checked": 26,
-    "changes_found": 1,
     "errors": [
       "Attempt 2/2 FAILED for twitch-community-guidelines. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/community-guidelines/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/community-guidelines/\", waiting until \"domcontentloaded\"\n",
       "Attempt 2/2 FAILED for twitch-terms-of-service. Error Type: unknown_error. Reason: Page.goto: net::ERR_CONNECTION_RESET at https://www.twitch.tv/p/legal/terms-of-service/\nCall log:\n  - navigating to \"https://www.twitch.tv/p/legal/terms-of-service/\", waiting until \"domcontentloaded\"\n",
