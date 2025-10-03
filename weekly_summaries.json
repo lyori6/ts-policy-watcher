@@ -1246,5 +1246,348 @@
         "commit_hash": "be702f3182b02263b729e50d3dcfb842a876f701"
       }
     ]
+  },
+  "2025-09-27_to_2025-10-03": {
+    "run_metadata": {
+      "run_date": "2025-10-03T19:15:14.753052+00:00",
+      "run_type": "scheduled",
+      "week_start": "2025-09-27",
+      "week_end": "2025-10-03",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Update Summary\n\n**Week Period:** September 27, 2025 \u2013 October 03, 2025\n**Generated On:** October 03, 2025 at 19:15 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week saw a mix of critical technical issues, significant improvements in user education and transparency, and some concerning changes to user feedback mechanisms. The most pressing issue is a **persistent display error on Twitch's Community Guidelines page**, rendering the platform's rules inaccessible to users. On the positive side, **TikTok made substantial strides in integrating safety features and guidelines into a comprehensive help center**, improving discoverability and user empowerment for moderation. Meta adjusted its **Oversight Board appeal eligibility**, potentially increasing appeal volume, while also introducing a problematic **localization shift** on a key safety page.\n\n**Key Takeaways:**\n\n1.  **Critical Twitch Policy Inaccessibility:** The Twitch Community Guidelines page is repeatedly failing to render, leaving users unable to access crucial platform rules. This requires immediate technical attention.\n2.  **Enhanced User Education & Safety Tooling:** TikTok significantly improved the discoverability and clarity of its LIVE moderation and blocking tools by integrating them into a new help center structure, empowering users to manage their safety.\n3.  **Shifting User Feedback & Accessibility:** While some platforms added user feedback mechanisms (YouTube Shopping Ads), YouTube also removed a feedback form for \"Hiding Users,\" potentially reducing T&S visibility into user issues. Meta also made changes that could hinder German-speaking users' access to support information.\n\n---\n\n### 2. Platform Highlights\n\n**Twitch:**\n*   **Community Guidelines Page Display Issue (Critical):** The Community Guidelines page repeatedly failed to render correctly throughout the week, displaying \"Loading,\" \"Sorry to interrupt,\" and \"CSS Error\" messages. This is a severe technical bug preventing users from accessing platform rules.\n    *   **Impact:** High user frustration, potential for inadvertent policy violations, increased support contacts, and a negative perception of platform stability and transparency. Requires immediate resolution.\n\n**YouTube:**\n*   **Shopping Ads Policy (UI/UX & Internal Tracking):** No changes to core policy text. Updates include a new \"Was this helpful?\" feedback survey and \"Need more help?\" section on the policy page. Internal JavaScript changes also formalize the identification of T&S monitoring tools.\n    *   **Impact:** Improved user feedback channels and support access for ads policy, better internal tracking for T&S.\n*   **Community Guidelines (Security & Education):** Enhanced Cross-Site Scripting (XSS) protection with a `nonce` attribute. A new \"Learning\" link was added to the navigation, providing direct access to educational content about YouTube's policies.\n    *   **Impact:** Strengthened security, enhanced user understanding of policies, potentially reducing violations.\n*   **Hiding Users (User Feedback Removal):** The entire user feedback form for the \"Hiding Users\" feature was removed.\n    *   **Impact:** Loss of a direct channel for user feedback on a privacy/safety feature, reducing T&S's visibility into potential bugs or poor user experience related to this functionality.\n\n**TikTok:**\n*   **Live Moderation (Policy Content & Privacy Compliance):** A detailed policy guide on LIVE moderation tools (blocking, reporting, muting, etc.) was added, replacing a previous placeholder. Extensive CSS for a \"TikTok Cookie Setting Portal\" was also introduced.\n    *   **Impact:** Significantly enhances T&S by empowering creators/moderators to maintain safe LIVE environments. The cookie portal is critical for privacy compliance (GDPR, CCPA) and user trust.\n*   **Blocking Users (Help Center Integration):** The \"Blocking someone\" content was transformed from a standalone document into a fully integrated help center article, with enhanced UI/UX, global navigation, and custom fonts.\n    *   **Impact:** No change to core blocking policy, but vastly improved discoverability and user education for safety features, potentially leading to better compliance and more effective use of safety tools.\n*   **Community Guidelines (Minor Technical Change):** A trailing newline character was added to the HTML file.\n    *   **Impact:** No impact on policy content, user experience, or enforcement.\n\n**Meta (Facebook/Instagram):**\n*   **Appeal Process (Oversight Board Eligibility):** The requirement for Instagram content to be reviewed twice before becoming eligible for an Oversight Board appeal was removed. Users can now appeal after a single internal review. Clarified flow for reporting content that wasn't taken down.\n    *   **Impact:** Increased user access to the Oversight Board, potentially leading to an increased volume of eligible appeals. Improved user experience with a clearer appeal process.\n*   **Blocking People (Localization & Navigation):** Help article titles on the \"Blocking People\" policy page were changed from German to English. Two navigation links (\"Points of support and contact on Instagram,\" \"Legal Removal Request\") were removed from the left-hand menu.\n    *   **Impact:** Negative UX for German-speaking users. Reduced direct accessibility to crucial support and legal reporting channels from privacy/security pages.\n*   **Commerce Policies (Technical Configuration Update):** An entire technical snapshot file containing client-side configuration data (feature flags, bootloader config, URL rewrite rules, localized UI strings) was replaced.\n    *   **Impact:** No direct policy text changes. Potential for indirect product behavior changes based on feature flags or UI strings. Likely a routine technical update.\n*   **Community Guidelines (German Locale) (Navigation & Discoverability):** Restructured footer navigation, removing a direct link to \"Our Approach to the Opioid Crisis\" and adding a link to \"Our Approach to Ranking in the Facebook Feed.\"\n    *   **Impact:** Reduced visibility for opioid crisis policy, increased transparency for content ranking. Overall improved discoverability of policy resources due to better organization.\n\n**Whatnot:**\n*   **Blocking A User (Editorial Clarity):** Minor editorial rephrasing for clarity (\"The person you blocked won\u2019t be notified\" instead of \"The person won't get a notification\").\n    *   **Impact:** No functional change to blocking; solely for textual clarity.\n*   **How To Report (Streamlined & Transparent):** Streamlined \"Report someone from their profile\" instructions. Enhanced transparency by explicitly stating T&S will \"Take appropriate action\" and linking to policy. Improved step-by-step guidance for checking report status on the website.\n    *   **Impact:** Improved ease of use for reporting, clearer expectations for reporters, and better accessibility for tracking report outcomes.\n\n---\n\n### 3. Risk Assessment\n\n1.  **HIGH RISK - Twitch Community Guidelines Page Display Issue:** This is a critical bug. The core rules of the platform are inaccessible. This directly impacts user compliance, trust, and could lead to a spike in unintentional violations or support tickets.\n    *   **Recommendation:** Prioritize with Engineering for immediate fix. Monitor for recurrence and user reports of confusion.\n\n2.  **MEDIUM RISK - YouTube Hiding Users Feedback Form Removal:** Removing a direct feedback channel for a feature related to user visibility/privacy means T&S loses a valuable source of early warning for potential misuse, bugs, or user confusion.\n    *   **Recommendation:** Investigate the rationale for removal. Ensure alternative robust feedback mechanisms are in place for this feature. T&S should proactively monitor social sentiment or support tickets related to \"Hiding Users.\"\n\n3.  **MEDIUM RISK - Meta Blocking People Localization & Navigation Changes:** The shift to English titles on a German-localized page creates a poor user experience for German speakers trying to understand safety features. Removing direct navigation links to support and legal removal requests could increase user friction and lead to frustration or missed reporting opportunities.\n    *   **Recommendation:** Review localization strategy for Help Center articles to ensure appropriate language display. Re-evaluate the removal of critical navigation links to ensure essential support and reporting channels remain easily accessible.\n\n4.  **MEDIUM RISK - Meta Appeal Process - Expanded Oversight Board Eligibility:** While positive for user access, removing the \"twice reviewed\" prerequisite could lead to a significant increase in appeals escalated to the Oversight Board. This may strain internal T&S resources responsible for preparing cases and managing the appeal pipeline.\n    *   **Recommendation:** Proactively monitor appeal volume and T&S resource allocation to the Oversight Board. Ensure sufficient staffing and clear internal processes are in place to handle potential increases.\n\n---\n\n### 4. Trends Analysis\n\n1.  **Technical vs. Policy Content:** A significant portion of \"policy changes\" this week were either technical bugs (Twitch CG page) or UI/UX enhancements (YouTube Shopping Ads, TikTok help center CSS) rather than substantive policy text updates. This highlights the importance of tools that can accurately differentiate between these change types and the need for prompt technical resolution when core policy pages are affected.\n2.  **Focus on User Education & Discoverability:** Multiple platforms are investing in making policies and safety features more accessible and understandable. TikTok's overhaul of its blocking and live moderation help pages, YouTube's new \"Learning\" link, and Whatnot's streamlined reporting instructions all demonstrate a push towards empowering users through better information architecture and clearer guidance.\n3.  **Transparency & Compliance Imperatives:** The introduction of TikTok's cookie setting portal UI underscores ongoing efforts to meet privacy regulations (e.g., GDPR, CCPA). Whatnot's enhanced transparency on report outcomes and Meta's addition of a \"Ranking in the Facebook Feed\" approach also indicate a continued focus on informing users about platform operations and accountability.\n4.  **Evolving Feedback Mechanisms:** There's a mixed signal regarding user feedback. While YouTube Shopping Ads introduced \"Was this helpful?\" surveys, YouTube also removed a feedback form for \"Hiding Users.\" This suggests varying strategies for gathering direct user input, which T&S teams rely on for identifying emerging issues. A holistic strategy for user feedback across all product areas could be beneficial.\n5.  **Localization Nuances:** Meta's change on the \"Blocking People\" page highlights the challenges of managing multi-lingual content and ensuring a consistent and effective user experience across different locales. Inaccurate localization or navigation changes can significantly impede user access to critical safety information.",
+    "changes_count": 22,
+    "changed_policies": [
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-03 12:51:36 +0000",
+        "commit_hash": "846c179cd798fc7f02a8a545fb9705e9ba241748"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-10-03 06:38:45 +0000",
+        "commit_hash": "533a363dccd2d74aa364a4fb80b96827ce85e9b8"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-03 01:50:44 +0000",
+        "commit_hash": "91ef0ee3cf8769ee18d6ca8c0ee25869b155df48"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-10-03 01:50:44 +0000",
+        "commit_hash": "91ef0ee3cf8769ee18d6ca8c0ee25869b155df48"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-02 18:38:21 +0000",
+        "commit_hash": "9079a5db3be1c0179737e6acdcc694c5a7cb2afd"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2025-10-02 18:38:21 +0000",
+        "commit_hash": "9079a5db3be1c0179737e6acdcc694c5a7cb2afd"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-10-02 18:38:21 +0000",
+        "commit_hash": "9079a5db3be1c0179737e6acdcc694c5a7cb2afd"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-10-02 12:52:10 +0000",
+        "commit_hash": "78e420717912799f517ce26dd6f4370a7736c223"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-02 12:52:10 +0000",
+        "commit_hash": "78e420717912799f517ce26dd6f4370a7736c223"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-10-02 12:52:10 +0000",
+        "commit_hash": "78e420717912799f517ce26dd6f4370a7736c223"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-10-02 06:38:12 +0000",
+        "commit_hash": "3ca542b5f391034974288fe5f2538a19452f327f"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-02 06:38:12 +0000",
+        "commit_hash": "3ca542b5f391034974288fe5f2538a19452f327f"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-02 01:56:08 +0000",
+        "commit_hash": "62612e976aa3e8c11b8cf35f681e575d6442cbf8"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2025-10-02 01:56:08 +0000",
+        "commit_hash": "62612e976aa3e8c11b8cf35f681e575d6442cbf8"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-10-01 18:38:27 +0000",
+        "commit_hash": "f1e7ea8d41e50a5cf5e9add92113cbe77325f0ef"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "meta-commerce-policies",
+        "file_path": "snapshots/production/meta-commerce-policies/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "youtube-community-guidelines",
+        "file_path": "snapshots/production/youtube-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-10-01 12:54:35 +0000",
+        "commit_hash": "1510c448f42c1de1729f1e5175259e46603aa298"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2025-10-01 06:39:45 +0000",
+        "commit_hash": "614030199370002f343ea49fec3cfeba12af4f1c"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2025-10-01 06:39:45 +0000",
+        "commit_hash": "614030199370002f343ea49fec3cfeba12af4f1c"
+      },
+      {
+        "policy_key": "meta-commerce-policies",
+        "file_path": "snapshots/production/meta-commerce-policies/snapshot.html",
+        "commit_date": "2025-10-01 06:39:45 +0000",
+        "commit_hash": "614030199370002f343ea49fec3cfeba12af4f1c"
+      },
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2025-10-01 06:39:45 +0000",
+        "commit_hash": "614030199370002f343ea49fec3cfeba12af4f1c"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-10-01 06:39:45 +0000",
+        "commit_hash": "614030199370002f343ea49fec3cfeba12af4f1c"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2025-10-01 02:04:05 +0000",
+        "commit_hash": "d921c17d1894a3e943dc60835a68f17d7f410eb1"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2025-10-01 02:04:05 +0000",
+        "commit_hash": "d921c17d1894a3e943dc60835a68f17d7f410eb1"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2025-10-01 02:04:05 +0000",
+        "commit_hash": "d921c17d1894a3e943dc60835a68f17d7f410eb1"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-10-01 02:04:05 +0000",
+        "commit_hash": "d921c17d1894a3e943dc60835a68f17d7f410eb1"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-30 18:34:56 +0000",
+        "commit_hash": "3ae3db7e09f41474908298c90004281687f4570e"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2025-09-30 18:34:56 +0000",
+        "commit_hash": "3ae3db7e09f41474908298c90004281687f4570e"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-09-30 12:54:16 +0000",
+        "commit_hash": "33e3e6a0dd5e9545b63917035a83863391a531a9"
+      },
+      {
+        "policy_key": "tiktok-community-guidelines",
+        "file_path": "snapshots/production/tiktok-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-30 12:54:16 +0000",
+        "commit_hash": "33e3e6a0dd5e9545b63917035a83863391a531a9"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-09-30 12:54:16 +0000",
+        "commit_hash": "33e3e6a0dd5e9545b63917035a83863391a531a9"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-30 12:54:16 +0000",
+        "commit_hash": "33e3e6a0dd5e9545b63917035a83863391a531a9"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-09-30 06:39:35 +0000",
+        "commit_hash": "c8e58423af5df703b6d38de407cf6d275ba674bd"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-30 06:39:35 +0000",
+        "commit_hash": "c8e58423af5df703b6d38de407cf6d275ba674bd"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-09-30 01:49:34 +0000",
+        "commit_hash": "7c05c455bc427ff07b7b792789300a41f79d0c66"
+      },
+      {
+        "policy_key": "tiktok-community-guidelines",
+        "file_path": "snapshots/production/tiktok-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-30 01:49:34 +0000",
+        "commit_hash": "7c05c455bc427ff07b7b792789300a41f79d0c66"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2025-09-30 01:49:34 +0000",
+        "commit_hash": "7c05c455bc427ff07b7b792789300a41f79d0c66"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2025-09-29 18:38:29 +0000",
+        "commit_hash": "870ffdacf177ff5f1ab3470622266ebb681652cf"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-09-29 12:56:01 +0000",
+        "commit_hash": "0a29eed99191076e6cef53557be3e2966e75ea24"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-09-29 06:41:20 +0000",
+        "commit_hash": "70bfad5c9c13b31390ee3acebca8c9695fe2cc40"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-09-28 18:34:22 +0000",
+        "commit_hash": "3f599043e3404e6822b2b7b845d55ed42492c766"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-28 18:34:22 +0000",
+        "commit_hash": "3f599043e3404e6822b2b7b845d55ed42492c766"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-09-28 18:34:22 +0000",
+        "commit_hash": "3f599043e3404e6822b2b7b845d55ed42492c766"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-09-28 12:45:40 +0000",
+        "commit_hash": "58da72800d077b0fc381e822b0f9a631bb5e4612"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-28 12:45:40 +0000",
+        "commit_hash": "58da72800d077b0fc381e822b0f9a631bb5e4612"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2025-09-28 12:45:40 +0000",
+        "commit_hash": "58da72800d077b0fc381e822b0f9a631bb5e4612"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-28 06:36:41 +0000",
+        "commit_hash": "e9b2aed96eb2bece64f3fb69ddd1230b71ac4681"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-09-28 02:02:54 +0000",
+        "commit_hash": "c7ef0a8310a148cdfb801233a67283191a53b249"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-09-28 02:02:54 +0000",
+        "commit_hash": "c7ef0a8310a148cdfb801233a67283191a53b249"
+      }
+    ]
   }
 }
