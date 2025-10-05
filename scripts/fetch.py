@@ -4,6 +4,7 @@ import httpx
 import time
 import os
 import sys
+import subprocess
 from pathlib import Path
 from datetime import datetime, UTC
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
@@ -82,6 +83,8 @@ HISTORY_EXPORT_ENABLED = is_env_flag_enabled("ENABLE_HISTORY_EXPORT")
 CLEAN_SNAPSHOT_FILENAME = "clean.txt"
 HISTORY_EXPORT_ONLY_MODE = is_env_flag_enabled("HISTORY_EXPORT_ONLY")
 
+_HISTORY_BOOTSTRAP_ATTEMPTED = False
+
 
 def export_clean_snapshot_if_enabled(slug: str, cleaned_content: str, slug_dir: Path) -> None:
     """Persist a cleaned snapshot when history export is enabled."""
@@ -101,6 +104,128 @@ def export_clean_snapshot_if_enabled(slug: str, cleaned_content: str, slug_dir: 
         print(f"  - HISTORY EXPORT: {action} clean snapshot at {clean_path}")
     except Exception as e:
         print(f"    - WARNING: Failed to write clean snapshot for {slug}: {e}", file=sys.stderr)
+
+
+def ensure_history_bootstrap_from_data_branch(snapshots_dir: Path) -> None:
+    """Populate local history files from the data branch when absent.
+
+    The history exporter runs on the `main` checkout, which does not track
+    history artifacts. Without seeding the working tree from the `data-updates`
+    branch first, every run would see an empty manifest and produce a single
+    entry. This helper fetches the remote data branch and restores any existing
+    history files before we append new ones.
+    """
+
+    global _HISTORY_BOOTSTRAP_ATTEMPTED
+
+    if _HISTORY_BOOTSTRAP_ATTEMPTED:
+        return
+
+    _HISTORY_BOOTSTRAP_ATTEMPTED = True
+
+    if not HISTORY_EXPORT_ENABLED:
+        return
+
+    repo_root = Path(__file__).resolve().parents[1]
+    history_rel = (snapshots_dir / HISTORY_SUBDIR_NAME).as_posix()
+    history_dir = repo_root / history_rel
+
+    # If the history directory already exists (e.g., local dev run), there is
+    # nothing to hydrate from the data branch.
+    if history_dir.exists() and any(history_dir.iterdir()):
+        return
+
+    remote = os.getenv("HISTORY_DATA_REMOTE", "origin")
+    branch = os.getenv("HISTORY_DATA_BRANCH", "data-updates")
+    ref = f"{remote}/{branch}"
+
+    try:
+        fetch_proc = subprocess.run(
+            ["git", "fetch", remote, branch],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except FileNotFoundError:
+        print(
+            "    - WARNING: Git not available; skipping history bootstrap.",
+            file=sys.stderr,
+        )
+        return
+
+    if fetch_proc.returncode != 0:
+        message = fetch_proc.stderr.strip() or "unknown error"
+        print(
+            f"    - WARNING: Unable to fetch {ref} for history bootstrap: {message}",
+            file=sys.stderr,
+        )
+        return
+
+    ls_proc = subprocess.run(
+        [
+            "git",
+            "ls-tree",
+            "-r",
+            "--full-tree",
+            ref,
+            "--",
+            history_rel,
+        ],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    if ls_proc.returncode != 0:
+        message = ls_proc.stderr.strip() or "unknown error"
+        print(
+            f"    - WARNING: Unable to list history files from {ref}: {message}",
+            file=sys.stderr,
+        )
+        return
+
+    file_paths = []
+    for line in ls_proc.stdout.splitlines():
+        try:
+            _, path = line.split("\t", 1)
+        except ValueError:
+            continue
+        normalized = path.strip()
+        if not normalized:
+            continue
+        file_paths.append(normalized)
+
+    if not file_paths:
+        return
+
+    restored_files = 0
+    for relative_path in file_paths:
+        show_proc = subprocess.run(
+            ["git", "show", f"{ref}:{relative_path}"],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+
+        if show_proc.returncode != 0:
+            message = show_proc.stderr.strip() or "unknown error"
+            print(
+                f"    - WARNING: Unable to restore {relative_path} from {ref}: {message}",
+                file=sys.stderr,
+            )
+            continue
+
+        destination = repo_root / relative_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(show_proc.stdout, encoding="utf-8")
+        restored_files += 1
+
+    if restored_files:
+        print(
+            f"  - HISTORY EXPORT: Bootstrapped {restored_files} files from {ref}")
 
 
 def load_history_manifest(manifest_path: Path) -> list[dict]:
@@ -154,6 +279,8 @@ def save_history_manifest(manifest_path: Path, manifest: list[dict]) -> None:
 def update_history_artifacts(slug: str, cleaned_content: str, snapshots_dir: Path) -> None:
     if not HISTORY_EXPORT_ENABLED:
         return
+
+    ensure_history_bootstrap_from_data_branch(snapshots_dir)
 
     history_root = snapshots_dir / HISTORY_SUBDIR_NAME / slug
     manifest_path = history_root / HISTORY_MANIFEST_FILENAME
