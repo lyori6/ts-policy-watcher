@@ -61,6 +61,11 @@ class WeeklyAggregator:
         # Track API key usage
         self.current_api_key = GEMINI_API_KEY
         self.using_backup_key = False
+
+        if not self.current_api_key and GEMINI_API_KEY_2:
+            self.current_api_key = GEMINI_API_KEY_2
+            self.using_backup_key = True
+            print("ℹ️  Using backup Gemini API key as primary key is not configured.", file=sys.stderr)
         
         print(f"🗓️  Weekly aggregation for: {self.week_start} to {self.week_ending}")
         print(f"🔧 Run type: {'Manual' if self.manual_run else 'Scheduled'}")
@@ -183,7 +188,7 @@ class WeeklyAggregator:
         ai_summary = self.call_ai_api(prompt)
         
         # Check if AI summary generation failed and provide fallback
-        if ai_summary.startswith("Error generating AI summary"):
+        if not ai_summary or ai_summary.lower().startswith("error"):
             print(f"WARNING: AI summary generation failed, using fallback summary", file=sys.stderr)
             return self.generate_fallback_summary(weekly_changes, run_type)
         
@@ -192,7 +197,7 @@ class WeeklyAggregator:
     def call_ai_api(self, prompt, max_retries=3):
         """Call Gemini API with improved error handling and fallback to backup key."""
         if not self.current_api_key:
-            return "Error: No GEMINI_API_KEY configured."
+            return "Error: No GEMINI_API_KEY configured. Set GEMINI_API_KEY or GEMINI_API_KEY_2 to enable AI summaries."
         
         genai.configure(api_key=self.current_api_key)
         model = genai.GenerativeModel('gemini-2.5-flash')
