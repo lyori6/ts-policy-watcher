@@ -33,6 +33,7 @@ from datetime import datetime, UTC, timedelta
 from typing import Dict, List, Optional, NamedTuple
 from dataclasses import dataclass, asdict
 from enum import Enum
+from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 # Health Status Classifications
@@ -239,14 +240,23 @@ class URLHealthChecker:
             with httpx.Client(timeout=self.timeout_seconds, follow_redirects=True) as client:
                 response = client.head(url)
                 response_time_ms = int((time.time() - start_time) * 1000)
+                status_code = response.status_code
+
+                if status_code >= 400 and self.should_retry_with_get(url, status_code):
+                    initial_status = status_code
+                    get_start = time.time()
+                    response = client.get(url)
+                    response_time_ms = int((time.time() - get_start) * 1000)
+                    status_code = response.status_code
+                    print(f"      ↻ HEAD returned {initial_status}; GET fallback returned {status_code}")
                 
                 # Determine health status
-                if response.status_code == 200:
+                if status_code == 200:
                     if response_time_ms <= self.slow_threshold_ms:
                         status = HealthStatus.HEALTHY
                     else:
                         status = HealthStatus.DEGRADED  # Slow response
-                elif 300 <= response.status_code < 400:
+                elif 300 <= status_code < 400:
                     # Redirects are generally OK for health checks
                     status = HealthStatus.HEALTHY if response_time_ms <= self.slow_threshold_ms else HealthStatus.DEGRADED
                 else:
@@ -258,7 +268,7 @@ class URLHealthChecker:
                 if url.startswith('https://'):
                     ssl_valid = self.check_ssl_health(url)
                 
-                print(f"      ✅ {status.value} ({response.status_code}, {response_time_ms}ms)")
+                print(f"      ✅ {status.value} ({status_code}, {response_time_ms}ms)")
                 
                 return HealthCheckResult(
                     url=url,
@@ -266,7 +276,7 @@ class URLHealthChecker:
                     platform=platform,
                     timestamp=datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
                     status=status,
-                    http_status=response.status_code,
+                    http_status=status_code,
                     response_time_ms=response_time_ms,
                     error_message=None,
                     ssl_valid=ssl_valid
@@ -304,7 +314,6 @@ class URLHealthChecker:
         """Quick SSL certificate validation"""
         try:
             # Simple SSL check - just verify the certificate is valid
-            from urllib.parse import urlparse
             parsed = urlparse(url)
             
             # Create SSL context for validation
@@ -361,6 +370,22 @@ class URLHealthChecker:
         except Exception as e:
             response_time_ms = int((time.time() - start_time) * 1000)
             return 0, response_time_ms, f"Playwright error: {str(e)[:100]}"
+
+    def should_retry_with_get(self, url: str, status_code: int) -> bool:
+        """
+        Some providers (notably support.google.com) return false 4xx responses for HEAD
+        requests even though a normal GET succeeds. This guard falls back to GET for a
+        known set of hosts so we avoid flagging healthy pages as failed.
+        """
+        if status_code not in (403, 404, 405):
+            return False
+
+        hostname = urlparse(url).hostname or ""
+        fallback_hosts = {
+            "support.google.com",
+        }
+
+        return any(hostname == host or hostname.endswith(f".{host}") for host in fallback_hosts)
     
     def load_health_database(self) -> Dict:
         """Load existing health database or create new one"""
