@@ -44,10 +44,10 @@ Run the following commands from the repository root with an activated virtual en
 
 5. **Final review**
    ```bash
-   git diff scripts/health_check.py scripts/weekly_aggregator.py
-   git status -sb
-   ```
-   Ensure only the expected files are modified before committing or merging.
+ git diff scripts/health_check.py scripts/weekly_aggregator.py
+ git status -sb
+  ```
+  Ensure only the expected files are modified before committing or merging.
 
 ## Branch & Deployment Notes
 - If you prefer to keep `main` always releasable, create a dev branch for these changes:
@@ -56,5 +56,13 @@ Run the following commands from the repository root with an activated virtual en
   ```
 - After QA, commit and merge the branch (PR optional if you’re solo, but the branch keeps the history clean).
 - When ready, rerun the fetcher and aggregator in production context (without `DEVELOPMENT_MODE` and with real API keys) so live artifacts reflect the fixes.
+
+## Vercel Preview & Pre-Deployment Checklist
+- Push your dev branch (e.g. `git push -u origin dev-url-health-fallback`) to let Vercel build a preview deployment.
+- Once the preview URL is live, smoke-test the dashboard:
+  - Confirm the policy list loads, health statuses are present, and the updated snapshots display correctly.
+  - Check the weekly summary view to ensure fallback text or AI-generated content renders as expected.
+- If everything looks right, complete any final commits (updated `run_log.json`, `url_health.json`, `weekly_summaries.json`) and push again so the preview reflects the latest artifacts.
+- Deploy to `main` only after both the local CLI checks and the Vercel preview look good. Immediately rerun `venv/bin/python scripts/fetch.py` and `scripts/weekly_aggregator.py` without dev flags/post-merge to refresh production datasets.
 
 Keep this checklist handy for future regressions; it captures everything needed to prove that Policy Watcher is back to collecting complete data and emitting summaries even when external services misbehave.
