@@ -110,16 +110,16 @@
   
   
 
-  <body class="font-default" x-data="{ geo_targeting: &quot;&quot;, redirectUrl: $el.dataset.redirectUrl }" data-redirect-url="/en/legal/" x-init="init();$watch('isVisible', value => {
+  <body class="font-default" x-data="{ geo_targeting: &quot;&quot;, redirectUrl: $el.dataset.redirectUrl }" data-redirect-url="/en/legal/" x-init="init();$watch('isVisible', value =&gt; {
     if (value === false) { // Ensure it only redirects when explicitly false
-        setTimeout(() => {
+        setTimeout(() =&gt; {
             window.location.href = redirectUrl;
         }, 10000);
     }
   });">
     <header>
       <nav class="flex justify-center bg-brand-purple">
-  <a id="skip-to-content" href="#main-content" tabindex="0" class="absolute top-0 transition-all focus:translate-y-0 -translate-y-full text-white text-base px-3 flex items-center gap-[10px] border-2 border-white rounded-lg p-[14px_12px] leading-[20px]">
+  <a id="skip-to-content" href="#table-of-contents" tabindex="0" class="absolute top-0 transition-all focus:translate-y-0 -translate-y-full text-white text-base px-3 flex items-center gap-[10px] border-2 border-white rounded-lg p-[14px_12px] leading-[20px]">
     Skip to content
   </a>
   <div class="max-w-[2000px] w-full px-5 lg:px-8 py-6 max-[479px]:flex-col flex-row flex gap-4 items-center col-start-2" x-data="{mobileSubNavOpen: false, mobileAccountNavOpen: false}">
@@ -141,14 +141,14 @@
       
 
   <div class="relative max-[479px]:w-full" x-data="{languageModalOpen: false}">
-    <button class="max-[479px]:w-full max-[479px]:justify-center text-white text-base px-3 flex items-center gap-[10px] border-2 border-white rounded-lg p-[14px_12px] leading-[20px] " @click="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" :aria-expanded="languageModalOpen" @keydown.down="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" @keydown.up="languageModalOpen = true;$focus.within($refs.language_dropdown).last()" x-ref="language_button" aria-expanded="false">
+    <button class="max-[479px]:w-full max-[479px]:justify-center text-white text-base px-3 flex items-center gap-[10px] border-2 border-white rounded-lg p-[14px_12px] leading-[20px] " @click="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" :aria-expanded="languageModalOpen" aria-haspopup="true" aria-label="Languages" @keydown.down.prevent="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" @keydown.up.prevent="languageModalOpen = true;$focus.within($refs.language_dropdown).last()" @keydown.escape="languageModalOpen = false" x-ref="language_button" aria-expanded="false">
         <div>
           Languages
         </div>
         <img src="/images/icons/arrow.svg" alt="">
     </button>
 
-    <ul class="max-[479px]:w-full border-brand-purple border rounded-lg bg-white p-2 absolute z-[200] top-[calc(100%+7.5px)]" x-show="languageModalOpen" @click.outside="languageModalOpen = !languageModalOpen" x-ref="language_dropdown" @keydown.down="$focus.wrap().next()" @keydown.up="$focus.wrap().previous()" @keydown.prevent.tab="languageModalOpen = !languageModalOpen;$focus.within($refs.language_button)" x-trap.inert="languageModalOpen" style="display: none;">
+    <ul class="max-[479px]:w-full border-brand-purple border rounded-lg bg-white p-2 absolute z-[200] top-[calc(100%+7.5px)]" role="menu" x-show="languageModalOpen" @click.outside="languageModalOpen = false" @keydown.escape="languageModalOpen = false;$focus.within($refs.language_button)" @keydown.down.prevent="$focus.wrap().next()" @keydown.up.prevent="$focus.wrap().previous()" x-ref="language_dropdown" x-trap.inert="languageModalOpen" style="display: none;">
       
           
           
@@ -156,9 +156,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/ar-sa/legal/monetized-streamer-agreement" lang="ar">العربية</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/ar-sa/legal/monetized-streamer-agreement" lang="ar">العربية</a>
           </li>
           
       
@@ -168,9 +168,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/bg-bg/legal/monetized-streamer-agreement" lang="bg">Български</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/bg-bg/legal/monetized-streamer-agreement" lang="bg">Български</a>
           </li>
           
       
@@ -180,9 +180,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/cs-cz/legal/monetized-streamer-agreement" lang="cs">Čeština</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/cs-cz/legal/monetized-streamer-agreement" lang="cs">Čeština</a>
           </li>
           
       
@@ -192,9 +192,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/da-dk/legal/monetized-streamer-agreement" lang="da">Dansk</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/da-dk/legal/monetized-streamer-agreement" lang="da">Dansk</a>
           </li>
           
       
@@ -204,9 +204,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/de-de/legal/monetized-streamer-agreement" lang="de">Deutsch</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/de-de/legal/monetized-streamer-agreement" lang="de">Deutsch</a>
           </li>
           
       
@@ -216,9 +216,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/el-gr/legal/monetized-streamer-agreement" lang="el">Ελληνικά</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/el-gr/legal/monetized-streamer-agreement" lang="el">Ελληνικά</a>
           </li>
           
       
@@ -228,9 +228,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/en/legal/monetized-streamer-agreement" lang="en">English</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/en/legal/monetized-streamer-agreement" lang="en">English</a>
           </li>
           
       
@@ -240,9 +240,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/es-es/legal/monetized-streamer-agreement" lang="es">Español</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/es-es/legal/monetized-streamer-agreement" lang="es">Español</a>
           </li>
           
       
@@ -252,9 +252,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/es-mx/legal/monetized-streamer-agreement" lang="es">Español - Latinoamérica</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/es-mx/legal/monetized-streamer-agreement" lang="es">Español - Latinoamérica</a>
           </li>
           
       
@@ -264,9 +264,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/fi-fi/legal/monetized-streamer-agreement" lang="fi">Suomi</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/fi-fi/legal/monetized-streamer-agreement" lang="fi">Suomi</a>
           </li>
           
       
@@ -276,9 +276,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/fr-fr/legal/monetized-streamer-agreement" lang="fr">Français</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/fr-fr/legal/monetized-streamer-agreement" lang="fr">Français</a>
           </li>
           
       
@@ -288,9 +288,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/hu-hu/legal/monetized-streamer-agreement" lang="hu">Magyar</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/hu-hu/legal/monetized-streamer-agreement" lang="hu">Magyar</a>
           </li>
           
       
@@ -300,9 +300,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/it-it/legal/monetized-streamer-agreement" lang="it">Italiano</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/it-it/legal/monetized-streamer-agreement" lang="it">Italiano</a>
           </li>
           
       
@@ -312,9 +312,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/ja-jp/legal/monetized-streamer-agreement" lang="ja">日本語</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/ja-jp/legal/monetized-streamer-agreement" lang="ja">日本語</a>
           </li>
           
       
@@ -324,9 +324,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/ko-kr/legal/monetized-streamer-agreement" lang="ko">한국어</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/ko-kr/legal/monetized-streamer-agreement" lang="ko">한국어</a>
           </li>
           
       
@@ -336,9 +336,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/nl-nl/legal/monetized-streamer-agreement" lang="nl">Nederlands</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/nl-nl/legal/monetized-streamer-agreement" lang="nl">Nederlands</a>
           </li>
           
       
@@ -348,9 +348,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/no-no/legal/monetized-streamer-agreement" lang="no">Norsk</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/no-no/legal/monetized-streamer-agreement" lang="no">Norsk</a>
           </li>
           
       
@@ -360,9 +360,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/pl-pl/legal/monetized-streamer-agreement" lang="pl">Polski</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/pl-pl/legal/monetized-streamer-agreement" lang="pl">Polski</a>
           </li>
           
       
@@ -372,9 +372,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/pt-br/legal/monetized-streamer-agreement" lang="pt">Português Brasileiro</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/pt-br/legal/monetized-streamer-agreement" lang="pt">Português Brasileiro</a>
           </li>
           
       
@@ -384,9 +384,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/pt-pt/legal/monetized-streamer-agreement" lang="pt">Português</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/pt-pt/legal/monetized-streamer-agreement" lang="pt">Português</a>
           </li>
           
       
@@ -396,9 +396,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/ro-ro/legal/monetized-streamer-agreement" lang="ro">Română</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/ro-ro/legal/monetized-streamer-agreement" lang="ro">Română</a>
           </li>
           
       
@@ -408,9 +408,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/ru-ru/legal/monetized-streamer-agreement" lang="ru">Русский</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/ru-ru/legal/monetized-streamer-agreement" lang="ru">Русский</a>
           </li>
           
       
@@ -420,9 +420,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/sk-sk/legal/monetized-streamer-agreement" lang="sk">Slovenčina</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/sk-sk/legal/monetized-streamer-agreement" lang="sk">Slovenčina</a>
           </li>
           
       
@@ -432,9 +432,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/sv-se/legal/monetized-streamer-agreement" lang="sv">Svenska</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/sv-se/legal/monetized-streamer-agreement" lang="sv">Svenska</a>
           </li>
           
       
@@ -444,9 +444,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/th-th/legal/monetized-streamer-agreement" lang="th">ภาษาไทย</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/th-th/legal/monetized-streamer-agreement" lang="th">ภาษาไทย</a>
           </li>
           
       
@@ -463,9 +463,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/tr-tr/legal/monetized-streamer-agreement" lang="tr">Türkçe</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/tr-tr/legal/monetized-streamer-agreement" lang="tr">Türkçe</a>
           </li>
           
       
@@ -475,9 +475,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/vi-vn/legal/monetized-streamer-agreement" lang="vi">Tiếng Việt</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/vi-vn/legal/monetized-streamer-agreement" lang="vi">Tiếng Việt</a>
           </li>
           
       
@@ -487,9 +487,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/zh-cn/legal/monetized-streamer-agreement" lang="zh">中文 简体</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/zh-cn/legal/monetized-streamer-agreement" lang="zh">中文 简体</a>
           </li>
           
       
@@ -499,9 +499,9 @@
           
           
           
-          <li class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
-            <a class="p-2 w-full whitespace-nowrap" href="/zh-tw/legal/monetized-streamer-agreement" lang="zh">中文 繁體</a>
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/zh-tw/legal/monetized-streamer-agreement" lang="zh">中文 繁體</a>
           </li>
           
       
@@ -646,7 +646,6 @@
         const maxAttempts = 20;
         const interval = setInterval(function () {
             attempts++;
-            attempts++;
 
             if (initializeSearch() || attempts >= maxAttempts) {
                 clearInterval(interval);
@@ -666,7 +665,7 @@
 
 
 <div id="search" class="w-full max-[479px]:max-w-[55%] max-w-[40%] lg:max-w-full"></div>
-<div id="results" class="hidden absolute mt-4 bg-white border border-[#8D41F9] rounded-lg z-20 overflow-hidden lg:w-[446px] left-0 right-0 lg:left-auto lg:right-auto top-[100%]" tabindex="0" role="dialog" aria-label="Search results"></div>
+<div id="results" class="hidden absolute mt-4 bg-white border border-[#8D41F9] rounded-lg z-20 overflow-hidden lg:w-[446px] left-0 right-0 lg:left-auto lg:right-auto top-[100%]" role="dialog" aria-label="Search results"></div>
 
     </div>
     
@@ -858,7 +857,7 @@
     
       
       
-      
+        
       <div class="grid grid-cols-1 pb-16 xl:grid-cols-1">
         
         
@@ -945,7 +944,7 @@
   <svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="block ml-4 xl:hidden" :class="mobileTOCOpen ? 'rotate-[0deg]' : 'rotate-[270deg]'" aria-hidden="true">
     <path d="M11.0006 8.49963L6.00058 13.4996M6.00058 13.4996L1.00058 8.49963M6.00058 13.4996V1.49963" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
   </svg>
-  <span class="sr-only" x-text="mobileTOCOpen ? 'Collapse table of contents' : 'Expand table of contents'"></span>
+  
 </button>
 <div id="table-of-contents" :class="mobileTOCOpen ? 'block xl:block' : 'hidden xl:block'" style="background-color: #F0F0FF; border-radius: 0.5rem; padding: 16px;">
   <nav id="TableOfContents">
@@ -1139,7 +1138,6 @@
         const maxAttempts = 20;
         const interval = setInterval(function () {
             attempts++;
-            attempts++;
 
             if (initializeSearch() || attempts >= maxAttempts) {
                 clearInterval(interval);
@@ -1159,7 +1157,7 @@
 
 
 <div id="search" class="w-full max-[479px]:max-w-[55%] max-w-[40%] lg:max-w-full"><form class="pagefind-modular-input-wrapper" role="search" aria-label="Search this site" action="javascript:void(0);"><label for="pfmod-input-0" data-pfmod-sr-hidden="true">Search this site</label><input id="pfmod-input-0" class="pagefind-modular-input" autocapitalize="none" enterkeyhint="search" placeholder="Search legal docs"><button class="pagefind-modular-input-clear" data-pfmod-suppressed="true">Clear</button></form></div>
-<div id="results" class="hidden absolute mt-4 bg-white border border-[#8D41F9] rounded-lg z-20 overflow-hidden lg:w-[446px] left-0 right-0 lg:left-auto lg:right-auto top-[100%]" tabindex="0" role="dialog" aria-label="Search results"></div>
+<div id="results" class="hidden absolute mt-4 bg-white border border-[#8D41F9] rounded-lg z-20 overflow-hidden lg:w-[446px] left-0 right-0 lg:left-auto lg:right-auto top-[100%]" role="dialog" aria-label="Search results"></div>
 
     </div>
     
@@ -1351,7 +1349,7 @@
     
       
       
-      
+        
       <div class="grid grid-cols-1 pb-16 xl:grid-cols-1">
         
         
@@ -1438,7 +1436,7 @@
   <svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="block ml-4 xl:hidden rotate-[270deg]" :class="mobileTOCOpen ? 'rotate-[0deg]' : 'rotate-[270deg]'" aria-hidden="true">
     <path d="M11.0006 8.49963L6.00058 13.4996M6.00058 13.4996L1.00058 8.49963M6.00058 13.4996V1.49963" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
   </svg>
-  <span class="sr-only" x-text="mobileTOCOpen ? 'Collapse table of contents' : 'Expand table of contents'">Expand table of contents</span>
+  
 </button>
 <div id="table-of-contents" :class="mobileTOCOpen ? 'block xl:block' : 'hidden xl:block'" style="background-color: #F0F0FF; border-radius: 0.5rem; padding: 16px;" class="hidden xl:block">
   <nav id="TableOfContents">
