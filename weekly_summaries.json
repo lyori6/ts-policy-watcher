@@ -3491,5 +3491,324 @@
         "commit_hash": "c6e888f0b4be8cd605af99db86996bda995a2d28"
       }
     ]
+  },
+  "2025-11-22_to_2025-11-28": {
+    "run_metadata": {
+      "run_date": "2025-11-28T19:16:24.619118+00:00",
+      "run_type": "scheduled",
+      "week_start": "2025-11-22",
+      "week_end": "2025-11-28",
+      "generated_by": "friday_automation"
+    },
+    "summary": "Here is a comprehensive weekly summary of policy changes for the period of November 22, 2025, to November 28, 2025:\n\n### Weekly Policy Change Summary: November 22 - November 28, 2025\n\n**Run Information:** Generated on November 28, 2025, at 19:16 UTC\n\n---\n\n### 1. Executive Summary\n\n*   **Critical Safety Gap on TikTok:** The \"Blocking Users\" policy page on TikTok has been entirely removed, creating a significant immediate user safety risk and a likely increase in support inquiries. This necessitates urgent attention to restore or redirect critical safety information.\n*   **Enhanced LIVE Safety on TikTok:** TikTok has significantly improved its LIVE moderation documentation, providing comprehensive guidance and tools for creators and moderators to maintain safer live environments.\n*   **Loss of User Feedback Channel on YouTube:** YouTube removed a dedicated feedback form for its \"Hiding Users\" feature, indicating a loss of structured user sentiment and quality feedback for this specific functionality.\n\n---\n\n### 2. Platform Highlights\n\n#### TikTok\n\n*   **CRITICAL: \"Blocking Users\" Policy Page Removed:** The entire content of the `tiktok-blocking-users/snapshot.html` policy page, which contained instructions on how to block users (single, multiple, unblocking, finding blocked lists, Family Pairing), has been removed. The page now contains minimal technical data.\n    *   **Trust & Safety Impact:** **Highly Negative.** This creates a severe gap in user-facing safety documentation, preventing users from easily understanding and utilizing a fundamental platform safety feature. This is expected to lead to increased confusion, frustration, and higher support inquiries related to account management and personal safety.\n    *   **Action Needed:** **Urgent investigation** to confirm if this content has been moved, replaced by a dynamic loading mechanism, or if this removal was unintended. Clear redirects or re-deployment of this crucial user safety information must be verified immediately.\n*   **POSITIVE: Comprehensive LIVE Moderation Documentation Launched:** A minimal or blank page has been replaced with detailed, comprehensive documentation for TikTok LIVE moderation. This includes clear instructions for creators and moderators on how to use tools such as blocking messages, reporting/muting/blocking viewers, setting audience age controls, managing comment settings, and adding/removing moderators. Instructions are tailored for both app and web.\n    *   **Trust & Safety Impact:** **Highly Positive.** This significantly enhances user safety by empowering creators and moderators with clear, actionable tools to maintain a safer LIVE environment. It also improves policy enforcement through self-help guidance and increases transparency regarding available moderation features.\n\n#### YouTube\n\n*   **\"Hiding Users\" Feedback Form Removed:** The `youtube-hiding-users/snapshot.html` page, which previously featured a user feedback form (with options like \"Inaccurate,\" \"Hard to understand,\" \"Missing info\"), has been entirely removed.\n    *   **Trust & Safety Impact:** **Negative.** This eliminates a dedicated input channel for gathering structured user sentiment and suggestions specifically related to the \"hiding users\" feature, potentially creating a data collection gap and hindering future product improvements based on user needs.\n\n#### Twitch\n\n*   **Technical Front-End Update to Community Guidelines:** The `twitch-community-guidelines/snapshot.html` file has been updated to include a large block of Salesforce Lightning Design System (SLDS) and Lightning Web Component (LWC) related CSS.\n    *   **Trust & Safety Impact:** **Neutral (Technical).** There are **no changes to the actual Community Guidelines policy text or rules**. The impact is purely on the visual presentation and technical rendering of the guidelines page, likely aimed at standardization or accessibility. Potential rendering quirks should be monitored.\n\n#### Whatnot\n\n*   **Minor Community Guidelines Update (Effective Date & Link Refinement):** The policy's effective date was updated from \"June 30, 2025\" to \"Today, 4:25 PM,\" and the hyperlink for the \"Card breaks\" policy under \"Selling Policies\" was updated to point to a new, dedicated help center article. No other substantive policy text changes were noted.\n    *   **Trust & Safety Impact:** **Neutral to Slightly Positive.** The immediate effective date means the latest guidance is live. The update to the \"Card breaks\" link likely signifies a more focused or refined resource, which could improve user understanding and adherence to these specific guidelines without changing core rules.\n\n---\n\n### 3. Risk Assessment\n\n*   **HIGH RISK: TikTok - Blocking Users Policy Page Removal:**\n    *   **Nature of Risk:** Direct erosion of user safety features' discoverability and usability. Users may struggle to protect themselves from harassment or unwanted contact, leading to increased vulnerability and dissatisfaction.\n    *   **Potential Consequences:** Significant increase in negative user experiences, higher complaint volume, potential for public relations issues related to platform safety, and a substantial drain on customer support resources.\n    *   **Recommended Action:** **Immediate verification and restoration/redirection** of the \"Blocking Users\" policy content. This should be treated as a top priority to mitigate user safety risks.\n\n*   **MEDIUM RISK: YouTube - Loss of \"Hiding Users\" Feedback Channel:**\n    *   **Nature of Risk:** Reduced ability to collect direct, structured user feedback on a safety-related feature. This can lead to unaddressed user pain points, missed opportunities for iterative improvements, and a lack of data-driven insights into the effectiveness or clarity of the \"hiding users\" functionality.\n    *   **Potential Consequences:** Stagnation in the evolution of the feature, potential for user frustration if issues persist, and a gap in understanding how users perceive and interact with the feature.\n    *   **Recommended Action:** Product management should investigate if alternative, equally effective feedback mechanisms have been established for the \"hiding users\" feature and assess the impact of this data collection gap.\n\n---\n\n### 4. Trends Analysis\n\n*   **Divergent Approaches to User Empowerment:** While TikTok demonstrated a positive step by rolling out comprehensive LIVE moderation documentation to empower users with self-help tools, the simultaneous removal of the \"Blocking Users\" page contradicts this trend, indicating an inconsistency in prioritizing accessible user safety resources.\n*   **Ongoing Platform Documentation Refinement:** Twitch and Whatnot both engaged in updates primarily focused on the presentation or linking within their policy documentation, rather than substantive rule changes. This suggests a continuous effort across platforms to improve the clarity, discoverability, and technical delivery of their guidelines.\n*   **Critical Information Gaps Emerging:** The removal of critical safety-related information (TikTok blocking users) and dedicated feedback channels (YouTube hiding users) points to a potential trend where crucial user-facing documentation or input mechanisms might be inadvertently, or intentionally, deprioritized or removed, which could have downstream negative impacts on user trust and safety operations.",
+    "changes_count": 24,
+    "changed_policies": [
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-28 18:37:36 +0000",
+        "commit_hash": "04a56b1ec8526ce0bd660eb46c5c58cc27c16f93"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-11-28 18:37:36 +0000",
+        "commit_hash": "04a56b1ec8526ce0bd660eb46c5c58cc27c16f93"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-28 12:54:46 +0000",
+        "commit_hash": "3b7afd7d2f913aab3476991d87c8665c4589fde1"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-28 12:54:46 +0000",
+        "commit_hash": "3b7afd7d2f913aab3476991d87c8665c4589fde1"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-28 06:41:06 +0000",
+        "commit_hash": "3349a4c6c107e8885201a8310262f195bec08987"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-28 06:41:06 +0000",
+        "commit_hash": "3349a4c6c107e8885201a8310262f195bec08987"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-28 06:41:06 +0000",
+        "commit_hash": "3349a4c6c107e8885201a8310262f195bec08987"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-28 01:58:59 +0000",
+        "commit_hash": "ca1e10c9654c1ebe97d648d63071571a24b367ed"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-27 18:37:27 +0000",
+        "commit_hash": "67d52e693fa4f298811fa3dbb6b4697c3fff614e"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-27 12:56:12 +0000",
+        "commit_hash": "2e4f4d421abab0cc8c366d955e173365cc7d959c"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-27 12:56:12 +0000",
+        "commit_hash": "2e4f4d421abab0cc8c366d955e173365cc7d959c"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-27 06:42:00 +0000",
+        "commit_hash": "cb884f48320f8506996d4544f2df1ce66eac8e03"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-27 06:42:00 +0000",
+        "commit_hash": "cb884f48320f8506996d4544f2df1ce66eac8e03"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-27 01:59:00 +0000",
+        "commit_hash": "2380d8e370038e27ce737bf317c50d9b9d729116"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-27 01:59:00 +0000",
+        "commit_hash": "2380d8e370038e27ce737bf317c50d9b9d729116"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-26 18:35:14 +0000",
+        "commit_hash": "5344abf6900ede66d005c96243d3986abadea4d8"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-26 12:57:51 +0000",
+        "commit_hash": "e61ef8f2dd28d924b575aaa06ed71d2b54686805"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-26 06:41:05 +0000",
+        "commit_hash": "04ef9034731b49672b4d2c484255e4d2a65dfaba"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-26 06:41:05 +0000",
+        "commit_hash": "04ef9034731b49672b4d2c484255e4d2a65dfaba"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-26 06:41:05 +0000",
+        "commit_hash": "04ef9034731b49672b4d2c484255e4d2a65dfaba"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-26 02:01:41 +0000",
+        "commit_hash": "5343fe96fcd846ef7d4a9ecebc0bc998f68ffe47"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-26 02:01:41 +0000",
+        "commit_hash": "5343fe96fcd846ef7d4a9ecebc0bc998f68ffe47"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-25 18:40:56 +0000",
+        "commit_hash": "018e02bf8ea794f6ed45839d98248ead1c052b74"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-25 12:56:27 +0000",
+        "commit_hash": "dbf83aa005ac010ee38b49039cff2d80deb428b3"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-25 12:56:27 +0000",
+        "commit_hash": "dbf83aa005ac010ee38b49039cff2d80deb428b3"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-25 12:56:27 +0000",
+        "commit_hash": "dbf83aa005ac010ee38b49039cff2d80deb428b3"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-25 06:41:42 +0000",
+        "commit_hash": "9de92062c1c25203761a205c81b1f9fe35f59a57"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-25 06:41:42 +0000",
+        "commit_hash": "9de92062c1c25203761a205c81b1f9fe35f59a57"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-25 02:01:38 +0000",
+        "commit_hash": "dd69db584c060ce8be7ec67c1a26a5f6f047cb1d"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-25 02:01:38 +0000",
+        "commit_hash": "dd69db584c060ce8be7ec67c1a26a5f6f047cb1d"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-25 02:01:38 +0000",
+        "commit_hash": "dd69db584c060ce8be7ec67c1a26a5f6f047cb1d"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-24 18:40:04 +0000",
+        "commit_hash": "0e6b7c19e3e59268aa2210eac287fab2ba105a77"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-24 18:40:04 +0000",
+        "commit_hash": "0e6b7c19e3e59268aa2210eac287fab2ba105a77"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-24 12:56:39 +0000",
+        "commit_hash": "c42ded8ad203e1c5780a6ad01939a0e930ff8186"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-24 06:41:03 +0000",
+        "commit_hash": "4e52bb8f6e7d8a217dc3881b79c2318e115b2248"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-24 06:41:03 +0000",
+        "commit_hash": "4e52bb8f6e7d8a217dc3881b79c2318e115b2248"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-24 02:07:56 +0000",
+        "commit_hash": "8fb5cfe7db0ccac7451ac777af3f286ad55e2bee"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-24 02:07:56 +0000",
+        "commit_hash": "8fb5cfe7db0ccac7451ac777af3f286ad55e2bee"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-23 18:36:05 +0000",
+        "commit_hash": "87f3b79a77e29999510e3b15f975f53de941c9a3"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-23 18:36:05 +0000",
+        "commit_hash": "87f3b79a77e29999510e3b15f975f53de941c9a3"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-23 18:36:05 +0000",
+        "commit_hash": "87f3b79a77e29999510e3b15f975f53de941c9a3"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-23 12:46:32 +0000",
+        "commit_hash": "48615c6c2edaa99b2f74d94518986da20142a110"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-23 12:46:32 +0000",
+        "commit_hash": "48615c6c2edaa99b2f74d94518986da20142a110"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-23 12:46:32 +0000",
+        "commit_hash": "48615c6c2edaa99b2f74d94518986da20142a110"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2025-11-23 06:38:04 +0000",
+        "commit_hash": "3baa4935464902efbbf4a51317dcadf679dcbe53"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-23 06:38:04 +0000",
+        "commit_hash": "3baa4935464902efbbf4a51317dcadf679dcbe53"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-23 06:38:04 +0000",
+        "commit_hash": "3baa4935464902efbbf4a51317dcadf679dcbe53"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-11-23 06:38:04 +0000",
+        "commit_hash": "3baa4935464902efbbf4a51317dcadf679dcbe53"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2025-11-23 02:14:36 +0000",
+        "commit_hash": "688a23039d0786666252e437604776cdafa3e39e"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2025-11-23 02:14:36 +0000",
+        "commit_hash": "688a23039d0786666252e437604776cdafa3e39e"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2025-11-23 02:14:36 +0000",
+        "commit_hash": "688a23039d0786666252e437604776cdafa3e39e"
+      }
+    ]
   }
 }
