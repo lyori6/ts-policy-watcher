@@ -1,5 +1,12 @@
 [
   {
+    "timestamp_utc": "2026-01-07T12:59:28.071163Z",
+    "status": "success",
+    "pages_checked": 26,
+    "changes_found": 3,
+    "errors": []
+  },
+  {
     "timestamp_utc": "2026-01-07T06:43:22.023716Z",
     "status": "success",
     "pages_checked": 26,
@@ -168,15 +175,5 @@
     "pages_checked": 26,
     "changes_found": 5,
     "errors": []
-  },
-  {
-    "timestamp_utc": "2026-01-01T06:42:18.652296Z",
-    "status": "partial_failure",
-    "pages_checked": 26,
-    "changes_found": 5,
-    "errors": [
-      "Attempt 2/2 FAILED for meta-appeal-process. Error Type: unknown_error. Reason: HTTP 429: ",
-      "Attempt 2/2 FAILED for meta-blocking-people. Error Type: unknown_error. Reason: HTTP 429: "
-    ]
   }
 ]
