@@ -1,5 +1,15 @@
 [
   {
+    "timestamp_utc": "2026-01-09T12:58:28.467824Z",
+    "status": "partial_failure",
+    "pages_checked": 26,
+    "changes_found": 1,
+    "errors": [
+      "Attempt 2/2 FAILED for meta-appeal-process. Error Type: unknown_error. Reason: HTTP 429: ",
+      "Attempt 2/2 FAILED for meta-blocking-people. Error Type: unknown_error. Reason: Page.goto: net::ERR_TOO_MANY_REDIRECTS at https://help.instagram.com/426700567389543\nCall log:\n  - navigating to \"https://help.instagram.com/426700567389543\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
     "timestamp_utc": "2026-01-09T06:43:38.954525Z",
     "status": "success",
     "pages_checked": 26,
@@ -167,13 +177,6 @@
     "status": "success",
     "pages_checked": 26,
     "changes_found": 1,
-    "errors": []
-  },
-  {
-    "timestamp_utc": "2026-01-03T06:39:33.420125Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 3,
     "errors": []
   }
 ]
