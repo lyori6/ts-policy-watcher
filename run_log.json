@@ -1,5 +1,14 @@
 [
   {
+    "timestamp_utc": "2026-02-04T02:36:53.010052Z",
+    "status": "partial_failure",
+    "pages_checked": 26,
+    "changes_found": 0,
+    "errors": [
+      "Attempt 1/2 FAILED for whatnot-prohibited-items. Error Type: 403_forbidden. Reason: HTTP 403: "
+    ]
+  },
+  {
     "timestamp_utc": "2026-02-03T19:04:27.533809Z",
     "status": "success",
     "pages_checked": 26,
@@ -176,13 +185,6 @@
   },
   {
     "timestamp_utc": "2026-01-28T18:46:18.724827Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 1,
-    "errors": []
-  },
-  {
-    "timestamp_utc": "2026-01-28T13:04:54.248480Z",
     "status": "success",
     "pages_checked": 26,
     "changes_found": 1,
