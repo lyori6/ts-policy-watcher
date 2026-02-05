@@ -1,5 +1,19 @@
 [
   {
+    "timestamp_utc": "2026-02-05T13:16:48.938598Z",
+    "status": "partial_failure",
+    "pages_checked": 26,
+    "changes_found": 1,
+    "errors": [
+      "Attempt 1/2 FAILED for whatnot-hate-and-harassment. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-prohibited-items. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-how-to-report. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-enforcement-actions. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-buyer-protection. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-moderator-guidelines. Error Type: 403_forbidden. Reason: HTTP 403: "
+    ]
+  },
+  {
     "timestamp_utc": "2026-02-05T07:08:00.490152Z",
     "status": "success",
     "pages_checked": 26,
@@ -177,13 +191,6 @@
   },
   {
     "timestamp_utc": "2026-01-30T06:59:20.169386Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 1,
-    "errors": []
-  },
-  {
-    "timestamp_utc": "2026-01-30T02:35:58.105760Z",
     "status": "success",
     "pages_checked": 26,
     "changes_found": 1,
