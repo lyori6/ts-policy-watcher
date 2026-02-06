@@ -6531,5 +6531,156 @@
         "commit_hash": "4fffdf7dc80900174c4df5afa69cc6ccae8db99c"
       }
     ]
+  },
+  "2026-01-31_to_2026-02-06": {
+    "run_metadata": {
+      "run_date": "2026-02-06T19:38:18.126798+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-01-31",
+      "week_end": "2026-02-06",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Update Summary\n\n**Week Period: January 31, 2026 to February 06, 2026**\n**Run Information: Generated on February 06, 2026 at 19:38 UTC**\n\n---\n\n### 1. Executive Summary\n\nThis week saw a significant push towards **increased policy clarity and user empowerment across major platforms**, particularly Twitch and Meta. Twitch implemented a comprehensive update to its Community Guidelines, focusing on detailed enforcement examples for high-risk areas like self-destructive behavior, youth safety, and off-platform conduct. Concurrently, Meta launched a formalized Oversight Board appeal process for Instagram and improved user guidance for blocking features. A notable concern emerged from YouTube with the removal of a direct user feedback channel for its \"hide user\" feature, potentially impacting signal detection for T&S.\n\n**Key Takeaways:**\n\n*   **Transparency & Specificity:** Platforms are moving towards more explicit and example-driven policy explanations to reduce ambiguity and improve user compliance.\n*   **User Empowerment in Safety:** Enhanced tools and clear appeal processes are empowering users to manage their safety and challenge content decisions.\n*   **Operational & Product Alignment Critical:** These policy shifts necessitate product reviews and readiness from operational teams, especially concerning monetization features and appeals handling.\n\n---\n\n### 2. Platform Highlights\n\nHere are the notable policy changes by platform:\n\n*   **Twitch:**\n    *   **Community Guidelines Update:** A major revision focused on \"Enhanced Clarity & Specific Enforcement Examples.\" Key changes include:\n        *   **Expanded Navigation & Introduction:** Redesigned sidebar and new introductory section to improve policy discoverability and contextualize Twitch's safety philosophy.\n        *   **\"Enforcement Notes\" Framework:** Introduction of dedicated sections with detailed examples of what is/isn't allowed, increasing transparency.\n        *   **Self-Destructive Behavior Clarifications:** Explicitly prohibiting encouraging harm for monetary gain (e.g., \"shot for subs\"), setting clear boundaries for drinking goal streams, and banning dangerous driving while streaming.\n        *   **Youth Safety Specifics:** Prohibiting sexual framing of child-like anime characters (\"lolis\"/\"shotas\"), humor sexualizing minors, and stating one is under 13.\n        *   **Off-Service Conduct Details:** Expanded examples for severe harms like doxxing and swatting, and clarified requirements for verifiable evidence in reports.\n    *   **Monetized Streamer Agreement:**\n        *   **New Language Availability:** Added Ukrainian and Vietnamese versions, requiring T&S consideration for language-specific content moderation and support.\n        *   **Improved Document Navigation:** Added a numbered table of contents for better readability and easier access to specific clauses.\n        *   **Minor Technical Updates:** Conversion of external hyperlinks to internal paths, improving consistency.\n\n*   **Meta (Instagram):**\n    *   **Oversight Board Appeals Process:** The `meta-appeal-process` page was fully updated to provide a comprehensive Instagram Help Center guide on appealing content decisions to the Oversight Board. This formalizes an external appeal path after internal reviews.\n    *   **Blocking People Documentation:** The `meta-blocking-people` page was updated from a generic login screen to a detailed Help Center article on how to use the blocking feature effectively, enhancing user safety and self-service.\n\n*   **YouTube:**\n    *   **\"Hiding Users\" Feedback Removal:** The user feedback form for the \"youtube-hiding-users\" feature has been entirely removed. This eliminates a direct channel for users to report issues or suggest improvements related to this safety function.\n\n---\n\n### 3. Risk Assessment\n\nHere are the changes that require immediate attention:\n\n*   **Twitch Community Guidelines - Monetization & Self-Destructive Behavior:** The explicit prohibition on \"encouraging harm for monetary gain\" and clearer boundaries for drinking streams directly impact product features that facilitate viewer interaction and donations. Product teams responsible for monetization features must conduct a rapid review to ensure alignment and prevent potential policy violations or misuse.\n*   **Twitch Community Guidelines - Youth Safety:** The specific prohibitions regarding child-like anime characters (\"lolis\"/\"shotas\") and humor sexualizing minors have significant implications for creators using VTuber technologies or avatar systems. Product teams should evaluate their content filters and user-generated content policies to ensure compliance.\n*   **Meta Oversight Board Appeals Process - Operational Impact:** The formalization of the Oversight Board appeal process will likely lead to an **increase in internal appeal requests** as users fulfill the prerequisite internal review steps. Content moderation and user support teams need to be prepared for this increased volume and ensure seamless alignment with Oversight Board operational requirements and timelines.\n*   **YouTube Hiding Users - Loss of Signal:** The removal of the user feedback form for \"hiding users\" is a **moderate-to-high risk** for T&S. This eliminates a critical user-generated signal channel for identifying potential misuse, bugs, or emerging policy-related concerns with the feature. T&S should explore alternative monitoring strategies or re-establish a feedback mechanism to mitigate this blind spot.\n\n---\n\n### 4. Trends Analysis\n\nSeveral patterns are observable across platforms this week:\n\n*   **The Age of Specificity:** There's a clear trend towards platforms providing highly granular, example-driven policy guidance rather than broad statements. Twitch's \"Enforcement Notes\" framework exemplifies this, aiming to demystify enforcement for users and creators. This approach reflects an industry-wide effort to enhance transparency and reduce ambiguity, which can lead to better compliance and fewer appeals rooted in misunderstanding.\n*   **Prioritization of User Safety & Wellbeing:** Explicit policy updates targeting self-destructive behavior and youth safety (Twitch) demonstrate a strong focus on protecting vulnerable users and preventing harm. Similarly, Meta's improved guidance for blocking features empowers users to take control of their online interactions.\n*   **Formalized External Recourse:** Meta's comprehensive rollout of the Oversight Board appeal process signifies a growing commitment to external accountability and providing users with formal avenues to challenge content moderation decisions. This trend suggests increased scrutiny of internal content review processes and the potential for public discourse surrounding platform policies.\n*   **The Double-Edged Sword of Streamlining:** While efforts to improve navigation and accessibility (Twitch's Monetized Streamer Agreement, Meta's blocking help article) are beneficial, YouTube's removal of a feedback form highlights a potential trade-off. Streamlining can sometimes inadvertently remove vital channels for T&S to gather real-time user signals, risking delayed detection of emerging issues or feature misuse.\n*   **Product Policy Alignment Becomes More Complex:** As policies become more detailed and impact specific features (e.g., monetization, avatars), the need for proactive and continuous alignment between T&S, product development, and operational teams becomes increasingly critical to ensure compliance and avoid unexpected disruptions.",
+    "changes_count": 14,
+    "changed_policies": [
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-06 02:40:51 +0000",
+        "commit_hash": "60c804781afe91c0c3dcb3d9a2ce56ed72443e9d"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-05 13:18:05 +0000",
+        "commit_hash": "6fc8f12f05c9aa660c43858f38903ff8107f99c8"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-05 07:09:39 +0000",
+        "commit_hash": "d1bc35a3a13d08f7512f8e1d9286f0c10a4ce66b"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-05 02:40:44 +0000",
+        "commit_hash": "664c762af893e8aed96dac042f69d3860a36c27c"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-04 19:01:19 +0000",
+        "commit_hash": "0330cc6b7d038a803957182aac948ed3a8dcef0d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-02-04 19:01:19 +0000",
+        "commit_hash": "0330cc6b7d038a803957182aac948ed3a8dcef0d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-02-04 13:16:42 +0000",
+        "commit_hash": "b99634692fdd2b0a568725023c69c9a1d3331461"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-04 07:03:29 +0000",
+        "commit_hash": "bdc55dd5bdf4892af31b5f1304b0321b089ae40f"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-03 19:06:03 +0000",
+        "commit_hash": "536e8084b1868f74b88da960da1568e5c11b5bcd"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-02-03 19:06:03 +0000",
+        "commit_hash": "536e8084b1868f74b88da960da1568e5c11b5bcd"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-02-03 13:17:32 +0000",
+        "commit_hash": "be2b1df163ddb3c5164a66463524c9fa3cd11886"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-03 02:43:50 +0000",
+        "commit_hash": "b731f819f682eace14581af3282d81aaa3910392"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-02-03 02:43:50 +0000",
+        "commit_hash": "b731f819f682eace14581af3282d81aaa3910392"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-02 13:16:29 +0000",
+        "commit_hash": "7dc10e37acd270335f52838043975e65f590c8d4"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-02-01 18:46:16 +0000",
+        "commit_hash": "3ce8a48ae949facf764511a32e899bf165b1da48"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-02-01 18:46:16 +0000",
+        "commit_hash": "3ce8a48ae949facf764511a32e899bf165b1da48"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-01 18:46:16 +0000",
+        "commit_hash": "3ce8a48ae949facf764511a32e899bf165b1da48"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-02-01 18:46:16 +0000",
+        "commit_hash": "3ce8a48ae949facf764511a32e899bf165b1da48"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-02-01 13:05:33 +0000",
+        "commit_hash": "0cd269f619cd64a05675959b711a7cbe701318d5"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-02-01 13:05:33 +0000",
+        "commit_hash": "0cd269f619cd64a05675959b711a7cbe701318d5"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-01 13:05:33 +0000",
+        "commit_hash": "0cd269f619cd64a05675959b711a7cbe701318d5"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-02-01 13:05:33 +0000",
+        "commit_hash": "0cd269f619cd64a05675959b711a7cbe701318d5"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-02-01 02:58:30 +0000",
+        "commit_hash": "3687aec9dce0266ddf2e942cb7fdeded49651163"
+      }
+    ]
   }
 }
