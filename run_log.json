@@ -1,5 +1,12 @@
 [
   {
+    "timestamp_utc": "2026-02-06T19:00:25.676611Z",
+    "status": "success",
+    "pages_checked": 26,
+    "changes_found": 0,
+    "errors": []
+  },
+  {
     "timestamp_utc": "2026-02-06T13:14:28.862017Z",
     "status": "success",
     "pages_checked": 26,
@@ -186,14 +193,5 @@
     "pages_checked": 26,
     "changes_found": 2,
     "errors": []
-  },
-  {
-    "timestamp_utc": "2026-01-31T06:50:36.429535Z",
-    "status": "partial_failure",
-    "pages_checked": 26,
-    "changes_found": 2,
-    "errors": [
-      "Attempt 1/2 FAILED for whatnot-community-guidelines. Error Type: 403_forbidden. Reason: HTTP 403: "
-    ]
   }
 ]
