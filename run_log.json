@@ -1,5 +1,12 @@
 [
   {
+    "timestamp_utc": "2026-02-07T18:45:00.748432Z",
+    "status": "success",
+    "pages_checked": 26,
+    "changes_found": 3,
+    "errors": []
+  },
+  {
     "timestamp_utc": "2026-02-07T13:03:18.873682Z",
     "status": "success",
     "pages_checked": 26,
@@ -182,16 +189,6 @@
     "changes_found": 4,
     "errors": [
       "Attempt 1/2 FAILED for whatnot-prohibited-items. Error Type: 403_forbidden. Reason: HTTP 403: "
-    ]
-  },
-  {
-    "timestamp_utc": "2026-02-01T06:59:14.447030Z",
-    "status": "partial_failure",
-    "pages_checked": 26,
-    "changes_found": 0,
-    "errors": [
-      "Attempt 2/2 FAILED for meta-appeal-process. Error Type: unknown_error. Reason: HTTP 429: ",
-      "Attempt 2/2 FAILED for meta-blocking-people. Error Type: unknown_error. Reason: HTTP 429: "
     ]
   }
 ]
