@@ -1,5 +1,12 @@
 [
   {
+    "timestamp_utc": "2026-02-18T13:20:14.041328Z",
+    "status": "success",
+    "pages_checked": 26,
+    "changes_found": 0,
+    "errors": []
+  },
+  {
     "timestamp_utc": "2026-02-18T07:10:13.196235Z",
     "status": "partial_failure",
     "pages_checked": 26,
@@ -203,12 +210,5 @@
       "Attempt 1/2 FAILED for whatnot-how-to-report. Error Type: 403_forbidden. Reason: HTTP 403: ",
       "Attempt 1/2 FAILED for whatnot-enforcement-actions. Error Type: 403_forbidden. Reason: HTTP 403: "
     ]
-  },
-  {
-    "timestamp_utc": "2026-02-12T07:10:57.332049Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 1,
-    "errors": []
   }
 ]
