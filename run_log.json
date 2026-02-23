@@ -1,5 +1,15 @@
 [
   {
+    "timestamp_utc": "2026-02-23T07:14:37.157455Z",
+    "status": "partial_failure",
+    "pages_checked": 26,
+    "changes_found": 1,
+    "errors": [
+      "Attempt 1/2 FAILED for whatnot-community-guidelines. Error Type: 403_forbidden. Reason: HTTP 403: ",
+      "Attempt 1/2 FAILED for whatnot-hate-and-harassment. Error Type: 403_forbidden. Reason: HTTP 403: "
+    ]
+  },
+  {
     "timestamp_utc": "2026-02-23T02:45:44.138129Z",
     "status": "success",
     "pages_checked": 26,
@@ -174,12 +184,5 @@
       "Attempt 1/2 FAILED for whatnot-community-guidelines. Error Type: 403_forbidden. Reason: HTTP 403: ",
       "Attempt 1/2 FAILED for whatnot-blocking-a-user. Error Type: 403_forbidden. Reason: HTTP 403: "
     ]
-  },
-  {
-    "timestamp_utc": "2026-02-17T02:42:19.849185Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 2,
-    "errors": []
   }
 ]
