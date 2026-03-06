@@ -7141,5 +7141,180 @@
         "commit_hash": "7d3a3517427a999a0f511b805c1eeeb40888b29a"
       }
     ]
+  },
+  "2026-02-28_to_2026-03-06": {
+    "run_metadata": {
+      "run_date": "2026-03-06T19:35:05.988521+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-02-28",
+      "week_end": "2026-03-06",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** February 28, 2026 to March 06, 2026\n**Generated On:** March 06, 2026 at 19:35 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week saw a strong emphasis across platforms on improving user experience and trust through better policy presentation and proactive security measures. Twitch and Meta notably upgraded the UI/UX of their policy and help center pages for enhanced discoverability and accessibility, while TikTok strengthened its live moderation security with new SDKs. Whatnot introduced a comprehensive Buyer Protection policy to bolster transaction trust. A key operational clarification from Meta designated the US English Community Standards as definitive, potentially impacting localization, while YouTube's removal of a specific user feedback channel for \"hiding users\" could create a visibility gap for T&S.\n\n---\n\n### 2. Platform Highlights\n\n*   **Twitch**\n    *   **Community Guidelines UI/UX Overhaul:** The Community Guidelines pages received a significant visual update. They now feature a complete webpage template including standard UI elements (header, navigation, search, language selector, footer) and incorporate Salesforce Lightning Design System (SLDS) components.\n    *   **Impact:** This dramatically improves the user experience by presenting guidelines within a fully branded and navigable environment, enhancing professionalism, trust, discoverability, accessibility, and error handling. **Crucially, no substantive policy content has changed.**\n*   **TikTok**\n    *   **Live Moderation Security Enhancement:** New security SDK imports (`acrawler`, `secsdk_sg`, `secsdk_va`, `secsdk_ttp`) have been integrated into TikTok Live moderation.\n    *   **Impact:** This is a significant upgrade to platform security, improving the ability to detect and mitigate automated malicious activities (bots, spam, scraping), thus strengthening platform integrity and user safety in live environments.\n*   **Meta**\n    *   **Community Guidelines Clarity:** A bold disclaimer was added to the \"Introduction\" section, stating that the US English version of the Community Standards is the primary, most up-to-date document for enforcement.\n    *   **Impact:** This provides critical clarity for enforcement teams on the authoritative policy source but introduces potential implications for localization and global user understanding if non-US English translations fall out of sync.\n    *   **Appeal Process Refinement:** Clarified the appeal path for users reporting content that was *not* taken down, explicitly directing them to the \"request a review process\" first. Minor restructuring of Help Center content also occurred.\n    *   **Impact:** Improves user guidance and streamlines the process for appealing content moderation decisions.\n    *   **\"Blocking People\" Help Center UX:** The \"Blocking People\" help center page was enhanced with an interactive FAQ structure (expand/collapse icons), improved navigation cues, and minor content/header refinements.\n    *   **Impact:** Makes information more digestible and easier for users to find, improving the overall help center user experience.\n*   **Whatnot**\n    *   **Comprehensive Buyer Protection Policy:** A detailed Buyer Protection Policy was introduced, effective May 16, 2025. It outlines specific conditions for refunds related to incomplete/incorrect items, items not as described/inauthentic, and packages not received. It also details refund request timelines (general, category-specific, counterfeit, lost packages), return requirements, and key exclusions (e.g., opened consumables, tips, off-platform transactions). Special policies for high-value losses and EU/UK Right of Withdrawal are also included.\n    *   **Impact:** This policy significantly enhances buyer confidence and trust on the platform by providing clear guidelines for dispute resolution, refunds, and returns, with specific considerations for item categories and international regulations.\n*   **YouTube**\n    *   **Removal of User Feedback Form:** A comprehensive user feedback form (with options for reporting issues and free-text suggestions) was removed from the \"Hiding Users\" product page.\n    *   **Impact:** Eliminates a direct channel for users to provide specific feedback or report issues related to the \"hiding users\" functionality, potentially reducing T&S visibility into bugs, usability problems, or emergent policy violations in this area.\n\n---\n\n### 3. Risk Assessment\n\n*   **Meta Community Guidelines - Localization Discrepancy Risk:**\n    *   **Description:** The explicit designation of the US English version as the primary, definitive policy source for Meta's Community Standards creates a potential risk of divergence between the authoritative policy and its localized translations.\n    *   **Impact:** Non-US English speaking users might encounter policies that are not perfectly synchronized or may misinterpret rules based on outdated translations. This could lead to user confusion, perceived unfairness in enforcement, increased appeals, and damage to user trust in global markets.\n    *   **Immediate Attention Needed:** Yes. While internal enforcement gains clarity, product teams should ensure localization strategies account for this official hierarchy, with a clear plan for regular, high-priority updates to all translated Community Standards to minimize discrepancies and manage user expectations proactively.\n*   **YouTube Hiding Users - User Feedback Gap:**\n    *   **Description:** The removal of the direct user feedback form from the \"Hiding Users\" product page eliminates a specific, granular channel for users to report issues or suggest improvements.\n    *   **Impact:** This could result in delayed detection of product bugs, usability issues, or emerging patterns of misuse and policy violations related to the \"hiding users\" feature. Trust & Safety teams may have reduced direct insight into user pain points, making it harder to proactively address problems.\n    *   **Immediate Attention Needed:** Consider evaluating alternative, readily accessible feedback mechanisms specifically for the \"Hiding Users\" feature, or assess the broader impact of this removal on T&S's ability to monitor user sentiment and issues for this product area.\n\n---\n\n### 4. Trends Analysis\n\n*   **Elevated Focus on Policy Presentation & User Experience:** Twitch and Meta's significant UI/UX updates to policy pages and help centers (e.g., Twitch's full template, Meta's interactive FAQs) indicate a growing trend across platforms to make policies more digestible, discoverable, and user-friendly. This reflects an understanding that clear, accessible policies are fundamental for building user trust and encouraging compliance.\n*   **Proactive Security & Integrity Investments:** TikTok's integration of new security SDKs for Live Moderation highlights a trend towards leveraging advanced technological solutions to proactively combat automated malicious activity (bots, spam). This reduces the burden on human moderation and fosters safer, more authentic platform environments.\n*   **Enhanced Consumer Protection Frameworks:** Whatnot's introduction of a comprehensive Buyer Protection Policy underscores the industry-wide importance of robust consumer safeguards, particularly for marketplaces and e-commerce platforms. This trend focuses on defining clear rights, responsibilities, and recourse mechanisms to build buyer confidence and ensure a fair trading environment.\n*   **Centralization & Clarification of Enforcement Standards:** Meta's move to explicitly declare the US English Community Standards as the definitive policy points to a trend towards centralizing and clarifying enforcement standards, particularly in a globally distributed operational context. This aims to reduce ambiguity for T&S teams but necessitates careful management of localization efforts.\n*   **Evolving User Feedback Mechanisms:** YouTube's removal of a direct feedback form, while other platforms enhance accessibility, suggests an ongoing re-evaluation of how user feedback is collected. This could indicate a shift towards more centralized or data-driven feedback acquisition, with potential trade-offs regarding the immediacy and specificity of user-reported issues.",
+    "changes_count": 19,
+    "changed_policies": [
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-06 13:12:17 +0000",
+        "commit_hash": "4c10fb746b4aec5a19dbc5fd23894543a03fb681"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-06 07:01:47 +0000",
+        "commit_hash": "ad2465ee2ea884d772c703e4d52cd69a96818580"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-06 02:38:03 +0000",
+        "commit_hash": "12ee242b06565d4b9d91676f6fa0207b5748f486"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-05 19:23:57 +0000",
+        "commit_hash": "9c0c07360b04d01302f99232d29d4e7e74c1e7e7"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-03-05 13:16:51 +0000",
+        "commit_hash": "68a4aacb085f78428cbe94710a1fc36f73c3c3bb"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-05 13:16:51 +0000",
+        "commit_hash": "68a4aacb085f78428cbe94710a1fc36f73c3c3bb"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-03-05 07:03:52 +0000",
+        "commit_hash": "9e8568e95472ab863cc0430de87467c4e6b1a79d"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-05 07:03:52 +0000",
+        "commit_hash": "9e8568e95472ab863cc0430de87467c4e6b1a79d"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-03-04 19:01:43 +0000",
+        "commit_hash": "26b4cacde9336b37f73f61cc28903af0b927233e"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-04 19:01:43 +0000",
+        "commit_hash": "26b4cacde9336b37f73f61cc28903af0b927233e"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-03-04 13:12:50 +0000",
+        "commit_hash": "3f3909a7f0af1cc7692343d4ca7b7ac2548a5473"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-04 13:12:50 +0000",
+        "commit_hash": "3f3909a7f0af1cc7692343d4ca7b7ac2548a5473"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-04 07:00:06 +0000",
+        "commit_hash": "880a8740710b93603e63cca71a08a5b993cc0195"
+      },
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-03 19:01:46 +0000",
+        "commit_hash": "06b2f71adac1fd1bc9f5736869ca3d08bd7350a8"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-03 19:01:46 +0000",
+        "commit_hash": "06b2f71adac1fd1bc9f5736869ca3d08bd7350a8"
+      },
+      {
+        "policy_key": "whatnot-buyer-protection",
+        "file_path": "snapshots/production/whatnot-buyer-protection/snapshot.html",
+        "commit_date": "2026-03-03 19:01:46 +0000",
+        "commit_hash": "06b2f71adac1fd1bc9f5736869ca3d08bd7350a8"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-03 13:13:52 +0000",
+        "commit_hash": "ede50936e6ccab35b7214ecf7edad7ff401ee242"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-03 07:03:36 +0000",
+        "commit_hash": "d9dd838061c8f69535de74903214ed5210c9b22e"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-03 02:44:48 +0000",
+        "commit_hash": "d5648859e762b6d2b0639f2e2a61b71d5cc96b80"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-03-02 18:59:56 +0000",
+        "commit_hash": "bb50c0fa44428c4467c427ff26cc0156e7cdf80a"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-03-02 18:59:56 +0000",
+        "commit_hash": "bb50c0fa44428c4467c427ff26cc0156e7cdf80a"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-03-02 13:15:41 +0000",
+        "commit_hash": "fcb8d5d47e1390ea60048a158495039ed3e5423b"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-03-02 13:15:41 +0000",
+        "commit_hash": "fcb8d5d47e1390ea60048a158495039ed3e5423b"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-02 07:09:01 +0000",
+        "commit_hash": "35f3c014f1366724679e547ba435bef4a7047b76"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-01 13:03:40 +0000",
+        "commit_hash": "40141acd158b81a03f78f286a81ab5dec2a1ea0f"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-01 06:57:35 +0000",
+        "commit_hash": "a052b32497a1f636f7b764d7c027b8c21e51a06c"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-01 02:54:25 +0000",
+        "commit_hash": "981d1eccd9378327918fb99792b4135c40065def"
+      }
+    ]
   }
 }
