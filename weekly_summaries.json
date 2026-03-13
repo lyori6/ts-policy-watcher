@@ -7316,5 +7316,168 @@
         "commit_hash": "981d1eccd9378327918fb99792b4135c40065def"
       }
     ]
+  },
+  "2026-03-07_to_2026-03-13": {
+    "run_metadata": {
+      "run_date": "2026-03-13T19:31:36.660275+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-03-07",
+      "week_end": "2026-03-13",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** March 07, 2026 to March 13, 2026\n**Generated On:** March 13, 2026 at 19:31 UTC\n\n### 1. Executive Summary\n\nThis week's policy landscape saw a significant push towards **AI integration for user support** and **enhanced security measures**, alongside a concerning trend of **removing direct user feedback mechanisms**. Platforms are increasingly leveraging AI to streamline user inquiries and clarify reporting processes, aiming to improve self-service. Simultaneously, there's a focus on bolstering anti-abuse capabilities through new SDKs. However, the removal of \"Was this helpful?\" and general feedback options on some critical help pages poses a risk to identifying user pain points and policy interpretation issues.\n\n### 2. Platform Highlights\n\nHere's a breakdown of notable policy and help center changes by platform:\n\n*   **Tiktok:**\n    *   **Blocking Users:** Integrated multiple \"Security SDKs\" and an \"acrawler\" SDK. This enhances the platform's ability to detect and mitigate malicious activity (bots, spam, block evasion), strengthening user safety features and providing more data for T&S investigations.\n*   **Whatnot:**\n    *   **How To Report:** Redesigned the \"How to Report\" help article to include a prominent \"Tip\" section guiding users to block or contact support for non-policy issues. Visual aids for blocking were also repositioned, and formatting was improved for readability. This aims to improve user experience, reduce misdirected reports to T&S, and optimize resource allocation.\n    *   **Enforcement Actions:** Clarified the appeal process with bullet points and direct navigation to the \"Policy Standing\" section of the dashboard. This improves user experience for appeals and should reduce related support queries. A minor stylistic change was made to the \"Enforcement Philosophy.\"\n*   **Twitch:**\n    *   **Community Guidelines:** The substantive policy text remains unchanged across multiple updates this week. The changes were purely technical front-end updates, primarily adding CSS styling rules (including `gen-ai-enabled` hints). A recurring \"CSS Error\" message within the added content indicates potential rendering issues, which needs immediate attention to ensure users can reliably access policy content.\n*   **Youtube:**\n    *   **Hiding Users:** The entire user feedback/reporting mechanism (categorized options, open text field) for the \"hiding users\" flow has been removed. This significantly reduces T&S and Product visibility into user-reported issues, increasing the risk of undetected problems with this feature.\n*   **Meta:**\n    *   **Appeal Process:** Clarified the appeal path for users appealing content they *reported* (that wasn't taken down), stating they must complete the internal review first.\n    *   **Blocking People & Appeal Process:** Introduced a new interactive \"Meta AI support assistant\" module to help center pages, offering quick answers and a free-text prompt. The \"Was this helpful?\" feedback was simultaneously removed from the \"Blocking People\" page. This aims to enhance user self-service but introduces risks related to AI accuracy and alters feedback mechanisms.\n\n### 3. Risk Assessment\n\n*   **Immediate Concern: Twitch Community Guidelines CSS Errors:** The repeated presence of a \"CSS Error\" message within the updated front-end code for Twitch's Community Guidelines is a critical UX issue. This could prevent users from properly viewing policy content, undermining trust and understanding of rules. **Recommendation: Investigate and resolve this rendering issue immediately.**\n*   **High Risk: Removal of User Feedback (Youtube, Meta):** The complete removal of direct user feedback mechanisms on Youtube's \"Hiding Users\" flow and Meta's \"Blocking People\" page poses a significant risk. This eliminates a vital channel for T&S and Product teams to understand user pain points, identify bugs, or detect issues with policy clarity/implementation. We lose direct signals for improvement.\n*   **New Risk Surface: AI Support Assistant (Meta):** While designed to improve self-service, the introduction of the Meta AI support assistant carries inherent risks. The AI could provide inaccurate, incomplete, or inconsistent policy interpretations, leading to user confusion, frustration, or unintended policy violations. **Recommendation: Establish robust monitoring for AI accuracy, maintain clear human escalation paths, and develop guardrails.**\n\n### 4. Trends Analysis\n\n*   **Shift Towards AI-Powered Self-Service:** Both Meta and Twitch are signaling or implementing AI integration in user support and content delivery. Meta explicitly launched an AI support assistant, while Twitch's CSS update included `gen-ai-enabled` styling. This indicates a broader industry trend towards leveraging AI for automated user assistance and potentially for content understanding or moderation.\n*   **Streamlining User Journeys & Resource Optimization:** Whatnot's updates to \"How to Report\" and \"Enforcement Actions\" clearly aim to guide users to the most appropriate solutions (blocking, support, self-service appeals) before engaging the T&S team. This reflects a trend to optimize T&S resource allocation by reducing misdirected reports and enabling more efficient self-service.\n*   **Enhanced Platform Security & Anti-Abuse:** Tiktok's integration of new Security SDKs highlights a continuous focus on strengthening platform defenses against malicious actors, reflecting the ongoing cat-and-mouse game in platform integrity. This is a crucial area for maintaining user trust and safety.\n*   **Degradation of Direct User Feedback Channels:** The removal of traditional feedback mechanisms on Youtube and Meta is a concerning trend. While AI may gather interaction data, it's not a direct substitute for explicit user feedback on help content quality or feature usability, potentially leading to a blind spot for T&S and Product teams.",
+    "changes_count": 19,
+    "changed_policies": [
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2026-03-13 18:55:04 +0000",
+        "commit_hash": "c44621b222079cc1f1e2297e5b05f9df4f7f44c6"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2026-03-13 18:55:04 +0000",
+        "commit_hash": "c44621b222079cc1f1e2297e5b05f9df4f7f44c6"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-13 13:15:54 +0000",
+        "commit_hash": "5d2ee1fde16c2652b32c16caa5487a297c53e704"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-13 07:05:45 +0000",
+        "commit_hash": "af69fbdbfad6352ea8b68e88823077a94b761e2d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-13 07:05:45 +0000",
+        "commit_hash": "af69fbdbfad6352ea8b68e88823077a94b761e2d"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-03-12 19:04:44 +0000",
+        "commit_hash": "b9bdaa19fb846866eeb8fbe9f9f536d0cd163f2c"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-03-12 19:04:44 +0000",
+        "commit_hash": "b9bdaa19fb846866eeb8fbe9f9f536d0cd163f2c"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-12 13:17:59 +0000",
+        "commit_hash": "65acff3c630b0317787304f5846b5913de55b1f1"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-12 07:06:53 +0000",
+        "commit_hash": "ccfd5679af75ad9604ad61c419f348a0813a74b9"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-11 19:03:19 +0000",
+        "commit_hash": "0b969ea2769f53b5ad900ae07c99ac65352aa84b"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-03-11 19:03:19 +0000",
+        "commit_hash": "0b969ea2769f53b5ad900ae07c99ac65352aa84b"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-11 13:17:27 +0000",
+        "commit_hash": "6a9efbe095d42421da65916510e8d8d673d3cb6c"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-11 07:05:09 +0000",
+        "commit_hash": "62df78a1239f961c11e9f24b87da5fc7b3a5195d"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-11 02:35:46 +0000",
+        "commit_hash": "f8b8992b466e5ad4992eb0fefb43169d113777e1"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-03-10 19:03:01 +0000",
+        "commit_hash": "a5da20453102557fe9e7a7e2dcbefbd5d977b7d1"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-10 07:01:58 +0000",
+        "commit_hash": "ad3240e8de90bf1ba5f7ebd88800b777cd0563d4"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-10 02:36:37 +0000",
+        "commit_hash": "f8f011fb2742e18c796071c1343ca50396cb4a9c"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-03-10 02:36:37 +0000",
+        "commit_hash": "f8f011fb2742e18c796071c1343ca50396cb4a9c"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-03-09 19:03:17 +0000",
+        "commit_hash": "1d147c608f9bdf24d4666bb6c6c28dcc64eaf79d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-09 19:03:17 +0000",
+        "commit_hash": "1d147c608f9bdf24d4666bb6c6c28dcc64eaf79d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-09 13:20:30 +0000",
+        "commit_hash": "5d39a9f32e3b2f944b1b48ba6ae5938fc55f5df7"
+      },
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-03-09 02:46:04 +0000",
+        "commit_hash": "5bcdea0beb4e9a5dc26924c70d9afa26a14ed635"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-08 18:45:47 +0000",
+        "commit_hash": "409a6a0d21415e6e2fcb45665a378d5bf7d7c499"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-08 06:55:37 +0000",
+        "commit_hash": "dd2183645b3c1b6d6d8077cde3a8d85cee1394e2"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-08 02:44:29 +0000",
+        "commit_hash": "54d938fa5bea9a719169e4cb6123682e976977a5"
+      }
+    ]
   }
 }
