@@ -5,7 +5,7 @@ An automated competitive intelligence system that monitors competitor Trust & Sa
 ## What It Does
 
 The T&S Policy Watcher automatically:
-- **Monitors** 20+ policy pages across TikTok, YouTube, Meta, and Whatnot every 6 hours
+- **Monitors** 20+ policy pages across TikTok, YouTube, Meta, and Whatnot once a week on Fridays at 15:00 UTC
 - **🆕 Enhanced Health Checks** with real Playwright validation for bot-protected sites (WhatNot, etc.)
 - **Detects** substantive policy changes while filtering out cosmetic updates  
 - **Summarizes** changes using AI (Google Gemini) with product manager-focused insights
@@ -148,7 +148,7 @@ https://ts-policy-watcher.vercel.app/
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌────────────────────┐
 │ GitHub Actions  │───▶│ scripts/fetch.py │───▶│ snapshots/ (Git)   │
-│ (6hr Schedule)  │    │ Change Detection │    │ HTML Storage       │
+│(Weekly Schedule)│    │ Change Detection │    │ HTML Storage       │
 └─────────────────┘    └────────┬─────────┘    └────────────────────┘
                                 │
                                 ▼
@@ -165,6 +165,7 @@ https://ts-policy-watcher.vercel.app/
 ```
 
 **Key Components**:
+- **Scraping Recommendation**: The system is configured to run the policy fetcher once a week on Fridays at 15:00 UTC (4 hours before the weekly summary report goes out at 19:00 UTC) to minimize noise and maintain a clear cadence.
 - `scripts/fetch.py` - Policy collection with intelligent change detection
 - `scripts/diff_and_notify.py` - AI summarization and email notifications  
 - `dashboard/` - Static web interface for policy tracking

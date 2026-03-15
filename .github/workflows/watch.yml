@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
 
   # This is the automated schedule. It uses a cron expression.
-  # '0 */6 * * *' means "at minute 0, every 6th hour".
-  # It will run at 00:00, 06:00, 12:00, 18:00 UTC.
+  # '0 15 * * 5' means "at minute 0 past hour 15 on Friday".
+  # It will run at 15:00 UTC on Fridays.
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 15 * * 5'
 
 concurrency:
   group: ${{ github.workflow }}
