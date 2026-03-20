@@ -7479,5 +7479,48 @@
         "commit_hash": "54d938fa5bea9a719169e4cb6123682e976977a5"
       }
     ]
+  },
+  "2026-03-14_to_2026-03-20": {
+    "run_metadata": {
+      "run_date": "2026-03-20T19:37:39.349661+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-03-14",
+      "week_end": "2026-03-20",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Policy Summary: March 14, 2026 - March 20, 2026**\n\n**Run Information:** Scheduled weekly run generated on March 20, 2026 at 19:37 UTC\n\n---\n\n### 1. Executive Summary\n\n*   **Major Platform Safety Overhaul:** Twitch underwent a comprehensive rewrite of its Community Guidelines, significantly expanding clarity, transparency, and enforcement detail across key areas, including a major update to youth safety.\n*   **Streamlined User Pathways:** Meta simplified its Oversight Board appeal process, reducing user friction, while Twitch formalized its off-service conduct reporting, indicating a broader focus on user experience in safety interactions.\n*   **Heightened Child Safety in Virtual Spaces:** A notable trend is the explicit expansion of child safety policies into virtual content, with Twitch specifically prohibiting sexualized fictional child-like characters and related humor in avatars and streams.\n\n---\n\n### 2. Platform Highlights\n\n**Meta**\n\n*   **Appeal Process Streamlined:**\n    *   Users now require only **one** internal review before becoming eligible to appeal to the Oversight Board, down from two. The explicit statement that \"not all content and content decisions will be eligible\" has been removed.\n    *   **Impact:** Expect an anticipated increase in volume of cases submitted to the Oversight Board due to reduced friction in the appeal pathway.\n*   **Blocking People Support Updated:**\n    *   The interactive Meta AI Support Assistant was entirely removed from the \"Blocking People\" help page.\n    *   A standard \"Was this helpful?\" feedback module was introduced.\n    *   **Impact:** Users will no longer find AI assistance on this page, potentially redirecting them to other support channels. The new feedback module provides valuable direct input on policy content.\n*   **Community Guidelines Formatting:**\n    *   The statement emphasizing the US English version's primacy as the most up-to-date policy is no longer bolded.\n    *   **Impact:** A minor reduction in visual prominence of the US English version's authoritative status; a non-substantive policy change.\n\n**Twitch**\n\n*   **Comprehensive Community Guidelines Overhaul (Major Update):**\n    *   **Expanded Introduction & Structure:** A new introduction outlines Twitch's safety philosophy, types of harm, and enforcement actions, with \"Enforcement Notes\" providing detailed examples.\n    *   **Impact:** Increased transparency and context for users, potentially reducing ambiguity and support inquiries.\n    *   **Self-Destructive Behavior:** Explicitly prohibits monetizing harmful acts (e.g., excessive drinking for subs/bits, dangerous challenges) and clarifies allowances for driving streams.\n    *   **Impact:** Establishes clearer boundaries for interactive and IRL content, helping creators understand acceptable engagement models.\n    *   **Violence & Threats:** Added a provision for preemptive suspension of accounts likely to incite violence, considering influence and past recklessness.\n    *   **Impact:** Enables proactive risk mitigation against influential bad actors before direct harm occurs.\n    *   **Youth Safety (Significant Update):** Prohibits sexualized fictional child-like characters (e.g., \"lolis\" in VTubers/VRChat), any related humor, and self-identifying as under 13 (even jokingly).\n    *   **Impact:** Establishes a much stricter and clearer stance on child safety, expanding enforcement to virtual content and language that could normalize or contribute to the sexualization of minors. This will directly affect avatar and content creation guidelines for many users.\n    *   **Off-Service Conduct:** Formalized the policy for severe off-service harms, providing a dedicated reporting email (OSIT@twitch.tv) and specifying verifiable evidence requirements.\n    *   **Impact:** Streamlines the reporting and investigation process for egregious off-service behaviors.\n\n---\n\n### 3. Risk Assessment\n\n*   **IMMEDIATE ATTENTION: Twitch Youth Safety Policy Expansion:** The explicit prohibition of sexualized fictional child-like characters (\"lolis\") and related humor, particularly in VTubers/VRChat contexts, is a significant policy shift. This will directly impact a segment of content creators and is likely to generate substantial user queries, potential backlash, and a surge in content moderation actions. **Product teams involved in virtual avatars, interactive content, or community features should be immediately briefed to assess potential feature impacts, communication strategies, and anticipate an increase in related moderation volume.**\n*   **Meta Appeal Process Streamlining:** While a positive user experience change, reducing the internal review steps will likely lead to an immediate and sustained increase in content decisions escalated to the Oversight Board. This could strain internal T&S resources dedicated to preparing these cases and may require adjustments to workflow and staffing for Oversight Board engagement.\n\n---\n\n### 4. Trends Analysis\n\n*   **Increased Policy Transparency & Clarity:** Both Meta and Twitch are clearly prioritizing making their policies more understandable and accessible. Twitch's comprehensive overhaul with detailed \"Enforcement Notes\" and Meta's simplified appeal process reflect an ongoing effort to reduce ambiguity and user friction.\n*   **Proactive Harm Prevention:** There's a clear trend towards platforms taking more proactive steps to prevent harm, rather than solely reacting to it. Twitch's new provisions for preemptive suspensions for incitement to violence and explicit prohibitions on monetizing harmful acts demonstrate a strategic shift to mitigate risks earlier.\n*   **Expanding Child Safety Measures into Virtual Spaces:** Twitch's decisive action regarding sexualized fictional child-like characters in virtual content signifies a growing recognition of the unique safety challenges presented by virtual environments and interactive avatars. This trend suggests a broader industry movement to adapt child safety policies for emerging digital contexts.\n*   **Refined User Feedback and Support Pathways:** Platforms are iterating on how users interact with support and policy information. Meta's removal of an AI assistant from a specific help page in favor of direct feedback indicates experimentation in optimizing user support channels.\n*   **Formalization of Off-Platform Accountability:** Twitch's dedicated reporting channel for off-service conduct highlights a continuing industry trend where platforms are increasingly taking responsibility for severe harms that originate or have impacts outside their immediate service, recognizing the interconnectedness of online communities.",
+    "changes_count": 2,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-03-20 15:41:46 +0000",
+        "commit_hash": "30a25b3407245b5eed4bbbd802d86b19948233a3"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-03-20 15:41:46 +0000",
+        "commit_hash": "30a25b3407245b5eed4bbbd802d86b19948233a3"
+      },
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-20 15:41:46 +0000",
+        "commit_hash": "30a25b3407245b5eed4bbbd802d86b19948233a3"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-20 15:41:46 +0000",
+        "commit_hash": "30a25b3407245b5eed4bbbd802d86b19948233a3"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-03-15 18:53:00 +0000",
+        "commit_hash": "6df916f05b83756fff2b24654638f23ead42dff7"
+      }
+    ]
   }
 }
