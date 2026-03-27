@@ -7522,5 +7522,30 @@
         "commit_hash": "6df916f05b83756fff2b24654638f23ead42dff7"
       }
     ]
+  },
+  "2026-03-21_to_2026-03-27": {
+    "run_metadata": {
+      "run_date": "2026-03-27T19:40:53.025900+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-03-21",
+      "week_end": "2026-03-27",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly T&S Policy Update: March 21, 2026 \u2013 March 27, 2026**\n\n**Executive Summary**\n\nThis week's policy changes focus on refining user appeal processes and enhancing creator tools for content moderation. Meta significantly streamlined its Oversight Board appeal eligibility by removing the double-internal review requirement, potentially leading to a notable increase in escalated cases. YouTube introduced new guidance aimed at empowering creators to foster positive community engagement through comment management. Both platforms also conducted minor UI/UX improvements and technical cleanups.\n\n**Platform Highlights**\n\n*   **Meta Appeal Process**\n    *   **Streamlined Oversight Board Appeals:** A critical change removes the previous requirement for content to be reviewed twice internally before being eligible for an Oversight Board appeal. Users can now escalate to the Oversight Board after at least one internal review. This aims to expedite the appeal process but is likely to increase the volume of cases directed to the Oversight Board.\n    *   **Clarified Appeal Path for Reporters:** New explicit policy statements detail the prerequisite \"request a review process\" for users who reported content that was not removed, before they can appeal to the Oversight Board. This improves user clarity on the necessary steps.\n    *   **Minor UI/UX Updates:** Reordering of \"Was this helpful?\", \"Feedback,\" and \"Related Articles\" sections on help pages for improved user experience.\n\n*   **YouTube Hiding Users (Managing Posts & Comments)**\n    *   **Enhanced Creator Engagement Tools:** A new help article, \"Use suggested comments to heart,\" provides guidance for creators to highlight positive or valuable comments. This feature aims to foster healthier community interactions and improve creators' efficiency in managing comments.\n    *   **Technical Cleanup:** Removal of legacy JavaScript code associated with a \"gif_player\" component, signifying a backend cleanup with no direct user or safety impact.\n\n**Risk Assessment**\n\n*   **Immediate Attention Required: Meta's Revised Oversight Board Appeal Eligibility:** The removal of the double-internal review requirement for Oversight Board appeals presents the most significant immediate risk.\n    *   **Increased Workload:** Expect a potential surge in eligible Oversight Board appeals. This will directly impact internal review teams responsible for preparing cases and the Oversight Board's capacity.\n    *   **Resource Strain:** Product, Policy, and Legal teams should anticipate increased demands related to case preparation, potential policy challenges, and managing outcomes from the Oversight Board.\n    *   **Impact on Metrics:** This change could affect internal metrics related to appeal volumes, overturn rates, and resolution times.\n    *   **Recommendation:** Review internal processes and resource allocation for handling Oversight Board escalations immediately. Consider proactive communication with relevant internal stakeholders.\n\n*   **YouTube Changes:** Present low immediate risk. The changes are largely positive, focusing on creator empowerment and technical hygiene.\n\n**Trends Analysis**\n\n*   **User Empowerment and Clarity:** Both platforms show a trend towards empowering users and creators by providing clearer pathways and tools. Meta's clarification of the appeal process and YouTube's guidance for creators to foster positive communities exemplify this.\n*   **Streamlining Governance Processes:** Meta's adjustment to the Oversight Board appeal eligibility indicates an ongoing effort to streamline content governance and make external review more accessible, albeit with potential operational impacts.\n*   **Focus on Positive Engagement:** YouTube's new guidance highlights a commitment to fostering healthier and more positive community interactions, moving beyond just content removal to active community building.\n*   **Technical Debt Management:** The removal of outdated code on YouTube demonstrates a continuous focus on technical hygiene and efficiency, which indirectly supports a more stable platform for T&S initiatives.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-03-27 15:51:24 +0000",
+        "commit_hash": "b2b41f22c4a60a00466ff4889b4b1f8644b3761d"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-03-27 15:51:24 +0000",
+        "commit_hash": "b2b41f22c4a60a00466ff4889b4b1f8644b3761d"
+      }
+    ]
   }
 }
