@@ -7584,5 +7584,42 @@
         "commit_hash": "0fff2b2732553e76248479967717ca64668cd0b8"
       }
     ]
+  },
+  "2026-04-04_to_2026-04-10": {
+    "run_metadata": {
+      "run_date": "2026-04-10T19:45:32.686641+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-04-04",
+      "week_end": "2026-04-10",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period: April 04, 2026 to April 10, 2026**\n**Generated On: April 10, 2026 at 19:45 UTC**\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a significant push across platforms towards **enhanced user clarity and experience**, **strategic integration of AI for support**, and a **broader, more mature approach to safety and compliance**. Meta is refining user appeal and support flows, including AI integration. TikTok is bolstering privacy compliance and security with new technical implementations. Twitch has formally launched comprehensive Community Guidelines, notably expanding its enforcement scope to severe off-platform conduct and providing detailed examples for sensitive areas like youth safety.\n\n### 2. Platform Highlights\n\nHere are the notable policy changes by platform:\n\n*   **Meta**\n    *   **Oversight Board Appeal Process:** Streamlined the appeal user journey with new interactive navigation links, clarified the process for users appealing content *they reported*, and removed redundant explanatory text for a more concise policy.\n    *   **Blocking People:** Refined the Help Center article by removing redundant and off-topic information, adding specific topics for improved navigation, and most significantly, **integrating a \"Meta AI support assistant\"** directly into the help page.\n*   **TikTok**\n    *   **Live Moderation:** Introduced new SDK integrations (`acrawler`, `secsdk_sg`, `secsdk_va`, `secsdk_ttp`) likely for enhanced security, anti-bot measures, or data collection. Extensive CSS for a **new Cookie Consent Banner UI** (toast and persistent banner) was also added, indicating a focus on privacy compliance.\n*   **Twitch**\n    *   **Community Guidelines:** Formally launched a comprehensive set of Community Guidelines, replacing previous placeholders. Key additions include explicit rules on Self-Destructive Behavior, Violence & Threats, Terrorism, Adult Sexual Violence, Youth Safety, and **Off-Service Conduct**. Detailed \"Enforcement Notes and Clarifications\" provide specific examples (e.g., drinking goal streams, sexually framed child-like anime characters, off-platform serious offenses).\n\n### 3. Risk Assessment\n\nSeveral policy changes this week introduce new areas of focus or potential risks for Trust & Safety:\n\n*   **Meta AI Support Assistant (Immediate Attention Required):**\n    *   **Risk:** The introduction of AI for user support poses risks related to the AI's accuracy in interpreting and applying policies, potential for misdirection or providing incorrect advice, and ensuring a seamless, clear human escalation path for complex or sensitive queries. New privacy considerations for data shared with the AI also arise.\n    *   **Action:** Immediate T&S oversight is critical to monitor the AI's performance, ensure policy alignment, and establish robust feedback mechanisms. Work with product/engineering to define appropriate human fallback/escalation paths and review AI data handling/privacy implications.\n*   **Twitch Off-Service Conduct Enforcement:**\n    *   **Risk:** Expanding enforcement to off-platform conduct significantly increases the complexity of investigations, evidence collection, and jurisdiction. There's a risk of overreach, misinterpretation of off-platform events, and potential legal challenges regarding data privacy and scope.\n    *   **Action:** T&S Legal counsel should review the scope and enforcement mechanisms. Develop clear internal guidelines for investigation, evidence standards, and collaboration with law enforcement where applicable.\n*   **TikTok New SDK Integrations & Cookie Banners:**\n    *   **Risk:** The new SDKs could introduce new data collection points that require thorough privacy impact assessments to ensure compliance with global regulations (e.g., GDPR, CCPA). Improper implementation or clarity of the cookie banners could lead to privacy violations or user backlash.\n    *   **Action:** Conduct a privacy review of all new SDKs and their data collection practices. Verify that the cookie consent banners are fully compliant with relevant data protection laws and clearly communicate data usage to users.\n*   **Twitch Comprehensive Guidelines Launch:**\n    *   **Risk:** The formal launch of detailed guidelines, especially with specific examples, is likely to lead to an initial surge in user reports and appeals as the community adapts to new expectations and T&S enforces them. This could strain moderation resources.\n    *   **Action:** Ensure moderation teams are comprehensively trained on all new guidelines and enforcement notes. Anticipate and prepare for an increased volume of reports and appeals, potentially requiring scaling of moderation capacity.\n\n### 4. Trends Analysis\n\nSeveral patterns are evident across this week's policy changes:\n\n*   **Proactive User Experience & Policy Clarity:** Platforms are heavily investing in making their policies and support mechanisms clearer and easier to navigate for users. Meta's streamlined appeal process and refined help articles, along with TikTok's transparent cookie banners, demonstrate a commitment to reducing user friction and improving understanding.\n*   **Strategic AI Integration for Support:** Meta's introduction of an AI support assistant signals a growing trend towards leveraging artificial intelligence to automate responses for common user queries, potentially reducing human support load and improving response times. This places a new mandate on T&S to ensure AI accuracy and policy alignment.\n*   **Expanding Safety Perimeters & Policy Maturity:** Twitch's comprehensive Community Guidelines, particularly the detailed enforcement notes for sensitive topics like youth safety and the expansion to off-service conduct, illustrate a maturing approach to platform safety. Platforms are taking a broader, more detailed, and sometimes proactive stance to protect their communities both on and off-platform.\n*   **Heightened Focus on Data Privacy & Compliance:** TikTok's implementation of new security/anti-bot SDKs alongside explicit cookie consent banners underscores the ongoing global regulatory pressure and platforms' efforts to ensure data privacy, transparency, and adherence to evolving compliance standards.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-04-10 15:49:23 +0000",
+        "commit_hash": "9026f814641bae98c8535768506316679d14dac4"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-04-10 15:49:23 +0000",
+        "commit_hash": "9026f814641bae98c8535768506316679d14dac4"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-04-10 15:49:23 +0000",
+        "commit_hash": "9026f814641bae98c8535768506316679d14dac4"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-04-10 15:49:23 +0000",
+        "commit_hash": "9026f814641bae98c8535768506316679d14dac4"
+      }
+    ]
   }
 }
