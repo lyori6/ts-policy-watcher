@@ -7621,5 +7621,48 @@
         "commit_hash": "9026f814641bae98c8535768506316679d14dac4"
       }
     ]
+  },
+  "2026-04-11_to_2026-04-17": {
+    "run_metadata": {
+      "run_date": "2026-04-17T19:58:12.825428+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-04-11",
+      "week_end": "2026-04-17",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** April 11, 2026 to April 17, 2026\n**Run Information:** Generated on April 17, 2026 at 19:58 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a strong focus on **enhancing regulatory compliance through jurisdiction-specific age restrictions, improving user experience by streamlining appeal processes and document navigation, and expanding global accessibility through significant localization efforts.** The most critical change impacting product strategy and legal risk is Twitch's update to jurisdiction-specific minimum age requirements in its Terms of Service, demanding immediate attention for age verification and data handling processes.\n\n---\n\n### 2. Platform Highlights\n\nHere are the notable policy changes across platforms this week:\n\n*   **Meta (Oversight Board Appeals Process):**\n    *   **Streamlined Navigation:** Removed redundant links and sub-headings to declutter the appeal page.\n    *   **Clarified Reported Content Appeals:** Added explicit instructions for users to complete an internal review before escalating reported content decisions to the Oversight Board.\n    *   **Simplified Eligibility Messaging:** Consolidated explanations for appeal prerequisites, improving user clarity.\n    *   **Impact:** Enhanced user experience and clearer pathways for appeals, potentially reducing confusion and misdirected submissions.\n\n*   **TikTok (Live Moderation):**\n    *   **Technical Update:** Backend code changes, adding import definitions for several SDKs (`acrawler`, `secsdk_sg`, `secsdk_va`, `secsdk_ttp`).\n    *   **Impact:** This is a technical implementation, likely enhancing security, analytics, or functionality of the policy display page. No direct changes to moderation rules or user guidance.\n\n*   **Twitch:**\n    *   **Community Guidelines:**\n        *   **Full Document Refresh:** The entire Community Guidelines document was replaced, ensuring the complete and current version is published.\n        *   **Impact:** Ensures users have access to the most up-to-date guidelines; no new policy rules introduced, but confirms current version is active.\n    *   **Monetized Streamer Agreement:**\n        *   **New Language Availability:** Added Ukrainian and Vietnamese language versions of the agreement.\n        *   **Improved Document Navigation:** Introduced a numbered table of contents for better readability and accessibility.\n        *   **Impact:** Enhances accessibility for streamers in new regions, potentially boosting participation. Improves user comprehension and compliance by making the agreement easier to navigate.\n    *   **Terms of Service:**\n        *   **Revised Minimum Age Requirements (High Impact):** Updated the global minimum age from 13 to a jurisdiction-specific \"Minimum Age,\" explicitly setting 16 for Australia and allowing for other regional variations. All associated clauses updated.\n        *   **New Language Support:** Added a link to the Ukrainian (uk-ua) version of the ToS.\n        *   **Policy Date Update:** \"Last modified\" date updated to 12/08/2025.\n        *   **Impact:** Significant for compliance, user gating, and potential product development adjustments for age verification workflows across different jurisdictions. Improves accessibility for Ukrainian-speaking users.\n\n---\n\n### 3. Risk Assessment\n\n*   **Twitch - Terms of Service (Minimum Age Requirements):**\n    *   **Risk Level: HIGH**\n    *   **Immediate Attention Required:** This change has direct and significant implications for legal and regulatory compliance, especially concerning child protection laws in specific regions (e.g., Australia's 16-year-old minimum).\n    *   **Action Needed by Product:** Product teams must immediately review age verification flows, registration screens, and parental consent mechanisms. This may require implementing or enhancing geo-specific age gating to ensure only eligible users access the service or are correctly flagged for parental supervision in different regions. Data implications related to age and consent should also be re-evaluated.\n\n*   **Twitch - Monetized Streamer Agreement & Terms of Service (New Language Support - Ukrainian, Vietnamese):**\n    *   **Risk Level: MEDIUM**\n    *   **Attention Required:** While positive for accessibility, the introduction of new languages for legal agreements creates an operational risk for Trust & Safety.\n    *   **Action Needed by T&S/Product:** Ensure that T&S enforcement capabilities (e.g., content moderation, policy interpretation) and user support mechanisms are adequately prepared to handle inquiries, violations, and appeals in these new languages. Lack of support could lead to inconsistent enforcement or poor user experience.\n\n*   **Meta - Oversight Board Appeals Process:**\n    *   **Risk Level: LOW-MEDIUM**\n    *   **Attention Required:** While intended to improve clarity, any changes to appeal pathways can impact user behavior and the volume/nature of escalated cases.\n    *   **Action Needed by T&S/Product:** Monitor appeal submission trends, user feedback, and internal review requests related to reported content to ensure the new process is clear and effective. Be prepared to adjust support resources if new patterns emerge.\n\n---\n\n### 4. Trends Analysis\n\nSeveral patterns are observable across this week's policy updates:\n\n*   **Enhanced Regulatory Compliance & Age Gating:** Twitch's significant update to jurisdiction-specific minimum age requirements underscores an industry-wide trend towards proactive compliance with diverse international child protection and data privacy laws. This suggests increasing scrutiny on platforms' handling of underage users and a move away from \"one-size-fits-all\" age policies.\n*   **Localization and Global Accessibility:** The addition of Ukrainian and Vietnamese language support for Twitch's agreements and ToS signifies a continued push for global market expansion and user inclusivity. Platforms are investing in making critical legal and policy documents accessible to a wider international audience, requiring parallel T&S operational readiness.\n*   **Improved User Experience and Policy Clarity:** Both Meta's streamlining of its appeal process and Twitch's addition of a table of contents to its Streamer Agreement demonstrate a focus on making complex policies easier for users to understand and navigate. This aims to reduce user confusion, potentially improving compliance and reducing support inquiries.\n*   **Ongoing Technical Infrastructure Updates:** The TikTok SDK update, though not a direct policy change, highlights continuous behind-the-scenes efforts to improve platform security, performance, and data collection capabilities, which implicitly support T&S functions and overall site health.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-04-17 15:59:20 +0000",
+        "commit_hash": "108b4bd4ede74d90b80687dd62b7a408fcaa3158"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-04-17 15:59:20 +0000",
+        "commit_hash": "108b4bd4ede74d90b80687dd62b7a408fcaa3158"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-04-17 15:59:20 +0000",
+        "commit_hash": "108b4bd4ede74d90b80687dd62b7a408fcaa3158"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-04-17 15:59:20 +0000",
+        "commit_hash": "108b4bd4ede74d90b80687dd62b7a408fcaa3158"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2026-04-17 15:59:20 +0000",
+        "commit_hash": "108b4bd4ede74d90b80687dd62b7a408fcaa3158"
+      }
+    ]
   }
 }
