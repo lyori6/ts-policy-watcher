@@ -7664,5 +7664,48 @@
         "commit_hash": "108b4bd4ede74d90b80687dd62b7a408fcaa3158"
       }
     ]
+  },
+  "2026-04-18_to_2026-04-24": {
+    "run_metadata": {
+      "run_date": "2026-04-24T19:53:13.140456+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-04-18",
+      "week_end": "2026-04-24",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary (April 18 - April 24, 2026)\n\n**Run Information:** Scheduled weekly run generated on April 24, 2026 at 19:53 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a significant shift towards more nuanced content moderation, particularly YouTube's explicit inclusion of \"public interest\" in its Community Guidelines. Concurrently, platforms are focusing on enhancing the clarity and accessibility of their policies, with Twitch expanding language support and improving document navigation. A recurring theme across platforms is the need to address user friction with critical safety features, exemplified by Meta's update regarding blocking difficulties.\n\n---\n\n### 2. Platform Highlights\n\n*   **Meta:**\n    *   **Blocking People:** Help Center article updated to remove \"Who can I block?\" and add \"I can't block someone.\" This indicates a shift in user pain points from understanding blocking scope to encountering difficulties when attempting to block.\n*   **Twitch:**\n    *   **Community Guidelines:** The entire Community Guidelines document was refreshed/replaced, ensuring the complete and current version is displayed. No specific policy rule changes were identified from this action.\n    *   **Monetized Streamer Agreement:**\n        *   **New Language Availability:** Added Ukrainian and Vietnamese language versions.\n        *   **Improved Navigation:** A numbered table of contents was added to enhance readability.\n        *   **Minor Technical Updates:** Internal linking and heading formats adjusted for consistency.\n*   **Whatnot:**\n    *   **Blocking A User:** Minor editorial rephrasing for clarity in the Help Center article \"Block someone on Whatnot,\" with no change to actual blocking functionality or user experience regarding notifications.\n*   **YouTube:**\n    *   **Community Guidelines:** Policy updated to explicitly broaden the definition of \"context\" to include \"content that is in the public\u2019s interest,\" allowing for more nuanced moderation.\n\n---\n\n### 3. Risk Assessment\n\n*   **High Risk - YouTube Community Guidelines (Public Interest Context):** This is the most significant policy shift of the week. While aiming for more nuanced enforcement, explicitly including \"public interest\" carries a **high risk** of inconsistent application without robust, clear internal guidelines and extensive moderator training. This could lead to increased appeals, perceived leniency, or challenges in explaining enforcement decisions to the user base and public. Requires immediate attention to operationalize effectively.\n*   **Moderate Risk - Twitch Monetized Streamer Agreement (New Languages):** The addition of Ukrainian and Vietnamese versions is positive for accessibility but introduces a **moderate risk** to Trust & Safety operations. We must ensure our content moderation and user support teams have adequate linguistic and cultural expertise to accurately interpret policy violations and resolve disputes in these new languages.\n*   **Low to Moderate Risk - Meta Blocking People (User Difficulties):** The change in Meta's Help Center suggests users are encountering obstacles when trying to block. This presents a **moderate risk** of user frustration and potential safety concerns if users are unable to effectively utilize a core safety feature. Product and T&S should investigate the root causes of these \"can't block\" issues, which could be technical, UX-related, or due to specific, unclear limitations.\n\n---\n\n### 4. Trends Analysis\n\n*   **Increased Nuance in Content Moderation:** YouTube's explicit inclusion of \"public interest\" in its Community Guidelines signals a broader industry trend towards more sophisticated, context-aware content moderation, moving beyond purely rule-based enforcement to consider external factors like societal value.\n*   **Focus on Policy Clarity and Accessibility:** Platforms are consistently investing in making their policies and safety features more understandable and accessible. This is evident in Twitch's improved Monetized Streamer Agreement navigation and language expansion, and Meta's adjustments to its blocking help content.\n*   **Addressing User Friction in Safety Tools:** Meta's policy update points to an ongoing need to identify and resolve practical difficulties users face when engaging with critical safety features (e.g., blocking). This indicates potential opportunities for product and UX improvements to ensure safety tools are effective and user-friendly.\n*   **International Expansion & Localization:** Twitch's addition of Ukrainian and Vietnamese language versions of a key agreement highlights a continued push for global reach and the importance of localizing policies for diverse user bases, which has direct implications for T&S resource planning.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-04-24 16:04:33 +0000",
+        "commit_hash": "f396fe2fa4f6686d9839474313854f98ff9ad2a4"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-04-24 16:04:33 +0000",
+        "commit_hash": "f396fe2fa4f6686d9839474313854f98ff9ad2a4"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-04-24 16:04:33 +0000",
+        "commit_hash": "f396fe2fa4f6686d9839474313854f98ff9ad2a4"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2026-04-24 16:04:33 +0000",
+        "commit_hash": "f396fe2fa4f6686d9839474313854f98ff9ad2a4"
+      },
+      {
+        "policy_key": "youtube-community-guidelines",
+        "file_path": "snapshots/production/youtube-community-guidelines/snapshot.html",
+        "commit_date": "2026-04-24 16:04:33 +0000",
+        "commit_hash": "f396fe2fa4f6686d9839474313854f98ff9ad2a4"
+      }
+    ]
   }
 }
