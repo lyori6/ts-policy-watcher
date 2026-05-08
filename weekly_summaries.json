@@ -7726,5 +7726,36 @@
         "commit_hash": "ebf1e23cdfab830dc9064e2b86a1312b4bf7b4cc"
       }
     ]
+  },
+  "2026-05-02_to_2026-05-08": {
+    "run_metadata": {
+      "run_date": "2026-05-08T20:06:36.286186+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-05-02",
+      "week_end": "2026-05-08",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Summary for Product Manager**\n\n**Week Period:** May 02, 2026 to May 08, 2026\n**Run Information:** Scheduled weekly run generated on May 08, 2026 at 20:06 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a dual focus across platforms: enhancing user clarity and significantly broadening the scope of prohibited harmful content. The most impactful change comes from Twitch, which has substantially expanded its Community Guidelines regarding sexual content, directly affecting content creators and moderation. Meta improved the user experience for its Oversight Board appeal process through language refinement, and Whatnot made a minor textual clarity update.\n\n**Key Takeaways:**\n\n1.  **Twitch's Significant Expansion of Prohibited Sexual Content:** The platform has moved to a much broader and more explicit prohibition of simulated or implied sexual acts and the display of sexual bodily fluids, which will have a substantial impact on creators and moderation.\n2.  **Focus on User Clarity:** Both Meta and Whatnot made updates aimed at improving user understanding and navigation of existing features (appeals, blocking), reflecting an ongoing commitment to a clearer user experience.\n3.  **Potential for Increased Moderation & Creator Impact:** The changes on Twitch are likely to increase flagged content, appeals, and require creators to significantly adjust their content strategy, posing the most immediate operational and community management considerations.\n\n### 2. Platform Highlights\n\n*   **Meta Appeal Process:**\n    *   **Specific Change:** Updated the main navigation options on the \"Appeal Instagram\u2019s content decision to the Oversight Board\" page. Options changed from descriptive (\"My content was taken down\") to action-oriented (\"Appeal my content decision,\" \"Appeal content I reported\").\n    *   **Impact:** A positive user experience improvement designed to enhance clarity, reduce user confusion, and streamline the appeal initiation process by making options more intuitive and action-focused.\n*   **Twitch Community Guidelines:**\n    *   **Expanded Prohibited Sexual Content:** The \"Sexual Content\" policy now explicitly prohibits \"explicit, simulated, fictional, or implied sex or masturbation\" and \"display of sexual bodily fluids.\"\n    *   **Impact:** This is a major policy expansion, providing clearer and significantly broader guidelines for creators and enabling more precise enforcement against sexually suggestive content. It is expected to lead to a substantial increase in flagged content and require creators to adopt a more conservative approach to themes that might be interpreted as sexual.\n    *   **Removed Randomized Video Chat Prohibition:** The explicit prohibition and detailed enforcement notes for \"randomized video chat services\" (e.g., Ome.tv) were removed from the \"Extreme Violence or Gore\" section.\n    *   **Impact:** This suggests a re-evaluation of where this prohibition is documented or its handling under broader policy, potentially simplifying enforcement by consolidating similar issues under other existing guidelines. Further clarity on its current coverage is advisable.\n*   **Whatnot Blocking A User:**\n    *   **Specific Change:** A minor editorial rephrasing in the Help Center article \"Block someone on Whatnot,\" changing \"The person won\u2019t get a notification when you block them\" to \"The person you blocked won\u2019t be notified.\"\n    *   **Impact:** No change to functionality or user experience; this update is solely for textual clarity in user-facing documentation.\n\n### 3. Risk Assessment\n\n*   **HIGH RISK: Twitch - Expanded Sexual Content Policy**\n    *   **Creator Backlash & Confusion:** The broad definitions (\"implied,\" \"simulated\") may lead to significant confusion among creators, potentially resulting in backlash due to perceived over-enforcement or a lack of clear boundaries. Creators will need time and guidance to adapt.\n    *   **Increased Moderation Burden & Appeals:** This expanded scope will undoubtedly lead to a substantial increase in flagged content, requiring more moderation resources and potentially an increase in user appeals as creators contest decisions. This could strain existing moderation queues and review processes.\n    *   **Content Landscape Shift:** Expect a notable shift in the type of content creators produce, with a strong push towards more conservative themes, potentially impacting audience engagement and platform appeal for certain content genres.\n*   **MEDIUM RISK: Twitch - Removed Randomized Video Chat Prohibition**\n    *   **Policy Gap/Ambiguity:** While likely covered by other policies, the removal of explicit prohibition from a specific section without clear public communication on *where* it is now covered could create ambiguity for both users and moderators, potentially leading to inconsistent enforcement or a perceived loophole. Confirmation of its robust coverage elsewhere is critical.\n\n### 4. Trends Analysis\n\n*   **Enhanced Clarity and User Experience Focus:** A consistent trend this week is the commitment to improving clarity in policy language and user-facing interfaces. Meta refined appeal options for better actionability, and Whatnot made a minor textual clarity update to a help article. This indicates an ongoing effort to make platform rules and features more understandable and navigable for users.\n*   **Broadening Scope of Harmful Content Definitions:** Twitch's update on sexual content signifies a trend towards providing more comprehensive, specific, and expansive definitions for prohibited harmful content. This move aims to close potential loopholes, address nuanced forms of harm (e.g., implied vs. explicit), and enable more robust and consistent enforcement in sensitive content areas. This suggests platforms are proactively adapting policies to evolving content and community standards.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-05-08 16:16:43 +0000",
+        "commit_hash": "64ab532fefa177fa8d1dafa8d68e0059a0529765"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-05-08 16:16:43 +0000",
+        "commit_hash": "64ab532fefa177fa8d1dafa8d68e0059a0529765"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2026-05-08 16:16:43 +0000",
+        "commit_hash": "64ab532fefa177fa8d1dafa8d68e0059a0529765"
+      }
+    ]
   }
 }
