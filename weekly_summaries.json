@@ -7757,5 +7757,66 @@
         "commit_hash": "64ab532fefa177fa8d1dafa8d68e0059a0529765"
       }
     ]
+  },
+  "2026-05-09_to_2026-05-15": {
+    "run_metadata": {
+      "run_date": "2026-05-15T20:17:15.475098+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-05-09",
+      "week_end": "2026-05-15",
+      "generated_by": "friday_automation"
+    },
+    "summary": "Here is your comprehensive weekly Trust & Safety summary for the product manager, covering policy changes from May 09, 2026, to May 15, 2026.\n\n---\n\n## Weekly Trust & Safety Policy Summary: May 09, 2026 - May 15, 2026\n\n**Run Information:** Scheduled weekly run generated on May 15, 2026 at 20:17 UTC\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a significant focus across platforms on **enhancing user trust, legal compliance, and policy clarity**. Key takeaways include:\n\n*   **Major New Policy Launch:** Whatnot introduced a comprehensive Buyer Protection Policy, significantly expanding user rights and platform obligations for refunds and returns.\n*   **Increased Transparency & Consent:** Meta expanded explicit consent for AI interactions, and TikTok rolled out a comprehensive cookie consent management system, demonstrating a push towards stronger privacy compliance and user control.\n*   **Improved Policy Accessibility & Feedback:** YouTube implemented direct user feedback mechanisms and support links on policy pages, aiming to improve user understanding and gather actionable insights for future policy iterations.\n\n### 2. Platform Highlights\n\nHere's a breakdown of notable changes by platform:\n\n*   **Meta:**\n    *   **AI Support Assistant Consent:** The disclaimer for the \"Meta AI support assistant\" was updated to explicitly state that users agree to the **full Meta Terms, AI terms, and Privacy Policy** by continuing, significantly broadening the scope of user consent.\n    *   **Oversight Board Appeals (Minor):** A paragraph detailing appeal prerequisites was repositioned within the \"Appeal Instagram's content decision to the Oversight Board\" article. This was an editorial change with no substantive policy impact.\n*   **TikTok:**\n    *   **Enhanced Privacy & Compliance:** A comprehensive **cookie consent management system** was implemented, including banners and a detailed settings portal, to provide users with clear notification and granular control over data collection.\n    *   **Platform Security Boost:** Integration of multiple security and web crawling SDKs (`acrawler`, `secsdk_sg`, `secsdk_va`, `secsdk_ttp`) was introduced, designed to enhance bot detection, fraud prevention, and overall platform integrity.\n    *   **Live Moderation (Minor):** Only technical/formatting updates (SVG data re-write, newline character addition) were made to the TikTok LIVE header image, with no substantive policy changes.\n*   **Twitch:**\n    *   **Monetized Streamer Agreement Clarity:** The agreement was significantly restructured into **14 clearly numbered and titled sections** for improved readability and navigability. This was a structural improvement to clarity without changing core policy obligations for streamers.\n*   **Whatnot:**\n    *   **NEW Buyer Protection Policy:** A comprehensive new policy was introduced, effective May 16, 2025, detailing conditions for refunds across various issues (incomplete/incorrect items, not as described, packages not received). It outlines specific refund request timelines for different product categories (e.g., 7 days for Sports Cards, 2 days for Plants) and enumerates key exclusions (e.g., opened consumables, tips, off-platform transactions).\n*   **YouTube:**\n    *   **Policy Page User Experience:** The **Harassment & Cyberbullying** and **Shopping Ads** policy pages were updated with \"Was this helpful? Yes/No\" feedback modules and \"Need More Help?\" links to the help community and support. These changes aim to improve user understanding and collect direct feedback on policy clarity, without altering policy content.\n\n### 3. Risk Assessment\n\nChanges requiring immediate attention or close monitoring:\n\n*   **HIGH RISK / IMMEDIATE ATTENTION:**\n    *   **Whatnot - New Buyer Protection Policy (Operational, Legal):** This is a *major new policy* with an impending effective date (May 16, 2025). It introduces significant new liabilities and operational processes for managing refunds, returns, and seller disputes. Product managers must ensure that internal systems, support teams, and seller education are fully prepared for its implementation to avoid financial losses, user dissatisfaction, and reputational damage.\n*   **MEDIUM RISK / MONITOR CLOSELY:**\n    *   **Meta - AI Support Assistant Footer (Legal, User Experience):** The expanded consent language for AI interactions strengthens Meta's legal standing but requires monitoring to ensure user comprehension. Any confusion or perceived lack of transparency in the consent flow could lead to user complaints or legal scrutiny.\n    *   **TikTok - Cookie Consent Management (Compliance, User Experience):** While critical for privacy compliance, the new cookie banner and portal implementation needs careful monitoring. Poor UX could lead to lower consent rates, user frustration, or potential compliance gaps if not fully effective across all regions. Product managers should track consent rates and user feedback.\n\n### 4. Trends Analysis\n\nSeveral patterns are emerging across platforms this week:\n\n*   **Increased Focus on Transparency and Granular Consent:** Platforms are making concerted efforts to clearly communicate legal terms and obtain explicit user consent. Meta's broader AI disclaimer and TikTok's comprehensive cookie consent system are prime examples, reflecting a response to evolving global data privacy regulations and user expectations.\n*   **Investment in Policy Clarity and Accessibility:** There's a noticeable trend towards making complex legal and safety policies easier for users to understand and navigate. Twitch's structural re-organization of its streamer agreement and Meta's minor editorial adjustments aim to reduce ambiguity.\n*   **User-Centric Policy Feedback Loops:** YouTube's implementation of \"Was this helpful?\" feedback and direct support links on policy pages signals a strategic shift towards actively soliciting user input on policy clarity and providing immediate assistance. This provides invaluable data for T&S teams to iteratively improve policy language and address common pain points.\n*   **Reinforced Platform Security and Integrity:** TikTok's deployment of new security SDKs underscores an ongoing commitment to bolstering core platform defenses against bots, fraud, and abuse, directly contributing to a safer environment for users and creators.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "whatnot-buyer-protection",
+        "file_path": "snapshots/production/whatnot-buyer-protection/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "youtube-harassment-policy",
+        "file_path": "snapshots/production/youtube-harassment-policy/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2026-05-15 16:51:07 +0000",
+        "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
+      }
+    ]
   }
 }
