@@ -7818,5 +7818,36 @@
         "commit_hash": "87616eea450bd0a2085fc36e8c460cac2da67461"
       }
     ]
+  },
+  "2026-05-16_to_2026-05-22": {
+    "run_metadata": {
+      "run_date": "2026-05-22T20:43:08.629845+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-05-16",
+      "week_end": "2026-05-22",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary: May 16 - May 22, 2026\n\n**Run Information:** Scheduled weekly run generated on May 22, 2026 at 20:43 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a dual focus on enhanced user transparency and potential operational shifts. Meta significantly expanded its appeal process to explicitly include user appeals for *non-removal* of reported content, which is expected to increase review volumes but boost user agency. Concurrently, YouTube unexpectedly removed critical documentation for its \"Hide users\" feature, creating a potential support burden and user experience gap for creators.\n\n**Key Takeaways:**\n*   **Enhanced User Empowerment & Transparency:** Meta is increasing user agency in content moderation decisions and clarifying AI data usage.\n*   **Potential Operational Impact:** Expect increased workload for content review teams and support operations due to Meta's appeals expansion and YouTube's documentation removal.\n*   **Creator Support Gap:** YouTube's undocumented moderation feature could lead to confusion and increased support queries for creators.\n\n---\n\n### 2. Platform Highlights\n\n#### Meta\n*   **Appeal Process Expansion (Instagram):** The policy for appealing Instagram content decisions to the Oversight Board now explicitly includes the process for users to appeal decisions where **content they reported from others was NOT taken down**. Users are required to first undergo a standard internal review.\n    *   **Impact:** Increases transparency and user empowerment by providing a formal pathway for challenging non-removal decisions. Anticipate a potential increase in internal review requests and subsequent Oversight Board appeals related to \"reported, not taken down\" content, affecting content review team workload.\n*   **AI Consent Transparency (Blocking People):** The consent disclaimer for the \"Meta AI support assistant\" on the \"Blocking People\" help page has been updated. The new text explicitly states: \"By using this service, you agree to Meta's [AI terms]. Your interactions with AIs will be used to improve [AI at Meta].\"\n    *   **Impact:** Enhances transparency and clarity for users regarding data usage for AI product improvement, aligning with evolving data privacy expectations.\n\n#### YouTube\n*   **Removal of \"Hide Users from Your Channel\" Help Content:** The entire help page content detailing how creators can \"Hide users from your channel\" has been removed from YouTube's official help resources.\n    *   **Impact:** Creates a significant user experience gap for creators, who now lack official guidance on using or managing this moderation feature. This will likely lead to an increase in support queries related to blocking users and channel moderation. The feature, if still active, is now effectively undocumented.\n\n---\n\n### 3. Risk Assessment\n\n*   **Meta Appeal Process Expansion (High Operational Risk):** The explicit inclusion of appeals for *non-removal* of reported content is a significant policy shift. This will almost certainly lead to a **measurable increase in internal review requests and subsequent Oversight Board appeals**. Product managers should anticipate increased workload for content review teams and potentially higher resource allocation for review infrastructure and personnel. This requires immediate monitoring of appeal volumes.\n*   **YouTube Hiding Users - Undocumented Feature (High User Experience & Support Risk):** The complete removal of help content for a creator moderation feature (\"Hide users from your channel\") poses an immediate risk to creator experience and support operations. Creators will be confused, unable to self-serve, and will likely escalate to support, leading to **increased support ticket volumes and potential dissatisfaction**. Product teams should investigate the status of this feature and consider re-documenting or providing alternative guidance.\n\n---\n\n### 4. Trends Analysis\n\n*   **Growing Emphasis on User Empowerment and Transparency in Moderation:** Meta's expansion of appeal rights to cover non-removal decisions for reported content, alongside clearer AI consent language, signifies a broader industry trend towards giving users more agency and transparency in content moderation processes and data usage. This aims to build trust and accountability.\n*   **Increasing Operational and Support Demands from Policy Evolution:** Both Meta's appeal process changes and YouTube's documentation removal highlight how policy and content resource changes directly impact operational workloads. Expanded appeal rights drive review volume, while undocumented features shift the burden to support teams. This underscores the need for robust operational planning alongside policy development.\n*   **Evolving AI Integration and Disclosure Practices:** Meta's update to its AI consent language reflects an industry-wide trend of integrating AI into user-facing support and features, coupled with a stronger push for explicit, clear disclosure about how user interactions with AI are utilized for product improvement. This is crucial for maintaining user trust and adhering to privacy expectations in an AI-first world.\n*   **Potential Gaps in Creator/User Support Resources:** The YouTube change points to a potential vulnerability where valuable self-service documentation for core product features is removed without clear communication or alternative resources. This can undermine user autonomy and significantly increase demand on human support channels.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-05-22 17:09:02 +0000",
+        "commit_hash": "7d8adcbe5725faac2e14481c5ddb0dded45afddb"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-05-22 17:09:02 +0000",
+        "commit_hash": "7d8adcbe5725faac2e14481c5ddb0dded45afddb"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-05-22 17:09:02 +0000",
+        "commit_hash": "7d8adcbe5725faac2e14481c5ddb0dded45afddb"
+      }
+    ]
   }
 }
