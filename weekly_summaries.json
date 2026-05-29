@@ -7849,5 +7849,42 @@
         "commit_hash": "7d8adcbe5725faac2e14481c5ddb0dded45afddb"
       }
     ]
+  },
+  "2026-05-23_to_2026-05-29": {
+    "run_metadata": {
+      "run_date": "2026-05-29T21:08:05.748613+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-05-23",
+      "week_end": "2026-05-29",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Policy Summary**\n\n**Week Period:** May 23, 2026 to May 29, 2026\n**Generated:** May 29, 2026 at 21:08 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates across Meta and YouTube demonstrate a strong focus on **enhancing user control and clarity** within moderation and appeal processes. Key takeaways include:\n\n*   **Streamlined User Journeys:** Both platforms introduced changes to simplify understanding and navigation for users engaging with moderation outcomes, particularly around appeals and creator tools.\n*   **Empowered Creators:** YouTube significantly upgraded its \"hide user\" functionality, giving creators more robust tools to manage their community and combat unwanted interactions, including content repurposing.\n*   **Improved Support & UX:** Several updates aimed at making help resources more discoverable and policy pages more user-friendly, without altering core policy substance.\n\n### 2. Platform Highlights\n\n#### Meta\n\n*   **Oversight Board Appeal Process Clarity:**\n    *   **Specific Changes:** Removed the ambiguous \"reviewed twice\" prerequisite for Oversight Board appeals. Explicitly clarified that users appealing reported content (not taken down) must first complete Instagram's internal \"request a review\" process, aligning it with appeals for one's own content.\n    *   **Impact:** Streamlines the general understanding of appeal eligibility and provides clearer, consistent guidance for users appealing decisions on content they reported.\n*   **Blocking People Help Page Restructure:**\n    *   **Specific Changes:** Introduced a new `<h2>Other ways to get help</h2>` section and moved the \"Meta AI support assistant\" feature and related prompts underneath it. Minor text refinements for conciseness.\n    *   **Impact:** Improves the discoverability of alternative support options (Meta AI) on the \"Blocking People\" help page. This update is a user experience enhancement with no change to the core blocking policy or functionality.\n\n#### YouTube\n\n*   **Enhanced \"Hide Users from Channel\" Functionality & Clarity:**\n    *   **Specific Changes:** Expanded the impact of hiding a user to prevent them from **creating clips**, in addition to hiding their comments. Introduced comprehensive, step-by-step guides for hiding/unhiding users via comments or Studio settings. Clarified behavioral aspects: previous comments are removed within 48 hours, hidden users are not notified, and unhiding makes only future comments visible. Added a prominent section for abuse reporting.\n    *   **Impact:** Provides creators with significantly more powerful and clearly defined tools to manage their channel environment, protect against unwanted interactions (including content repurposing), and simplify moderation. Enhances safety by removing problematic content and preventing retaliation.\n*   **Shopping Ads Policy Page UX Improvements:**\n    *   **Specific Changes:** Added a \"Was this helpful?\" feedback mechanism (thumbs up/down) and a \"Need more help?\" section with direct links to community forums and support. Minor backend JavaScript updates.\n    *   **Impact:** Significantly improves user support and feedback collection for the policy page itself, making it easier for users to rate content helpfulness and find additional assistance. There are **no substantive changes to the Shopping Ads policy content or enforcement logic.**\n\n### 3. Risk Assessment\n\nNo immediate, high-priority risks requiring urgent attention have been identified this week.\n\n*   The **Meta Appeal Process** changes are primarily about *clarity and streamlining* an existing process. While any change to appeals warrants careful monitoring for user understanding and potential increases in initial review requests, the intent is to reduce confusion rather than introduce new complexities or liabilities.\n*   The **YouTube Hiding Users** update empowers creators more, which is generally a positive for community safety and moderation. There's no inherent risk identified beyond the usual need to monitor how new tools are adopted and ensure they are used as intended. The clarifications around no notifications for hidden users help mitigate potential harassment risks.\n*   The **Meta Blocking People** and **YouTube Shopping Ads Policy** updates are purely user experience and support improvements, carrying no inherent policy, legal, or operational risk for Trust & Safety.\n\n### 4. Trends Analysis\n\nThis week's updates highlight several ongoing trends in Trust & Safety and platform management:\n\n*   **Empowering Users & Creators:** A clear theme is the push to give users, particularly creators, more control over their content experience and community interactions. YouTube's enhanced \"hide user\" feature is a prime example, providing more robust moderation capabilities.\n*   **Focus on Clarity and User Experience (UX):** Both platforms are heavily investing in making their policies and help resources more understandable and accessible. This includes streamlining appeal processes, improving navigation on help pages, and integrating direct feedback/support mechanisms on policy documentation. The goal is to reduce user confusion and friction.\n*   **Refinement of Moderation Workflows:** There's an ongoing effort to refine the pathways users take when encountering moderation decisions or seeking to moderate their own communities. This ensures a consistent, logical user journey, whether it's appealing a decision or managing channel interactions.\n*   **Iterative, Non-Substantive Policy Updates:** A notable portion of the changes this week were related to process, UX, or organizational improvements, rather than introducing new policy rules or enforcement definitions. This indicates a focus on optimizing existing systems and documentation for better usability and understanding.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-05-29 18:12:52 +0000",
+        "commit_hash": "7311e62e9964087af5df8768a2673456ad6c4451"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-05-29 18:12:52 +0000",
+        "commit_hash": "7311e62e9964087af5df8768a2673456ad6c4451"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-05-29 18:12:52 +0000",
+        "commit_hash": "7311e62e9964087af5df8768a2673456ad6c4451"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2026-05-29 18:12:52 +0000",
+        "commit_hash": "7311e62e9964087af5df8768a2673456ad6c4451"
+      }
+    ]
   }
 }
