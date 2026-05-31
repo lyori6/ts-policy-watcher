@@ -1882,26 +1882,25 @@ class PolicyWatcherDashboard {
 
     calculateSecondsUntilNextCheck() {
         const now = new Date();
-        
-        // If we have run data, calculate based on theoretical 6-hour schedule
-        // Use schedule-based calculation instead of last-run + 6 hours to handle missed runs
-        const utcHour = now.getUTCHours();
-        const scheduleHours = [0, 6, 12, 18];
-        
-        // Find the next scheduled run hour
-        let nextRunHour = scheduleHours.find(hour => hour > utcHour);
-        let nextRunDate = new Date(now);
-        
-        if (nextRunHour === undefined) {
-            // If no more runs today, next run is at 00:00 tomorrow
-            nextRunHour = 0;
-            nextRunDate.setUTCDate(nextRunDate.getUTCDate() + 1);
+
+        // Schedule: every Friday at 15:00 UTC (cron: 0 15 * * 5)
+        const FRIDAY = 5; // getUTCDay() value for Friday
+        const RUN_HOUR_UTC = 15;
+
+        const nextRun = new Date(now);
+        nextRun.setUTCHours(RUN_HOUR_UTC, 0, 0, 0);
+
+        const currentDay = now.getUTCDay();
+        const daysUntilFriday = (FRIDAY - currentDay + 7) % 7;
+
+        if (daysUntilFriday === 0 && now >= nextRun) {
+            // It's Friday but past 15:00 UTC — next run is next Friday
+            nextRun.setUTCDate(nextRun.getUTCDate() + 7);
+        } else {
+            nextRun.setUTCDate(nextRun.getUTCDate() + daysUntilFriday);
         }
-        
-        // Set the next run time to the exact scheduled hour
-        nextRunDate.setUTCHours(nextRunHour, 0, 0, 0);
-        
-        const secondsUntilNext = Math.round((nextRunDate - now) / 1000);
+
+        const secondsUntilNext = Math.round((nextRun - now) / 1000);
         return Math.max(0, secondsUntilNext);
     }
 
@@ -2180,17 +2179,20 @@ class PolicyWatcherDashboard {
                 headerIndicator.className = 'status-item issues';
             }
         } else {
-            // System is healthy - show countdown until next check
-            const secondsUntilNext = this.calculateSecondsUntilNextCheck();
-            const countdownDisplay = this.formatCountdownDisplay(secondsUntilNext);
+            // System is healthy - show last check and next scheduled check
+            const nextRun = new Date(now);
+            nextRun.setUTCHours(15, 0, 0, 0);
+            const daysUntilFriday = (5 - now.getUTCDay() + 7) % 7 || 7;
+            nextRun.setUTCDate(nextRun.getUTCDate() + (now.getUTCDay() === 5 && now.getUTCHours() >= 15 ? 7 : daysUntilFriday));
+
+            const lastStr = lastRunTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const nextStr = nextRun.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
             if (headerNumber && headerLabel) {
-                headerNumber.textContent = countdownDisplay;
-                headerLabel.textContent = 'Time to Next Check';
-                headerIndicator.title = `Monitoring ${this.platformData.length} policies\nNext check in: ${countdownDisplay}`;
+                headerNumber.textContent = lastStr;
+                headerLabel.innerHTML = `Last Check &nbsp;·&nbsp; Next: ${nextStr}`;
+                headerIndicator.title = `Last run: ${lastRunTime.toUTCString()}\nNext scheduled: ${nextRun.toUTCString()}`;
                 headerIndicator.className = 'status-item operational';
-                
-                // Start countdown timer for visual effect
-                this.startCountdownTimer();
             }
         }
     }
