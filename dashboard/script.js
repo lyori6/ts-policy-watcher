@@ -1204,13 +1204,12 @@ class PolicyWatcherDashboard {
                             </circle>
                         `).join('')}
                         
-                        <!-- Week labels - Smart mobile display -->
+                        <!-- Week labels - Smart display: limit to ~8 labels on desktop, fewer on smaller screens -->
                         ${points.map((point, index) => {
-                            // Smart date display: show fewer labels on mobile to prevent crowding
-                            const shouldShow = isMobile ? 
+                            const shouldShow = isMobile ?
                                 (index === 0 || index === points.length - 1 || index % Math.ceil(points.length / 3) === 0) :
                                 isTablet ? (index % Math.ceil(points.length / 6) === 0) :
-                                true;
+                                (index % Math.ceil(points.length / 8) === 0 || index === points.length - 1);
                             
                             return shouldShow ? `
                                 <text x="${point.x}" y="${chartHeight - 5}" 
@@ -1606,7 +1605,7 @@ class PolicyWatcherDashboard {
             const lastRun = this.runData[0];
             const hoursAgo = this.getHoursAgo(new Date(lastRun.timestamp_utc));
             
-            if (hoursAgo > 48) {
+            if (hoursAgo > 200) {
                 statusText = 'System Offline';
             } else if (lastRun.status === 'success') {
                 statusText = 'All Systems OK';
@@ -1755,7 +1754,7 @@ class PolicyWatcherDashboard {
         let overallStatus = 'operational';
         let statusText = 'All Systems Operational';
         
-        if (hoursAgo > 48) {
+        if (hoursAgo > 200) {
             overallStatus = 'down';
             statusText = 'System Offline';
         } else if (lastRun.status === 'partial_failure') {
@@ -2160,11 +2159,11 @@ class PolicyWatcherDashboard {
         let issueType = '';
         let tooltipText = '';
         
-        if (hoursSinceLastRun > 12) {
-            // System hasn't run in over 12 hours - likely an issue
+        if (hoursSinceLastRun > 200) {
+            // System hasn't run in over 200 hours - likely an issue (runs weekly = ~168h)
             hasIssues = true;
             issueType = 'System Offline';
-            tooltipText = `Last run: ${Math.round(hoursSinceLastRun)} hours ago\nExpected: Every 6 hours`;
+            tooltipText = `Last run: ${Math.round(hoursSinceLastRun)} hours ago\nExpected: Weekly (Fridays)`;
         } else if (lastRun.status !== 'success' || (lastRun.errors && lastRun.errors.length > 0)) {
             // Recent run had issues
             hasIssues = true;
