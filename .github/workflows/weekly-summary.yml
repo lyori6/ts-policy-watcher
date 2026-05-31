@@ -44,13 +44,13 @@ jobs:
           pip install -r requirements.txt
 
       # Step 4: Generate weekly summary
+      # NOTE: Email notifications are disabled. To re-enable, see the module
+      # docstring in scripts/weekly_aggregator.py for full instructions.
+      # You'll need to restore RESEND_API_KEY, RECIPIENT_EMAIL env vars here.
       - name: 'Generate Weekly Policy Summary'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-          SEND_IMMEDIATE_EMAILS: "false"  # Enable weekly emails
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "Running manual weekly summary..."

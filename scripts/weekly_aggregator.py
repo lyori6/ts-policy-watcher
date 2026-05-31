@@ -3,6 +3,26 @@
 Weekly Policy Changes Aggregator
 Collects and summarizes policy changes from the past 7 days
 Supports both manual testing and automated Friday runs
+
+--- EMAIL NOTIFICATIONS (disabled as of 2026-05-31) ---
+Weekly email summaries were removed because they were no longer needed.
+The summary data is still generated and saved to weekly_summaries.json,
+so re-enabling emails is straightforward:
+
+To re-enable:
+1. Uncomment `import resend` and `import markdown` below
+2. Uncomment the RESEND_API_KEY and RECIPIENT_EMAIL config lines
+3. Remove the SEND_IMMEDIATE_EMAILS config line (or keep it as a toggle)
+4. Restore the send_weekly_email() method (see git history for full implementation)
+5. In run(), call self.send_weekly_email(summary_data) after save_weekly_summary()
+6. In .github/workflows/weekly-summary.yml, add back:
+     RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+     RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+   and remove SEND_IMMEDIATE_EMAILS env var
+
+The email used Resend (resend.dev) to send HTML-formatted weekly digests
+with an executive summary, platform highlights, risk assessment, and trends.
+---
 """
 
 import os
@@ -16,8 +36,8 @@ import google.generativeai as genai
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 import html2text
 import warnings
-import resend
-import markdown
+# import resend      # Removed: not needed while emails are disabled
+# import markdown    # Removed: was only used for HTML email formatting
 
 # Suppress BeautifulSoup warnings
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
@@ -25,14 +45,13 @@ warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 # --- Configuration ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_API_KEY_2 = os.environ.get("GEMINI_API_KEY_2")
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
-RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
 SUMMARIES_FILE = "summaries.json"
 WEEKLY_SUMMARIES_FILE = "weekly_summaries.json"
 RUN_LOG_FILE = "run_log.json"
 
-# Email settings
-SEND_IMMEDIATE_EMAILS = os.environ.get("SEND_IMMEDIATE_EMAILS", "false").lower() == "true"
+# Email settings removed (see module docstring for how to re-enable)
+# RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+# RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
 
 # AI Prompt Template for weekly summaries
 WEEKLY_PROMPT_TEMPLATE = """As a Trust & Safety analyst, provide a comprehensive weekly summary for a product manager covering policy changes across multiple platforms.
@@ -366,74 +385,6 @@ The following policy changes were detected during this period:
         print(f"✅ Weekly summary saved to {WEEKLY_SUMMARIES_FILE}")
         return weekly_data
 
-    def send_weekly_email(self, summary_data):
-        """Send weekly summary email."""
-        if not RESEND_API_KEY or not RECIPIENT_EMAIL:
-            print("❌ Email not configured (missing RESEND_API_KEY or RECIPIENT_EMAIL)")
-            return False
-        
-        try:
-            resend.api_key = RESEND_API_KEY
-            
-            # Email subject
-            week_range = f"{self.week_start.strftime('%b %d')}-{self.week_ending.strftime('%d, %Y')}"
-            if self.manual_run:
-                subject = f"[MANUAL] Weekly Policy Summary - {week_range}"
-            else:
-                subject = f"Weekly Policy Summary - {week_range}"
-            
-            # Generate HTML content
-            summary_html = markdown.markdown(summary_data['summary'])
-            run_type_label = "Manual Test Run" if self.manual_run else "Scheduled Friday Run"
-            run_type_color = "#3498db" if self.manual_run else "#27ae60"
-            
-            html_content = f"""
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
-                <div style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); padding: 30px; border-radius: 12px; text-align: center; color: white; margin-bottom: 20px;">
-                    <h1 style="margin: 0; font-size: 24px;">📊 Weekly Policy Summary</h1>
-                    <p style="margin: 10px 0 0 0; opacity: 0.9;">{week_range}</p>
-                </div>
-                
-                <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
-                        <div>
-                            <p style="margin: 0; color: #666; font-size: 14px;">Generated on {self.run_date.strftime('%B %d, %Y at %H:%M UTC')}</p>
-                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Changes detected: {summary_data['changes_count']}</p>
-                        </div>
-                        <span style="background: {run_type_color}; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
-                            {run_type_label}
-                        </span>
-                    </div>
-                    
-                    <div style="color: #2c3e50; line-height: 1.6;">
-                        {summary_html}
-                    </div>
-                </div>
-                
-                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-                    <p style="margin: 0; color: #666; font-size: 12px;">
-                        <strong>T&S Policy Watcher</strong> | 
-                        <a href="https://ts-policy-watcher.vercel.app/" style="color: #3498db; text-decoration: none;">View Dashboard</a>
-                    </p>
-                </div>
-            </div>
-            """
-            
-            # Send email
-            result = resend.Emails.send({
-                "from": "Policy Watch <noreply@resend.dev>",
-                "to": [RECIPIENT_EMAIL],
-                "subject": subject,
-                "html": html_content
-            })
-            
-            print(f"✅ Weekly email sent successfully. Email ID: {result.get('id', 'unknown')}")
-            return True
-            
-        except Exception as e:
-            print(f"❌ Failed to send weekly email: {e}", file=sys.stderr)
-            return False
-
     def run(self):
         """Execute the weekly aggregation process."""
         print(f"🚀 Starting weekly policy aggregation...")
@@ -450,14 +401,10 @@ The following policy changes were detected during this period:
         
         # Save summary
         summary_data = self.save_weekly_summary(summary_text, weekly_changes)
-        
-        # Send email if not disabled
-        if not SEND_IMMEDIATE_EMAILS:
-            print("📧 Sending weekly summary email...")
-            self.send_weekly_email(summary_data)
-        else:
-            print("📧 Email disabled (SEND_IMMEDIATE_EMAILS=true)")
-        
+
+        # Email notifications are disabled. See module docstring to re-enable.
+        print("📧 Email notifications disabled. Summary saved to weekly_summaries.json.")
+
         print(f"✅ Weekly aggregation complete!")
         return summary_data
 
