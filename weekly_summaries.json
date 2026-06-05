@@ -7886,5 +7886,30 @@
         "commit_hash": "7311e62e9964087af5df8768a2673456ad6c4451"
       }
     ]
+  },
+  "2026-05-30_to_2026-06-05": {
+    "run_metadata": {
+      "run_date": "2026-06-05T20:47:39.105344+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-05-30",
+      "week_end": "2026-06-05",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary: May 30, 2026 - June 05, 2026\n\n**Run Information:** Scheduled weekly run generated on June 05, 2026 at 20:47 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates from Meta indicate a strategic refinement of user support and appeal mechanisms. Key takeaways include:\n\n*   **Expanded Appeal Scope:** Meta has subtly broadened the perceived scope of content decisions appealable to the Oversight Board, potentially leading to increased and more varied appeal submissions.\n*   **Strategic AI Support Integration:** Meta is actively refining how and where its AI support assistant is promoted and integrated, with a notable reduction in its prominence for specific help topics, while also improving natural language prompts.\n*   **User Journey Optimization:** Changes aim to streamline user action, guiding users more directly toward initiating appeals or clarifying AI interactions.\n\n---\n\n### 2. Platform Highlights\n\n#### Meta\n\n*   **Oversight Board Appeal Process Refinement:**\n    *   The \"Appeal Instagram\u2019s content decision to the Oversight Board\" page saw quick links updated. \"My content was taken down\" was replaced with \"Appeal my content decision,\" and \"Check my appeal eligibility\" was repositioned lower.\n    *   This change broadens the user's perception of what outcomes are appealable beyond just content removals, potentially increasing the variety and volume of appeals to the Oversight Board.\n    *   Prioritizing \"Appeal my content decision\" aims to streamline the user journey towards initiating an appeal directly.\n*   **Meta AI Support Visibility Adjustment:**\n    *   On the \"Blocking People\" Help Center page, the dedicated section promoting \"Chat with Meta AI support assistant\" was entirely removed. This significantly reduces the prominence and direct promotion of real-time AI support for users seeking help with blocking issues.\n    *   Conversely, a minor wording improvement (\"Reset my password\" to \"How to reset my password?\") was made in an AI prompt example across both \"Appeal Process\" and \"Blocking People\" pages, enhancing natural language interaction.\n\n---\n\n### 3. Risk Assessment\n\n*   **Potential for Increased Appeal Volume & Complexity (Immediate Attention Required):** The shift from \"takedowns\" to \"content decision\" in the Oversight Board appeal process creates a broader and potentially ambiguous scope for what users can appeal. This could lead to:\n    *   A significant increase in appeal submissions, including types of \"content decisions\" not previously or clearly defined as appealable, potentially overwhelming existing review capacity.\n    *   An increase in appeals that may fall outside the Oversight Board's current remit or Meta's internal appeal processes, requiring additional triage and user communication.\n*   **Action:** Product and T&S teams should immediately monitor appeal metrics, specifically focusing on changes in submission volume, the *type* of content decisions being appealed, and the outcome of these appeals. Internal guidance for review teams may need to be updated to clarify the new scope.\n\n---\n\n### 4. Trends Analysis\n\n*   **Evolving AI Integration Strategy:** Meta is not uniformly pushing its AI support across all help topics. The removal of prominent AI support from the \"Blocking People\" page, while making minor language improvements elsewhere, suggests a more nuanced, perhaps data-driven, approach to where and how AI support is most effective and desired by users for specific issues. This indicates an ongoing optimization of AI utility within the support ecosystem rather than a blanket deployment.\n*   **User Empowerment and Clarity in Moderation Appeals:** The rephrasing of appeal options towards \"content decision\" and streamlining the appeal initiation highlights a trend towards greater transparency and user empowerment in content moderation. Meta appears to be making it easier and clearer for users to engage with appeal processes, reflecting a broader industry push for fairness and due process in content moderation outcomes.\n*   **Continuous Iteration on User Experience:** Minor adjustments like AI prompt wording improvements and quick link reordering demonstrate a continuous effort to refine the user experience within help centers and support flows, aiming for more intuitive navigation and interaction.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-06-05 17:15:27 +0000",
+        "commit_hash": "a9863ded31cfcb93dd726960f38d746edc5d14e5"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-06-05 17:15:27 +0000",
+        "commit_hash": "a9863ded31cfcb93dd726960f38d746edc5d14e5"
+      }
+    ]
   }
 }
