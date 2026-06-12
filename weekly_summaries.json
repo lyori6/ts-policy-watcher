@@ -7911,5 +7911,24 @@
         "commit_hash": "a9863ded31cfcb93dd726960f38d746edc5d14e5"
       }
     ]
+  },
+  "2026-06-06_to_2026-06-12": {
+    "run_metadata": {
+      "run_date": "2026-06-12T21:01:41.600712+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-06-06",
+      "week_end": "2026-06-12",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** June 06, 2026 to June 12, 2026\n**Generated On:** June 12, 2026 at 21:01 UTC\n\n---\n\n### 1. Executive Summary\n\n*   **Minimal Policy Activity:** This week saw extremely limited policy-related activity across monitored platforms.\n*   **No Substantive Changes:** There were no substantive updates to policy text, community guidelines, or terms of service that would impact user behavior or moderation workflows.\n*   **Administrative Update Only:** The sole noted \"change\" was an administrative re-save of the Whatnot Community Guidelines file, containing no actual policy modifications.\n\n### 2. Platform Highlights\n\n*   **Whatnot Community Guidelines (2026-06-12):**\n    *   An update was detected for the Whatnot Community Guidelines snapshot file.\n    *   **Crucially, a detailed review of the provided diff confirmed no actual content changes** to the policy text. The update appears to be an administrative commit or re-save without any modifications to user-facing guidelines or enforcement criteria.\n    *   No impact on users, moderation, or product is expected from this specific update.\n\n### 3. Risk Assessment\n\n*   **No Immediate Risks:** No policy changes were identified this week that pose immediate risks, require urgent product attention, or necessitate changes to our platform's user experience, moderation tooling, or policy enforcement strategies.\n*   The administrative update on Whatnot does not introduce any new vulnerabilities or compliance concerns.\n\n### 4. Trends Analysis\n\n*   **Lack of Trends:** Due to the absence of any substantive policy changes across all monitored platforms, no significant trends or patterns in policy evolution could be observed or reported for this period. The activity was limited to internal administrative updates rather than external shifts in platform governance or enforcement priorities.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-06-12 17:37:36 +0000",
+        "commit_hash": "fa8428e3c2543f7513072dc5ccdafd700b523150"
+      }
+    ]
   }
 }
