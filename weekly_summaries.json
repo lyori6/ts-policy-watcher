@@ -7930,5 +7930,72 @@
         "commit_hash": "fa8428e3c2543f7513072dc5ccdafd700b523150"
       }
     ]
+  },
+  "2026-06-13_to_2026-06-19": {
+    "run_metadata": {
+      "run_date": "2026-06-19T20:25:53.184904+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-06-13",
+      "week_end": "2026-06-19",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary: June 13 - June 19, 2026\n\n**Run Information:** Scheduled weekly run generated on June 19, 2026 at 20:25 UTC\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a significant push towards enhancing user self-service, particularly through the adoption of AI, and a continued focus on establishing clear user protection policies.\n\n*   **AI-Powered Self-Service on the Rise:** Meta launched a new AI support assistant for user blocking issues, and Twitch's Community Guidelines page showed signs of generative AI integration, indicating a broader trend of leveraging AI to improve user support and policy comprehension.\n*   **Enhanced User Protection & Clarity:** Whatnot introduced a comprehensive Buyer Protection Policy, alongside formalizing its Prohibited Items and clarifying its Enforcement Actions appeal process. Meta also streamlined its appeal process, reinforcing mandatory internal reviews. These changes aim to boost user trust and streamline dispute resolution.\n*   **Improved Help Center User Experience (UX):** Platforms like Meta and YouTube made significant updates to their help center articles, introducing better navigation, feedback mechanisms, and underlying technical stability, signaling an investment in making policy information more accessible and user-friendly.\n\n### 2. Platform Highlights\n\nHere are the notable policy changes by platform:\n\n*   **Meta:**\n    *   **Appeal Process Streamlined:** Removed direct appeal entry points from the Oversight Board overview, reinforcing the mandatory \"request a review process\" as the sole first step. Clarified the flow for users appealing reported content.\n    *   **AI Support Assistant Integrated:** Launched a new AI-powered chatbot widget on the \"Blocking People\" help center article to offer immediate assistance and potentially deflect support tickets.\n    *   **Improved Blocking Navigation:** Added prominent sub-navigation links within the \"Blocking People\" article for common queries like \"Block someone on Instagram\" and \"Unblock someone.\"\n    *   **Content Feedback Module Removed:** The \"Was this helpful?\" module was removed from the \"Blocking People\" article, impacting direct feedback on content quality.\n*   **Twitch:**\n    *   **UI/UX & Potential AI Integration:** The Community Guidelines page received significant CSS styling updates impacting its visual presentation and potentially accessibility. The addition of a `gen-ai-enabled` class suggests that generative AI features might be active or enabled on this page, warranting further investigation into its functionality and T&S implications.\n*   **Whatnot:**\n    *   **New Comprehensive Buyer Protection Policy (Effective May 16, 2025):** Introduced a detailed policy outlining conditions for refunds for `incomplete/incorrect items`, `items not as described or inauthentic`, and `packages not received`. It includes category-specific refund request timelines (e.g., 7 days for Sports Cards, 2 days for Plants) and a clear list of exclusions (e.g., opened consumables, tips, chargebacks, off-platform transactions). Special provisions for EU/UK Right of Withdrawal were also added.\n    *   **New Prohibited Items Policy (Initial Version):** This marks the formal introduction or baseline snapshot of a policy outlining items not allowed for sale on the platform.\n    *   **Enforcement Actions Appeal Process Clarified:** The appeal process instructions were reformatted into clear bullet points, explicitly directing users to the \"Policy Standing\" section of their dashboard via Account Health, improving user navigation and reducing friction.\n    *   **Community Guidelines:** No substantive content changes were observed this week; the update appears to be an administrative commit.\n*   **YouTube:**\n    *   **Enhanced Help Center Feedback:** Added new inline feedback widgets and \"Need more help?\" contact options to both the \"Hide users from your channel\" and \"Shopping Ads Policy\" help pages, enabling easier user feedback and support access.\n    *   **Technical Stability & Performance:** Extensive JavaScript refactoring and the addition of `try/catch` blocks across help pages (\"Hide users from your channel,\" \"Shopping Ads Policy\") improve page stability, performance, and error handling.\n    *   **No Policy Content Change:** The substantive policy text for \"Shopping Ads Policy\" remains unchanged; updates were purely technical and UI-related.\n\n### 3. Risk Assessment\n\n*   **Whatnot Buyer Protection Policy (High):** This is a new, comprehensive policy with significant operational implications. The detailed timelines, category-specific rules, and extensive exclusions can be complex for users.\n    *   **Risk:** Potential for increased customer support inquiries and disputes as users navigate the new rules. Misinterpretation by buyers or sellers could lead to frustration or perceived unfairness.\n    *   **Action:** Ensure robust internal training for support and moderation teams. Consider in-product educational resources, simplified explainers, or FAQs to help users understand their rights and responsibilities. Monitor early dispute trends and support ticket volume for areas of confusion.\n*   **Meta AI Support Assistant (Medium):** While promising for self-service, AI has inherent limitations.\n    *   **Risk:** The AI might provide incorrect or incomplete information, leading to user frustration or escalation to human support. There are also data privacy implications related to user interactions with the AI.\n    *   **Action:** Implement a rigorous monitoring and feedback loop for AI performance, accuracy, and user satisfaction. Ensure privacy policies explicitly cover AI interaction data.\n*   **Twitch Generative AI (Medium):** The `gen-ai-enabled` class indicates a potential user-facing AI feature.\n    *   **Risk:** If this AI is intended to interpret or summarize Community Guidelines, there's a risk of misinterpretation, oversimplification, or generating misleading advice, which could have serious T&S consequences.\n    *   **Action:** Investigate the scope and functionality of this AI integration immediately. If user-facing, ensure strong guardrails are in place to guarantee accuracy and compliance with existing policies.\n\n### 4. Trends Analysis\n\n*   **Acceleration of AI Integration for Self-Service:** The most prominent trend is the clear move towards embedding AI directly into user support and policy documentation. Meta's new AI support assistant and Twitch's `gen-ai-enabled` flag signal a strategic shift to automate assistance and enhance user comprehension of complex policies. Product managers should anticipate more AI-driven features across platforms.\n*   **Prioritization of User Self-Service & Experience:** Beyond AI, platforms are significantly investing in the user experience of their help centers and policy pages. This includes improved navigation (Meta), new feedback mechanisms (YouTube), and clearer instructions (Whatnot's appeal process). The goal is to empower users to find answers independently and reduce reliance on direct support channels.\n*   **Robustifying Core Trust & Safety Pillars:** There's a continuous effort to strengthen fundamental T&S policies. Whatnot's new comprehensive Buyer Protection and Prohibited Items policies, along with Meta's streamlined appeal process, demonstrate a focus on building user trust, ensuring platform safety, and providing clear mechanisms for recourse.\n*   **Underlying Technical Debt & Reliability Investments:** Across YouTube and Twitch, significant internal engineering efforts (JavaScript refactoring, `try/catch` blocks, CSS updates) were observed. These updates, while not directly policy changes, improve the stability, maintainability, and accessibility of the infrastructure that delivers policy information, contributing to a more reliable user experience.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "whatnot-buyer-protection",
+        "file_path": "snapshots/production/whatnot-buyer-protection/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "whatnot-prohibited-items",
+        "file_path": "snapshots/production/whatnot-prohibited-items/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2026-06-19 17:18:55 +0000",
+        "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
+      }
+    ]
   }
 }
