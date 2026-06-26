@@ -7997,5 +7997,48 @@
         "commit_hash": "6504ce19c29efc04efe9f0df21e6b0f6e0724280"
       }
     ]
+  },
+  "2026-06-20_to_2026-06-26": {
+    "run_metadata": {
+      "run_date": "2026-06-26T20:47:12.230490+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-06-20",
+      "week_end": "2026-06-26",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary: June 20 - June 26, 2026\n\n**Run Information:** Scheduled weekly run generated on June 26, 2026 at 20:47 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight two significant trends: a strategic re-evaluation of AI support integration on Meta platforms, and a proactive step by YouTube to address AI misuse through a new impersonation policy. Overall, platforms continue to refine policy presentation for improved user experience, while one major policy change creates a new moderation vector around generative AI.\n\n*   **Strategic Shift in AI Support:** Meta has removed direct AI support channels from several key help articles (Appeal Process, Blocking People), potentially redirecting user queries to other support avenues or requiring users to self-serve more.\n*   **Proactive AI Misuse Policy:** YouTube has explicitly updated its Harassment Policy to prohibit AI-driven impersonation, signaling a clear stance against emerging generative AI threats and creating a new enforcement imperative.\n*   **User Experience & Clarity Focus:** Efforts continue across platforms (Meta, Twitch) to streamline policy content and improve the navigability of help center articles and guidelines.\n\n---\n\n### 2. Platform Highlights\n\nHere's a breakdown of notable policy changes by platform:\n\n*   **Meta (Appeal Process):**\n    *   **Streamlined UX:** Simplified the page header by removing explicit sub-navigation links for appeals, guiding users more directly into the main process.\n    *   **Content Conciseness:** Removed a redundant paragraph regarding the Oversight Board appeal prerequisite, improving overall clarity without altering the underlying policy.\n    *   **Removed AI Support:** Eliminated the \"Chat with Meta AI support assistant\" option from the page footer, removing a direct AI-powered support channel for appeal-related queries.\n*   **Meta (Blocking People):**\n    *   **Removed AI Support:** Similar to the Appeal Process page, the \"Chat with Meta AI support assistant\" section was removed, impacting direct AI support access for blocking-related questions.\n    *   **Content Streamlining:** Consolidated content by removing several specific sub-headings, potentially streamlining the article flow but requiring clear content re-integration to avoid user confusion.\n    *   **Standardized Feedback:** Introduced a generic \"Was this helpful?\" feedback module, moving away from AI-specific interaction feedback.\n*   **Twitch (Community Guidelines):**\n    *   **Technical Migration (No Policy Change):** This was a significant technical re-implementation (likely Salesforce Lightning Web Components) of the policy page. There are **no changes to the actual policy content, rules, or enforcement scope.**\n    *   **Enhanced UX:** Introduced comprehensive sidebar navigation, interactive collapsible sections, and \"Expand All\" functionality for improved readability and discoverability.\n*   **Whatnot (Community Guidelines):**\n    *   **Minor Technical Adjustment:** A very minor formatting change to ensure the snapshot HTML file ends with a newline character. **No impact on policy content, users, or product functionality.**\n*   **YouTube (Harassment Policy):**\n    *   **Explicit AI Impersonation Ban:** Added a new, detailed policy statement explicitly prohibiting unauthorized impersonation using AI to copy the voice or likeness of an individual to mislead viewers. This significantly expands the policy's enforcement scope to cover generative AI misuse.\n    *   **Content Refinement:** Removed a general introductory statement, focusing the policy page more directly on specific harassment and cyberbullying definitions.\n\n---\n\n### 3. Risk Assessment\n\nKey changes that warrant immediate attention from a product management perspective:\n\n*   **Medium Risk: Meta AI Support Removal (Appeal Process & Blocking People pages)**\n    *   **Impact:** Users seeking immediate, AI-powered assistance for appeals or blocking issues will no longer find it on these pages. This could lead to a redirection of support traffic to other channels (e.g., human support, forums, self-service FAQs), potentially increasing load or response times elsewhere. It might also lead to an increase in unaddressed user questions if alternative pathways are not clear or efficient.\n    *   **Action for PM:** Monitor support ticket volumes and types for appeals and blocking-related queries. Evaluate the effectiveness of alternative support pathways and consider if clarity is needed on how users *should* seek assistance for these topics now.\n*   **High Risk/Opportunity: YouTube AI Impersonation Policy Update**\n    *   **Impact:** This is a significant new policy vector. It creates a clear mandate for moderating and taking action against AI-driven impersonation.\n        *   **Product:** Does our current product have (or need) new detection capabilities to identify AI-generated voice or likeness used for impersonation?\n        *   **Moderation:** Are moderation teams adequately trained to identify violations of this new policy? Do they have the necessary tools and workflows?\n        *   **Legal/PR:** Proactive policy is good, but enforcement must be consistent and transparent.\n    *   **Action for PM:** Collaborate with T&S Operations and Engineering to assess existing detection capabilities and identify gaps. Prioritize development of new tools or refinement of existing ones for AI-driven impersonation. Ensure moderation training materials are updated promptly.\n\n---\n\n### 4. Trends Analysis\n\nSeveral patterns are observable across platforms this week:\n\n*   **Evolving Stance on Generative AI:**\n    *   **Meta's Retraction:** The removal of \"Chat with Meta AI support assistant\" suggests a re-evaluation or scaling back of direct AI integration for support on sensitive policy pages. This could be due to efficacy concerns, cost management, or a desire to route users to more definitive policy content or human support for complex issues.\n    *   **YouTube's Proactive Enforcement:** Conversely, YouTube is actively shaping its policies to directly address the misuse of generative AI technologies for harmful activities like impersonation. This indicates a broader industry trend of adapting trust and safety frameworks to the capabilities and threats posed by AI.\n*   **Continuous Improvement of User Experience for Policy Content:**\n    *   Both Meta (Appeal Process) and Twitch (Community Guidelines) are investing in making policy information more accessible, navigable, and concise for users. This reflects a commitment to transparency and helping users understand platform rules, potentially reducing policy violations due to lack of clarity.\n*   **Underlying Technical Modernization:**\n    *   The significant technical migration on Twitch's Community Guidelines and the minor technical fix on Whatnot highlight ongoing efforts by platforms to modernize their infrastructure for managing and delivering policy content. While not direct policy changes, these efforts lay the groundwork for more efficient future policy updates and improved content delivery.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-06-26 17:00:32 +0000",
+        "commit_hash": "14ae52d71a13fdd8918f3906dc9a5e1de5d85213"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-06-26 17:00:32 +0000",
+        "commit_hash": "14ae52d71a13fdd8918f3906dc9a5e1de5d85213"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-06-26 17:00:32 +0000",
+        "commit_hash": "14ae52d71a13fdd8918f3906dc9a5e1de5d85213"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-06-26 17:00:32 +0000",
+        "commit_hash": "14ae52d71a13fdd8918f3906dc9a5e1de5d85213"
+      },
+      {
+        "policy_key": "youtube-harassment-policy",
+        "file_path": "snapshots/production/youtube-harassment-policy/snapshot.html",
+        "commit_date": "2026-06-26 17:00:32 +0000",
+        "commit_hash": "14ae52d71a13fdd8918f3906dc9a5e1de5d85213"
+      }
+    ]
   }
 }
