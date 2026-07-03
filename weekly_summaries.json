@@ -8040,5 +8040,48 @@
         "commit_hash": "14ae52d71a13fdd8918f3906dc9a5e1de5d85213"
       }
     ]
+  },
+  "2026-06-27_to_2026-07-03": {
+    "run_metadata": {
+      "run_date": "2026-07-03T20:14:34.348405+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-06-27",
+      "week_end": "2026-07-03",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** June 27, 2026 to July 03, 2026\n**Run Information:** Scheduled weekly run generated on July 03, 2026 at 20:14 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy landscape reveals a dual focus across platforms: **significant strengthening of explicit safety guidelines** by Twitch, particularly concerning youth safety, alongside a concerted effort by Meta and YouTube to **enhance user experience and self-service support** for existing Trust & Safety processes. Key takeaways include:\n\n*   **Proactive Youth Safety Enhancements:** Twitch has taken a decisive step to explicitly prohibit the sexualization of child-like characters and broaden its off-service conduct policy, signaling a strong stance against harmful content and behaviors.\n*   **User-Centric Policy & Support UX:** Meta and YouTube are refining their help centers and AI assistants to make T&S-related information and appeal processes more accessible, intuitive, and user-friendly.\n*   **Increased Enforcement Potential:** The explicit nature of Twitch's updates is highly likely to result in increased enforcement actions and appeals for content previously in a gray area, requiring close monitoring.\n\n### 2. Platform Highlights\n\nHere's a breakdown of notable changes by platform:\n\n*   **Meta (Instagram Help Center & AI Support)**\n    *   **Appeal Process Clarity:** Improved navigation and readability for the \"Appeal Instagram decision\" help article. This includes renaming quick links for broader inclusivity and adding direct entry points like \"My content was taken down.\"\n    *   **Blocking Features UX:** Streamlined the \"Blocking People\" help section with personalized support prompts (encouraging login), added quick-action buttons (block/unblock), and refined the Meta AI support assistant's input for a more conversational experience.\n    *   **Overall Impact:** These changes are primarily focused on enhancing user experience, reducing confusion, and streamlining self-service for common T&S-related actions.\n\n*   **Twitch (Community Guidelines)**\n    *   **Youth Safety Policy Clarifications:** Introduced explicit prohibitions against depicting child-like anime characters (\"lolis\"/\"shotas\") with any sexual framing, regardless of user age or content context (e.g., VTubers, VRChat avatars). Also explicitly banned humor related to sexual content involving minors with zero-tolerance enforcement.\n    *   **Off-Service Conduct FAQ:** Clarified that general on-service reports will not receive preferential review by the Off-Service Investigations Team. Critically, the policy now applies to severe off-service abuses even if the victim or accused is not a Twitch community member at the time of the incident, as long as the perpetrator is a Twitch user.\n    *   **Overall Impact:** These are substantive policy content changes, significantly enhancing Twitch's stance on youth safety and expanding the protective scope of its off-service conduct policy. This will likely lead to increased enforcement actions.\n\n*   **YouTube (Harassment Policy & Hiding Users)**\n    *   **Harassment Policy Page UX:** Integrated a \"Was this helpful?\" feedback widget and a \"Need more help?\" section with a link to the Help Community on the Harassment & Cyberbullying policy page.\n    *   **Hiding Users:** Only minor technical file formatting adjustments were made; no substantive policy content changes or impact on user experience.\n    *   **Overall Impact:** The Harassment policy page updates aim to improve user feedback and guidance pathways, without altering the policy content itself.\n\n### 3. Risk Assessment\n\n*   **HIGH RISK - Twitch Youth Safety Policy Clarifications:**\n    *   **Potential for Increased Enforcement & Appeals:** The explicit prohibition of sexualized child-like characters and zero-tolerance for related humor is a significant content moderation shift. This will likely result in a noticeable increase in enforcement actions, particularly impacting creators using VTubers, VRChat, or similar avatar-based content.\n    *   **Creator Pushback/Confusion:** Creators, especially those in niche communities, may misinterpret or resist these new explicit boundaries, potentially leading to community friction or negative PR if not clearly communicated.\n    *   **Resource Implications:** An uptick in enforcement will place a greater burden on review teams and the appeals process.\n*   **MODERATE RISK - Twitch Off-Service Conduct Policy Expansion:**\n    *   **Enforcement Complexity:** While positive in intent, broadening the policy's applicability to non-Twitch members for severe abuses could introduce complexities in evidence gathering, cross-platform investigations, and consistent enforcement, potentially stretching investigative resources.\n*   **LOW RISK - Meta Appeal Process & Blocking People UX Changes:**\n    *   **Minor User Disorientation:** While aimed at improvement, any changes to critical user flows like appeals or blocking carry a minimal risk of temporary user confusion during the transition phase.\n    *   **Support Impact:** Unintended consequences could marginally increase support queries if the new flows aren't immediately intuitive.\n*   **NEGLIGIBLE RISK - YouTube Updates:** The YouTube changes are either focused on non-substantive UX improvements or are purely technical, posing no direct policy or enforcement risk.\n\n### 4. Trends Analysis\n\n*   **Enhanced Safety & Explicit Policy Definitions:** There's a clear trend towards platforms providing more explicit and unambiguous policy guidelines, especially in sensitive areas like youth safety (Twitch). This indicates a proactive stance to address evolving online harms and reduce ambiguity for creators and enforcers.\n*   **Optimization of User Experience for T&S Self-Service:** Both Meta and YouTube are heavily investing in improving the navigability, readability, and interactivity of their help centers and policy pages. This includes:\n    *   Streamlining access to critical information (Meta appeal process).\n    *   Integrating direct user feedback mechanisms (YouTube harassment policy).\n    *   Enhancing AI support assistants for more conversational and guided interactions (Meta AI prompts).\n    *   Driving users towards authenticated, personalized support (Meta blocking people).\n    This trend aims to empower users to resolve issues independently, reduce direct support load, and improve overall satisfaction with T&S processes.\n*   **Refinement of AI in T&S Support:** Meta's updates specifically highlight an ongoing effort to mature the role of AI in assisting users with T&S queries, moving towards more natural language and action-oriented guidance.\n*   **Continuous Internal Maintenance:** Minor technical updates, like those seen on YouTube, underscore the ongoing effort required for platform maintenance and code health, even when no user-facing policy changes occur.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-07-03 16:25:01 +0000",
+        "commit_hash": "00c23b174ee22c88f2e9a9a668009255a68699f1"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-07-03 16:25:01 +0000",
+        "commit_hash": "00c23b174ee22c88f2e9a9a668009255a68699f1"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-07-03 16:25:01 +0000",
+        "commit_hash": "00c23b174ee22c88f2e9a9a668009255a68699f1"
+      },
+      {
+        "policy_key": "youtube-harassment-policy",
+        "file_path": "snapshots/production/youtube-harassment-policy/snapshot.html",
+        "commit_date": "2026-07-03 16:25:01 +0000",
+        "commit_hash": "00c23b174ee22c88f2e9a9a668009255a68699f1"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-07-03 16:25:01 +0000",
+        "commit_hash": "00c23b174ee22c88f2e9a9a668009255a68699f1"
+      }
+    ]
   }
 }
