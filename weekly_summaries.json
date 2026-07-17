@@ -8120,5 +8120,42 @@
         "commit_hash": "93b9eb111eba7e0637643f1c5556f44b646bbb23"
       }
     ]
+  },
+  "2026-07-11_to_2026-07-17": {
+    "run_metadata": {
+      "run_date": "2026-07-17T20:05:44.670868+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-07-11",
+      "week_end": "2026-07-17",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary: July 11, 2026 - July 17, 2026\n\n**Run Information:** Scheduled weekly run generated on July 17, 2026 at 20:05 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week saw a significant focus on **enhancing user experience and clarity** across Meta platforms, alongside substantial **strengthening of core safety policies** on Twitch. While YouTube focused on improving policy accessibility through feedback mechanisms, Meta streamlined appeal processes and blocking functionalities. Twitch introduced a new \"Enforcement Notes\" framework and notably tightened policies around self-destructive behavior and youth safety, broadening enforcement scope to include fictional representations and related humor.\n\n**Key Takeaways:**\n\n*   **Improved User Experience & Policy Clarity:** Meta (appeal navigation, blocking flow) and YouTube (feedback/support on policy pages) made strides in making policies and processes more intuitive and user-friendly.\n*   **Strengthened Safety on Twitch:** Significant updates to Twitch Community Guidelines explicitly prohibit monetizing self-harm and expand youth safety to include sexually framed child-like characters and related humor.\n*   **Evolving AI Support:** Meta's AI assistant is transitioning to a more general support role, moving away from guided flows for specific, sensitive processes like Oversight Board appeals.\n\n---\n\n### 2. Platform Highlights\n\nHere's a breakdown of notable changes by platform:\n\n#### Meta\n\n*   **Appeal Process:**\n    *   **User Navigation:** Main navigation links for content appeals were rephrased (\"My content was taken down\") and reordered, adding a general \"Appeal Instagram decision\" option for clearer entry points.\n    *   **AI Support:** The Meta AI support assistant removed specific, guided sections for Oversight Board appeals, replacing them with general example questions. This broadens the AI's utility but might require users to be more explicit in their requests for specific appeal types.\n    *   **Policy Wording:** No substantive changes to the core policy text for Instagram-to-Oversight Board appeals.\n*   **Blocking People:**\n    *   **Content Streamlining:** The \"What happens when I block?\" link was removed, and \"on Instagram\" phrases were removed from action links (\"Block someone,\" \"Unblock someone\") for improved conciseness and less clutter.\n    *   **Content Maintenance:** An internal link ID for \"Third Party Apps\" was updated, indicating ongoing maintenance or reorganization of related help content.\n\n#### Twitch\n\n*   **Community Guidelines:**\n    *   **Transparency Framework:** Introduced an \"Introduction to Safety on Twitch\" and a dedicated \"Enforcement Notes\" explanation, clarifying that these notes provide examples of existing policy rather than new rules.\n    *   **Self-Destructive Behavior:**\n        *   Explicitly prohibits monetizing activities causing harm (e.g., \"shots for subs,\" \"cinnamon challenge for Bits\").\n        *   Clarified drinking goal streams are allowed only if non-excessive, with specific examples.\n        *   Detailed examples added for dangerous/distracted driving while streaming.\n    *   **Youth Safety:**\n        *   Explicitly prohibits sexually framed child-like anime characters (\"lolis\"/\"shotas\"), including VTubers and game avatars.\n        *   Any humor related to sexual content concerning minors is now specifically prohibited.\n        *   Reinforced that stating one is under 13 (even jokingly) leads to permanent account deactivation.\n\n#### YouTube\n\n*   **Shopping Ads Policy:**\n    *   **Policy Content:** No substantive changes to the core policy text itself.\n    *   **User Support & Feedback:** Integrated \"Was this helpful?\" survey and a \"Need more help?\" section with direct links to the help community and contact support. This enhances the user experience for advertisers engaging with the policy.\n    *   **Technical:** Minor underlying JavaScript code refactoring with no direct T&S implications.\n\n---\n\n### 3. Risk Assessment\n\n*   **Twitch - Elevated Enforcement Risk & Potential Creator Backlash:** The significant updates to \"Self-Destructive Behavior\" and \"Youth Safety\" are likely to result in increased enforcement actions. The explicit prohibition of sexually framed child-like characters and related humor, especially regarding VTubers and game avatars, could lead to pushback or confusion from certain creator communities who previously operated in grey areas. Clear communication and robust internal training for moderators will be crucial to manage this transition and potential increase in appeals.\n*   **Meta - Potential Appeal Friction for Oversight Board:** The removal of specific guided flows for Oversight Board appeals from the Meta AI support assistant might initially increase friction for users specifically seeking this avenue through AI, potentially shifting inquiries to other support channels or increasing direct support requests if users struggle to navigate. This should be monitored for any spikes in specific support queues.\n*   **No immediate high-priority risks** identified for Meta's \"Blocking People\" changes or YouTube's Shopping Ads policy updates, as they are primarily positive UX enhancements or maintenance.\n\n---\n\n### 4. Trends Analysis\n\n*   **Harm Reduction & Proactive Safety:** Twitch's updates are a clear example of platforms moving towards more explicit and proactive safety measures, particularly concerning physical harm and vulnerable populations (minors). The detailed examples and broadening of scope (e.g., fictional representations) indicate a mature approach to anticipating and mitigating nuanced forms of abuse.\n*   **Enhanced User Accessibility & Transparency:** Across Meta and YouTube, there's a concerted effort to make policies and support mechanisms more accessible and understandable for users. This includes clearer navigation, streamlined content, and direct feedback/support channels. The \"Enforcement Notes\" on Twitch also align with this trend of increasing transparency about policy application.\n*   **Evolving Role of AI in Support:** Meta's shift of its AI assistant to a more generalized support role, rather than a guided flow for sensitive, high-stakes processes like Oversight Board appeals, suggests a strategy to leverage AI for broader query resolution while potentially reserving human-guided or dedicated pathways for critical T&S functions.\n*   **Continuous Iteration on Policy Presentation:** While core policy text may remain stable, platforms are continuously iterating on how policies are presented, navigated, and supported, indicating a focus on usability as a key component of policy effectiveness and compliance.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-07-17 16:13:34 +0000",
+        "commit_hash": "4a3a1d2a4414281b8a71299fad1fa3960f200852"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-07-17 16:13:34 +0000",
+        "commit_hash": "4a3a1d2a4414281b8a71299fad1fa3960f200852"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-07-17 16:13:34 +0000",
+        "commit_hash": "4a3a1d2a4414281b8a71299fad1fa3960f200852"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2026-07-17 16:13:34 +0000",
+        "commit_hash": "4a3a1d2a4414281b8a71299fad1fa3960f200852"
+      }
+    ]
   }
 }
