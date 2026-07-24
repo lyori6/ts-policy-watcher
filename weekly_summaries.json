@@ -8157,5 +8157,36 @@
         "commit_hash": "4a3a1d2a4414281b8a71299fad1fa3960f200852"
       }
     ]
+  },
+  "2026-07-18_to_2026-07-24": {
+    "run_metadata": {
+      "run_date": "2026-07-24T20:20:10.057948+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-07-18",
+      "week_end": "2026-07-24",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** July 18, 2026 to July 24, 2026\n**Generated On:** July 24, 2026 at 20:20 UTC\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a strong focus on **improving user experience and clarity for critical safety features** across platforms. Key themes include streamlining navigation for appeal processes, enhancing guidance for users reporting content, and robust implementation of user feedback mechanisms for help content. Meta adjusted its AI support integration, while Whatnot made significant strides in help article usability and policy discoverability, including compliance-related information.\n\n### 2. Platform Highlights\n\n#### Meta\n\n*   **Appeal Process (Oversight Board):**\n    *   **Streamlined Initial Navigation:** Removed prominent quick links for a cleaner initial page view.\n    *   **Enhanced Clarity for Reporters:** Added explicit guidance for users who reported content, directing them to internal review processes before engaging the Oversight Board.\n    *   **Restructured Information Flow:** Detailed eligibility criteria and process steps were repositioned lower on the page.\n*   **Blocking People:**\n    *   **Removed Meta AI Support Integration:** The \"Chat with Meta AI support assistant\" section was entirely removed from this help page.\n    *   **Streamlined FAQ Links:** Consolidated redundant or specific FAQ links to improve content clarity.\n    *   **Introduced \"Was this helpful?\" Feedback:** Implemented a standard feedback module at the bottom of the page for content optimization.\n\n#### Whatnot\n\n*   **Blocking a User:**\n    *   **Enhanced Navigation:** Added an \"On this page\" table of contents for improved article navigation and information discoverability.\n    *   **Implemented \"Was this article helpful?\" Feedback:** Introduced a feedback prompt to collect user sentiment on article utility.\n    *   **Updated UI Images:** Ensured screenshots accurately reflect the current product interface for blocking.\n    *   **Improved Policy Referencing:** Revised \"General\" policy link for clearer context and refreshed \"Related Articles\" to include more pertinent T&S policies (e.g., Community Guidelines, What Actions We Take, EU regulations).\n    *   **Branding Consistency:** Updated Twitter icon to \"X.\"\n\n### 3. Risk Assessment\n\n*   **Meta Blocking People - Removal of Meta AI Support:** This change could lead to a **potential short-term increase in support tickets** or user frustration if users relied on the AI assistant for immediate help with blocking issues and are now directed to less immediate channels. This may require monitoring of support volume related to blocking.\n*   **Meta Appeal Process - Information Restructuring:** Moving detailed appeal eligibility and process information to a lower section could **increase friction for users seeking comprehensive details**. While improving initial view, it might inadvertently obscure critical steps, potentially leading to ineligible appeals or increased support queries if users cannot easily find the full requirements.\n\n### 4. Trends Analysis\n\n*   **Focus on User Feedback:** Both Meta and Whatnot integrated \"Was this helpful?\" feedback modules into their help articles this week. This signals a concerted effort across platforms to **collect direct user sentiment** for data-driven content improvement and optimization of T&S-related help documentation.\n*   **Enhanced Clarity and Navigation for Safety Features:** Platforms are actively refining how users interact with critical safety features and their associated help content. From Meta streamlining appeal navigation to Whatnot adding in-article tables of contents for blocking, the trend is towards **reducing cognitive load and improving discoverability** of essential safety information.\n*   **Dynamic AI Support Strategy:** Meta's removal of AI support from a specific page (\"Blocking People\") suggests that platforms are continually **evaluating and adjusting the strategic deployment of AI assistants** in T&S support flows, likely based on performance metrics or a desire to direct users to specific support channels for sensitive topics.\n*   **Improved Policy Discoverability and Education:** Whatnot notably enhanced the linking of related articles, including direct references to **Community Guidelines, enforcement actions, and EU regulations**. This indicates a growing emphasis on actively guiding users towards broader policy understanding and compliance-related information within the product ecosystem.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-07-24 16:36:21 +0000",
+        "commit_hash": "4a5ae19fd40b6d456d8f5a11899cf0fa5810b360"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-07-24 16:36:21 +0000",
+        "commit_hash": "4a5ae19fd40b6d456d8f5a11899cf0fa5810b360"
+      },
+      {
+        "policy_key": "whatnot-blocking-a-user",
+        "file_path": "snapshots/production/whatnot-blocking-a-user/snapshot.html",
+        "commit_date": "2026-07-24 16:36:21 +0000",
+        "commit_hash": "4a5ae19fd40b6d456d8f5a11899cf0fa5810b360"
+      }
+    ]
   }
 }
