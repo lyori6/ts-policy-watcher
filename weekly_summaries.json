@@ -8225,5 +8225,48 @@
         "commit_hash": "9f6a2ba4c9bdcfa3d4186acdb57767f6d482b0f8"
       }
     ]
+  },
+  "2026-08-01_to_2026-08-07": {
+    "run_metadata": {
+      "run_date": "2026-08-07T19:52:26.274191+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-08-01",
+      "week_end": "2026-08-07",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Policy Summary for Product Manager**\n\n**Week Period:** August 01, 2026 to August 07, 2026\n**Run Information:** Scheduled weekly run generated on August 07, 2026 at 19:52 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week saw significant efforts across platforms to **streamline Trust & Safety operations and enhance user experience within help centers**. Key initiatives included Meta refining its appeal processes and optimizing support channels, alongside Whatnot formalizing new enforcement actions and centralizing user appeals for greater efficiency. A notable trend is the increasing focus on **policy discoverability and global regulatory compliance**, particularly with Whatnot's emphasis on EU regulations. These updates aim to improve clarity for users, reduce operational overhead, and ensure a more structured approach to moderation and appeals.\n\n### 2. Platform Highlights\n\nHere are the notable policy changes by platform:\n\n*   **Meta:**\n    *   **Appeal Process Refinement:** Restructured the Oversight Board appeal help page to clarify pathways and reinforce the requirement for users to exhaust internal review processes before escalation. This simplifies the initial user view but requires more careful reading to navigate.\n    *   **Support Channel Optimization (Blocking People):** Removed the \"Chat with Meta AI support assistant\" and a dedicated \"Get help\" module from the \"Blocking People\" help article. This shifts user support queries away from AI and toward self-service documentation or other channels. A new \"Was this helpful?\" feedback mechanism was added to gauge content effectiveness.\n\n*   **Twitch:**\n    *   **Technical UI Update:** Implemented a minor technical update to the Community Guidelines page, specifically adding CSS styling rules for UI elements. This change is purely front-end and has no impact on policy content, user expectations, or enforcement.\n\n*   **Whatnot:**\n    *   **Formalized Enforcement & Appeals:** Introduced \"Ongoing Investigation Suspension\" as a new, formalized enforcement action, enhancing transparency during serious account reviews. Crucially, the appeal process was centralized exclusively to the Account Health Dashboard, eliminating appeals via email to streamline workflow and improve tracking.\n    *   **Enhanced Policy Discoverability & Compliance:** Significantly reorganized the \"How to Report\" help article's sidebar to prioritize core Trust & Safety policies, including the prominent promotion of links for **EU General Product Safety Regulation** and **EU Digital Services Act**. Minor UX improvements like a feedback UI and visual updates were also implemented.\n\n### 3. Risk Assessment\n\nThe following changes warrant attention for potential immediate impact:\n\n*   **Meta Appeal Process - UX Shift:** While aiming for clarity, the removal of direct navigation links and increased reading requirement for users on the Oversight Board appeal page could initially lead to slight user confusion or increased support queries if users struggle to find the correct appeal path. Monitor initial user feedback and support volume.\n*   **Meta Blocking People - Support Channel Shift:** The removal of the Meta AI support assistant on the \"Blocking People\" page means users seeking real-time help will no longer have that immediate option. This could shift support burden to other channels or increase reliance on the self-service article. It's crucial to monitor related support metrics and article effectiveness.\n*   **Whatnot Appeal Process Centralization:** The complete removal of email-based appeals in favor of the Account Health Dashboard is a positive move for operational efficiency but might cause initial friction for users accustomed to the old method. Clear in-product communication and potentially proactive user education will be important to manage this transition.\n*   **Whatnot How to Report - Policy Prioritization:** While promoting key T&S and EU policies is beneficial, the \"deprioritization\" of certain articles (e.g., Explicit Content, Counterfeit Policy) from the \"Articles in this section\" sidebar for \"How to Report\" means we should verify these critical policies remain easily discoverable elsewhere to prevent potential gaps in user reporting capability or understanding.\n*   The Twitch update is purely technical and poses no immediate risk to policy enforcement or user understanding.\n\n### 4. Trends Analysis\n\nSeveral patterns emerged across the policy updates this week:\n\n*   **User Self-Service & Clarity Focus:** Both Meta and Whatnot are actively refining help center content to empower users to self-serve more effectively. This includes Meta's efforts to clarify appeal pathways and Whatnot's reorganization of policy discoverability. The addition of direct user feedback mechanisms (Meta, Whatnot) signals a commitment to continuously improving self-service content based on user satisfaction.\n*   **Operational Efficiency in T&S Workflows:** There's a clear emphasis on streamlining Trust & Safety operations. Meta's reinforcement of internal review steps before Oversight Board appeals and Whatnot's centralization of the appeals process to an in-product dashboard are direct moves to reduce unstructured inbound requests, improve tracking, and create more manageable workflows.\n*   **Increasing Regulatory Compliance & Transparency:** Whatnot's explicit promotion of EU General Product Safety Regulation and EU Digital Services Act policies highlights a growing focus on clear communication around global regulatory requirements. This trend underscores the importance of proactively integrating compliance information into user-facing policies.\n*   **UX-Driven Policy Communication:** Policies are increasingly being presented with a focus on user experience. This manifests through simplified initial views (Meta), reorganized help article structures (Whatnot), and visual updates. The underlying intent is to make complex policy information more digestible and actionable for users, thereby improving comprehension and compliance.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-08-07 15:54:49 +0000",
+        "commit_hash": "dcadf6146bdd7f83f3987dc26e3b2e9f096f90e7"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-08-07 15:54:49 +0000",
+        "commit_hash": "dcadf6146bdd7f83f3987dc26e3b2e9f096f90e7"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-08-07 15:54:49 +0000",
+        "commit_hash": "dcadf6146bdd7f83f3987dc26e3b2e9f096f90e7"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-08-07 15:54:49 +0000",
+        "commit_hash": "dcadf6146bdd7f83f3987dc26e3b2e9f096f90e7"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2026-08-07 15:54:49 +0000",
+        "commit_hash": "dcadf6146bdd7f83f3987dc26e3b2e9f096f90e7"
+      }
+    ]
   }
 }
