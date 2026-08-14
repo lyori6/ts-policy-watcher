@@ -8268,5 +8268,72 @@
         "commit_hash": "dcadf6146bdd7f83f3987dc26e3b2e9f096f90e7"
       }
     ]
+  },
+  "2026-08-08_to_2026-08-14": {
+    "run_metadata": {
+      "run_date": "2026-08-14T19:48:39.850927+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-08-08",
+      "week_end": "2026-08-14",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** August 08, 2026 to August 14, 2026\n**Run Information:** Generated on August 14, 2026 at 19:48 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy landscape reveals **three critical themes**:\n\n1.  **Critical Outage: Twitch Community Guidelines are Inaccessible.** This is the most urgent issue, as users cannot view the rules governing the platform, severely impacting enforcement and trust.\n2.  **Major AI Integration for User Support:** Meta is aggressively rolling out AI assistants across its appeal and blocking flows, aiming to streamline user experience and deflect support tickets, while explicitly addressing data use for AI.\n3.  **Enhanced Enforcement & Regional Compliance:** Platforms are strengthening rules against enforcement evasion, expanding age restrictions, and tightening political monetization policies, often with a focus on specific regional legal requirements.\n\n---\n\n### 2. Platform Highlights\n\nHere are the notable policy changes by platform:\n\n*   **Meta:**\n    *   **Appeal Process & Blocking Pages Overhauled:** Both Meta's appeal process and \"Blocking People\" help pages received significant updates. These include enhanced navigation, clearer pathways, and prominent quick links designed to improve user experience and self-service.\n    *   **AI Support Integration:** A \"Chat with Meta AI support assistant\" feature has been integrated into both the appeal and blocking help pages. Legal disclosures regarding AI terms and data usage for AI improvement have been added.\n    *   **Impact:** Aims to improve user experience, potentially increase appeal volume, reduce human support tickets, and introduces new data streams and AI safety considerations.\n\n*   **Twitch:**\n    *   **CRITICAL: Community Guidelines Inaccessible:** The Twitch Community Guidelines page is currently broken and displays an error message, rendering the core policy document inaccessible to users.\n    *   **Privacy Policy Update (Generative AI):** Explicitly updated to state that user data will be used \"to test and improve technology, including machine learning and artificial intelligence, to support and enhance the customer experience... This includes using data to develop or deploy our generative AI models and services.\"\n    *   **Terms of Sale (Effective 08/12/2026):** Significant future-dated changes include expanded age restrictions (e.g., age 16 in Australia), new dedicated policy sections for \"Twitch Extensions,\" \"Refunds,\" and \"Regional Pricing,\" and increased flexibility for modifying subscription services (non-price related). Also, Spendable Balance will now automatically apply to subscription renewals.\n    *   **Terms of Service (Effective 08/12/2026):** Also future-dated, key changes include a new restriction for minors in Brazil requiring a judicial permit for monetized content, a broadened license for Twitch to use User Content for \"Twitch and/or its affiliates\u2019 business,\" and an expanded prohibition on political monetization to include a wider range of political entities.\n    *   **Impact:** The broken Community Guidelines are a severe risk. Other updates provide greater transparency on AI data use, enhance regional compliance, formalize product features, and introduce stricter content and monetization rules, with potential impacts on creators.\n\n*   **Whatnot:**\n    *   **Strengthened Enforcement Evasion Policy:** The Community Guidelines now explicitly cover users who have been \"restricted\" (not just banned/suspended) and state that \"Account action and removal may extend to related user accounts,\" significantly strengthening the ability to combat multi-accounting.\n    *   **Formalized Enforcement Actions:** Introduced a new \"Ongoing Investigation Suspension\" type to provide clearer communication to users when their accounts are temporarily suspended during serious reviews.\n    *   **Centralized Appeal Process:** The Enforcement Actions page now directs all appeals to the Account Health dashboard, removing the option to appeal via email.\n    *   **Impact:** Improves platform integrity, provides clearer communication to users on enforcement, and streamlines the appeals workflow for T&S operations.\n\n*   **TikTok:**\n    *   **Live Moderation:** Only technical, front-end code (CSS) changes were detected, related to UI components and styling. There are no changes to the content or rules of the TikTok LIVE moderation policy itself.\n    *   **Impact:** No direct policy or functional impact on Trust & Safety.\n\n---\n\n### 3. Risk Assessment\n\nThe following changes require immediate attention:\n\n*   **CRITICAL: Twitch Community Guidelines Inaccessibility:**\n    *   **Impact:** This is a severe outage. Users cannot access the rules of the platform, compromising transparent enforcement, increasing legal exposure, and eroding user trust.\n    *   **Action Required:** **Immediate investigation and resolution** to restore the policy page are paramount. This should be treated as a high-priority incident.\n\n*   **Potential for Increased T&S Workload (Meta Appeals):**\n    *   **Impact:** While Meta's improved appeal navigation aims to streamline user experience, it may also lead to a higher volume of completed appeal requests, potentially increasing the burden on T&S review queues.\n    *   **Action Required:** Monitor appeal volume metrics closely following the rollout. T&S operations should prepare for potential surges and assess resource needs.\n\n*   **AI Misinformation/Safety & Data Privacy (Meta AI Support):**\n    *   **Impact:** The introduction of AI support assistants, especially for sensitive topics like blocking and appeals, carries a risk of providing inaccurate, inappropriate, or harmful advice. User interactions with AI also generate new data streams for AI improvement, necessitating strict data privacy and ethical AI considerations.\n    *   **Action Required:** Establish robust guardrails, conduct continuous monitoring and auditing of AI responses for accuracy and safety, and ensure compliance with Meta's AI terms and privacy policies regarding data usage.\n\n*   **User Friction from Subscription Feature Changes (Twitch Terms of Sale):**\n    *   **Impact:** Twitch's increased flexibility to \"change, remove, or add any other aspect or feature of the Subscription Service without prior notice\" (for non-price changes) could lead to negative user sentiment or complaints if significant features are altered or removed unexpectedly in some regions.\n    *   **Action Required:** Product teams should develop clear communication strategies for any impactful feature changes to mitigate user backlash, especially in regions with stronger consumer protection laws.\n\n*   **Enforcement Complexity for Political & Minor Monetization (Twitch Terms of Service):**\n    *   **Impact:** The expanded political monetization prohibitions and Brazil's minor monetization restriction will require more sophisticated detection and enforcement mechanisms. This could impact certain creators or organizations and lead to an increase in appeals if enforcement is unclear or perceived as unfair.\n    *   **Action Required:** T&S enforcement teams need clear guidelines and training on these new policies. Product teams may need to explore technical solutions for verification and gating, particularly for the Brazil-specific rule.\n\n---\n\n### 4. Trends Analysis\n\nSeveral patterns are emerging across the platforms this week:\n\n*   **Aggressive AI Integration & Data Monetization:** Both Meta and Twitch are explicitly incorporating AI into their strategies. Meta is using AI for direct user support and streamlining processes, while Twitch has updated its Privacy Policy to clearly state the use of user data for generative AI model development. This highlights a clear industry trend towards leveraging AI for product enhancement, operational efficiency, and new data insights, bringing with it increased scrutiny on data privacy and ethical AI development.\n\n*   **Streamlining User Pathways & Self-Service:** Platforms are investing heavily in improving the user experience for support and enforcement actions. Meta revamped its appeal and blocking pages with enhanced navigation and AI assistance, and Whatnot centralized its appeal process to an in-product dashboard. The goal is to reduce friction for users and deflect routine queries from human agents, leading to greater operational efficiency for T&S.\n\n*   **Strengthening Enforcement Against Evasion & Misuse:** There's a concerted effort to close policy loopholes and enhance platform integrity. Whatnot expanded its \"Enforcement Evasion\" policy to combat multi-accounting more effectively, and Twitch significantly broadened its prohibitions on political monetization. This indicates a growing focus on robust enforcement mechanisms to maintain a trustworthy environment.\n\n*   **Increased Regional Specificity & Compliance:** Twitch's updates to its Terms of Sale and Service demonstrate a strong move towards tailoring policies to specific regional legal requirements (e.g., age restrictions in Australia, minor monetization laws in Brazil, Ukrainian language support). This signals a broader trend in global platforms adapting to diverse legal landscapes and user demographics.\n\n*   **Formalizing Operations into Policy:** Platforms are proactively formalizing aspects of their operations into official policy documents. Twitch introduced new sections for \"Extensions\" and \"Refunds\" in its Terms of Sale, and Whatnot added a new \"Ongoing Investigation Suspension\" type. This provides greater transparency for users and clearer guidelines for internal teams, reducing ambiguity in how certain situations are handled.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "twitch-privacy-policy",
+        "file_path": "snapshots/production/twitch-privacy-policy/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "twitch-terms-of-sale",
+        "file_path": "snapshots/production/twitch-terms-of-sale/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-08-14 15:48:18 +0000",
+        "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
+      }
+    ]
   }
 }
