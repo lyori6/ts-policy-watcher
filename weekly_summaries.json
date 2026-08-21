@@ -8335,5 +8335,42 @@
         "commit_hash": "a5da50f9a444a3bf86c131d399de798c3c05cfb3"
       }
     ]
+  },
+  "2026-08-15_to_2026-08-21": {
+    "run_metadata": {
+      "run_date": "2026-08-21T19:25:58.165734+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-08-15",
+      "week_end": "2026-08-21",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period:** August 15, 2026 to August 21, 2026\n**Generated On:** August 21, 2026 at 19:25 UTC\n\nThis past week saw significant policy updates from Whatnot, including a new regional commerce restriction and improvements to enforcement processes, while Twitch and YouTube focused on technical and UI enhancements.\n\n### 1. Executive Summary\n\n*   **Significant New Commerce Restriction on Whatnot:** Whatnot introduced a critical new policy prohibiting the sale or giveaway of Trading Card Games (TCGs) in Australia and Japan before their official release or pre-release date. This has direct impact on regional sellers and buyers.\n*   **Streamlined Enforcement & Appeals on Whatnot:** Whatnot formalized a new \"Ongoing Investigation Suspension\" action and centralized its user appeal process exclusively to the Account Health dashboard, aiming to improve operational efficiency and user clarity.\n*   **Technical & UI Focus for Other Platforms:** Twitch and YouTube made minor technical and UI-related updates to help center pages, with no changes to their core policy content or enforcement rules.\n\n### 2. Platform Highlights\n\n#### Twitch\n*   **Community Guidelines Page UX Improvements:** The Community Guidelines page now includes explicit \"Loading\" indicators and an \"CSS Error\" modal with a \"Refresh\" link if the page fails to render. This improves user feedback for technical issues.\n*   *Note:* There are **no changes** to the actual Community Guidelines content or enforcement policies; this is purely a technical/UI enhancement.\n\n#### Whatnot\n*   **NEW: APAC TCG Pre-release Policy (High Impact):** A new policy prohibits the sale or giveaway of Trading Card Games (TCGs) in Australia and Japan before their official release or pre-release date, effective **August 20, 2026**. This applies to listings, live shows, and will be enforced with billbacks and suspensions.\n*   **Centralized Enforcement Appeals Process:** Users are now required to submit appeals solely through the Account Health dashboard, removing the option to appeal via email replies to T&S. This aims to streamline the appeals workflow and improve tracking.\n*   **New \"Ongoing Investigation Suspension\":** A new official enforcement action has been introduced to formalize temporary account suspensions during serious issue reviews, improving user communication.\n*   *Minor Updates:* Reordering of the \"Illegal drugs & related products\" section (content unchanged), renaming \"Fresh & Specialty Foods\" to \"Fresh Food,\" and minor textual/formatting adjustments.\n\n#### YouTube\n*   **Minor Technical Update:** A newline character was added to the HTML file for the `youtube-hiding-users` Help Center page.\n*   *Note:* This is a cosmetic/technical change with no impact on the policy content, user understanding, or enforcement of the feature.\n\n### 3. Risk Assessment\n\n*   **HIGH - Whatnot: APAC TCG Pre-release Requirements (Active Policy):** This is a new, actively enforced policy (since August 20, 2026) that creates a direct restriction on commerce for TCG sellers and buyers in Australia and Japan.\n    *   **Action Required:** Product teams involved in listing creation, live commerce, and enforcement for these regions should ensure full awareness of the policy details, potential user confusion, and be prepared to support enforcement actions (e.g., billbacks, suspensions). Clear communication to affected users is paramount.\n*   **MEDIUM - Whatnot: Centralized Enforcement Appeals:** While a positive long-term efficiency gain, the transition from email-based appeals to a dashboard-only process may lead to initial user friction or an increase in support queries if not communicated broadly and clearly.\n    *   **Action Required:** Ensure Help Center articles and in-product messaging regarding appeals are prominently updated and highly visible. Monitor user feedback and support channels closely for any uptake in \"how to appeal\" questions.\n*   **LOW - Twitch: \"CSS Error\" Surfacing:** The explicit \"CSS Error\" modal, while improving user feedback, indicates a potential underlying technical issue with the Community Guidelines page rendering.\n    *   **Action Required:** Engineering teams should investigate the root cause of these rendering issues to ensure page stability and a consistently positive user experience for accessing critical guidelines.\n\n### 4. Trends Analysis\n\n*   **Operational Streamlining & User Clarity in T&S:** Whatnot's updates to enforcement actions and the appeals process demonstrate a clear focus on improving internal operational efficiency, reducing manual workflows (email appeals), and providing more transparent communication to users regarding account status and violations.\n*   **Regionalized Policy & Vertical-Specific Enforcement:** The introduction of the APAC TCG pre-release policy by Whatnot highlights a trend towards platforms implementing highly specific, geographically targeted policies. This suggests a growing need for product teams to support nuanced rules tailored to regional markets, unique product categories, and local regulatory or cultural considerations.\n*   **Backend Technical Hygiene vs. Frontend Policy Evolution:** This week saw a mix of purely technical/UI cleanups (Twitch, YouTube, and minor Whatnot changes) alongside significant policy content changes (Whatnot). This pattern indicates ongoing efforts to maintain platform stability and improve user experience from a technical perspective, in parallel with the strategic evolution of platform rules.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-08-21 15:31:13 +0000",
+        "commit_hash": "ece91d862105ba25cf68e34ea48b32b2e95630fe"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-08-21 15:31:13 +0000",
+        "commit_hash": "ece91d862105ba25cf68e34ea48b32b2e95630fe"
+      },
+      {
+        "policy_key": "whatnot-prohibited-items",
+        "file_path": "snapshots/production/whatnot-prohibited-items/snapshot.html",
+        "commit_date": "2026-08-21 15:31:13 +0000",
+        "commit_hash": "ece91d862105ba25cf68e34ea48b32b2e95630fe"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-08-21 15:31:13 +0000",
+        "commit_hash": "ece91d862105ba25cf68e34ea48b32b2e95630fe"
+      }
+    ]
   }
 }
