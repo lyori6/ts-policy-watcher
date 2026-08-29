@@ -8372,5 +8372,48 @@
         "commit_hash": "ece91d862105ba25cf68e34ea48b32b2e95630fe"
       }
     ]
+  },
+  "2026-08-23_to_2026-08-29": {
+    "run_metadata": {
+      "run_date": "2026-08-29T02:00:10.561035+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-08-23",
+      "week_end": "2026-08-29",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary\n\n**Week Period: August 23, 2026 to August 29, 2026**\n**Generated On: August 29, 2026 at 02:00 UTC**\n\n---\n\n### 1. Executive Summary\n\n*   **Significant Policy Hardening on Twitch:** Twitch implemented major updates to its Community Guidelines, particularly strengthening youth safety and self-destructive behavior policies with explicit examples. It also added a critical sanctions compliance clause to its Monetized Streamer Agreement.\n*   **Focus on User Experience & Clarity for Meta:** Meta's policy changes were primarily cosmetic, aimed at improving Help Center navigation, FAQ clarity, and Meta AI support prompts across appeal processes and blocking features. No substantive policy shifts were observed.\n*   **General Trend Towards Proactive Safety:** The changes across platforms highlight a trend towards making policies more accessible, providing clearer examples for users, and enhancing proactive measures for user safety and legal compliance.\n\n### 2. Platform Highlights\n\n#### Meta\n\n*   **Appeal Process:**\n    *   **User Experience (UX) Enhancements:** Renamed and rephrased Help Center FAQs, updated bullet point formatting, revised Meta AI support prompts, and minor textual revisions in \"Get Help\" popups.\n    *   **Impact:** Improved navigation and clarity for users seeking to appeal decisions. No changes to the actual policy or process for appeals.\n*   **Blocking People (Instagram):**\n    *   **User-Centric Phrasing:** Revised primary questions in the Help Center from imperative statements to interrogative, e.g., \"How do I block someone?\"\n    *   **Clarity in Reporting:** Updated \"Report something\" to \"Report content\" for more precise language.\n    *   **Impact:** Enhanced user experience by making help content more intuitive and guiding users more accurately on blocking and reporting.\n\n#### Twitch\n\n*   **Community Guidelines:**\n    *   **Comprehensive Introduction & Safety Philosophy:** Added a detailed overview of Twitch's safety philosophy and enforcement.\n    *   **\"Enforcement Notes\" for Clarity:** Introduced sections with concrete examples for existing policies:\n        *   **Self-Destructive Behavior:** Prohibits monetizing harmful activities (e.g., shots for subs), clarifies acceptable \"drinking goal streams,\" and provides examples for dangerous driving.\n        *   **Youth Safety:** Explicitly bans sexualized depictions of child-like anime characters (lolis/shotas, including VTubers/avatars), prohibits humor related to minors' sexuality, and mandates account deactivation for users claiming to be under 13.\n    *   **Significant UI/UX Overhaul:** Extensive CSS/JavaScript additions suggest a major redesign of the guidelines page for improved readability and navigation.\n    *   **Impact:** Improved user understanding and compliance, enhanced safety and youth protection, streamlined moderation with clearer guardrails, and better user experience.\n*   **Monetized Streamer Agreement:**\n    *   **New Sanctions Compliance Clause:** Added a new paragraph (Section 6.1) requiring streamers to warrant they are not a \"Sanctioned Person.\"\n    *   **Impact:** Significantly strengthens Twitch's compliance with international sanctions laws (e.g., OFAC), reducing legal and financial risk by formalizing the exclusion of sanctioned entities from monetized programs. May require enhanced vetting.\n\n#### Whatnot\n\n*   **Community Guidelines:**\n    *   **Technical Update Only:** A minor technical update to the `snapshot.html` file, with no substantive changes to policy text, rules, or content.\n    *   **Impact:** No impact on user experience, policy enforcement, product features, or platform risk profile.\n\n### 3. Risk Assessment\n\n*   **Twitch Monetized Streamer Agreement - Sanctions Compliance (HIGH):** This is a critical legal and financial risk mitigation update. Product teams involved with monetization, onboarding, and compliance will need to understand the implications, potential for enhanced streamer vetting, and any required operational adjustments to enforce this. Non-compliance could lead to significant legal penalties for Twitch.\n*   **Twitch Community Guidelines - Youth Safety & Content Restrictions (MEDIUM-HIGH):** The explicit bans on sexualized child-like anime characters and humor related to minors' sexuality are significant content policy shifts. While crucial for safety, these could lead to increased user appeals, potential community backlash (especially from affected creator communities), and require new or updated content moderation models/workflows for detection and enforcement. Product should anticipate potential short-term user disruption and monitor enforcement metrics closely.\n\n### 4. Trends Analysis\n\n*   **Enhanced Clarity & User Empowerment:** Across platforms, there's a clear trend towards making policies more accessible and understandable. Meta's UI/UX changes and Twitch's \"Enforcement Notes\" exemplify efforts to reduce ambiguity, guide user behavior, and improve the overall user experience when interacting with safety features and guidelines.\n*   **Proactive Risk Mitigation & Compliance:** Twitch's update to its Monetized Streamer Agreement highlights an industry-wide focus on strengthening legal and financial compliance, particularly concerning international sanctions. This suggests platforms are increasingly embedding proactive risk management into their agreements and policies.\n*   **Deepened Commitment to Youth Safety:** Twitch's robust updates to its Youth Safety guidelines, with explicit bans and examples, demonstrate a heightened focus on protecting minors on platforms. This indicates a growing recognition of the specific vulnerabilities of younger users and the need for stringent, unambiguous policies to address them.\n*   **Operationalizing Policies with Examples:** Twitch's addition of \"Enforcement Notes\" with concrete examples for complex policy areas (like Self-Destructive Behavior and Youth Safety) is a notable trend. This approach helps users understand boundaries and provides clearer frameworks for content moderators, leading to more consistent and efficient enforcement.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-08-28 23:52:30 +0000",
+        "commit_hash": "35313f8ade020df33fe39f78ebc849240d909c44"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-08-28 23:52:30 +0000",
+        "commit_hash": "35313f8ade020df33fe39f78ebc849240d909c44"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-08-28 23:52:30 +0000",
+        "commit_hash": "35313f8ade020df33fe39f78ebc849240d909c44"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-08-28 23:52:30 +0000",
+        "commit_hash": "35313f8ade020df33fe39f78ebc849240d909c44"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-08-28 23:52:30 +0000",
+        "commit_hash": "35313f8ade020df33fe39f78ebc849240d909c44"
+      }
+    ]
   }
 }
