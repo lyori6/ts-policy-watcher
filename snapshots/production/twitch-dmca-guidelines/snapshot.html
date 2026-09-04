@@ -1,8 +1,8 @@
-<!DOCTYPE html><html lang="en" dir="ltr" x-data="geotargeting"><head>
+<!DOCTYPE html><html lang="es-MX" dir="ltr" x-data="geotargeting"><head>
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Welcome to Twitch Legal</title>
+<title>DMCA Guidelines</title>
 
 <meta name="description" content="">
 
@@ -13,7 +13,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@twitch">
 <meta name="twitter:creator" content="@twitch">
-<meta name="twitter:title" content="Welcome to Twitch Legal">
+<meta name="twitter:title" content="DMCA Guidelines">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="">
 
@@ -21,7 +21,7 @@
 <link rel="icon" type="image/png" href="/icons/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="/icons/favicon-16x16.png" sizes="16x16">
 
-<meta http-equiv="content-language" content="en">
+<meta http-equiv="content-language" content="es-mx">
 
 
   
@@ -36,8 +36,6 @@
     <link rel="alternate" href="https://legal.twitch.com/el-gr/legal/dmca-guidelines/" hreflang="el-gr">
   
     <link rel="alternate" href="https://legal.twitch.com/es-es/legal/dmca-guidelines/" hreflang="es-es">
-  
-    <link rel="alternate" href="https://legal.twitch.com/es-mx/legal/dmca-guidelines/" hreflang="es-mx">
   
     <link rel="alternate" href="https://legal.twitch.com/fi-fi/legal/dmca-guidelines/" hreflang="fi-fi">
   
@@ -81,6 +79,10 @@
   
     <link rel="alternate" href="https://legal.twitch.com/ar-sa/legal/dmca-guidelines/" hreflang="ar-sa">
   
+    <link rel="alternate" href="https://legal.twitch.com/en/legal/dmca-guidelines/" hreflang="en">
+  
+    <link rel="alternate" href="https://legal.twitch.com/uk-ua/legal/dmca-guidelines/" hreflang="uk-ua">
+  
 
 
     
@@ -115,7 +117,7 @@
       
   
 
-  <body class="font-default" x-data="{ geo_targeting: &quot;&quot;, redirectUrl: $el.dataset.redirectUrl }" data-redirect-url="/en/legal/" x-init="init();$watch('isVisible', value =&gt; {
+  <body class="font-default" x-data="{ geo_targeting: &quot;&quot;, redirectUrl: $el.dataset.redirectUrl }" data-redirect-url="/es-mx/legal/" x-init="init();$watch('isVisible', value =&gt; {
     if (value === false) { // Ensure it only redirects when explicitly false
         setTimeout(() =&gt; {
             window.location.href = redirectUrl;
@@ -129,7 +131,7 @@
   </a>
   <div class="max-w-[2000px] w-full px-5 lg:px-8 py-6 max-[479px]:flex-col flex-row flex gap-4 items-center col-start-2" x-data="{mobileSubNavOpen: false, mobileAccountNavOpen: false}">
     
-    <a href="/en/legal/" class="flex flex-col items-center mr-auto" aria-label="Twitch Legal Home">
+    <a href="/es-mx/legal/" class="flex flex-col items-center mr-auto" aria-label="Twitch Legal Home">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1139.43 379.04" height="32px">
         <title>Twitch Legal Home</title>
         <g data-name="Layer 2">
@@ -146,26 +148,14 @@
       
 
   <div class="relative max-[479px]:w-full" x-data="{languageModalOpen: false}">
-    <button class="max-[479px]:w-full max-[479px]:justify-center text-white text-base px-3 flex items-center gap-[10px] border-2 border-white rounded-lg p-[14px_12px] leading-[20px] " @click="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" :aria-expanded="languageModalOpen" aria-haspopup="true" aria-label="Languages" @keydown.down.prevent="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" @keydown.up.prevent="languageModalOpen = true;$focus.within($refs.language_dropdown).last()" @keydown.escape="languageModalOpen = false" x-ref="language_button" aria-expanded="false">
+    <button class="max-[479px]:w-full max-[479px]:justify-center text-white text-base px-3 flex items-center gap-[10px] border-2 border-white rounded-lg p-[14px_12px] leading-[20px] " @click="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" :aria-expanded="languageModalOpen" aria-haspopup="true" aria-label="Idiomas" @keydown.down.prevent="languageModalOpen = true;$focus.within($refs.language_dropdown).first()" @keydown.up.prevent="languageModalOpen = true;$focus.within($refs.language_dropdown).last()" @keydown.escape="languageModalOpen = false;$nextTick(() =&gt; $refs.language_button.focus())" x-ref="language_button" aria-expanded="false">
         <div>
-          Languages
+          Idiomas
         </div>
         <img src="/images/icons/arrow.svg" alt="">
     </button>
 
-    <ul class="max-[479px]:w-full border-brand-purple border rounded-lg bg-white p-2 absolute z-[200] top-[calc(100%+7.5px)]" role="menu" x-show="languageModalOpen" @click.outside="languageModalOpen = false" @keydown.escape="languageModalOpen = false;$focus.within($refs.language_button)" @keydown.down.prevent="$focus.wrap().next()" @keydown.up.prevent="$focus.wrap().previous()" x-ref="language_dropdown" x-trap.inert="languageModalOpen" style="display: none;">
-      
-          
-          
-          
-          
-          
-          
-          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
-            
-            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/ar-sa/legal/dmca-guidelines" lang="ar">العربية</a>
-          </li>
-          
+    <ul class="max-[479px]:w-full border-brand-purple border rounded-lg bg-white p-2 absolute z-[200] top-[calc(100%+7.5px)]" role="menu" x-show="languageModalOpen" @click.outside="languageModalOpen = false" @keydown.escape="languageModalOpen = false;$nextTick(() =&gt; $refs.language_button.focus())" @keydown.down.prevent="$focus.wrap().next()" @keydown.up.prevent="$focus.wrap().previous()" x-ref="language_dropdown" x-trap.inert="languageModalOpen" style="display: none;">
       
           
           
@@ -475,6 +465,18 @@
           
           <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
             
+            <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/uk-ua/legal/dmca-guidelines" lang="uk">Українська</a>
+          </li>
+          
+      
+          
+          
+          
+          
+          
+          
+          <li role="none" class="flex hover:bg-brand-purple hover:text-white text-base text-brand-black">
+            
             <a role="menuitem" tabindex="0" class="p-2 w-full whitespace-nowrap" href="/vi-vn/legal/dmca-guidelines" lang="vi">Tiếng Việt</a>
           </li>
           
@@ -506,25 +508,27 @@
     </ul>
   </div>
 
-    
 
+
+      
       <ul class="nav__list--desktop nav__unauthenticated max-[479px]:w-full">
-        
-        
-        
+  
+  
+  
+    
+      <li class="nav__item text-brand-purple bg-brand-white border-2 border-[transparent] p-[14px_12px] text-base rounded-lg leading-[20px] require_logged_out">
+        <a href="https://www.twitch.tv/" class="nav__link flex gap-[10px] max-[479px]:justify-center ">
           
-            <li class="nav__item text-brand-purple bg-brand-white border-2 border-[transparent] p-[14px_12px] text-base rounded-lg leading-[20px] require_logged_out">
-              <a href="https://www.twitch.tv/" class="nav__link flex gap-[10px] max-[479px]:justify-center ">
-                
-                <span data-i18n="menu:back-to-twitch">Back to Twitch</span>
-                <svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[225deg] stroke-brand-purple">
-                  <path d="M11.0006 8.49963L6.00058 13.4996M6.00058 13.4996L1.00058 8.49963M6.00058 13.4996V1.49963" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-              </a>
-            </li>
-          
-        
-      </ul>
+          <span data-i18n="menu:regresar-a-twitch">Regresar a Twitch</span>
+          <svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[225deg] stroke-brand-purple">
+            <path d="M11.0006 8.49963L6.00058 13.4996M6.00058 13.4996L1.00058 8.49963M6.00058 13.4996V1.49963" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </li>
+    
+  
+</ul>
+
     </div>
   </div>
 </nav>
@@ -538,7 +542,7 @@
             <aside class="lg:sticky top-0 self-start lg:h-[100vh] col-span-2 lg:col-span-1 col-start-1 bg-brand-ice pl-4 lg:pl-8 pt-4 pb-4 lg:pb-0 lg:pt-8 pr-4"><div class="w-full text-base font-[700]" x-data="{mobileSubNavOpen: false}">
     <div class="relative flex items-center justify-between w-full">
         <div class="flex items-center lg:hidden">
-            Contents
+            Contenido
             <button aria-label="Site menu" class="flex-none lg:hidden fill-white z-100" id="menu" @click="mobileSubNavOpen = !mobileSubNavOpen">
                 <svg height="32" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h48v48h-48z" fill="none"></path><path fill="#8D41F9" d="M6 36h36v-4h-36v4zm0-10h36v-4h-36v4zm0-14v4h36v-4h-36z"></path></svg>
             </button>
@@ -599,7 +603,7 @@
                     let text = document.createElement("a");
                     text.classList.add("underline");
                     text.innerHTML = `See all ${resultsCount} results`;
-                    text.href = "\/en/legal/search?term=" + window.instance.searchTerm;
+                    text.href = "\/es-mx/legal/search?term=" + window.instance.searchTerm;
                     bottom.append(text);
 
                     resultContainer.append(bottom);
@@ -610,7 +614,7 @@
                 setTimeout(() => {
                     const input = document.querySelector(".pagefind-modular-input");
                     if (input) {
-                        input.placeholder = "Search legal docs";
+                        input.placeholder = "Buscar documentos legales";
                     }
                 }, 100);
 
@@ -673,8 +677,8 @@
             <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1.25 11L10.204 2.04501C10.644 1.60601 11.356 1.60601 11.795 2.04501L20.75 11M3.5 8.75001V18.875C3.5 19.496 4.004 20 4.625 20H8.75V15.125C8.75 14.504 9.254 14 9.875 14H12.125C12.746 14 13.25 14.504 13.25 15.125V20H17.375C17.996 20 18.5 19.496 18.5 18.875V8.75001M7.25 20H15.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
-            <a class="p-2 " href="/en/legal/">
-                All Legal Docs
+            <a class="p-2 " href="/es-mx/legal/">
+                Todos los Documentos Legales
             </a>
         </li>
         
@@ -682,6 +686,8 @@
         
         
         
+        
+        
             
             
             
@@ -689,24 +695,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/terms-of-service/" data-i18n="menu:terms-of-service">Terms of Service</a>
+                <a class="p-3  " href="/es-mx/legal/terms-of-service/" data-i18n="menu:términos-de-servicio">Términos de servicio</a>
             
 
             
@@ -721,24 +715,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/terms-of-sale/" data-i18n="menu:terms-of-sale">Terms of Sale</a>
+                <a class="p-3  " href="/es-mx/legal/terms-of-sale/" data-i18n="menu:términos-de-venta">Términos de Venta</a>
             
 
             
@@ -753,24 +735,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/privacy-notice/" data-i18n="menu:privacy-notice">Privacy Notice</a>
+                <a class="p-3  " href="/es-mx/legal/privacy-notice/" data-i18n="menu:aviso-de-privacidad">Aviso de privacidad</a>
             
 
             
@@ -785,24 +755,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/privacy-choices/" data-i18n="menu:privacy-choices">Privacy Choices</a>
+                <a class="p-3  " href="/es-mx/legal/privacy-choices/" data-i18n="menu:opciones-de-privacidad">Opciones de privacidad</a>
             
 
             
@@ -817,17 +775,12 @@
         
         
             
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/monetized-streamer-agreement/" data-i18n="menu:monetized-streamer-agreement">Monetized Streamer Agreement</a>
+                <a class="p-3  " href="/es-mx/legal/monetized-streamer-agreement/" data-i18n="menu:acuerdo-de-streamer-monetizado-de-twitch">Acuerdo de Streamer Monetizado de Twitch</a>
             
 
             
@@ -854,9 +807,10 @@
     
       
       
+      
         
       <div class="grid grid-cols-1 pb-16 xl:grid-cols-[1fr_350px]">
-        
+
         
         
         
@@ -868,8 +822,16 @@
           
         
 
-        <h1 class="pt-12 pl-5 text-4xl text-brand-purple-dark font-[700] mb-4 xl:col-span-2">DMCA Guidelines</h1>
         
+        
+        
+        
+        
+
+        
+          <h1 class="pt-12 pl-5 text-4xl text-brand-purple-dark font-[700] mb-4 xl:col-span-2">Lineamientos de la DMCA</h1>
+        
+
         
         
         <div class=" xl:sticky top-0 self-start px-4 xl:pl-5 xl:pr-5 pt-8 xl:h-[100vh] xl:overflow-y-scroll xl:col-start-2 xl:row-start-2 xl:max-w-[350px] order-first xl:order-none" x-data="{mobileTOCOpen: false}">
@@ -883,7 +845,7 @@
           
             <div class="bg-brand-ice xl:bg-transparent p-4 xl:p-0 rounded-lg xl:rounded-none">
               <button class="text-sm font-[500] flex items-center justify-between xl:border-none xl:toc-header w-full text-left group" @click="mobileTOCOpen = !mobileTOCOpen" @keydown.enter="mobileTOCOpen = !mobileTOCOpen" @keydown.space.prevent="mobileTOCOpen = !mobileTOCOpen" aria-expanded="false" :aria-expanded="mobileTOCOpen ? 'true' : 'false'" :data-state="mobileTOCOpen ? 'open' : 'closed'" aria-controls="table-of-contents">
-                <div>ON THIS PAGE</div>
+                <div>EN ESTA PÁGINA</div>
                 <div class="flex items-center justify-end xl:hidden">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-4 h-4 transition-transform duration-300 select-none" :class="mobileTOCOpen ? '-scale-y-100' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"></path></svg>
                 </div>
@@ -892,13 +854,13 @@
                 <nav id="TableOfContents">
   <ul>
     <li></li>
-    <li><a href="#the-dmca-process-at-twitch">The DMCA Process at Twitch</a></li>
-    <li><a href="#information-for-rights-holders">Information for Rights Holders</a></li>
-    <li><a href="#information-for-twitch-streamers">Information for Twitch Streamers</a></li>
-    <li><a href="#repeat-infringer-policy">Repeat Infringer Policy</a></li>
-    <li><a href="#copyright-school">Copyright School</a></li>
-    <li><a href="#twitchs-role">Twitch’s Role</a></li>
-    <li><a href="#designated-copyright-agent">Designated Copyright Agent</a></li>
+    <li><a href="#el-proceso-dmca-en-twitch">El proceso DMCA en Twitch</a></li>
+    <li><a href="#información-para-titulares-de-derechos">Información para titulares de derechos</a></li>
+    <li><a href="#información-para-streamers-de-twitch">Información para Streamers de Twitch</a></li>
+    <li><a href="#política-de-infractor-reincidente">Política de infractor reincidente</a></li>
+    <li><a href="#escuela-de-derechos-de-autor">Escuela de derechos de autor</a></li>
+    <li><a href="#rol-de-twitch">Rol de Twitch</a></li>
+    <li><a href="#agente-de-derechos-de-autor-designado">Agente de derechos de autor designado</a></li>
   </ul>
 </nav>
               </div>
@@ -906,235 +868,219 @@
           
         </div>
         
+        
         <div class="pl-5 pr-5 xl:pr-0 xl:col-start-1 xl:row-start-2">
           
+            
             
               <div class="flex items-center justify-between mb-5">
                 <p class="text-xs">
                   
                     
-                    <span data-i18n="legal-enlegaldmca-guidelines20231011:modified" style="display: block;">
-                        Last modified on 
+                    <span data-i18n="legal-es-mxlegaldmca-guidelines20231012:modified" style="display: block;">
+                        Última modificación el
                         
-                          10/11/2023
+                          10/12/2023
                         
                     </span>
                     
                   
                   
-                      <span data-i18n="legal-enlegaldmca-guidelines20231011:modified" style="display: block;">
-                          <a class="font-bold text-brand-purple" href="/en/legal/dmca-guidelines/archive">See prior versions of DMCA Guidelines</a>
+                      <span data-i18n="legal-es-mxlegaldmca-guidelines20231012:modified" style="display: block;">
+                          <a class="font-bold text-brand-purple" href="/es-mx/legal/dmca-guidelines/archive">Ver versiones anteriores de Lineamientos de la DMCA</a>
                       </span>
                   
                 </p>
               </div>
           
 
-          <article data-pagefind-body="" data-pagefind-meta="title:DMCA Guidelines" class="prose max-w-none prose-brand-purple prose-base prose-headings:text-brand-purple-dark prose-a:text-brand-black hover:prose-a:underline">
-            <h1 id="digital-millennium-copyright-act-notification-guidelines">
-  Digital Millennium Copyright Act Notification Guidelines
+          <article data-pagefind-body="" data-pagefind-meta="title:Lineamientos de la DMCA" class="prose max-w-none prose-brand-purple prose-base prose-headings:text-brand-purple-dark prose-a:text-brand-black hover:prose-a:underline">
+            <h1 id="directrices-de-notificación-de-la-ley-de-copyright-del-milenio-digital">
+  Directrices de notificación de la Ley de Copyright del Milenio Digital
 </h1>
-<p>Twitch is a home for creative expression that respects copyright laws and other forms of intellectual property.</p>
-<p>These are guidelines for streamers, rights holders, and copyright agents to understand how Twitch’s copyright takedown process works and what it means for them. Twitch complies with the Digital Millennium Copyright Act (commonly known as the “DMCA”) and other copyright laws around the world, and for simplicity we refer to these guidelines as our “DMCA Notification Guidelines” and the process described below as our “DMCA process.”</p>
-<p>If you’re a streamer and want to learn more about copyright law and how it impacts your streaming experience on Twitch, we recommend you visit our <a href="https://www.twitch.tv/creatorcamp/paths/copyrights-and-your-channel">Copyrights &amp; Your Channel Learning Path</a> and consider attending <a href="https://www.twitch.tv/creatorcamp/en/paths/copyrights-and-your-channel/what-is-a-copyright-and-what-do-i-need-to-know-about-copyright-law/">Copyright School</a>.</p>
-<p>As with all legal matters, consider consulting a legal professional to obtain specific guidance or answers to questions about what copyright law is or how it applies in a particular situation, what options you have if your content is targeted in a notification, and related issues. We strongly encourage you to do so before taking any action that might impact your rights. This guide isn’t legal advice and shouldn’t be taken as such.</p>
-<h3 id="table-of-contents">
-  Table of Contents
+<p>Twitch es un servicio para la expresión creativa que respeta las leyes de derechos de autor y otras formas de propiedad intelectual.</p>
+<p>Estas son pautas para que los streamers, los titulares de los derechos y los agentes de derechos de autor entiendan cómo funciona el proceso de eliminación de derechos de autor de Twitch y lo que significa para ellos. Twitch cumple con la Ley de Derechos de Autor del Milenio Digital (también conocida como la “DMCA”) y otras leyes de derechos de autor en todo el mundo, y por motivos de simplicidad nos referimos a estas directrices como nuestras “Directrices de notificación de la DMCA” y el proceso que se describe a continuación como nuestro “proceso DMCA”.</p>
+<p>Si eres streamer y quieres más información sobre la ley de derechos de autor y cómo afecta tu experiencia de stream en Twitch, te recomendamos que consultes <a href="https://www.twitch.tv/creatorcamp/paths/copyrights-and-your-channel">Ruta de aprendizaje de derechos de autor y Tu canal</a> y consideres la posibilidad de asistir a la <a href="https://www.twitch.tv/creatorcamp/en/paths/copyrights-and-your-channel/what-is-a-copyright-and-what-do-i-need-to-know-about-copyright-law/">Escuela de derechos de autor</a>.</p>
+<p>Al igual que con todos los asuntos legales, considere consultar a un profesional legal para obtener orientación específica o respuestas a preguntas sobre qué es la ley de derechos de autor o cómo se aplica en una situación específica, qué opciones tiene si su contenido está especificado en una notificación y asuntos relacionados. Le recomendamos encarecidamente que lo haga antes de tomar cualquier medida que pueda afectar sus derechos. Esta guía no es un consejo legal y no debe tomarse como tal.</p>
+<h3 id="tabla-de-contenidos">
+  Tabla de contenidos
 </h3>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#the-dmca-process-at-twitch">The DMCA Process at Twitch</a></li>
-<li><a href="/en/legal/dmca-guidelines/#information-for-rights-holders">Information for Rights Holders</a>
+<li><a href="/es-mx/legal/dmca-guidelines/#the-dmca-process-at-twitch">El proceso DMCA en Twitch</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#information-for-rights-holders">Información para titulares de derechos</a>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#how-to-submit-a-notification-of-claimed-infringement">How to Submit a Notification of Claimed Infringement</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#how-to-submit-a-notification-of-claimed-infringement">Cómo Enviar una Notificación de Reclamo de Infracción</a></li>
 </ul>
 </li>
-<li><a href="/en/legal/dmca-guidelines/#information-for-twitch-streamers">Information for Twitch Streamers</a>
+<li><a href="/es-mx/legal/dmca-guidelines/#information-for-twitch-streamers">Información para Streamers de Twitch</a>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#how-to-submit-a-counter-notification">How to Submit a Counter-Notification</a></li>
-<li><a href="/en/legal/dmca-guidelines/#how-to-submit-a-retraction">How to Submit a Retraction</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#how-to-submit-a-counter-notification">Cómo Enviar una Contranotificación</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#how-to-submit-a-retraction">Cómo Enviar una Retractación</a></li>
 </ul>
 </li>
-<li><a href="/en/legal/dmca-guidelines/#repeat-infringer-policy">Repeat Infringer Policy</a></li>
-<li><a href="/en/legal/dmca-guidelines/#copyright-school">Copyright School</a></li>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-role">Twitch’s Role</a>
+<li><a href="/es-mx/legal/dmca-guidelines/#repeat-infringer-policy">Política de infractor reincidente</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#copyright-school">Escuela de derechos de autor</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-role">Rol de Twitch</a>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-notifications-of-claimed-infringement">Twitch’s Actions Upon Receipt of Notifications of Claimed Infringement</a></li>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-counter-notifications">Twitch’s Actions Upon Receipt of Counter-Notifications</a></li>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-retractions">Twitch’s Actions Upon Receipt of Retractions</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-notifications-of-claimed-infringement">Acciones de Twitch tras Recibir Notificaciones de Reclamo de Infracción</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-counter-notifications">Acciones de Twitch tras Recibir Contranotificaciones</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-retractions">Acciones de Twitch tras Recibir Retractaciones</a></li>
 </ul>
 </li>
-<li><a href="/en/legal/dmca-guidelines/#designated-copyright-agent">Designated Copyright Agent</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#designated-copyright-agent">Agente de derechos de autor designado</a></li>
 </ul>
-<h2 id="the-dmca-process-at-twitch" tabindex="-1">
-  The DMCA Process at Twitch
+<h2 id="el-proceso-dmca-en-twitch" tabindex="-1">
+  El proceso DMCA en Twitch
 </h2>
-<p>Twitch’s process for responding to notifications of claimed copyright infringement follows the legal parameters established by the DMCA and similar laws worldwide. Because Twitch is an online service that transmits and hosts user-generated content, this is how we address claims of copyright infringement made by rights holders and their agents.</p>
-<p>If you are a rights holder (or their legally authorized agent), you can submit a notification of claimed infringement (which we call a “DMCA notification”) to Twitch asking us to remove material that you believe infringes your copyrighted work(s).</p>
-<p>If you are a Twitch streamer and have received one of these notifications, Twitch will send you information about this notification and issue a copyright strike to your account, in accordance with our repeat infringer policy (see below). If you believe the DMCA notification was sent by mistake or misidentification, you can dispute it by sending Twitch a counter-notification or by requesting a retraction from the rights holder.</p>
-<p>We expect DMCA notifications and counter-notifications to comply with all legal requirements, and we will take into account any failure to comply. Accordingly, we expect that rights holders and their authorized agents will exercise due diligence and take into account exceptions and limitations to copyright – for example, fair use under US law and purposes such as quotation, criticism, review, caricature, parody, or pastiche under EU law – before submitting DMCA notifications. We similarly expect that streamers will carefully review DMCA notifications they receive and submit counter-notifications only where there are valid grounds to do so.</p>
-<h2 id="information-for-rights-holders" tabindex="-1">
-  Information for Rights Holders
+<p>El proceso de Twitch para responder a las notificaciones de una reclamación de infracción de derechos de autor sigue los parámetros legales establecidos por la DMCA y leyes similares en todo el mundo. Debido a que Twitch es un servicio en línea que transmite y hostea contenido generado por los usuarios, así es como abordamos las reclamaciones de infracción de derechos de autor hechas por titulares de derechos de autor y sus agentes.</p>
+<p>Si eres titular de los derechos (o su agente legalmente autorizado), puedes enviar una notificación de reclamo de infracción (a la que llamamos una “notificación de la DMCA”) a Twitch donde solicites que eliminemos material que creas que infringe tus obras con derechos de autor.</p>
+<p>Si eres streamer de Twitch y recibiste una de estas notificaciones, Twitch te enviará información sobre esta notificación y emitirá una infracción de derechos de autor a tu cuenta, de acuerdo con nuestra Política de infractores recurrentes (consulta a continuación). Si crees que la notificación de la DMCA se envió por error o identificación errónea, puedes disputarla enviando una apelación de notificación a Twitch o solicitando una retractación del titular de los derechos.</p>
+<p>Esperamos que las notificaciones y apelaciones de notificación de la DMCA cumplan con todos los requisitos legales, y tomaremos en cuenta cualquier incumplimiento. En consecuencia, esperamos que los titulares de derechos y sus agentes autorizados ejerzan la debida diligencia y tengan en cuenta las excepciones y limitaciones a los derechos de autor, por ejemplo, el uso legítimo bajo la ley estadounidense y propósitos como citas, críticas, revisión, caricatura, parodia o imitación según la ley de la UE, antes de enviar notificaciones de la DMCA. Así mismo, esperamos que los streamers revisen con detenimiento las notificaciones de la DMCA que reciben y envíen apelaciones de notificación solo cuando haya motivos válidos para hacerlo.</p>
+<h2 id="información-para-titulares-de-derechos" tabindex="-1">
+  Información para titulares de derechos
 </h2>
-<h3 id="how-to-submit-a-notification-of-claimed-infringement">
-  How to Submit a Notification of Claimed Infringement
+<h3 id="cómo-enviar-una-notificación-de-reclamo-de-infracción">
+  Cómo Enviar una Notificación de Reclamo de Infracción
 </h3>
-<p>Notifications against most types of content can be submitted by filling out our webform:</p>
-<p><strong>&gt;&gt;&nbsp;<a href="https://www.twitch.tv/copyright-claims">Submit a notification of claimed infringement</a></strong></p>
-<p>If you are a rights holder or their legally authorized agent and you believe that material transmitted or stored on our service infringes your copyright, then you may submit a notification of claimed infringement through our webform (or via our Designated Copyright Agent, defined below) that includes the following information (if you don’t include all of this information, your notification may be ineffective and not acted upon):</p>
+<p>Las notificaciones respecto de la mayoría de los tipos de contenido se pueden enviar completando nuestro formulario web:</p>
+<p><strong>&gt;&gt;&nbsp;<a href="https://www.twitch.tv/copyright-claims">Enviar una notificación de reclamo de infracción</a></strong></p>
+<p>Si eres titular de derechos o su agente legalmente autorizado y crees que el material transmitido o almacenado en nuestro servicio infringe tus derechos de autor, puedes enviar una notificación de reclamación de infracción a través de nuestro formulario web (o a través de nuestro agente designado de derechos de autor, definido a continuación) que incluya la siguiente información (si no incluye toda esta información, la notificación puede resultar ineficaz y no se tomarán medidas):</p>
 <ol>
-<li>Today’s date</li>
-<li>Type of material you are reporting (Live Stream, VOD, Clip, Channel Artwork, etc.):</li>
-<li>URL where the allegedly infringing material can or could be found
+<li>Fecha de hoy</li>
+<li>Tipo de material que denuncias (stream en vivo, VOD, clip, ilustraciones de canales, etc.):</li>
+<li>URL donde el material presuntamente en infracción puede o podría encontrarse
 <ul>
-<li>For claims against live streams, please provide a channel URL (e.g., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL)</li>
-<li>For claims against recorded videos, please provide a direct link to the video (e.g., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL/VOD_URL for VODs; <a href="https://clips.twitch.tv/Clip">https://clips.twitch.tv/Clip</a>_URL for Clips)</li>
-<li>For claims against static content on a channel page, such as emotes, panels, or profile pictures, please provide a channel URL (e.g., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL) and specify the infringing content (e.g., emoteNAME or About Panel).</li>
+<li>Para reclamos contra streams en vivo, proporciona una URL del canal (por ejemplo, <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL)</li>
+<li>Para reclamos en contra de videos grabados, proporcione un enlace directo al video (p. ej., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL/VOD_URL para VOD; <a href="https://clips.twitch.tv/Clip">https://clips.twitch.tv/Clip</a>_URL para clips)</li>
+<li>Para reclamos contra contenido estático en una página de canal, como emotes, paneles o fotos de perfil, proporciona una URL del canal (por ejemplo, <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL) e indica el contenido infractor (por ejemplo, nombre de emote o Panel Acerca de).</li>
 </ul>
 </li>
-<li>Date and time of the alleged infringement, where applicable
+<li>Fecha y hora de la presunta infracción, cuando corresponda
 <ul>
-<li>Live streams
+<li>Transmisiones en vivo
 <ol>
-<li>Please indicate “Ongoing” if the alleged infringement is occurring at the time of your submission (e.g., an unauthorized live sporting event or TV show that is currently being broadcast).</li>
-<li>If the alleged infringement has concluded by the time of your submission, please indicate “Past Livestream” and provide the date and an accurate timestamp or time frame that identifies, in Pacific Standard Time, when the allegedly infringing activity occurred (e.g., 1/21/2021 at 5:45pm PST).</li>
+<li>Por favor indique “En curso”; si la presunta infracción se produce al momento de su envío (por ejemplo, un evento deportivo no autorizado en directo o un programa de televisión que se está emitiendo actualmente).</li>
+<li>Si la supuesta infracción ya concluyó al momento del envío, indica “Stream en vivo pasado” y proporciona la fecha y una marca de tiempo o plazos exactos que identifique, en la hora estándar del Pacífico, cuando ocurrió la presunta actividad en infracción (por ejemplo, 21/1/2021 a las 5:45&nbsp;p.&nbsp;m.&nbsp;PST).</li>
 </ol>
 </li>
-<li>VODs
+<li>VOD
 <ol>
-<li>Please provide a timestamp of the particular segment of the VOD at which you claim infringing activity has occurred.</li>
-<li>You can either include a timestamp (e.g., [hour]:[minute]:[second]), or link to the timestamped portion of the VOD (this can be done by selecting the gear icon and clicking “Copy Video URL at [time]”)</li>
+<li>Por favor proporcione una marca de tiempo del segmento particular del VOD en el que afirma que se ha producido una actividad en infracción.</li>
+<li>Puede incluir una marca de tiempo (p. ej., [hora]:[minuto]:[segundo]) o un enlace a la parte con marca de tiempo del VOD (puede hacerlo seleccionando el icono de engranaje y haciendo clic en “Copiar URL del vídeo a las [hora]”).</li>
 </ol>
 </li>
 </ul>
 </li>
-<li>Identification of the specific copyrighted work that was allegedly infringed</li>
-<li>Link that points directly to an authorized example of the copyrighted work, if available (e.g. URL to your website or your Twitch page where work is displayed)</li>
-<li>Name of the rights holder (owner of the copyright) (person or company) (this will be shared with the account holder whose material is identified in the notification)
+<li>Identificación de la obra con derechos de autor específica que presuntamente se infringió</li>
+<li>Enlace que apunta directamente a un ejemplo autorizado del trabajo protegido por derechos de autor, si está disponible (p. ej., URL de su sitio web o de su página de Twitch donde se muestre el trabajo)</li>
+<li>Nombre del titular de los derechos (propietario de los derechos de autor) (persona o compañía) (esto se compartirá con el titular de la cuenta cuyo material se identifique en la notificación)
 <ul>
-<li>Your relationship to the rights holder (e.g., whether you are the rights holder or an authorized agent)</li>
+<li>Su relación con el titular de los derechos (p. ej., si usted es el titular de los derechos o un agente autorizado).</li>
 </ul>
 </li>
-<li>Information that allows Twitch and the account holder whose material is identified in the notification to contact you, including
+<li>Información que permite a Twitch y al titular de la cuenta cuyo material se identifica en la notificación comunicarse contigo, incluido lo siguiente:
 <ul>
-<li>Your name or organization (this will be shared with the account holder whose material is identified in the notification)</li>
-<li>Your full postal address (Street, Unit #, City/Town, State, Mailing Code, Country)</li>
-<li>Your phone number, including International Code</li>
-<li>Your email address (this will be shared with the account holder whose material is identified in the notification)</li>
+<li>Tu nombre u organización (esto se compartirá con el titular de la cuenta cuyo material se identifique en la notificación)</li>
+<li>Su domicilio postal completo (calle, número, ciudad o localidad, código postal, país)</li>
+<li>Su número de teléfono, incluido el código internacional</li>
+<li>Tu dirección de correo electrónico (esto se compartirá con el titular de la cuenta cuyo material esté identificado en la notificación)</li>
 </ul>
 </li>
-<li>Verify these statements by including, and adding your name to, the following affidavit:</li>
+<li>Verifica estas afirmaciones, y añade tu nombre a la siguiente declaración:</li>
 </ol>
-<p>I,</p>
-<p><your full="" name="" as="" an="" electronic="" signature="">, wish to state that:</your></p>
+<p>Yo, &lt;tu nombre completo como firma electrónica&gt;, declaro que:</p>
 <ul>
-<li>I have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law;</li>
-<li>This notification is accurate; and</li>
-<li>Under penalty of perjury, I am the owner, or an agent authorized to act on behalf of the owner, of an exclusive right that is allegedly infringed.</li>
+<li>Creo de buena fe que el uso del material, tal y como se detalla en la queja, no está autorizado por el titular de los derechos de autor, su agente o la ley.</li>
+<li>Esta notificación es exacta; y</li>
+<li>bajo pena de perjurio, soy el propietario, o un agente autorizado para actuar en nombre del propietario, de un derecho exclusivo que presuntamente se infringe.</li>
 </ul>
-<p>Twitch generally forwards complete notifications of claimed infringement to the account holder whose material is identified in the notification (this will include the name or organization of the submitter, the name of the rights holder, and the email address submitted) to give the account holder an opportunity to review the allegations of infringement, contact the submitter (e.g., to request a retraction), and take other appropriate actions.</p>
-<p>Please note that copyright complainants have an obligation to preserve evidence of the alleged infringement. Notifications of claimed infringement that include false statements or knowing misrepresentations will be rejected if Twitch becomes aware of them, and in addition to violating Twitch’s <a href="https://legal.twitch.com/legal/terms-of-service/">Terms of Service</a> and <a href="https://safety.twitch.tv/s/article/Community-Guidelines?language=en_US">Community Guidelines</a>, may subject the claimant who submitted the notification to legal liability – for example, pursuant to 17 U.S.C. § 512(f).</p>
-<h2 id="information-for-twitch-streamers" tabindex="-1">
-  Information for Twitch Streamers
+<p>Generalmente, Twitch reenvía las notificaciones completas de reclamación de infracción al titular de la cuenta cuyo material se identifica en la notificación (esto incluirá el nombre u organización del autor, el nombre del titular de los derechos y la dirección de correo electrónico enviada) para darle al titular de la cuenta la oportunidad de revisar las acusaciones de infracción, comunicarse con el autor (por ejemplo, para solicitar una retractación) y tomar las medidas adecuadas.</p>
+<p>Ten en cuenta que los reclamantes de derechos de autor tienen la obligación de conservar las pruebas de la presunta infracción. Las notificaciones de reclamo de infracción que incluyen declaraciones falsas o tergiversaciones a sabiendas se rechazarán si Twitch se da cuenta de ellas, y además de infringir los <a href="https://legal.twitch.com/legal/terms-of-service/">Términos de servicio</a> y las <a href="https://safety.twitch.tv/s/article/Community-Guidelines?language=en_US">Directrices de la comunidad</a>, pueden someter al reclamante que presentó la notificación a responsabilidad legal, por ejemplo, de conformidad con 17 U.S.C. § 512(f).</p>
+<h2 id="información-para-streamers-de-twitch" tabindex="-1">
+  Información para Streamers de Twitch
 </h2>
-<h3 id="how-to-submit-a-counter-notification">
-  How to Submit a Counter-Notification
+<h3 id="cómo-enviar-una-contranotificación">
+  Cómo Enviar una Contranotificación
 </h3>
-<p>If you are a Twitch streamer and a notification of claimed infringement has been submitted against content you shared on Twitch, you should review the details we have provided and consider your options. If you believe that the notification – and any action Twitch has taken as a result – was sent due to a mistake or misidentification, then you may submit a counter-notification to <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a>.</p>
-<p>Note that there may be legal consequences if you submit a counter-notification. For example, if the complaining party wishes to keep the content identified in their DMCA notification disabled after receiving your counter-notification, they have the option of initiating a legal action seeking a court order to restrain you from engaging in infringing activity.</p>
-<p>Also, please be aware that we will generally forward the information you share as part of your counter-notification with the claimant that submitted the DMCA notification against your content.</p>
-<p>To send a counter-notification – whether responding to a DMCA notification directed to recorded content, a live stream, or something else – please provide all of the following information (all of which will be shared with the claimant):</p>
+<p>Si eres streamer de Twitch y se envió una notificación de reclamación de infracción por el contenido que compartiste en Twitch, debes revisar los detalles que te proporcionamos y considerar tus opciones. Si crees que la notificación, y cualquier acción que Twitch haya tomado en consecuencia, se envió debido a un error o identificación errónea, puedes enviar una apelación de notificación a <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a>.</p>
+<p>Ten en cuenta que puede haber consecuencias legales si envías una apelación de notificación. Por ejemplo, si la parte reclamante desea mantener el contenido identificado en su notificación de la DMCA deshabilitado después de recibir la apelación de notificación, dicha parte tiene la opción de iniciar una acción legal y buscar una orden judicial para impedirte participar en actividades infractoras.</p>
+<p>Además, ten en cuenta que generalmente remitiremos la información que compartes como parte de tu apelación de notificación con el reclamante que envió la notificación de la DMCA contra tu contenido.</p>
+<p>Para enviar una apelación de notificación, ya sea al responder una notificación de la DMCA dirigida a contenido grabado, un stream en vivo o algo más, proporciona la siguiente información (la cual se compartirá con el reclamante):</p>
 <ol>
-<li>
-<p>URL(s) where the material that was the subject of the notification of claimed infringement appeared before it was identified, removed, or access to it was disabled</p>
-</li>
-<li>
-<p>Name of the claimant who submitted the notification</p>
-</li>
-<li>
-<p>Your Twitch channel name (e.g., twitch.tv/Username)</p>
-</li>
-<li>
-<p>Your full legal name</p>
-</li>
-<li>
-<p>Your email address</p>
-</li>
-<li>
-<p>Your full postal address (Street, Unit #, State, Mailing Code, Country)</p>
-</li>
-<li>
-<p>Your phone number, including International Code</p>
-</li>
-<li>
-<p>Verify these statements by including, and adding your name to, the following affidavit:I,</p>
-<p><your full="" name="" as="" an="" electronic="" signature="">, wish to state that:</your></p>
+<li>La URL en la que el material que fue objeto de la notificación de reclamo de infracción apareció antes de ser identificado, eliminado o de que su acceso fuera inhabilitado.</li>
+<li>El nombre del reclamante que envió la notificación</li>
+<li>El nombre de su canal de Twitch (p. ej., Twitch .tv / nombre de usuario)</li>
+<li>Su nombre legal completo</li>
+<li>Su dirección de correo</li>
+<li>Su domicilio postal completo (calle, número de unidad, estado, código postal, país)</li>
+<li>Su número de teléfono, incluido el código internacional</li>
+<li>Verifica estas declaraciones e incluye y agrega tu nombre a la siguiente declaración jurada: Yo, &lt;tu nombre completo como firma electrónica&gt;, deseo manifestar que:
 <ul>
-<li>I consent to the jurisdiction of the Federal District Court for the judicial district in which my address is located, or if my address is outside of the United States, the judicial district in which Twitch may be found, and will accept service of process from the claimant.</li>
-<li>I swear, under penalty of perjury, that I have a good faith belief that the material identified in the notification was identified, removed, and/or disabled as a result of mistake or misidentification.</li>
+<li>Doy mi consentimiento a la jurisdicción del Tribunal Federal de Distrito para el distrito judicial en el que se encuentra mi domicilio, o si mi domicilio está fuera de los Estados Unidos, para el distrito judicial en el que se encuentra Twitch, y acepto la notificación y el emplazamiento por parte del demandante.</li>
+<li>Juro, bajo pena de perjurio, que creo de buena fe que el material identificado en la notificación fue identificado, eliminado o inhabilitado como resultado de un error o identificación errónea.</li>
 </ul>
-
 </li>
 </ol>
-<p>You also have the option to explain why you believe there was a mistake or misidentification. Keep in mind that failure to provide the information required could result in Twitch being unable to take action in response to your counter-notification.</p>
-<h3 id="how-to-submit-a-retraction">
-  How to Submit a Retraction
+<p>También tienes la opción de explicar por qué crees que hubo un error o una identificación errónea. Ten en cuenta que, si no proporcionas la información necesaria, es posible que Twitch no pueda tomar medidas en respuesta a tu apelación de notificación.</p>
+<h3 id="cómo-enviar-una-retractación">
+  Cómo Enviar una Retractación
 </h3>
-<p>If you are a Twitch streamer who has received a notification of claimed infringement, you can seek a retraction by reaching out to the rights holder or agent who sent the notification directly. Their contact email will be provided in the email you receive from Twitch concerning the DMCA notification, and will also be identified in your Copyright Claims Manager.</p>
-<p>If you are a rights holder or agent who submitted a DMCA notification that you wish to retract, please email the following information to <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a> from the same email address as your original notification. Note that we cannot process retractions that are sent from a different email address.</p>
+<p>Si eres un streamer de Twitch que recibió una notificación de reclamo de infracción, puedes solicitar una retractación comunicándote con el titular de los derechos o el agente que la envió directamente. Su correo electrónico de contacto se proporcionará en el correo electrónico que recibas de Twitch con respecto a la notificación de la DMCA. También se identificará en tu Administrador de reclamos de derechos de autor.&nbsp;</p>
+<p>Si eres titular de los derechos o agente que envió una notificación de la DMCA y deseas hacer una retractación, envía la siguiente información por correo electrónico a <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a> desde la misma dirección de correo electrónico que tu notificación original. No podemos procesar las retractaciones que se envían desde otra dirección de correo electrónico.</p>
 <ol>
-<li>The date of your original notification and, if applicable, the Claim ID – replying to the takedown confirmation email we sent may help us respond more quickly.</li>
-<li>The copyrighted work(s) allegedly infringed.</li>
-<li>The URL(s) where the allegedly infringing material could be found.</li>
-<li>An electronic or physical signature (typing your full legal name is sufficient).</li>
+<li>La fecha de su notificación original y, en su caso, el Id. de la reclamación - responder al correo electrónico de confirmación de retirada que le enviamos, puede ayudarnos a responder más rápidamente.</li>
+<li>La(s) obra(s) protegida por derechos de autor que presuntamente se infringió.</li>
+<li>La(s) URL(s) donde se podría encontrar el material presuntamente en infracción.</li>
+<li>Una firma electrónica o física (escribir su nombre legal completo es suficiente).</li>
 </ol>
-<h2 id="repeat-infringer-policy" tabindex="-1">
-  Repeat Infringer Policy
+<h2 id="política-de-infractor-reincidente" tabindex="-1">
+  Política de infractor reincidente
 </h2>
-<p>We will terminate an account holder’s access to the Twitch service if that user is determined by Twitch to be a “repeat infringer” of copyrighted works on the service – under our policy, a user will be considered a repeat infringer if they accrue three copyright strikes.</p>
-<p>Twitch reserves the right to terminate accounts that act against Twitch’s <a href="https://legal.twitch.com/en/legal/terms-of-service/">Terms of Service</a>, or clearly against the values that Twitch seeks to promote in its community, regardless of how many strikes are involved.</p>
-<p>Account holders generally accrue a strike when Twitch receives a complete notification of infringement and does not receive a complete counter-notification regarding the alleged infringement or a retraction of the notification. Strikes are not permanent, but rather are associated with an account for enough time for Twitch to determine whether the account holder is engaging in repeated infringement such that termination is necessary under this Policy.</p>
-<p>When determining whether account holders are repeat infringers under this policy, we take into consideration complete notifications of claimed infringement from rights holders, complete counter-notifications from account holders, retractions from rights holders, and other relevant factors and circumstances. Twitch may also ask claimants and/or account holders for more information where we think it’s necessary to fairly apply our Repeat Infringer Policy.</p>
-<p>If a relevant court rules that an account holder is an “infringer” or “repeat infringer” on Twitch, we will take that ruling as conclusive under our Repeat Infringer Policy. To provide judicial determinations showing that an account holder is an infringer, or a repeat infringer, on the Twitch service, please forward it to our Designated Copyright Agent (see below) with “court ruling regarding infringer/repeat infringer” in the subject line. Twitch personnel will review the submission and may contact the claimants and/or account holder to verify the court ruling and understand its scope.</p>
-<h2 id="copyright-school" tabindex="-1">
-  Copyright School
+<p>Rescindiremos el acceso al servicio de Twitch a un titular de cuenta si Twitch determina que ese usuario es un “infractor recurrente”; de obras protegidas por derechos de autor en el servicio; según nuestra política, un usuario será considerado un infractor recurrente si acumula tres infracciones por derechos de autor.</p>
+<p>Twitch se reserva el derecho de cancelar las cuentas que actúen en contra de los <a href="https://legal.twitch.com/en/legal/terms-of-service/">Términos de servicio</a> de Twitch, o claramente en contra de los valores que Twitch busca promover en su comunidad, independientemente de cuántas infracciones estén involucradas.</p>
+<p>Los titulares de cuentas generalmente acumulan una falta cuando Twitch recibe una notificación completa de infracción y no recibe una apelación de notificación completa con respecto a la presunta infracción o una retractación de la notificación. Las faltas no son permanentes, sino que están asociadas con una cuenta durante el tiempo suficiente para que Twitch determine si el titular de cuenta está incurriendo en una infracción reiterada, de modo que la rescisión sea necesaria en virtud de esta Política.</p>
+<p>Al determinar si los titulares de una cuenta son infractores recurrentes bajo esta política, tomamos en consideración las notificaciones completas de reclamos de infracción de los titulares de derechos, las apelaciones de notificación completas de los titulares de la cuenta, las retractaciones de los titulares de derechos y otros factores y circunstancias relevantes. Twitch también puede solicitar al denunciante o a los titulares de la cuenta más información cuando lo consideremos necesario para aplicar de manera justa nuestra Política de Infractor Recurrente.</p>
+<p>Si un tribunal pertinente determina que un titular de una cuenta es un “infractor”; o un “infractor recurrente”; en Twitch, tomaremos esa decisión como concluyente según nuestra Política de Infractor Recurrente. Para proporcionar determinaciones judiciales que demuestren que el titular de una cuenta es un infractor, o un infractor recurrente, en el servicio de Twitch, favor de reenviarlas a nuestro Agente de Derechos de Autor designado (ver más abajo) indicando en el asunto “fallo judicial sobre infractor/infractor recurrente”. El personal de Twitch revisará la presentación y puede comunicarse con el denunciante o el titular de la cuenta para verificar el fallo judicial y entender su alcance.</p>
+<h2 id="escuela-de-derechos-de-autor" tabindex="-1">
+  Escuela de derechos de autor
 </h2>
-<p>We understand that mistakes happen and want everyone in the Twitch community to have the information needed to educate themselves and avoid making future mistakes.</p>
-<p>If you receive a copyright strike and are eligible to have the strike removed by completing Copyright School, you’ll receive an invitation to attend Copyright School through email and on twitch.tv via a top-of-page banner notification. If you successfully complete Copyright School following this invitation, one copyright strike will be removed from your account. You can take Copyright School once every 12 months.</p>
-<p>Because Copyright School contains valuable information for all streamers, we make it available for everyone (not only streamers who’ve received a copyright strike). Completing and viewing Copyright School without an invitation via email or top-of-page banner notification on twitch.tv will not decrement a copyright strike, nor will it prevent your eligibility to complete it again later to remove a copyright strike.</p>
-<h2 id="twitchs-role" tabindex="-1">
-  Twitch’s Role
+<p>Comprendemos que es normal cometer errores y nuestro objetivo es que todos en la comunidad de Twitch cuenten con la información necesaria para aprender y evitar equivocarse en el futuro.</p>
+<p>Si recibes una infracción de derechos de autor y eres elegible para que se elimine la infracción completando la Escuela de derechos de autor, recibirás una invitación para asistir a la Escuela de derechos de autor por correo electrónico y en twitch.tv a través de una notificación de banner en la parte superior de la página. Si completas correctamente la Escuela de derechos de autor después de esta invitación, se eliminará una infracción de derechos de autor de tu cuenta. Puedes cursar la Escuela de derechos de autor una vez cada 12&nbsp;meses.</p>
+<p>La Escuela de derechos de autor está disponible para todos porque contiene información importante para todos los streamers, no solo los que han recibido una infracción de derechos de autor. Completar y ver la Escuela de derechos de autor sin una invitación por correo electrónico o notificación de banner en la parte superior de la página en twitch.tv no decretará una infracción de derechos de autor, ni impedirá tu elegibilidad para completarla más tarde para eliminar una infracción de derechos de autor.&nbsp;</p>
+<h2 id="rol-de-twitch" tabindex="-1">
+  Rol de Twitch
 </h2>
-<p>Twitch does not have the authority or ability to make legal judgments regarding allegations of copyright infringement. It is our policy to follow statutes and court rulings regarding uses of our services and conduct of our account holders. The DMCA and similar laws require that Twitch act as a “go-between,” processing notifications of claimed infringement from rights holders and counter-notifications from account holders and notifying the impacted parties. It’s the responsibility of the rights holder and the account holder to resolve the dispute.</p>
-<p>In addition to facilitating this claim/dispute process, Twitch is also responsible for:</p>
+<p>Twitch no tiene la autoridad ni la capacidad para emitir juicios legales con respecto a las presunciones de infracción de derechos de autor. Nuestra política es seguir los estatutos y las sentencias judiciales con respecto a los usos de nuestros servicios y la conducta de nuestros titulares de cuenta. La DMCA y leyes similares exigen que Twitch actúe como un “intermediario”, al procesar notificaciones de reclamos de infracción de titulares de derechos y contranotificaciones de titulares de cuenta y al notificar a las partes afectadas. Es responsabilidad del titular de los derechos y del titular de cuenta resolver la disputa.</p>
+<p>Además de facilitar este proceso de reclamo/disputa, Twitch también es responsable de:</p>
 <ul>
-<li>Setting the requirements for what must be included in notifications and counter- notifications, consistent with the requirements of the DMCA and similar laws;</li>
-<li>Keeping track of notifications directed to account holders, counter-notifications from account holders, and any court orders regarding these disputes; and</li>
-<li>Adopting and reasonably implementing a policy that requires termination in appropriate circumstances of account holders who repeatedly engage in copyright infringement on Twitch. We call this our “Repeat Infringer Policy”, and it’s discussed in detail above.</li>
+<li>Establecer los requisitos de lo que debe incluirse en las notificaciones y contranotificaciones, de acuerdo con los requisitos de la DMCA y leyes similares.</li>
+<li>Realizar un seguimiento de las notificaciones dirigidas a titulares de cuenta, contranotificaciones de titulares de cuenta y cualquier orden judicial relacionada con estas disputas.</li>
+<li>Adoptar e implementar razonablemente una política que requiera la rescisión en las circunstancias apropiadas de los titulares de cuenta que participen reiteradamente en infracciones de derechos de autor en Twitch. La denominamos nuestra “Política de Infractor Recurrente” y se explica en detalle arriba.</li>
 </ul>
-<h3 id="twitchs-actions-upon-receipt-of-notifications-of-claimed-infringement">
-  Twitch’s Actions Upon Receipt of Notifications of Claimed Infringement
+<h3 id="acciones-de-twitch-tras-recibir-notificaciones-de-reclamo-de-infracción">
+  Acciones de Twitch tras Recibir Notificaciones de Reclamo de Infracción
 </h3>
-<p>If Twitch receives a complete notification from a rights holder or their legally authorized agent claiming that content on a channel infringes the rights holder’s copyright, Twitch generally notifies the account holder. At the same time, we will generally remove or disable access to recorded or other content containing the claimed infringing material. We may disable a livestream and/or suspend an account if the claimed infringement is continuing at the time we receive the rights holder’s notification.</p>
-<h3 id="twitchs-actions-upon-receipt-of-counter-notifications">
-  Twitch’s Actions Upon Receipt of Counter-Notifications
+<p>Si Twitch recibe una notificación completa de un titular de derechos o de su agente legalmente autorizado que afirma que el contenido de un canal infringe los derechos de autor del titular de los derechos, Twitch generalmente lo notifica al titular de la cuenta. Al mismo tiempo, generalmente eliminaremos o inhabilitaremos el acceso al contenido grabado o de otro tipo que contenga el supuesto material infractor. Podemos desactivar un stream en vivo o suspender una cuenta si el reclamo de infracción continúa al momento en que recibimos la notificación del titular de los derechos.</p>
+<h3 id="acciones-de-twitch-tras-recibir-contranotificaciones">
+  Acciones de Twitch tras Recibir Contranotificaciones
 </h3>
-<p>If Twitch receives a complete counter-notification from an account holder, Twitch generally notifies the claimant who submitted the original notification. At the same time, we may restore recorded content containing the claimed infringing material. Disputed notifications generally will not qualify for a strike under our Repeat Infringer Policy (discussed in more detail above), unless and until the dispute has been resolved by the account holder and the rights holder. Please note that Twitch may not be able to reinstate certain material or access to it due to factors such as the passage of time or the format in which the material was broadcast or stored.</p>
-<h3 id="twitchs-actions-upon-receipt-of-retractions">
-  Twitch’s Actions Upon Receipt of Retractions
+<p>Si Twitch recibe una apelación de notificación completa de un titular de cuenta, Twitch generalmente notifica al reclamante que envió la notificación original. Al mismo tiempo, podemos restablecer el contenido grabado que contiene el material que se presume en infracción. Por lo general, las notificaciones impugnadas no se consideran como una falta en virtud de nuestra Política de Infractor Recurrente (tratada con más detalle arriba), a menos que el titular de cuenta y el titular de los derechos hayan resuelto la disputa. Ten en cuenta que Twitch no puede rehabilitar cierto material o acceder a él debido a factores como el transcurso del tiempo o el formato en el que se transmitió o almacenó el material.</p>
+<h3 id="acciones-de-twitch-tras-recibir-retractaciones">
+  Acciones de Twitch tras Recibir Retractaciones
 </h3>
-<p>If Twitch receives a retraction from a rights holder or their legally authorized agent, we may restore recorded content containing the claimed infringing material and the disputed notification will not qualify for a strike under our Repeat Infringer Policy (discussed in more detail above). Please note that Twitch may not be able to reinstate certain material or access to it due to factors such as the passage of time or the format in which the material was broadcast or stored.</p>
-<h2 id="designated-copyright-agent" tabindex="-1">
-  Designated Copyright Agent
+<p>Si Twitch recibe una retractación de un titular de derechos o de su agente legalmente autorizado, podemos restaurar el contenido grabado que contenga el material infractor reclamado y la notificación en disputa no calificará para una infracción según nuestra Política de infractores recurrentes (discutida con más detalle anteriormente). Ten en cuenta que Twitch no puede rehabilitar cierto material o acceder a él debido a factores como el transcurso del tiempo o el formato en el que se transmitió o almacenó el material.</p>
+<h2 id="agente-de-derechos-de-autor-designado" tabindex="-1">
+  Agente de derechos de autor designado
 </h2>
-<p>Twitch Interactive, Inc. operates <a href="https://www.twitch.tv/">www.twitch.tv</a>, <a href="https://twitchrivals.com/">twitchrivals.com</a>, and <a href="https://twitchcon.com/">twitchcon.com</a>. Twitch’s Designated Copyright Agent receives notifications of claimed infringement, counter-notifications, and retractions.</p>
-<p>If you are a rights holder (or their legally authorized agent) and believe that content on any Twitch-operated websites or applications infringes upon your copyright, you may submit a DMCA notification to request that Twitch remove or disable access to that content.</p>
-<p>The fastest way to get a response to your DMCA notice is to fill in our online form at <a href="https://twitch.tv/copyright-claims">https://twitch.tv/copyright-claims.</a>&nbsp;Alternatively, if you prefer to submit your DMCA notification by email, physical mail, or phone, here’s how to do so:</p>
-<p>Email: <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a></p>
-<p>Mailing Address: Attention: Copyright Agent, 350 Bush Street, 2nd Floor, San Francisco, CA 94104, United States of America</p>
-<p>Phone: (415) 262-9766</p>
-<p>If you would like to submit a counter-notification (if you are a streamer) or retraction (if you are a copyright holder or their legally authorized agent), the fastest way to get a response is to send it to the email listed above. Please be aware that our online form can only accept submissions for DMCA notifications at this time and should not be used to submit counter-notifications or retractions. Alternatively, if you prefer to submit your counter-notification or retraction via physical mail or phone, you may reach out at the mailing address and number listed above.</p>
-<p>For information on reporting a trademark violation or Twitch’s process for responding to trademark reports, please review Twitch’s <a href="https://legal.twitch.com/en/legal/trademark-policy/">Trademark Policy</a>.</p>
-<p>Any other requests for support or other communications should be directed to Twitch customer service through <a href="https://help.twitch.tv/s/contactsupport">https://help.twitch.tv/s/contactsupport</a>.</p>
+<p>Twitch Interactive, Inc. opera <a href="https://www.twitch.tv/">www.twitch.tv</a>, <a href="https://twitchrivals.com/">twitchrivals.com</a>, y <a href="https://twitchcon.com/">twitchcon.com</a>. El agente de derechos de autor designado de Twitch recibe notificaciones de reclamación de infracción, apelaciones de notificación y retracciones.</p>
+<p>Si eres titular de los derechos (o su agente legalmente autorizado) y crees que el contenido de cualquier sitio web o aplicación operada por Twitch infringe tus derechos de autor, puedes enviar una notificación de la DMCA para solicitar que Twitch quite o desactive el acceso a ese contenido.&nbsp;</p>
+<p>La forma más rápida de obtener una respuesta a un aviso de la DMCA es completar nuestro formulario en línea en <a href="https://twitch.tv/copyright-claims">https://twitch.tv/copyright-claims.</a>&nbsp;Si prefieres enviar la notificación de la DMCA por correo electrónico, correo postal o teléfono, estas son las instrucciones para hacerlo: &nbsp;&nbsp;</p>
+<p>Correo electrónico: <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a></p>
+<p>Dirección postal: Atención: Copyright Agent, 350 Bush Street, 2nd Floor, San Francisco, CA 94104, Estados Unidos de América</p>
+<p>Teléfono: (415) 262-9766</p>
+<p>Si quieres enviar una apelación de notificación (si eres streamer) o retractarte (si eres titular de los derechos de autor o su agente legalmente autorizado), la forma más rápida de obtener una respuesta es enviarla al correo electrónico que se indica arriba. Ten en cuenta que nuestro formulario en línea solo puede aceptar envíos para notificaciones de la DMCA en este momento y no debe usarse para enviar apelaciones de notificación o retracciones. También, si prefieres enviar tu apelación de notificación o retractación por correo físico o por teléfono, puedes comunicarte con la dirección postal y el número que aparecen arriba.&nbsp;</p>
+<p>Para más información sobre la denuncia de una infracción de marca registrada o el proceso de Twitch para responder a las denuncias de marcas registradas, revisa la <a href="https://legal.twitch.com/en/legal/trademark-policy/">Política de marcas registradas</a> de Twitch.</p>
+<p>Cualquier otra solicitud de soporte u otras comunicaciones deben dirigirse al servicio de atención al cliente de Twitch a través de <a href="https://help.twitch.tv/s/contactsupport">https://help.twitch.tv/s/contactsupport</a>.</p>
 
           </article>
         </div>
@@ -1223,7 +1169,7 @@
             <aside class="lg:sticky top-0 self-start lg:h-[100vh] col-span-2 lg:col-span-1 col-start-1 bg-brand-ice pl-4 lg:pl-8 pt-4 pb-4 lg:pb-0 lg:pt-8 pr-4"><div class="w-full text-base font-[700]" x-data="{mobileSubNavOpen: false}">
     <div class="relative flex items-center justify-between w-full">
         <div class="flex items-center lg:hidden">
-            Contents
+            Contenido
             <button aria-label="Site menu" class="flex-none lg:hidden fill-white z-100" id="menu" @click="mobileSubNavOpen = !mobileSubNavOpen">
                 <svg height="32" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h48v48h-48z" fill="none"></path><path fill="#8D41F9" d="M6 36h36v-4h-36v4zm0-10h36v-4h-36v4zm0-14v4h36v-4h-36z"></path></svg>
             </button>
@@ -1284,7 +1230,7 @@
                     let text = document.createElement("a");
                     text.classList.add("underline");
                     text.innerHTML = `See all ${resultsCount} results`;
-                    text.href = "\/en/legal/search?term=" + window.instance.searchTerm;
+                    text.href = "\/es-mx/legal/search?term=" + window.instance.searchTerm;
                     bottom.append(text);
 
                     resultContainer.append(bottom);
@@ -1295,7 +1241,7 @@
                 setTimeout(() => {
                     const input = document.querySelector(".pagefind-modular-input");
                     if (input) {
-                        input.placeholder = "Search legal docs";
+                        input.placeholder = "Buscar documentos legales";
                     }
                 }, 100);
 
@@ -1347,7 +1293,7 @@
 </script>
 
 
-<div id="search" class="w-full max-[479px]:max-w-[55%] max-w-[40%] lg:max-w-full"><form class="pagefind-modular-input-wrapper" role="search" aria-label="Search this site" action="javascript:void(0);"><label for="pfmod-input-0" data-pfmod-sr-hidden="true">Search this site</label><input id="pfmod-input-0" class="pagefind-modular-input" autocapitalize="none" enterkeyhint="search" placeholder="Search legal docs"><button class="pagefind-modular-input-clear" data-pfmod-suppressed="true">Clear</button></form></div>
+<div id="search" class="w-full max-[479px]:max-w-[55%] max-w-[40%] lg:max-w-full"></div>
 <div id="results" class="hidden absolute mt-4 bg-white border border-[#8D41F9] rounded-lg z-20 overflow-hidden lg:w-[446px] left-0 right-0 lg:left-auto lg:right-auto top-[100%]" role="dialog" aria-label="Search results"></div>
 
     </div>
@@ -1358,8 +1304,8 @@
             <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1.25 11L10.204 2.04501C10.644 1.60601 11.356 1.60601 11.795 2.04501L20.75 11M3.5 8.75001V18.875C3.5 19.496 4.004 20 4.625 20H8.75V15.125C8.75 14.504 9.254 14 9.875 14H12.125C12.746 14 13.25 14.504 13.25 15.125V20H17.375C17.996 20 18.5 19.496 18.5 18.875V8.75001M7.25 20H15.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
-            <a class="p-2 " href="/en/legal/">
-                All Legal Docs
+            <a class="p-2 " href="/es-mx/legal/">
+                Todos los Documentos Legales
             </a>
         </li>
         
@@ -1367,6 +1313,8 @@
         
         
         
+        
+        
             
             
             
@@ -1374,24 +1322,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/terms-of-service/" data-i18n="menu:terms-of-service">Terms of Service</a>
+                <a class="p-3  " href="/es-mx/legal/terms-of-service/" data-i18n="menu:términos-de-servicio">Términos de servicio</a>
             
 
             
@@ -1406,24 +1342,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/terms-of-sale/" data-i18n="menu:terms-of-sale">Terms of Sale</a>
+                <a class="p-3  " href="/es-mx/legal/terms-of-sale/" data-i18n="menu:términos-de-venta">Términos de Venta</a>
             
 
             
@@ -1438,24 +1362,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/privacy-notice/" data-i18n="menu:privacy-notice">Privacy Notice</a>
+                <a class="p-3  " href="/es-mx/legal/privacy-notice/" data-i18n="menu:aviso-de-privacidad">Aviso de privacidad</a>
             
 
             
@@ -1470,24 +1382,12 @@
         
         
             
-                
-                    
-
-                    
-                    
-                    
-                    
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/privacy-choices/" data-i18n="menu:privacy-choices">Privacy Choices</a>
+                <a class="p-3  " href="/es-mx/legal/privacy-choices/" data-i18n="menu:opciones-de-privacidad">Opciones de privacidad</a>
             
 
             
@@ -1502,17 +1402,12 @@
         
         
             
-                
-            
         
         <li class="pt-[6px] pb-[6px] border-b border-brand-widow flex " data-available-countries="">
             
             
             
-                
-                
-
-                <a class="p-3  " href="https://legal.twitch.com/en/legal/monetized-streamer-agreement/" data-i18n="menu:monetized-streamer-agreement">Monetized Streamer Agreement</a>
+                <a class="p-3  " href="/es-mx/legal/monetized-streamer-agreement/" data-i18n="menu:acuerdo-de-streamer-monetizado-de-twitch">Acuerdo de Streamer Monetizado de Twitch</a>
             
 
             
@@ -1539,9 +1434,10 @@
     
       
       
+      
         
       <div class="grid grid-cols-1 pb-16 xl:grid-cols-[1fr_350px]">
-        
+
         
         
         
@@ -1553,8 +1449,16 @@
           
         
 
-        <h1 class="pt-12 pl-5 text-4xl text-brand-purple-dark font-[700] mb-4 xl:col-span-2">DMCA Guidelines</h1>
         
+        
+        
+        
+        
+
+        
+          <h1 class="pt-12 pl-5 text-4xl text-brand-purple-dark font-[700] mb-4 xl:col-span-2">Lineamientos de la DMCA</h1>
+        
+
         
         
         <div class=" xl:sticky top-0 self-start px-4 xl:pl-5 xl:pr-5 pt-8 xl:h-[100vh] xl:overflow-y-scroll xl:col-start-2 xl:row-start-2 xl:max-w-[350px] order-first xl:order-none" x-data="{mobileTOCOpen: false}">
@@ -1568,7 +1472,7 @@
           
             <div class="bg-brand-ice xl:bg-transparent p-4 xl:p-0 rounded-lg xl:rounded-none">
               <button class="text-sm font-[500] flex items-center justify-between xl:border-none xl:toc-header w-full text-left group" @click="mobileTOCOpen = !mobileTOCOpen" @keydown.enter="mobileTOCOpen = !mobileTOCOpen" @keydown.space.prevent="mobileTOCOpen = !mobileTOCOpen" aria-expanded="false" :aria-expanded="mobileTOCOpen ? 'true' : 'false'" :data-state="mobileTOCOpen ? 'open' : 'closed'" aria-controls="table-of-contents" data-state="closed">
-                <div>ON THIS PAGE</div>
+                <div>EN ESTA PÁGINA</div>
                 <div class="flex items-center justify-end xl:hidden">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-4 h-4 transition-transform duration-300 select-none" :class="mobileTOCOpen ? '-scale-y-100' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"></path></svg>
                 </div>
@@ -1577,13 +1481,13 @@
                 <nav id="TableOfContents">
   <ul>
     <li></li>
-    <li><a href="#the-dmca-process-at-twitch">The DMCA Process at Twitch</a></li>
-    <li><a href="#information-for-rights-holders">Information for Rights Holders</a></li>
-    <li><a href="#information-for-twitch-streamers">Information for Twitch Streamers</a></li>
-    <li><a href="#repeat-infringer-policy">Repeat Infringer Policy</a></li>
-    <li><a href="#copyright-school">Copyright School</a></li>
-    <li><a href="#twitchs-role">Twitch’s Role</a></li>
-    <li><a href="#designated-copyright-agent">Designated Copyright Agent</a></li>
+    <li><a href="#el-proceso-dmca-en-twitch">El proceso DMCA en Twitch</a></li>
+    <li><a href="#información-para-titulares-de-derechos">Información para titulares de derechos</a></li>
+    <li><a href="#información-para-streamers-de-twitch">Información para Streamers de Twitch</a></li>
+    <li><a href="#política-de-infractor-reincidente">Política de infractor reincidente</a></li>
+    <li><a href="#escuela-de-derechos-de-autor">Escuela de derechos de autor</a></li>
+    <li><a href="#rol-de-twitch">Rol de Twitch</a></li>
+    <li><a href="#agente-de-derechos-de-autor-designado">Agente de derechos de autor designado</a></li>
   </ul>
 </nav>
               </div>
@@ -1591,235 +1495,219 @@
           
         </div>
         
+        
         <div class="pl-5 pr-5 xl:pr-0 xl:col-start-1 xl:row-start-2">
           
+            
             
               <div class="flex items-center justify-between mb-5">
                 <p class="text-xs">
                   
                     
-                    <span data-i18n="legal-enlegaldmca-guidelines20231011:modified" style="display: block;">
-                        Last modified on 
+                    <span data-i18n="legal-es-mxlegaldmca-guidelines20231012:modified" style="display: block;">
+                        Última modificación el
                         
-                          10/11/2023
+                          10/12/2023
                         
                     </span>
                     
                   
                   
-                      <span data-i18n="legal-enlegaldmca-guidelines20231011:modified" style="display: block;">
-                          <a class="font-bold text-brand-purple" href="/en/legal/dmca-guidelines/archive">See prior versions of DMCA Guidelines</a>
+                      <span data-i18n="legal-es-mxlegaldmca-guidelines20231012:modified" style="display: block;">
+                          <a class="font-bold text-brand-purple" href="/es-mx/legal/dmca-guidelines/archive">Ver versiones anteriores de Lineamientos de la DMCA</a>
                       </span>
                   
                 </p>
               </div>
           
 
-          <article data-pagefind-body="" data-pagefind-meta="title:DMCA Guidelines" class="prose max-w-none prose-brand-purple prose-base prose-headings:text-brand-purple-dark prose-a:text-brand-black hover:prose-a:underline">
-            <h1 id="digital-millennium-copyright-act-notification-guidelines">
-  Digital Millennium Copyright Act Notification Guidelines
+          <article data-pagefind-body="" data-pagefind-meta="title:Lineamientos de la DMCA" class="prose max-w-none prose-brand-purple prose-base prose-headings:text-brand-purple-dark prose-a:text-brand-black hover:prose-a:underline">
+            <h1 id="directrices-de-notificación-de-la-ley-de-copyright-del-milenio-digital">
+  Directrices de notificación de la Ley de Copyright del Milenio Digital
 </h1>
-<p>Twitch is a home for creative expression that respects copyright laws and other forms of intellectual property.</p>
-<p>These are guidelines for streamers, rights holders, and copyright agents to understand how Twitch’s copyright takedown process works and what it means for them. Twitch complies with the Digital Millennium Copyright Act (commonly known as the “DMCA”) and other copyright laws around the world, and for simplicity we refer to these guidelines as our “DMCA Notification Guidelines” and the process described below as our “DMCA process.”</p>
-<p>If you’re a streamer and want to learn more about copyright law and how it impacts your streaming experience on Twitch, we recommend you visit our <a href="https://www.twitch.tv/creatorcamp/paths/copyrights-and-your-channel">Copyrights &amp; Your Channel Learning Path</a> and consider attending <a href="https://www.twitch.tv/creatorcamp/en/paths/copyrights-and-your-channel/what-is-a-copyright-and-what-do-i-need-to-know-about-copyright-law/">Copyright School</a>.</p>
-<p>As with all legal matters, consider consulting a legal professional to obtain specific guidance or answers to questions about what copyright law is or how it applies in a particular situation, what options you have if your content is targeted in a notification, and related issues. We strongly encourage you to do so before taking any action that might impact your rights. This guide isn’t legal advice and shouldn’t be taken as such.</p>
-<h3 id="table-of-contents">
-  Table of Contents
+<p>Twitch es un servicio para la expresión creativa que respeta las leyes de derechos de autor y otras formas de propiedad intelectual.</p>
+<p>Estas son pautas para que los streamers, los titulares de los derechos y los agentes de derechos de autor entiendan cómo funciona el proceso de eliminación de derechos de autor de Twitch y lo que significa para ellos. Twitch cumple con la Ley de Derechos de Autor del Milenio Digital (también conocida como la “DMCA”) y otras leyes de derechos de autor en todo el mundo, y por motivos de simplicidad nos referimos a estas directrices como nuestras “Directrices de notificación de la DMCA” y el proceso que se describe a continuación como nuestro “proceso DMCA”.</p>
+<p>Si eres streamer y quieres más información sobre la ley de derechos de autor y cómo afecta tu experiencia de stream en Twitch, te recomendamos que consultes <a href="https://www.twitch.tv/creatorcamp/paths/copyrights-and-your-channel">Ruta de aprendizaje de derechos de autor y Tu canal</a> y consideres la posibilidad de asistir a la <a href="https://www.twitch.tv/creatorcamp/en/paths/copyrights-and-your-channel/what-is-a-copyright-and-what-do-i-need-to-know-about-copyright-law/">Escuela de derechos de autor</a>.</p>
+<p>Al igual que con todos los asuntos legales, considere consultar a un profesional legal para obtener orientación específica o respuestas a preguntas sobre qué es la ley de derechos de autor o cómo se aplica en una situación específica, qué opciones tiene si su contenido está especificado en una notificación y asuntos relacionados. Le recomendamos encarecidamente que lo haga antes de tomar cualquier medida que pueda afectar sus derechos. Esta guía no es un consejo legal y no debe tomarse como tal.</p>
+<h3 id="tabla-de-contenidos">
+  Tabla de contenidos
 </h3>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#the-dmca-process-at-twitch">The DMCA Process at Twitch</a></li>
-<li><a href="/en/legal/dmca-guidelines/#information-for-rights-holders">Information for Rights Holders</a>
+<li><a href="/es-mx/legal/dmca-guidelines/#the-dmca-process-at-twitch">El proceso DMCA en Twitch</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#information-for-rights-holders">Información para titulares de derechos</a>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#how-to-submit-a-notification-of-claimed-infringement">How to Submit a Notification of Claimed Infringement</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#how-to-submit-a-notification-of-claimed-infringement">Cómo Enviar una Notificación de Reclamo de Infracción</a></li>
 </ul>
 </li>
-<li><a href="/en/legal/dmca-guidelines/#information-for-twitch-streamers">Information for Twitch Streamers</a>
+<li><a href="/es-mx/legal/dmca-guidelines/#information-for-twitch-streamers">Información para Streamers de Twitch</a>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#how-to-submit-a-counter-notification">How to Submit a Counter-Notification</a></li>
-<li><a href="/en/legal/dmca-guidelines/#how-to-submit-a-retraction">How to Submit a Retraction</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#how-to-submit-a-counter-notification">Cómo Enviar una Contranotificación</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#how-to-submit-a-retraction">Cómo Enviar una Retractación</a></li>
 </ul>
 </li>
-<li><a href="/en/legal/dmca-guidelines/#repeat-infringer-policy">Repeat Infringer Policy</a></li>
-<li><a href="/en/legal/dmca-guidelines/#copyright-school">Copyright School</a></li>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-role">Twitch’s Role</a>
+<li><a href="/es-mx/legal/dmca-guidelines/#repeat-infringer-policy">Política de infractor reincidente</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#copyright-school">Escuela de derechos de autor</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-role">Rol de Twitch</a>
 <ul>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-notifications-of-claimed-infringement">Twitch’s Actions Upon Receipt of Notifications of Claimed Infringement</a></li>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-counter-notifications">Twitch’s Actions Upon Receipt of Counter-Notifications</a></li>
-<li><a href="/en/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-retractions">Twitch’s Actions Upon Receipt of Retractions</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-notifications-of-claimed-infringement">Acciones de Twitch tras Recibir Notificaciones de Reclamo de Infracción</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-counter-notifications">Acciones de Twitch tras Recibir Contranotificaciones</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#twitchs-actions-upon-receipt-of-retractions">Acciones de Twitch tras Recibir Retractaciones</a></li>
 </ul>
 </li>
-<li><a href="/en/legal/dmca-guidelines/#designated-copyright-agent">Designated Copyright Agent</a></li>
+<li><a href="/es-mx/legal/dmca-guidelines/#designated-copyright-agent">Agente de derechos de autor designado</a></li>
 </ul>
-<h2 id="the-dmca-process-at-twitch" tabindex="-1">
-  The DMCA Process at Twitch
+<h2 id="el-proceso-dmca-en-twitch" tabindex="-1">
+  El proceso DMCA en Twitch
 </h2>
-<p>Twitch’s process for responding to notifications of claimed copyright infringement follows the legal parameters established by the DMCA and similar laws worldwide. Because Twitch is an online service that transmits and hosts user-generated content, this is how we address claims of copyright infringement made by rights holders and their agents.</p>
-<p>If you are a rights holder (or their legally authorized agent), you can submit a notification of claimed infringement (which we call a “DMCA notification”) to Twitch asking us to remove material that you believe infringes your copyrighted work(s).</p>
-<p>If you are a Twitch streamer and have received one of these notifications, Twitch will send you information about this notification and issue a copyright strike to your account, in accordance with our repeat infringer policy (see below). If you believe the DMCA notification was sent by mistake or misidentification, you can dispute it by sending Twitch a counter-notification or by requesting a retraction from the rights holder.</p>
-<p>We expect DMCA notifications and counter-notifications to comply with all legal requirements, and we will take into account any failure to comply. Accordingly, we expect that rights holders and their authorized agents will exercise due diligence and take into account exceptions and limitations to copyright – for example, fair use under US law and purposes such as quotation, criticism, review, caricature, parody, or pastiche under EU law – before submitting DMCA notifications. We similarly expect that streamers will carefully review DMCA notifications they receive and submit counter-notifications only where there are valid grounds to do so.</p>
-<h2 id="information-for-rights-holders" tabindex="-1">
-  Information for Rights Holders
+<p>El proceso de Twitch para responder a las notificaciones de una reclamación de infracción de derechos de autor sigue los parámetros legales establecidos por la DMCA y leyes similares en todo el mundo. Debido a que Twitch es un servicio en línea que transmite y hostea contenido generado por los usuarios, así es como abordamos las reclamaciones de infracción de derechos de autor hechas por titulares de derechos de autor y sus agentes.</p>
+<p>Si eres titular de los derechos (o su agente legalmente autorizado), puedes enviar una notificación de reclamo de infracción (a la que llamamos una “notificación de la DMCA”) a Twitch donde solicites que eliminemos material que creas que infringe tus obras con derechos de autor.</p>
+<p>Si eres streamer de Twitch y recibiste una de estas notificaciones, Twitch te enviará información sobre esta notificación y emitirá una infracción de derechos de autor a tu cuenta, de acuerdo con nuestra Política de infractores recurrentes (consulta a continuación). Si crees que la notificación de la DMCA se envió por error o identificación errónea, puedes disputarla enviando una apelación de notificación a Twitch o solicitando una retractación del titular de los derechos.</p>
+<p>Esperamos que las notificaciones y apelaciones de notificación de la DMCA cumplan con todos los requisitos legales, y tomaremos en cuenta cualquier incumplimiento. En consecuencia, esperamos que los titulares de derechos y sus agentes autorizados ejerzan la debida diligencia y tengan en cuenta las excepciones y limitaciones a los derechos de autor, por ejemplo, el uso legítimo bajo la ley estadounidense y propósitos como citas, críticas, revisión, caricatura, parodia o imitación según la ley de la UE, antes de enviar notificaciones de la DMCA. Así mismo, esperamos que los streamers revisen con detenimiento las notificaciones de la DMCA que reciben y envíen apelaciones de notificación solo cuando haya motivos válidos para hacerlo.</p>
+<h2 id="información-para-titulares-de-derechos" tabindex="-1">
+  Información para titulares de derechos
 </h2>
-<h3 id="how-to-submit-a-notification-of-claimed-infringement">
-  How to Submit a Notification of Claimed Infringement
+<h3 id="cómo-enviar-una-notificación-de-reclamo-de-infracción">
+  Cómo Enviar una Notificación de Reclamo de Infracción
 </h3>
-<p>Notifications against most types of content can be submitted by filling out our webform:</p>
-<p><strong>&gt;&gt;&nbsp;<a href="https://www.twitch.tv/copyright-claims">Submit a notification of claimed infringement</a></strong></p>
-<p>If you are a rights holder or their legally authorized agent and you believe that material transmitted or stored on our service infringes your copyright, then you may submit a notification of claimed infringement through our webform (or via our Designated Copyright Agent, defined below) that includes the following information (if you don’t include all of this information, your notification may be ineffective and not acted upon):</p>
+<p>Las notificaciones respecto de la mayoría de los tipos de contenido se pueden enviar completando nuestro formulario web:</p>
+<p><strong>&gt;&gt;&nbsp;<a href="https://www.twitch.tv/copyright-claims">Enviar una notificación de reclamo de infracción</a></strong></p>
+<p>Si eres titular de derechos o su agente legalmente autorizado y crees que el material transmitido o almacenado en nuestro servicio infringe tus derechos de autor, puedes enviar una notificación de reclamación de infracción a través de nuestro formulario web (o a través de nuestro agente designado de derechos de autor, definido a continuación) que incluya la siguiente información (si no incluye toda esta información, la notificación puede resultar ineficaz y no se tomarán medidas):</p>
 <ol>
-<li>Today’s date</li>
-<li>Type of material you are reporting (Live Stream, VOD, Clip, Channel Artwork, etc.):</li>
-<li>URL where the allegedly infringing material can or could be found
+<li>Fecha de hoy</li>
+<li>Tipo de material que denuncias (stream en vivo, VOD, clip, ilustraciones de canales, etc.):</li>
+<li>URL donde el material presuntamente en infracción puede o podría encontrarse
 <ul>
-<li>For claims against live streams, please provide a channel URL (e.g., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL)</li>
-<li>For claims against recorded videos, please provide a direct link to the video (e.g., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL/VOD_URL for VODs; <a href="https://clips.twitch.tv/Clip">https://clips.twitch.tv/Clip</a>_URL for Clips)</li>
-<li>For claims against static content on a channel page, such as emotes, panels, or profile pictures, please provide a channel URL (e.g., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL) and specify the infringing content (e.g., emoteNAME or About Panel).</li>
+<li>Para reclamos contra streams en vivo, proporciona una URL del canal (por ejemplo, <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL)</li>
+<li>Para reclamos en contra de videos grabados, proporcione un enlace directo al video (p. ej., <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL/VOD_URL para VOD; <a href="https://clips.twitch.tv/Clip">https://clips.twitch.tv/Clip</a>_URL para clips)</li>
+<li>Para reclamos contra contenido estático en una página de canal, como emotes, paneles o fotos de perfil, proporciona una URL del canal (por ejemplo, <a href="https://www.twitch.tv/Channel">https://www.twitch.tv/Channel</a>_URL) e indica el contenido infractor (por ejemplo, nombre de emote o Panel Acerca de).</li>
 </ul>
 </li>
-<li>Date and time of the alleged infringement, where applicable
+<li>Fecha y hora de la presunta infracción, cuando corresponda
 <ul>
-<li>Live streams
+<li>Transmisiones en vivo
 <ol>
-<li>Please indicate “Ongoing” if the alleged infringement is occurring at the time of your submission (e.g., an unauthorized live sporting event or TV show that is currently being broadcast).</li>
-<li>If the alleged infringement has concluded by the time of your submission, please indicate “Past Livestream” and provide the date and an accurate timestamp or time frame that identifies, in Pacific Standard Time, when the allegedly infringing activity occurred (e.g., 1/21/2021 at 5:45pm PST).</li>
+<li>Por favor indique “En curso”; si la presunta infracción se produce al momento de su envío (por ejemplo, un evento deportivo no autorizado en directo o un programa de televisión que se está emitiendo actualmente).</li>
+<li>Si la supuesta infracción ya concluyó al momento del envío, indica “Stream en vivo pasado” y proporciona la fecha y una marca de tiempo o plazos exactos que identifique, en la hora estándar del Pacífico, cuando ocurrió la presunta actividad en infracción (por ejemplo, 21/1/2021 a las 5:45&nbsp;p.&nbsp;m.&nbsp;PST).</li>
 </ol>
 </li>
-<li>VODs
+<li>VOD
 <ol>
-<li>Please provide a timestamp of the particular segment of the VOD at which you claim infringing activity has occurred.</li>
-<li>You can either include a timestamp (e.g., [hour]:[minute]:[second]), or link to the timestamped portion of the VOD (this can be done by selecting the gear icon and clicking “Copy Video URL at [time]”)</li>
+<li>Por favor proporcione una marca de tiempo del segmento particular del VOD en el que afirma que se ha producido una actividad en infracción.</li>
+<li>Puede incluir una marca de tiempo (p. ej., [hora]:[minuto]:[segundo]) o un enlace a la parte con marca de tiempo del VOD (puede hacerlo seleccionando el icono de engranaje y haciendo clic en “Copiar URL del vídeo a las [hora]”).</li>
 </ol>
 </li>
 </ul>
 </li>
-<li>Identification of the specific copyrighted work that was allegedly infringed</li>
-<li>Link that points directly to an authorized example of the copyrighted work, if available (e.g. URL to your website or your Twitch page where work is displayed)</li>
-<li>Name of the rights holder (owner of the copyright) (person or company) (this will be shared with the account holder whose material is identified in the notification)
+<li>Identificación de la obra con derechos de autor específica que presuntamente se infringió</li>
+<li>Enlace que apunta directamente a un ejemplo autorizado del trabajo protegido por derechos de autor, si está disponible (p. ej., URL de su sitio web o de su página de Twitch donde se muestre el trabajo)</li>
+<li>Nombre del titular de los derechos (propietario de los derechos de autor) (persona o compañía) (esto se compartirá con el titular de la cuenta cuyo material se identifique en la notificación)
 <ul>
-<li>Your relationship to the rights holder (e.g., whether you are the rights holder or an authorized agent)</li>
+<li>Su relación con el titular de los derechos (p. ej., si usted es el titular de los derechos o un agente autorizado).</li>
 </ul>
 </li>
-<li>Information that allows Twitch and the account holder whose material is identified in the notification to contact you, including
+<li>Información que permite a Twitch y al titular de la cuenta cuyo material se identifica en la notificación comunicarse contigo, incluido lo siguiente:
 <ul>
-<li>Your name or organization (this will be shared with the account holder whose material is identified in the notification)</li>
-<li>Your full postal address (Street, Unit #, City/Town, State, Mailing Code, Country)</li>
-<li>Your phone number, including International Code</li>
-<li>Your email address (this will be shared with the account holder whose material is identified in the notification)</li>
+<li>Tu nombre u organización (esto se compartirá con el titular de la cuenta cuyo material se identifique en la notificación)</li>
+<li>Su domicilio postal completo (calle, número, ciudad o localidad, código postal, país)</li>
+<li>Su número de teléfono, incluido el código internacional</li>
+<li>Tu dirección de correo electrónico (esto se compartirá con el titular de la cuenta cuyo material esté identificado en la notificación)</li>
 </ul>
 </li>
-<li>Verify these statements by including, and adding your name to, the following affidavit:</li>
+<li>Verifica estas afirmaciones, y añade tu nombre a la siguiente declaración:</li>
 </ol>
-<p>I,</p>
-<p><your full="" name="" as="" an="" electronic="" signature="">, wish to state that:</your></p>
+<p>Yo, &lt;tu nombre completo como firma electrónica&gt;, declaro que:</p>
 <ul>
-<li>I have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law;</li>
-<li>This notification is accurate; and</li>
-<li>Under penalty of perjury, I am the owner, or an agent authorized to act on behalf of the owner, of an exclusive right that is allegedly infringed.</li>
+<li>Creo de buena fe que el uso del material, tal y como se detalla en la queja, no está autorizado por el titular de los derechos de autor, su agente o la ley.</li>
+<li>Esta notificación es exacta; y</li>
+<li>bajo pena de perjurio, soy el propietario, o un agente autorizado para actuar en nombre del propietario, de un derecho exclusivo que presuntamente se infringe.</li>
 </ul>
-<p>Twitch generally forwards complete notifications of claimed infringement to the account holder whose material is identified in the notification (this will include the name or organization of the submitter, the name of the rights holder, and the email address submitted) to give the account holder an opportunity to review the allegations of infringement, contact the submitter (e.g., to request a retraction), and take other appropriate actions.</p>
-<p>Please note that copyright complainants have an obligation to preserve evidence of the alleged infringement. Notifications of claimed infringement that include false statements or knowing misrepresentations will be rejected if Twitch becomes aware of them, and in addition to violating Twitch’s <a href="https://legal.twitch.com/legal/terms-of-service/">Terms of Service</a> and <a href="https://safety.twitch.tv/s/article/Community-Guidelines?language=en_US">Community Guidelines</a>, may subject the claimant who submitted the notification to legal liability – for example, pursuant to 17 U.S.C. § 512(f).</p>
-<h2 id="information-for-twitch-streamers" tabindex="-1">
-  Information for Twitch Streamers
+<p>Generalmente, Twitch reenvía las notificaciones completas de reclamación de infracción al titular de la cuenta cuyo material se identifica en la notificación (esto incluirá el nombre u organización del autor, el nombre del titular de los derechos y la dirección de correo electrónico enviada) para darle al titular de la cuenta la oportunidad de revisar las acusaciones de infracción, comunicarse con el autor (por ejemplo, para solicitar una retractación) y tomar las medidas adecuadas.</p>
+<p>Ten en cuenta que los reclamantes de derechos de autor tienen la obligación de conservar las pruebas de la presunta infracción. Las notificaciones de reclamo de infracción que incluyen declaraciones falsas o tergiversaciones a sabiendas se rechazarán si Twitch se da cuenta de ellas, y además de infringir los <a href="https://legal.twitch.com/legal/terms-of-service/">Términos de servicio</a> y las <a href="https://safety.twitch.tv/s/article/Community-Guidelines?language=en_US">Directrices de la comunidad</a>, pueden someter al reclamante que presentó la notificación a responsabilidad legal, por ejemplo, de conformidad con 17 U.S.C. § 512(f).</p>
+<h2 id="información-para-streamers-de-twitch" tabindex="-1">
+  Información para Streamers de Twitch
 </h2>
-<h3 id="how-to-submit-a-counter-notification">
-  How to Submit a Counter-Notification
+<h3 id="cómo-enviar-una-contranotificación">
+  Cómo Enviar una Contranotificación
 </h3>
-<p>If you are a Twitch streamer and a notification of claimed infringement has been submitted against content you shared on Twitch, you should review the details we have provided and consider your options. If you believe that the notification – and any action Twitch has taken as a result – was sent due to a mistake or misidentification, then you may submit a counter-notification to <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a>.</p>
-<p>Note that there may be legal consequences if you submit a counter-notification. For example, if the complaining party wishes to keep the content identified in their DMCA notification disabled after receiving your counter-notification, they have the option of initiating a legal action seeking a court order to restrain you from engaging in infringing activity.</p>
-<p>Also, please be aware that we will generally forward the information you share as part of your counter-notification with the claimant that submitted the DMCA notification against your content.</p>
-<p>To send a counter-notification – whether responding to a DMCA notification directed to recorded content, a live stream, or something else – please provide all of the following information (all of which will be shared with the claimant):</p>
+<p>Si eres streamer de Twitch y se envió una notificación de reclamación de infracción por el contenido que compartiste en Twitch, debes revisar los detalles que te proporcionamos y considerar tus opciones. Si crees que la notificación, y cualquier acción que Twitch haya tomado en consecuencia, se envió debido a un error o identificación errónea, puedes enviar una apelación de notificación a <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a>.</p>
+<p>Ten en cuenta que puede haber consecuencias legales si envías una apelación de notificación. Por ejemplo, si la parte reclamante desea mantener el contenido identificado en su notificación de la DMCA deshabilitado después de recibir la apelación de notificación, dicha parte tiene la opción de iniciar una acción legal y buscar una orden judicial para impedirte participar en actividades infractoras.</p>
+<p>Además, ten en cuenta que generalmente remitiremos la información que compartes como parte de tu apelación de notificación con el reclamante que envió la notificación de la DMCA contra tu contenido.</p>
+<p>Para enviar una apelación de notificación, ya sea al responder una notificación de la DMCA dirigida a contenido grabado, un stream en vivo o algo más, proporciona la siguiente información (la cual se compartirá con el reclamante):</p>
 <ol>
-<li>
-<p>URL(s) where the material that was the subject of the notification of claimed infringement appeared before it was identified, removed, or access to it was disabled</p>
-</li>
-<li>
-<p>Name of the claimant who submitted the notification</p>
-</li>
-<li>
-<p>Your Twitch channel name (e.g., twitch.tv/Username)</p>
-</li>
-<li>
-<p>Your full legal name</p>
-</li>
-<li>
-<p>Your email address</p>
-</li>
-<li>
-<p>Your full postal address (Street, Unit #, State, Mailing Code, Country)</p>
-</li>
-<li>
-<p>Your phone number, including International Code</p>
-</li>
-<li>
-<p>Verify these statements by including, and adding your name to, the following affidavit:I,</p>
-<p><your full="" name="" as="" an="" electronic="" signature="">, wish to state that:</your></p>
+<li>La URL en la que el material que fue objeto de la notificación de reclamo de infracción apareció antes de ser identificado, eliminado o de que su acceso fuera inhabilitado.</li>
+<li>El nombre del reclamante que envió la notificación</li>
+<li>El nombre de su canal de Twitch (p. ej., Twitch .tv / nombre de usuario)</li>
+<li>Su nombre legal completo</li>
+<li>Su dirección de correo</li>
+<li>Su domicilio postal completo (calle, número de unidad, estado, código postal, país)</li>
+<li>Su número de teléfono, incluido el código internacional</li>
+<li>Verifica estas declaraciones e incluye y agrega tu nombre a la siguiente declaración jurada: Yo, &lt;tu nombre completo como firma electrónica&gt;, deseo manifestar que:
 <ul>
-<li>I consent to the jurisdiction of the Federal District Court for the judicial district in which my address is located, or if my address is outside of the United States, the judicial district in which Twitch may be found, and will accept service of process from the claimant.</li>
-<li>I swear, under penalty of perjury, that I have a good faith belief that the material identified in the notification was identified, removed, and/or disabled as a result of mistake or misidentification.</li>
+<li>Doy mi consentimiento a la jurisdicción del Tribunal Federal de Distrito para el distrito judicial en el que se encuentra mi domicilio, o si mi domicilio está fuera de los Estados Unidos, para el distrito judicial en el que se encuentra Twitch, y acepto la notificación y el emplazamiento por parte del demandante.</li>
+<li>Juro, bajo pena de perjurio, que creo de buena fe que el material identificado en la notificación fue identificado, eliminado o inhabilitado como resultado de un error o identificación errónea.</li>
 </ul>
-
 </li>
 </ol>
-<p>You also have the option to explain why you believe there was a mistake or misidentification. Keep in mind that failure to provide the information required could result in Twitch being unable to take action in response to your counter-notification.</p>
-<h3 id="how-to-submit-a-retraction">
-  How to Submit a Retraction
+<p>También tienes la opción de explicar por qué crees que hubo un error o una identificación errónea. Ten en cuenta que, si no proporcionas la información necesaria, es posible que Twitch no pueda tomar medidas en respuesta a tu apelación de notificación.</p>
+<h3 id="cómo-enviar-una-retractación">
+  Cómo Enviar una Retractación
 </h3>
-<p>If you are a Twitch streamer who has received a notification of claimed infringement, you can seek a retraction by reaching out to the rights holder or agent who sent the notification directly. Their contact email will be provided in the email you receive from Twitch concerning the DMCA notification, and will also be identified in your Copyright Claims Manager.</p>
-<p>If you are a rights holder or agent who submitted a DMCA notification that you wish to retract, please email the following information to <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a> from the same email address as your original notification. Note that we cannot process retractions that are sent from a different email address.</p>
+<p>Si eres un streamer de Twitch que recibió una notificación de reclamo de infracción, puedes solicitar una retractación comunicándote con el titular de los derechos o el agente que la envió directamente. Su correo electrónico de contacto se proporcionará en el correo electrónico que recibas de Twitch con respecto a la notificación de la DMCA. También se identificará en tu Administrador de reclamos de derechos de autor.&nbsp;</p>
+<p>Si eres titular de los derechos o agente que envió una notificación de la DMCA y deseas hacer una retractación, envía la siguiente información por correo electrónico a <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a> desde la misma dirección de correo electrónico que tu notificación original. No podemos procesar las retractaciones que se envían desde otra dirección de correo electrónico.</p>
 <ol>
-<li>The date of your original notification and, if applicable, the Claim ID – replying to the takedown confirmation email we sent may help us respond more quickly.</li>
-<li>The copyrighted work(s) allegedly infringed.</li>
-<li>The URL(s) where the allegedly infringing material could be found.</li>
-<li>An electronic or physical signature (typing your full legal name is sufficient).</li>
+<li>La fecha de su notificación original y, en su caso, el Id. de la reclamación - responder al correo electrónico de confirmación de retirada que le enviamos, puede ayudarnos a responder más rápidamente.</li>
+<li>La(s) obra(s) protegida por derechos de autor que presuntamente se infringió.</li>
+<li>La(s) URL(s) donde se podría encontrar el material presuntamente en infracción.</li>
+<li>Una firma electrónica o física (escribir su nombre legal completo es suficiente).</li>
 </ol>
-<h2 id="repeat-infringer-policy" tabindex="-1">
-  Repeat Infringer Policy
+<h2 id="política-de-infractor-reincidente" tabindex="-1">
+  Política de infractor reincidente
 </h2>
-<p>We will terminate an account holder’s access to the Twitch service if that user is determined by Twitch to be a “repeat infringer” of copyrighted works on the service – under our policy, a user will be considered a repeat infringer if they accrue three copyright strikes.</p>
-<p>Twitch reserves the right to terminate accounts that act against Twitch’s <a href="https://legal.twitch.com/en/legal/terms-of-service/">Terms of Service</a>, or clearly against the values that Twitch seeks to promote in its community, regardless of how many strikes are involved.</p>
-<p>Account holders generally accrue a strike when Twitch receives a complete notification of infringement and does not receive a complete counter-notification regarding the alleged infringement or a retraction of the notification. Strikes are not permanent, but rather are associated with an account for enough time for Twitch to determine whether the account holder is engaging in repeated infringement such that termination is necessary under this Policy.</p>
-<p>When determining whether account holders are repeat infringers under this policy, we take into consideration complete notifications of claimed infringement from rights holders, complete counter-notifications from account holders, retractions from rights holders, and other relevant factors and circumstances. Twitch may also ask claimants and/or account holders for more information where we think it’s necessary to fairly apply our Repeat Infringer Policy.</p>
-<p>If a relevant court rules that an account holder is an “infringer” or “repeat infringer” on Twitch, we will take that ruling as conclusive under our Repeat Infringer Policy. To provide judicial determinations showing that an account holder is an infringer, or a repeat infringer, on the Twitch service, please forward it to our Designated Copyright Agent (see below) with “court ruling regarding infringer/repeat infringer” in the subject line. Twitch personnel will review the submission and may contact the claimants and/or account holder to verify the court ruling and understand its scope.</p>
-<h2 id="copyright-school" tabindex="-1">
-  Copyright School
+<p>Rescindiremos el acceso al servicio de Twitch a un titular de cuenta si Twitch determina que ese usuario es un “infractor recurrente”; de obras protegidas por derechos de autor en el servicio; según nuestra política, un usuario será considerado un infractor recurrente si acumula tres infracciones por derechos de autor.</p>
+<p>Twitch se reserva el derecho de cancelar las cuentas que actúen en contra de los <a href="https://legal.twitch.com/en/legal/terms-of-service/">Términos de servicio</a> de Twitch, o claramente en contra de los valores que Twitch busca promover en su comunidad, independientemente de cuántas infracciones estén involucradas.</p>
+<p>Los titulares de cuentas generalmente acumulan una falta cuando Twitch recibe una notificación completa de infracción y no recibe una apelación de notificación completa con respecto a la presunta infracción o una retractación de la notificación. Las faltas no son permanentes, sino que están asociadas con una cuenta durante el tiempo suficiente para que Twitch determine si el titular de cuenta está incurriendo en una infracción reiterada, de modo que la rescisión sea necesaria en virtud de esta Política.</p>
+<p>Al determinar si los titulares de una cuenta son infractores recurrentes bajo esta política, tomamos en consideración las notificaciones completas de reclamos de infracción de los titulares de derechos, las apelaciones de notificación completas de los titulares de la cuenta, las retractaciones de los titulares de derechos y otros factores y circunstancias relevantes. Twitch también puede solicitar al denunciante o a los titulares de la cuenta más información cuando lo consideremos necesario para aplicar de manera justa nuestra Política de Infractor Recurrente.</p>
+<p>Si un tribunal pertinente determina que un titular de una cuenta es un “infractor”; o un “infractor recurrente”; en Twitch, tomaremos esa decisión como concluyente según nuestra Política de Infractor Recurrente. Para proporcionar determinaciones judiciales que demuestren que el titular de una cuenta es un infractor, o un infractor recurrente, en el servicio de Twitch, favor de reenviarlas a nuestro Agente de Derechos de Autor designado (ver más abajo) indicando en el asunto “fallo judicial sobre infractor/infractor recurrente”. El personal de Twitch revisará la presentación y puede comunicarse con el denunciante o el titular de la cuenta para verificar el fallo judicial y entender su alcance.</p>
+<h2 id="escuela-de-derechos-de-autor" tabindex="-1">
+  Escuela de derechos de autor
 </h2>
-<p>We understand that mistakes happen and want everyone in the Twitch community to have the information needed to educate themselves and avoid making future mistakes.</p>
-<p>If you receive a copyright strike and are eligible to have the strike removed by completing Copyright School, you’ll receive an invitation to attend Copyright School through email and on twitch.tv via a top-of-page banner notification. If you successfully complete Copyright School following this invitation, one copyright strike will be removed from your account. You can take Copyright School once every 12 months.</p>
-<p>Because Copyright School contains valuable information for all streamers, we make it available for everyone (not only streamers who’ve received a copyright strike). Completing and viewing Copyright School without an invitation via email or top-of-page banner notification on twitch.tv will not decrement a copyright strike, nor will it prevent your eligibility to complete it again later to remove a copyright strike.</p>
-<h2 id="twitchs-role" tabindex="-1">
-  Twitch’s Role
+<p>Comprendemos que es normal cometer errores y nuestro objetivo es que todos en la comunidad de Twitch cuenten con la información necesaria para aprender y evitar equivocarse en el futuro.</p>
+<p>Si recibes una infracción de derechos de autor y eres elegible para que se elimine la infracción completando la Escuela de derechos de autor, recibirás una invitación para asistir a la Escuela de derechos de autor por correo electrónico y en twitch.tv a través de una notificación de banner en la parte superior de la página. Si completas correctamente la Escuela de derechos de autor después de esta invitación, se eliminará una infracción de derechos de autor de tu cuenta. Puedes cursar la Escuela de derechos de autor una vez cada 12&nbsp;meses.</p>
+<p>La Escuela de derechos de autor está disponible para todos porque contiene información importante para todos los streamers, no solo los que han recibido una infracción de derechos de autor. Completar y ver la Escuela de derechos de autor sin una invitación por correo electrónico o notificación de banner en la parte superior de la página en twitch.tv no decretará una infracción de derechos de autor, ni impedirá tu elegibilidad para completarla más tarde para eliminar una infracción de derechos de autor.&nbsp;</p>
+<h2 id="rol-de-twitch" tabindex="-1">
+  Rol de Twitch
 </h2>
-<p>Twitch does not have the authority or ability to make legal judgments regarding allegations of copyright infringement. It is our policy to follow statutes and court rulings regarding uses of our services and conduct of our account holders. The DMCA and similar laws require that Twitch act as a “go-between,” processing notifications of claimed infringement from rights holders and counter-notifications from account holders and notifying the impacted parties. It’s the responsibility of the rights holder and the account holder to resolve the dispute.</p>
-<p>In addition to facilitating this claim/dispute process, Twitch is also responsible for:</p>
+<p>Twitch no tiene la autoridad ni la capacidad para emitir juicios legales con respecto a las presunciones de infracción de derechos de autor. Nuestra política es seguir los estatutos y las sentencias judiciales con respecto a los usos de nuestros servicios y la conducta de nuestros titulares de cuenta. La DMCA y leyes similares exigen que Twitch actúe como un “intermediario”, al procesar notificaciones de reclamos de infracción de titulares de derechos y contranotificaciones de titulares de cuenta y al notificar a las partes afectadas. Es responsabilidad del titular de los derechos y del titular de cuenta resolver la disputa.</p>
+<p>Además de facilitar este proceso de reclamo/disputa, Twitch también es responsable de:</p>
 <ul>
-<li>Setting the requirements for what must be included in notifications and counter- notifications, consistent with the requirements of the DMCA and similar laws;</li>
-<li>Keeping track of notifications directed to account holders, counter-notifications from account holders, and any court orders regarding these disputes; and</li>
-<li>Adopting and reasonably implementing a policy that requires termination in appropriate circumstances of account holders who repeatedly engage in copyright infringement on Twitch. We call this our “Repeat Infringer Policy”, and it’s discussed in detail above.</li>
+<li>Establecer los requisitos de lo que debe incluirse en las notificaciones y contranotificaciones, de acuerdo con los requisitos de la DMCA y leyes similares.</li>
+<li>Realizar un seguimiento de las notificaciones dirigidas a titulares de cuenta, contranotificaciones de titulares de cuenta y cualquier orden judicial relacionada con estas disputas.</li>
+<li>Adoptar e implementar razonablemente una política que requiera la rescisión en las circunstancias apropiadas de los titulares de cuenta que participen reiteradamente en infracciones de derechos de autor en Twitch. La denominamos nuestra “Política de Infractor Recurrente” y se explica en detalle arriba.</li>
 </ul>
-<h3 id="twitchs-actions-upon-receipt-of-notifications-of-claimed-infringement">
-  Twitch’s Actions Upon Receipt of Notifications of Claimed Infringement
+<h3 id="acciones-de-twitch-tras-recibir-notificaciones-de-reclamo-de-infracción">
+  Acciones de Twitch tras Recibir Notificaciones de Reclamo de Infracción
 </h3>
-<p>If Twitch receives a complete notification from a rights holder or their legally authorized agent claiming that content on a channel infringes the rights holder’s copyright, Twitch generally notifies the account holder. At the same time, we will generally remove or disable access to recorded or other content containing the claimed infringing material. We may disable a livestream and/or suspend an account if the claimed infringement is continuing at the time we receive the rights holder’s notification.</p>
-<h3 id="twitchs-actions-upon-receipt-of-counter-notifications">
-  Twitch’s Actions Upon Receipt of Counter-Notifications
+<p>Si Twitch recibe una notificación completa de un titular de derechos o de su agente legalmente autorizado que afirma que el contenido de un canal infringe los derechos de autor del titular de los derechos, Twitch generalmente lo notifica al titular de la cuenta. Al mismo tiempo, generalmente eliminaremos o inhabilitaremos el acceso al contenido grabado o de otro tipo que contenga el supuesto material infractor. Podemos desactivar un stream en vivo o suspender una cuenta si el reclamo de infracción continúa al momento en que recibimos la notificación del titular de los derechos.</p>
+<h3 id="acciones-de-twitch-tras-recibir-contranotificaciones">
+  Acciones de Twitch tras Recibir Contranotificaciones
 </h3>
-<p>If Twitch receives a complete counter-notification from an account holder, Twitch generally notifies the claimant who submitted the original notification. At the same time, we may restore recorded content containing the claimed infringing material. Disputed notifications generally will not qualify for a strike under our Repeat Infringer Policy (discussed in more detail above), unless and until the dispute has been resolved by the account holder and the rights holder. Please note that Twitch may not be able to reinstate certain material or access to it due to factors such as the passage of time or the format in which the material was broadcast or stored.</p>
-<h3 id="twitchs-actions-upon-receipt-of-retractions">
-  Twitch’s Actions Upon Receipt of Retractions
+<p>Si Twitch recibe una apelación de notificación completa de un titular de cuenta, Twitch generalmente notifica al reclamante que envió la notificación original. Al mismo tiempo, podemos restablecer el contenido grabado que contiene el material que se presume en infracción. Por lo general, las notificaciones impugnadas no se consideran como una falta en virtud de nuestra Política de Infractor Recurrente (tratada con más detalle arriba), a menos que el titular de cuenta y el titular de los derechos hayan resuelto la disputa. Ten en cuenta que Twitch no puede rehabilitar cierto material o acceder a él debido a factores como el transcurso del tiempo o el formato en el que se transmitió o almacenó el material.</p>
+<h3 id="acciones-de-twitch-tras-recibir-retractaciones">
+  Acciones de Twitch tras Recibir Retractaciones
 </h3>
-<p>If Twitch receives a retraction from a rights holder or their legally authorized agent, we may restore recorded content containing the claimed infringing material and the disputed notification will not qualify for a strike under our Repeat Infringer Policy (discussed in more detail above). Please note that Twitch may not be able to reinstate certain material or access to it due to factors such as the passage of time or the format in which the material was broadcast or stored.</p>
-<h2 id="designated-copyright-agent" tabindex="-1">
-  Designated Copyright Agent
+<p>Si Twitch recibe una retractación de un titular de derechos o de su agente legalmente autorizado, podemos restaurar el contenido grabado que contenga el material infractor reclamado y la notificación en disputa no calificará para una infracción según nuestra Política de infractores recurrentes (discutida con más detalle anteriormente). Ten en cuenta que Twitch no puede rehabilitar cierto material o acceder a él debido a factores como el transcurso del tiempo o el formato en el que se transmitió o almacenó el material.</p>
+<h2 id="agente-de-derechos-de-autor-designado" tabindex="-1">
+  Agente de derechos de autor designado
 </h2>
-<p>Twitch Interactive, Inc. operates <a href="https://www.twitch.tv/">www.twitch.tv</a>, <a href="https://twitchrivals.com/">twitchrivals.com</a>, and <a href="https://twitchcon.com/">twitchcon.com</a>. Twitch’s Designated Copyright Agent receives notifications of claimed infringement, counter-notifications, and retractions.</p>
-<p>If you are a rights holder (or their legally authorized agent) and believe that content on any Twitch-operated websites or applications infringes upon your copyright, you may submit a DMCA notification to request that Twitch remove or disable access to that content.</p>
-<p>The fastest way to get a response to your DMCA notice is to fill in our online form at <a href="https://twitch.tv/copyright-claims">https://twitch.tv/copyright-claims.</a>&nbsp;Alternatively, if you prefer to submit your DMCA notification by email, physical mail, or phone, here’s how to do so:</p>
-<p>Email: <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a></p>
-<p>Mailing Address: Attention: Copyright Agent, 350 Bush Street, 2nd Floor, San Francisco, CA 94104, United States of America</p>
-<p>Phone: (415) 262-9766</p>
-<p>If you would like to submit a counter-notification (if you are a streamer) or retraction (if you are a copyright holder or their legally authorized agent), the fastest way to get a response is to send it to the email listed above. Please be aware that our online form can only accept submissions for DMCA notifications at this time and should not be used to submit counter-notifications or retractions. Alternatively, if you prefer to submit your counter-notification or retraction via physical mail or phone, you may reach out at the mailing address and number listed above.</p>
-<p>For information on reporting a trademark violation or Twitch’s process for responding to trademark reports, please review Twitch’s <a href="https://legal.twitch.com/en/legal/trademark-policy/">Trademark Policy</a>.</p>
-<p>Any other requests for support or other communications should be directed to Twitch customer service through <a href="https://help.twitch.tv/s/contactsupport">https://help.twitch.tv/s/contactsupport</a>.</p>
+<p>Twitch Interactive, Inc. opera <a href="https://www.twitch.tv/">www.twitch.tv</a>, <a href="https://twitchrivals.com/">twitchrivals.com</a>, y <a href="https://twitchcon.com/">twitchcon.com</a>. El agente de derechos de autor designado de Twitch recibe notificaciones de reclamación de infracción, apelaciones de notificación y retracciones.</p>
+<p>Si eres titular de los derechos (o su agente legalmente autorizado) y crees que el contenido de cualquier sitio web o aplicación operada por Twitch infringe tus derechos de autor, puedes enviar una notificación de la DMCA para solicitar que Twitch quite o desactive el acceso a ese contenido.&nbsp;</p>
+<p>La forma más rápida de obtener una respuesta a un aviso de la DMCA es completar nuestro formulario en línea en <a href="https://twitch.tv/copyright-claims">https://twitch.tv/copyright-claims.</a>&nbsp;Si prefieres enviar la notificación de la DMCA por correo electrónico, correo postal o teléfono, estas son las instrucciones para hacerlo: &nbsp;&nbsp;</p>
+<p>Correo electrónico: <a href="mailto:dmca-notifications@twitch.tv">dmca-notifications@twitch.tv</a></p>
+<p>Dirección postal: Atención: Copyright Agent, 350 Bush Street, 2nd Floor, San Francisco, CA 94104, Estados Unidos de América</p>
+<p>Teléfono: (415) 262-9766</p>
+<p>Si quieres enviar una apelación de notificación (si eres streamer) o retractarte (si eres titular de los derechos de autor o su agente legalmente autorizado), la forma más rápida de obtener una respuesta es enviarla al correo electrónico que se indica arriba. Ten en cuenta que nuestro formulario en línea solo puede aceptar envíos para notificaciones de la DMCA en este momento y no debe usarse para enviar apelaciones de notificación o retracciones. También, si prefieres enviar tu apelación de notificación o retractación por correo físico o por teléfono, puedes comunicarte con la dirección postal y el número que aparecen arriba.&nbsp;</p>
+<p>Para más información sobre la denuncia de una infracción de marca registrada o el proceso de Twitch para responder a las denuncias de marcas registradas, revisa la <a href="https://legal.twitch.com/en/legal/trademark-policy/">Política de marcas registradas</a> de Twitch.</p>
+<p>Cualquier otra solicitud de soporte u otras comunicaciones deben dirigirse al servicio de atención al cliente de Twitch a través de <a href="https://help.twitch.tv/s/contactsupport">https://help.twitch.tv/s/contactsupport</a>.</p>
 
           </article>
         </div>
@@ -1903,7 +1791,7 @@
       </main>
     <template x-if="isVisible === false">
       <div>
-        <link rel="canonical" href="/en/legal/">
+        <link rel="canonical" href="/es-mx/legal/">
 
         <div class="mo__center_content align-center">
           <h3>…</h3>
@@ -1911,7 +1799,7 @@
             <span x-show="countryCode">We detected you're in <strong x-text="countryCode.toUpperCase()"></strong>. </span>
             This document is intended for users in other regions. You will be redirected shortly.
           </p>
-          <a href="/en/legal/">Click here if you are not redirected.</a>
+          <a href="/es-mx/legal/">Si no se te redirigió, haz clic aquí.</a>
         </div>
       
         <script>
@@ -1947,26 +1835,26 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-[2fr_2fr]">
             <div class="flex flex-col col-start-1 pb-6">
-                <a href="/en/legal/" class="pb-2 text-xs">Legal</a>
+                <a href="/es-mx/legal/" class="pb-2 text-xs">Legal</a>
                 
                 
                 
                 <ul class="list-none">
                     
                         
-                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/legal/terms-of-service/"><span data-i18n="menu:terms-of-service">Terms of Service</span></a></li>
+                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/es-mx/legal/terms-of-service/"><span data-i18n="menu:términos-de-servicio">Términos de servicio</span></a></li>
                     
                         
-                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/legal/terms-of-sale/"><span data-i18n="menu:terms-of-sale">Terms of Sale</span></a></li>
+                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/es-mx/legal/terms-of-sale/"><span data-i18n="menu:términos-de-venta">Términos de Venta</span></a></li>
                     
                         
-                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/legal/privacy-notice/"><span data-i18n="menu:privacy-notice">Privacy Notice</span></a></li>
+                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/es-mx/legal/privacy-notice/"><span data-i18n="menu:aviso-de-privacidad">Aviso de privacidad</span></a></li>
                     
                         
-                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/legal/privacy-choices/"><span data-i18n="menu:privacy-choices">Privacy Choices</span></a></li>
+                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/es-mx/legal/privacy-choices/"><span data-i18n="menu:opciones-de-privacidad">Opciones de privacidad</span></a></li>
                     
                         
-                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/legal/monetized-streamer-agreement/"><span data-i18n="menu:monetized-streamer-agreement">Monetized Streamer Agreement</span></a></li>
+                        <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="/es-mx/legal/monetized-streamer-agreement/"><span data-i18n="menu:acuerdo-de-streamer-monetizado-de-twitch">Acuerdo de Streamer Monetizado de Twitch</span></a></li>
                     
                         
                         <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3" href="https://www.twitch.tv/oss-attribution"><span data-i18n="menu:open-source-attribution">Open Source Attribution</span></a></li>
@@ -1985,22 +1873,22 @@
                     <ul class="list-none">
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/about/"><span data-i18n="menu:about">About</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/about/"><span data-i18n="menu:conócenos">Conócenos</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/jobs/"><span data-i18n="menu:careers">Careers</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/jobs/"><span data-i18n="menu:carreras">Carreras</span></a></li>
                         
                             
                             <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://blog.twitch.tv/"><span data-i18n="menu:blog">Blog</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/press-center/"><span data-i18n="menu:press">Press</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/press-center/"><span data-i18n="menu:prensa">Prensa</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://brand.twitch.com/"><span data-i18n="menu:brand">Brand</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://brand.twitch.com/"><span data-i18n="menu:marca">Marca</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://dev.twitch.tv/"><span data-i18n="menu:developers">Developers</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://dev.twitch.tv/"><span data-i18n="menu:desarrolladores">Desarrolladores</span></a></li>
                         
                             
                             <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://twitch.amazon.com/prime"><span data-i18n="menu:prime">Prime</span></a></li>
@@ -2009,13 +1897,13 @@
                             <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://twitch.amazon.com/bits"><span data-i18n="menu:bits">Bits</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/extensions/"><span data-i18n="menu:extensions">Extensions</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/extensions/"><span data-i18n="menu:extensiones">Extensiones</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="http://twitchadvertising.tv/"><span data-i18n="menu:advertise">Advertise</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="http://twitchadvertising.tv/"><span data-i18n="menu:date-a-conocer">Date a conocer</span></a></li>
                         
                             
-                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/giftcard/buy/?utm_source=footer"><span data-i18n="menu:gift-card">Gift Card</span></a></li>
+                            <li><a class="block hover:text-brand-purple hover:underline text-lg leading-[22px] pb-3 w-full" href="https://www.twitch.tv/p/giftcard/buy/?utm_source=footer"><span data-i18n="menu:twitch-gift-card">Twitch Gift Card</span></a></li>
                         
                     </ul>
                 </div>
@@ -2024,7 +1912,7 @@
     </div>
 </footer>
 
-    <div class="hidden">/home/ubuntu/actions-runner/_work/legal-hugo/legal-hugo/content/en/legal/dmca-guidelines.md</div>
+    <div class="hidden">/home/ubuntu/actions-runner/_work/legal-hugo/legal-hugo/content/es-mx/legal/dmca-guidelines.md</div>
   
 
 </body></html>
