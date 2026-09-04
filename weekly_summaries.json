@@ -8415,5 +8415,102 @@
         "commit_hash": "35313f8ade020df33fe39f78ebc849240d909c44"
       }
     ]
+  },
+  "2026-08-29_to_2026-09-04": {
+    "run_metadata": {
+      "run_date": "2026-09-04T21:17:12.098086+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-08-29",
+      "week_end": "2026-09-04",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Policy Summary**\n\n**Week Period:** August 29, 2026 to September 04, 2026\n**Run Information:** Scheduled weekly run generated on September 04, 2026 at 21:17 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a significant push towards **global accessibility through extensive localization** across Meta, Twitch, and YouTube. Concurrently, platforms are **expanding and refining their monetization and e-commerce offerings**, introducing new Trust & Safety challenges and requiring robust policy enforcement. A critical concern arises from **TikTok's removal of a dedicated \"Children's Privacy Policy\" link**, necessitating urgent clarification regarding child safety and data protection communications.\n\n---\n\n### 2. Platform Highlights\n\n*   **Meta:**\n    *   **Oversight Board Appeal Process:** Clarified that users appealing non-actioned reported content must first complete Instagram's internal review process, expanding the scope of cases potentially reaching the Oversight Board.\n    *   **Localization:** Fully translated Commerce Policies into Spanish, and updated \"Blocking People\" Help Center content with English translations and clarified language, improving accessibility for diverse user bases.\n*   **TikTok:**\n    *   **E-commerce Expansion (Mexico):** Introduced a \"TikTok Shop Seller MX\" link, signifying a significant launch of e-commerce in Mexico, which creates a new and substantial surface area for T&S issues (e.g., fraud, counterfeits, misleading claims).\n    *   **Children's Privacy:** **Critically removed the dedicated \"Children's Privacy Policy\" link** from the Community Guidelines footer, raising immediate concerns about compliance and transparency.\n    *   **Technical Enhancement:** Implemented a new, highly configurable \"toast\" notification system, offering enhanced capabilities for in-app T&S communications (e.g., violation alerts, safety tips).\n*   **Twitch:**\n    *   **Extensive Localization:** Fully translated DMCA Guidelines, Monetized Streamer Agreement, Privacy Policy, and Terms of Sale into Spanish (Mexico), and added Ukrainian as a supported language option for legal guidelines.\n    *   **Terms of Sale (Effective 08/12/2026):**\n        *   Expanded age restrictions for purchases (e.g., age 16 in Australia, or local minimum if higher than 13).\n        *   Introduced new dedicated policy sections for \"Twitch Extensions,\" \"Refunds,\" and \"Regional Pricing.\"\n        *   Increased flexibility for subscription service modifications (non-price related).\n        *   Spendable Balance will now automatically be used for subscription renewals.\n    *   **Terms of Service (Last Modified 08/12/2026):**\n        *   New restriction for minors in Brazil requiring a judicial permit for monetized/sponsored content.\n        *   Broadened Twitch's license to use user content for \"Twitch and/or its affiliates\u2019 business.\"\n        *   Expanded prohibitions on political monetization to include a broader range of entities (e.g., politicians, campaign committees, government entities).\n*   **YouTube:**\n    *   **User Feedback & Support:** Added \"Was this helpful?\" feedback modules and \"Need more help?\" sections to the Harassment & Cyberbullying and Shopping Ads policy pages, aiming to improve policy clarity and support deflection.\n    *   **Minor Navigational Updates:** Changed some \"About Products\" links to `.com.mx` domains, potentially indicating a regional focus.\n\n---\n\n### 3. Risk Assessment\n\n*   **HIGH RISK - TikTok Children's Privacy Policy Removal:** The removal of a dedicated link to the \"Children's Privacy Policy\" from the Community Guidelines page is highly critical. This creates an immediate risk of regulatory scrutiny (e.g., COPPA, GDPR-K, local laws) and potential backlash from users and child advocacy groups regarding TikTok's commitment to child safety. **Immediate action required to confirm where explicit child privacy protections are now located and communicated.**\n*   **MEDIUM-HIGH OPERATIONAL RISK - TikTok Shop Launch in Mexico:** The expansion of TikTok Shop into Mexico introduces a substantial new surface area for various e-commerce-related T&S issues, including fraud, counterfeit goods, IP infringement, misleading advertising, and buyer/seller disputes. This requires robust T&S policy coverage, enforcement mechanisms, and support infrastructure to manage the anticipated volume and complexity of issues in a new market.\n*   **MEDIUM COMPLIANCE/OPERATIONAL RISK - Twitch Age & Monetization Restrictions:**\n    *   **Expanded Age Restrictions (Twitch Terms of Sale):** The new specific age minimums (e.g., 16 in Australia) require product teams to ensure age verification and gating mechanisms are updated and compliant with these international regulations.\n    *   **Brazil Minor Monetization (Twitch Terms of Service):** The requirement for a judicial permit for minors producing monetized content in Brazil necessitates specific compliance checks and enforcement mechanisms, potentially impacting content creator demographics in the region.\n*   **MEDIUM OPERATIONAL RISK - Meta Oversight Board Appeal Expansion:** The clarification of the Oversight Board appeal process for reported content that *wasn't* taken down may lead to a higher volume of internal review requests and subsequent Oversight Board cases. This requires review teams and systems to be prepared for an increased workload and expanded scope.\n\n---\n\n### 4. Trends Analysis\n\n*   **Global Accessibility & Localization Drive:** There's a clear and widespread trend towards enhancing global accessibility by localizing key legal and policy documents. Meta, Twitch, and YouTube all pushed significant updates to translate policies into Spanish (especially for Mexico), and Twitch further expanded to include Ukrainian. This reflects an increased focus on serving diverse international audiences, ensuring compliance, and fostering trust through improved understanding.\n*   **Expansion & Maturation of Monetization and E-commerce:** Platforms are deepening their involvement in monetization and e-commerce. TikTok's launch of \"TikTok Shop\" in Mexico marks a significant expansion into a new e-commerce market, bringing with it a host of new T&S challenges. Concurrently, Twitch has formalized policies around \"Extensions,\" \"Refunds,\" and \"Regional Pricing\" in its Terms of Sale and broadened political monetization prohibitions. This trend underscores the growing complexity of commercial activities on platforms and the need for robust, granular T&S frameworks.\n*   **Enhanced Policy Transparency and User Feedback Mechanisms:** Platforms are making concerted efforts to improve user understanding of policies and gather feedback. Meta clarified its Oversight Board appeal process, providing a clearer path for users. YouTube implemented \"Was this helpful?\" modules and \"Need more help?\" sections on its policy pages. This indicates a strategic move towards greater policy clarity, user empowerment, and leveraging direct user input to refine policy language and support processes.\n*   **Improved Technical Infrastructure for T&S Communication:** While not a direct policy change, TikTok's introduction of a new, highly configurable \"toast\" notification system signifies an investment in more dynamic and context-sensitive in-app communication. This has a direct positive impact on T&S's ability to deliver timely alerts, warnings, and confirmations to users regarding policy violations, safety tips, or actions taken on their reports.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "meta-commerce-policies",
+        "file_path": "snapshots/production/meta-commerce-policies/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "tiktok-community-guidelines",
+        "file_path": "snapshots/production/tiktok-community-guidelines/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "twitch-dmca-guidelines",
+        "file_path": "snapshots/production/twitch-dmca-guidelines/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "twitch-privacy-policy",
+        "file_path": "snapshots/production/twitch-privacy-policy/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "twitch-terms-of-sale",
+        "file_path": "snapshots/production/twitch-terms-of-sale/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "youtube-harassment-policy",
+        "file_path": "snapshots/production/youtube-harassment-policy/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "youtube-hiding-users",
+        "file_path": "snapshots/production/youtube-hiding-users/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      },
+      {
+        "policy_key": "youtube-shopping-ads-policy",
+        "file_path": "snapshots/production/youtube-shopping-ads-policy/snapshot.html",
+        "commit_date": "2026-09-04 18:04:08 +0000",
+        "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
+      }
+    ]
   }
 }
