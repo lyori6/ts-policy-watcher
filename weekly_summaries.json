@@ -8512,5 +8512,96 @@
         "commit_hash": "b84cea80625bef41cd727f1110f3baf414950b91"
       }
     ]
+  },
+  "2026-09-05_to_2026-09-11": {
+    "run_metadata": {
+      "run_date": "2026-09-11T21:33:13.442446+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-09-05",
+      "week_end": "2026-09-11",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Policy Summary**\n\n**Week Period:** September 05, 2026 to September 11, 2026\n**Generated On:** September 11, 2026 at 21:33 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week saw significant policy updates across multiple platforms, primarily impacting user experience, localization strategy, and legal transparency. The most notable shifts include:\n\n*   **Major Localization Risk for Twitch:** Several core Twitch legal documents (DMCA, Monetized Streamer Agreement, Privacy Policy, Terms of Sale, Terms of Service) were unilaterally shifted from Spanish (es-mx) to English (en). This poses a substantial risk for user comprehension, compliance, and potential disputes in Spanish-speaking markets.\n*   **Enhanced Buyer Protection & Liability Shift on Whatnot:** Whatnot significantly updated its Buyer Protection policy, expanding language support and clarifying claim processes. Crucially, a new exclusion shifts liability for high-value lost/stolen items to buyers who opt out of signature confirmation, a key risk mitigation for the platform.\n*   **Widespread UI/UX & Support System Modernization:** Both Meta and TikTok rolled out updates aimed at improving user support flows and feedback mechanisms, including Meta's shift from AI chat to AI call support and TikTok's introduction of new \"toast notification\" systems for real-time user feedback.\n\n### 2. Platform Highlights\n\nHere are the notable policy changes by platform:\n\n*   **Meta:**\n    *   **Appeal Process & Blocking People:** Both help center articles saw a shift in automated support, moving from \"Chat with Meta AI support assistant\" to a \"Get a call from Meta AI assistant\" option. The Appeal Process removed top-level FAQs, while \"Blocking People\" restructured content for clarity and added a \"Was this helpful?\" feedback module.\n    *   **Commerce & Community Guidelines:** No substantive policy content changes were identified; updates were technical/administrative (e.g., internal configurations, whitespace).\n*   **TikTok:**\n    *   **Blocking Users & Live Moderation:** Both pages received extensive CSS for a new, comprehensive \"toast notification\" system, designed to provide immediate, non-intrusive user feedback (e.g., \"User blocked,\" \"Report submitted\").\n    *   **Community Guidelines:** Removed a \"TikTok Shop Seller MX\" link and added a new public link to a \"Children's Privacy Policy\" in the footer, signaling a formal commitment to specific privacy standards for minors.\n*   **Twitch:**\n    *   **DMCA Guidelines, Monetized Streamer Agreement, Privacy Policy, Terms of Sale, Terms of Service:** All these critical legal documents saw their *entire content and internal hyperlinks* shifted from Spanish (es-mx) to English (en) for their respective snapshots. This represents a significant, platform-wide localization change.\n    *   **Privacy Policy (Specific Content):** In addition to the language shift, the Privacy Notice was updated with a new effective date (08/12/2026), explicit identification of Twitch Interactive as the data controller, clarified scope of data collection (e.g., \"content you create,\" \"chats,\" \"date of birth\"), and strengthened legal phrasing.\n*   **Whatnot:**\n    *   **Buyer Protection:** A comprehensive rewrite and clarification, including expanded language support (Spanish, Italian), streamlined structure, new \"Additional Protections\" (e.g., high-value card protection, postage reimbursement), refined claim filing processes with clear deadlines and rationales, and the introduction of a new exclusion for buyers who opt out of signature confirmation for high-value U.S. shipments.\n\n### 3. Risk Assessment\n\nThe following changes require immediate attention or close monitoring:\n\n*   **High Risk: Twitch Localization Shift (DMCA, Streamer Agreement, Privacy Policy, Terms of Sale, Terms of Service from es-mx to en):**\n    *   **Impact:** This is the most significant risk of the week. Unilaterally changing core legal and policy documents from Spanish to English for entire snapshots will severely impact comprehension for Spanish-speaking users. It could lead to confusion, increased support inquiries, claims of non-compliance due to language barriers, and potential legal challenges in regions where Spanish localization is legally expected or required.\n    *   **Action Required:** Product and Legal teams must urgently assess the implications for Spanish-speaking markets, ensure alternative localized versions are readily available, and evaluate potential regulatory non-compliance. Communication strategy for affected users is critical.\n*   **Medium Risk: Whatnot Buyer Protection - New Exclusion for Signature Confirmation:**\n    *   **Impact:** While a positive step for Whatnot's liability mitigation, this is a significant shift in buyer protection. If not clearly and proactively communicated, it could lead to user dissatisfaction, negative reviews, and increased support load when claims for lost high-value items are denied due to the buyer opting out of signature confirmation.\n    *   **Action Required:** Product, Marketing, and Support teams need to collaborate on a clear communication plan to inform users, especially those purchasing high-value items, about this new exclusion and the importance of signature confirmation.\n*   **Monitor: Meta AI Support Channel Shift (Chat to Call):**\n    *   **Impact:** This change alters the primary automated support offering. It may impact user satisfaction and deflection rates for human agents depending on user preference for text vs. phone-based AI interaction.\n    *   **Action Required:** Monitor user feedback, support ticket trends, and engagement with the new AI call option to assess its effectiveness and user acceptance.\n*   **T&S Operational Consideration: TikTok Toast Notification Content:**\n    *   **Impact:** The new toast notification system itself is a positive UX enhancement. However, T&S teams *must* be involved in approving the content and triggers of specific messages to ensure accuracy, alignment with policy, and prevention of unintended information disclosure.\n    *   **Action Required:** Establish clear T&S review and approval processes for all toast notification content before deployment.\n\n### 4. Trends Analysis\n\nSeveral patterns emerged across platforms this week:\n\n*   **Increased Focus on Localization & Internationalization:**\n    *   **Twitch** demonstrated a massive, albeit potentially risky, shift by localizing several key documents from Spanish to English.\n    *   **Whatnot** explicitly added support for Espa\u00f1ol (Espa\u00f1a) and Italiano (Italia) in its Buyer Protection policy, directly improving accessibility for international users.\n    *   **TikTok's** new toast notification system included `ltr`/`rtl` styling, indicating consideration for global audiences.\n    *   This trend highlights an ongoing effort across platforms to serve diverse global user bases, though execution varies in its risk profile.\n\n*   **Enhancing User Feedback & Support UI/UX:**\n    *   **Meta** introduced \"Was this helpful?\" feedback modules and restructured help articles for better clarity, along with a significant shift in its AI support modality (chat to call).\n    *   **TikTok** implemented sophisticated \"toast notification\" systems across its \"Blocking Users\" and \"Live Moderation\" pages, providing immediate, non-intrusive feedback to users after critical actions.\n    *   This indicates a shared goal of improving the self-service experience, reducing friction, and gathering direct user sentiment on help content and platform actions.\n\n*   **Increased Transparency and Compliance for Legal Policies:**\n    *   **Twitch's** Privacy Policy update explicitly named the data controller, clarified data collection scope, and updated legal phrasing, aligning with global data protection standards.\n    *   **TikTok** added a dedicated \"Children's Privacy Policy\" link, signaling a formal commitment to protecting younger users' data.\n    *   **Whatnot** significantly refactored its Buyer Protection, making it clearer, more structured, and detailing \"Additional Protections\" and \"Not Covered\" scenarios.\n    *   These changes collectively point to a strong trend toward greater legal clarity, explicit commitment to data protection, and transparent communication of user rights and platform liabilities.\n\n*   **Technical & Administrative Updates:** A number of policy pages (e.g., Meta Commerce Policies, Meta Community Guidelines) saw purely technical updates (e.g., line ending standardization, internal timestamps, server revisions) without substantive changes to the policy content. This suggests ongoing backend maintenance and deployment activities across platforms.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "meta-commerce-policies",
+        "file_path": "snapshots/production/meta-commerce-policies/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "tiktok-community-guidelines",
+        "file_path": "snapshots/production/tiktok-community-guidelines/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "twitch-dmca-guidelines",
+        "file_path": "snapshots/production/twitch-dmca-guidelines/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "twitch-privacy-policy",
+        "file_path": "snapshots/production/twitch-privacy-policy/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "twitch-terms-of-sale",
+        "file_path": "snapshots/production/twitch-terms-of-sale/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      },
+      {
+        "policy_key": "whatnot-buyer-protection",
+        "file_path": "snapshots/production/whatnot-buyer-protection/snapshot.html",
+        "commit_date": "2026-09-11 18:10:18 +0000",
+        "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
+      }
+    ]
   }
 }
