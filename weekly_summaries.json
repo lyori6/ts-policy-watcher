@@ -8603,5 +8603,42 @@
         "commit_hash": "51c8506a9dc3abaeb4fbf9683bfa27012bee344c"
       }
     ]
+  },
+  "2026-09-12_to_2026-09-18": {
+    "run_metadata": {
+      "run_date": "2026-09-18T21:26:48.995629+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-09-12",
+      "week_end": "2026-09-18",
+      "generated_by": "friday_automation"
+    },
+    "summary": "**Weekly Trust & Safety Policy Summary**\n**Week Period: September 12, 2026 to September 18, 2026**\n**Generated: September 18, 2026 at 21:26 UTC**\n\n---\n\n### 1. Executive Summary\n\nThis week saw significant movements across platforms focused on enhancing user communication, streamlining operational workflows, and formalizing existing Trust & Safety practices. The key takeaways are:\n\n*   **Enhanced User Communication & Process Clarity:** Platforms are prioritizing clearer guidance for users, with Meta clarifying its Oversight Board appeal prerequisites and Whatnot formalizing a new \"Ongoing Investigation Suspension\" type for greater transparency.\n*   **Standardized In-Product Messaging:** TikTok is rolling out a new, customizable \"toast\" notification system across its platform. This represents a substantial upgrade for delivering consistent, clear, and real-time communication of policy-related information, moderation actions, and safety tips directly within the user experience.\n*   **Streamlined Appeals Workflows:** Whatnot has centralized its appeal process to an in-product \"Account Health Dashboard,\" shifting away from email-based appeals. This initiative aims to boost operational efficiency and provide users with a more structured and trackable appeal experience for policy violations.\n\n### 2. Platform Highlights\n\nHere's a breakdown of notable changes by platform:\n\n*   **Meta:**\n    *   **Instagram Appeal Process Clarification:** The \"Appeal Instagram\u2019s content decision to the Oversight Board\" help article was updated to re-insert text clarifying that users must first complete Instagram's internal \"request a review process\" before escalating reported content issues to the Oversight Board. This improves user guidance and reinforces existing procedural requirements.\n*   **TikTok:**\n    *   **New \"Sonner Toaster\" UI for Notifications (Across Blocking Users & Live Moderation):** TikTok has introduced extensive CSS for a new, customizable \"toast\" notification system. This system will provide standardized, transient pop-up messages that support various states, interactivity, and proper rendering for both Left-to-Right (LTR) and Right-to-Left (RTL) languages.\n        *   **Impact:** Significantly enhances the clarity, consistency, and immediacy of communicating important policy-related messages, moderation actions, and safety tips to users and moderators.\n*   **Whatnot:**\n    *   **New Enforcement Action: \"Ongoing Investigation Suspension\":** A new, formalized temporary suspension type has been introduced, allowing accounts to be suspended during investigations into serious issues. This formalizes a crucial T&S operational capability and provides clearer communication to users about this type of hold.\n    *   **Appeals Centralized to Account Health Dashboard:** The policy now exclusively directs users to appeal violations via an in-product Account Health dashboard, removing the option to reply to T&S emails. This is expected to streamline the appeals workflow, enhance operational efficiency, and provide a more consistent, trackable user experience.\n    *   **Minor Updates:** Visual and editorial updates included an image asset change, a minor typo correction (\"2 or 7 days**)\" to \"2 or 7 days):\"), and an update of the Twitter link to 'X'.\n\n### 3. Risk Assessment\n\n*   **TikTok - Sonner Toaster Implementation:** While a highly positive development for communication, the effectiveness will depend on consistent and strategic utilization.\n    *   **Action for PM:** Ensure a clear strategy is developed for which T&S messages (e.g., policy violations, warnings, feature confirmations) will leverage this new system. Content must be consistently clear, concise, and actionable to prevent user confusion or alert fatigue. Monitor user feedback closely post-rollout.\n*   **Whatnot - Centralized Appeals:** Redirecting all appeals to the Account Health Dashboard is a significant workflow change that could impact user experience if not managed effectively.\n    *   **Action for PM:** Confirm the Account Health Dashboard is robust enough to handle the increased traffic and provides adequate guidance and transparency to users regarding their appeal status. Closely monitor initial user adoption and potential spikes in support requests related to the new process. Ensure T&S operations are fully prepared for the shift in appeal intake and response.\n\n### 4. Trends Analysis\n\nSeveral patterns are emerging across platforms this week:\n\n*   **User Empowerment Through Clarity:** There's a clear trend towards making T&S processes and decisions more transparent and understandable to users. This includes clarifying complex appeal processes (Meta) and formalizing investigatory actions (Whatnot) to manage user expectations.\n*   **Standardized In-Product Communication:** Platforms are increasingly investing in consistent, in-product UI elements (like TikTok's \"Sonner Toaster\") to deliver critical safety and policy-related information. This signifies a move away from disparate communication methods towards a more cohesive and impactful user experience.\n*   **Operational Efficiency via In-Product Solutions:** A strong push is evident to streamline T&S workflows by centralizing user interactions (e.g., appeals) within the product itself. This reduces reliance on external channels (like email), enhancing trackability, operational efficiency, and the overall user experience for safety features.\n*   **Proactive Safety Communication:** The introduction of new notification systems and formalized processes enables platforms to communicate more proactively about safety features, moderation actions, and potential risks, fostering a more informed and safer user environment.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-09-18 18:03:56 +0000",
+        "commit_hash": "e6beb61696b450c24ef869a9b1cbaf73f49d0170"
+      },
+      {
+        "policy_key": "tiktok-blocking-users",
+        "file_path": "snapshots/production/tiktok-blocking-users/snapshot.html",
+        "commit_date": "2026-09-18 18:03:56 +0000",
+        "commit_hash": "e6beb61696b450c24ef869a9b1cbaf73f49d0170"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-09-18 18:03:56 +0000",
+        "commit_hash": "e6beb61696b450c24ef869a9b1cbaf73f49d0170"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-09-18 18:03:56 +0000",
+        "commit_hash": "e6beb61696b450c24ef869a9b1cbaf73f49d0170"
+      }
+    ]
   }
 }
