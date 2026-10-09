@@ -8714,5 +8714,48 @@
         "commit_hash": "c230f0a4164717946c157b47dcfc33bfa324b6d1"
       }
     ]
+  },
+  "2026-10-03_to_2026-10-09": {
+    "run_metadata": {
+      "run_date": "2026-10-09T23:04:27.538620+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-10-03",
+      "week_end": "2026-10-09",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Weekly Trust & Safety Policy Summary: October 03 - October 09, 2026\n\n**Run Information:** Scheduled weekly run generated on October 09, 2026 at 23:04 UTC\n\n---\n\n### 1. Executive Summary\n\nThis week's policy updates highlight a strong cross-platform trend towards **enhanced clarity and granular enforcement**, particularly in areas of user safety and content moderation. Platforms are refining their guidelines to reduce ambiguity, with Twitch introducing explicit \"Enforcement Notes\" for self-destructive behavior and youth safety. Concurrently, there's a focus on **improving user experience and operational efficiency**, seen in Meta's efforts to clarify appeal processes and Whatnot's streamlining of enforcement actions and appeals. Lastly, a notable shift towards **de-prioritizing single-language supremacy** in policy documentation (Meta) signals a move towards greater localization consistency across global teams.\n\n---\n\n### 2. Platform Highlights\n\n#### **Meta**\n*   **Appeal Process:** Clarified Help Center text and AI chatbot prompts to explicitly state that users can appeal both their own content and content they reported to the Oversight Board, enhancing user understanding.\n*   **Blocking People:** Revised Help Center language to more accurately reflect the full scope of blocking/unblocking functionality, emphasizing user control over interactions and profile visibility.\n*   **Community Guidelines:** Removed the explicit statement designating the US English version as primary. This necessitates increased vigilance for product teams to ensure all localized versions are equally current and authoritative.\n\n#### **Twitch**\n*   **Community Guidelines:** Introduced \"Enforcement Notes\" to existing policies, providing specific examples for:\n    *   **Self-Destructive Behavior:** Prohibiting monetization of harmful acts (e.g., \"Cinnamon challenge\" for Bits), clarifying acceptable vs. excessive drinking goals, and banning interaction with streaming devices while driving.\n    *   **Youth Safety:** Explicitly prohibiting sexualized child-like avatars (e.g., \"lolis\"/\"shotas\") even in VTuber/custom avatar contexts, banning humor related to sexualization of minors, and clarifying that claiming to be under 13 (even in jest) results in permanent deactivation.\n\n#### **Whatnot**\n*   **Enforcement Actions:**\n    *   **New Action Type:** Introduced \"Ongoing Investigation Suspension\" to formalize temporary account suspensions during reviews of serious issues, improving communication with affected users.\n    *   **Centralized Appeals:** Removed the option to appeal via email, directing all users to submit appeals through the Account Health dashboard. This aims to streamline the appeals process and improve operational efficiency.\n    *   **Minor Updates:** Cosmetic image, typo corrections, and a Twitter link update to 'X'.\n\n---\n\n### 3. Risk Assessment\n\n*   **Meta Community Guidelines - Localization Risk (High):** The removal of the US English version's primacy creates an immediate and ongoing risk. Without a single, designated source of truth, there's a higher likelihood of discrepancies emerging between localized policy versions. **Action Required:** Product and T&S teams responsible for international markets must ensure robust synchronization processes are in place for all policy rollouts to maintain consistency and avoid misinterpretations or uneven enforcement.\n*   **Twitch Community Guidelines - Enforcement & User Backlash (Medium-High):** The explicit \"Enforcement Notes,\" particularly regarding sexualized child-like avatars, monetized harmful acts, and \"claiming <13\" jokes, will lead to significantly increased enforcement actions in these areas. This could result in:\n    *   **Increased Appeals:** More users appealing actions based on newly clarified rules.\n    *   **User Frustration/Backlash:** Especially from communities impacted by the sexualized avatar rule (e.g., some VTubers) or those who previously engaged in \"jesting\" about age.\n    *   **Action Required:** Ensure moderation teams are fully trained on these new explicit examples. Product managers should anticipate potential spikes in user support inquiries and monitor community sentiment closely for any negative feedback or unintended consequences.\n*   **Whatnot Enforcement Actions - Appeals Workflow Readiness (Medium):** Centralizing appeals to the Account Health Dashboard is a positive step for efficiency, but it carries a risk if the dashboard's appeal functionality is not intuitive, robust, or fails to provide clear status updates.\n    *   **Action Required:** Product teams should review the Account Health dashboard's appeal UX/UI, ensuring it clearly guides users and provides adequate information. Any gaps could lead to user frustration and continued attempts to contact T&S via unmanaged channels.\n\n---\n\n### 4. Trends Analysis\n\n*   **Clarity and Granular Enforcement:** A clear trend across platforms is to provide more specific examples and details within policy documents (Meta appeal clarity, Twitch \"Enforcement Notes\"). This reduces ambiguity for users and moderators, aiming for more consistent enforcement and fewer \"grey areas.\"\n*   **Enhanced User Safety and Control:** Platforms are actively strengthening protections for vulnerable users (Twitch Youth Safety) and empowering users with more control over their experience (Meta blocking functionality). This reflects an industry-wide commitment to proactive harm prevention.\n*   **Operational Streamlining and Efficiency:** There's a push to improve internal workflows and reduce manual overhead. Whatnot's centralized appeal process is a prime example, aiming to reduce unstructured inbound communications and create a more trackable user journey.\n*   **Localization and Global Consistency:** Meta's move away from designating a primary language version for Community Guidelines signifies a growing recognition of the global nature of platforms. This implies a need for more sophisticated localization processes to ensure policy consistency across all regions, moving beyond a \"translate and publish\" model.\n*   **Addressing Emerging/Grey-Area Harms:** Twitch's updates specifically target behaviors like monetized harmful acts and specific types of avatar-based content, demonstrating an agile response to evolving online harms and community dynamics.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-10-09 20:01:04 +0000",
+        "commit_hash": "87dcfc098de9008ee2baeeacf987ae0240c2a7f7"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-10-09 20:01:04 +0000",
+        "commit_hash": "87dcfc098de9008ee2baeeacf987ae0240c2a7f7"
+      },
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-09 20:01:04 +0000",
+        "commit_hash": "87dcfc098de9008ee2baeeacf987ae0240c2a7f7"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-09 20:01:04 +0000",
+        "commit_hash": "87dcfc098de9008ee2baeeacf987ae0240c2a7f7"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-10-09 20:01:04 +0000",
+        "commit_hash": "87dcfc098de9008ee2baeeacf987ae0240c2a7f7"
+      }
+    ]
   }
 }
