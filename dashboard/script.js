@@ -194,7 +194,7 @@ class PolicyWatcherDashboard {
         // Main navigation tabs
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                this.switchMainTab(e.target.dataset.tab);
+                this.switchMainTab(e.currentTarget.dataset.tab);
             });
         });
 
@@ -1162,6 +1162,8 @@ class PolicyWatcherDashboard {
         const pathData = points.map((point, index) => 
             `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
         ).join(' ');
+        const baselineY = padding + innerHeight;
+        const areaData = `${pathData} L ${points[points.length - 1].x} ${baselineY} L ${points[0].x} ${baselineY} Z`;
         
         return `
             <div class="weekly-timeline-chart">
@@ -1175,6 +1177,12 @@ class PolicyWatcherDashboard {
                 
                 <div class="timeline-container">
                     <svg width="${chartWidth}" height="${chartHeight}" viewBox="0 0 ${chartWidth} ${chartHeight}" class="timeline-svg responsive-chart">
+                        <defs>
+                            <linearGradient id="timelineAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#2f5bea" stop-opacity="0.18"/>
+                                <stop offset="100%" stop-color="#2f5bea" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
                         <!-- Grid lines -->
                         ${Array.from({length: 5}, (_, i) => {
                             const y = padding + (i / 4) * innerHeight;
@@ -1187,8 +1195,10 @@ class PolicyWatcherDashboard {
                             `;
                         }).join('')}
                         
-                        <!-- Trend line -->
+                        <!-- Trend area + line -->
+                        <path d="${areaData}" class="timeline-area"/>
                         <path d="${pathData}" 
+                              class="timeline-line"
                               stroke="#2563eb" 
                               stroke-width="3" 
                               fill="none" 
@@ -1197,7 +1207,7 @@ class PolicyWatcherDashboard {
                         
                         <!-- Data points - Touch-friendly on mobile -->
                         ${points.map(point => `
-                            <circle cx="${point.x}" cy="${point.y}" r="${isMobile ? '7' : '5'}" 
+                            <circle cx="${point.x}" cy="${point.y}" r="${isMobile ? '5' : '3.5'}" 
                                     fill="#2563eb" stroke="white" stroke-width="2"
                                     class="chart-data-point">
                                 <title>${point.weekKey}: ${point.count} changes</title>
@@ -1296,8 +1306,8 @@ class PolicyWatcherDashboard {
         
         return filteredPoints.map((point, index) => {
             const trend = index > 0 ? 
-                (point.count > filteredPoints[index-1].count ? '↗️ +' : 
-                 point.count < filteredPoints[index-1].count ? '↘️ ' : '→') : '—';
+                (point.count > filteredPoints[index-1].count ? '<i class="fas fa-arrow-trend-up"></i> Up' : 
+                 point.count < filteredPoints[index-1].count ? '<i class="fas fa-arrow-trend-down"></i> Down' : '<i class="fas fa-arrow-right"></i> Flat') : '—';
             
             const trendClass = index > 0 ? 
                 (point.count > filteredPoints[index-1].count ? 'trend-up' : 
@@ -2904,6 +2914,8 @@ class PolicyWatcherDashboard {
     markdownToHtml(markdown) {
         // Basic markdown conversion for weekly summaries
         return markdown
+            .replace(/^\s*-{3,}\s*$/gm, '<hr>')
+            .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
             .replace(/^### (.*$)/gim, '<h3>$1</h3>')
             .replace(/^## (.*$)/gim, '<h2>$1</h2>')
             .replace(/^# (.*$)/gim, '<h1>$1</h1>')
@@ -2912,7 +2924,7 @@ class PolicyWatcherDashboard {
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n\n/g, '</p><p>')
-            .replace(/^(?!<[h1-6]|<li|<\/li|<p|<\/p)(.+)$/gim, '<p>$1</p>')
+            .replace(/^(?!<[h1-6]|<hr|<li|<\/li|<p|<\/p)(.+)$/gim, '<p>$1</p>')
             .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
             .replace(/<\/ul>\s*<ul>/g, '');
     }
@@ -3573,7 +3585,7 @@ async function subscribeFromWidget() {
                 <div class="widget-header">
                     <div class="widget-title">
                         <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                        <h3>You're subscribed!</h3>
+                        <h2>You're subscribed!</h2>
                     </div>
                 </div>
                 <p class="widget-subtitle">Thanks! We've messaged Lyor and he'll add you to the updates. You'll get a confirmation once you're added.</p>
@@ -3597,7 +3609,7 @@ async function subscribeFromWidget() {
             <div class="widget-header">
                 <div class="widget-title">
                     <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                    <h3>You're subscribed!</h3>
+                    <h2>You're subscribed!</h2>
                 </div>
             </div>
             <p class="widget-subtitle">Thanks! We've messaged Lyor and he'll add you to the updates. You'll get a confirmation once you're added.</p>
@@ -3667,17 +3679,10 @@ function isValidEmail(email) {
 // Initialize widget on page load
 document.addEventListener('DOMContentLoaded', function() {
     const widgetForm = document.getElementById('widgetForm');
-    const widgetMinimized = localStorage.getItem('widget-minimized');
-    
-    // Widget starts expanded by default (from HTML)
-    // Only minimize if user has explicitly minimized it before
-    if (widgetMinimized === 'true') {
-        widgetForm.classList.remove('expanded');
-    } else {
-        // Ensure it's expanded and clear any minimize preference
-        widgetForm.classList.add('expanded');
-        localStorage.setItem('widget-minimized', 'false');
-    }
+
+    // Widget starts collapsed so it never covers the dashboard on load;
+    // visitors open it from the floating button.
+    widgetForm.classList.remove('expanded');
     
     // Add enter key support and real-time validation for widget email input
     const widgetEmail = document.getElementById('widgetEmail');

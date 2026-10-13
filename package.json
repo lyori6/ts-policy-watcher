@@ -1,32 +1,39 @@
 {
   "name": "ts-policy-watcher",
   "version": "1.0.0",
-  "description": "An automated competitive intelligence system that monitors competitor Trust & Safety policies, detects meaningful changes, and delivers AI-powered summaries to product teams.",
-  "main": "screenshot.js",
-  "directories": {
-    "test": "tests"
-  },
+  "description": "Automated monitoring of competitor Trust & Safety policies with AI-generated change summaries and a static dashboard.",
   "scripts": {
-    "dev": "cd dashboard && python3 -m http.server 3000",
+    "dev": "python3 -m http.server 3000 --directory dashboard",
     "smoke": "node scripts/puppeteer-smoke.js http://localhost:3000 --screenshot=smoke.png",
     "smoke:preview": "node scripts/puppeteer-smoke.js $PREVIEW_URL --screenshot=smoke-preview.png",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test",
+    "test:update-snapshots": "playwright test tests/visual-regression.spec.js --update-snapshots"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lyori6/ts-policy-watcher.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "trust-and-safety",
+    "policy-monitoring",
+    "playwright",
+    "gemini",
+    "github-actions",
+    "dashboard"
+  ],
+  "author": "Lyor Itzhaki",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/lyori6/ts-policy-watcher/issues"
   },
   "homepage": "https://github.com/lyori6/ts-policy-watcher#readme",
   "dependencies": {
-    "puppeteer": "^24.17.0"
+    "puppeteer": "^25.13.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0"
+    "@playwright/test": "^1.64.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

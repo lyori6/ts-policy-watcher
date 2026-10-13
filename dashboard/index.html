@@ -11,7 +11,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&S Policy Watcher - Market Intelligence & Risk Assessment Platform</title>
+    <title>T&S Policy Watcher · Trust & Safety policy intelligence</title>
     
     <!-- Meta Description & SEO -->
     <meta name="description" content="Real-time monitoring of Trust & Safety policies across TikTok, Meta, YouTube, Whatnot, and Twitch. Stay ahead of policy changes that could impact your business.">
@@ -24,7 +24,7 @@
     <meta property="og:title" content="T&S Policy Watcher - Real-time Policy Monitoring">
     <meta property="og:description" content="Monitor Trust & Safety policy changes across major platforms. Get instant alerts when policies update.">
     <meta property="og:site_name" content="T&S Policy Watcher">
-    <meta property="og:image" content="https://ts-policy-watcher.vercel.app/og-image.png">
+    <meta property="og:image" content="https://ts-policy-watcher.vercel.app/dashboard/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
@@ -33,16 +33,19 @@
     <meta property="twitter:url" content="https://ts-policy-watcher.vercel.app/">
     <meta property="twitter:title" content="T&S Policy Watcher - Real-time Policy Monitoring">
     <meta property="twitter:description" content="Monitor Trust & Safety policy changes across major platforms. Get instant alerts when policies update.">
-    <meta property="twitter:image" content="https://ts-policy-watcher.vercel.app/og-image.png">
+    <meta property="twitter:image" content="https://ts-policy-watcher.vercel.app/dashboard/og-image.png">
     
     <!-- Favicon - Shield Icon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232f5bea'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232f5bea'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
     
     <!-- Theme Color -->
-    <meta name="theme-color" content="#007aff">
-    <meta name="msapplication-TileColor" content="#007aff">
-    
+    <meta name="theme-color" content="#0b1324">
+    <meta name="msapplication-TileColor" content="#0b1324">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -55,8 +58,11 @@
     <header>
         <div class="header-content">
             <div class="header-left">
-                <h1><i class="fas fa-shield-alt"></i> T&S Policy Watcher</h1>
-                <p>Market Intelligence & Risk Assessment Platform</p>
+                <div class="brand-mark" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
+                <div class="brand-text">
+                                        <h1>T&amp;S Policy Watcher</h1>
+                    <p class="tagline">Weekly, AI-summarized monitoring of community and safety policies across TikTok, Meta, YouTube, Whatnot and Twitch.</p>
+                </div>
             </div>
             <div class="header-right">
                 <div class="header-status-bar">
@@ -66,7 +72,7 @@
                     </div>
                     <div class="status-item" id="header-system-status">
                         <span class="status-number" id="header-status-number">-</span>
-                        <span class="status-label" id="header-status-label">Minutes to Next Check</span>
+                        <span class="status-label" id="header-status-label">Checking status…</span>
                     </div>
                 </div>
             </div>
@@ -75,16 +81,16 @@
 
     <!-- Newsletter Chat Widget -->
     <div class="newsletter-widget visible" id="newsletterWidget">
-        <button class="widget-trigger" onclick="toggleWidget()" id="widgetTrigger">
+        <button class="widget-trigger" onclick="toggleWidget()" id="widgetTrigger" aria-label="Subscribe to policy alerts" title="Subscribe to policy alerts">
             <i class="fas fa-envelope-open-text"></i>
         </button>
-        <div class="widget-form expanded" id="widgetForm">
+        <div class="widget-form" id="widgetForm">
             <div class="widget-header">
                 <div class="widget-title">
                     <i class="fas fa-envelope-open-text"></i>
-                    <h3>Subscribe to Alerts</h3>
+                    <h2>Subscribe to alerts</h2>
                 </div>
-                <button class="widget-close" onclick="toggleWidget()">
+                <button class="widget-close" onclick="toggleWidget()" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -104,7 +110,7 @@
         </div>
     </div>
 
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Dashboard sections">
         <button class="nav-tab active" data-tab="matrix">
             <i class="fas fa-table"></i> Policy Matrix
         </button>
@@ -126,7 +132,7 @@
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
             <div class="alert-message">
-                <h4>URL Health Issues Detected</h4>
+                <h3>URL health issues detected</h3>
                 <p id="health-alert-text">Some policy URLs are currently inaccessible.</p>
             </div>
             <div class="alert-actions">
@@ -140,9 +146,15 @@
     <main>
         <!-- Policy Matrix Tab -->
         <section id="matrix" class="tab-content active">
+            <div class="section-intro">
+                <div>
+                    <h2>Policy Matrix</h2>
+                    <p>Every tracked policy at a glance: coverage, notable features and enforcement signals pulled from the latest AI summary.</p>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header">
-                    <h2><i class="fas fa-table"></i> Policy Matrix</h2>
+                    <h2><i class="fas fa-table"></i> Tracked policies</h2>
                     <div class="matrix-controls">
                         <button class="export-btn" onclick="exportMatrix()">
                             <i class="fas fa-download"></i> Export CSV
@@ -192,7 +204,7 @@
             <div class="weekly-content">
                 <div class="card weekly-summary-card full-width">
                     <div class="card-header">
-                        <h3><i class="fas fa-chart-bar"></i> Summary</h3>
+                        <h3><i class="fas fa-file-lines"></i> Executive summary</h3>
                     </div>
                     <div class="card-body">
                         <div id="weekly-summary-content">
@@ -240,6 +252,12 @@
 
         <!-- Policy Explorer Tab -->
         <section id="platforms" class="tab-content">
+            <div class="section-intro">
+                <div>
+                    <h2>Policy Explorer</h2>
+                    <p>Browse AI summaries by platform. Open any card for the full summary, recent changes and saved version history.</p>
+                </div>
+            </div>
             <!-- Block/Mute Focus Section -->
             <div class="block-mute-section" id="block-mute-section">
                 <!-- Block/Mute content will be populated by JS -->
@@ -261,10 +279,16 @@
 
         <!-- Analytics Tab -->
         <section id="analytics" class="tab-content">
+            <div class="section-intro">
+                <div>
+                    <h2>Analytics &amp; Logs</h2>
+                    <p>How often competitor policies change, and how the monitoring pipeline itself is performing.</p>
+                </div>
+            </div>
             <!-- Weekly Change Frequency Chart - Top Priority -->
             <div class="card full-width">
                 <div class="card-header">
-                    <h2><i class="fas fa-chart-line"></i> Weekly Unique Policy Changes by Platform</h2>
+                    <h2><i class="fas fa-chart-line"></i> Policy change velocity</h2>
                 </div>
                 <div class="card-body">
                     <div id="weekly-platform-chart"></div>
@@ -274,10 +298,10 @@
             <!-- Recent Policy Changes Card -->
             <div class="card recent-changes-card full-width">
                 <div class="card-header">
-                    <h2><i class="fas fa-history"></i> Recent Policy Changes</h2>
+                    <h2><i class="fas fa-history"></i> Recent policy changes</h2>
                 </div>
                 <div class="card-body">
-                    <div id="recent-changes-list">Loading...</div>
+                    <div id="recent-changes-list"></div>
                 </div>
             </div>
             
@@ -285,7 +309,7 @@
             <div class="analytics-grid">
                 <div class="card">
                     <div class="card-header">
-                        <h2><i class="fas fa-clock"></i> Run Performance Trends</h2>
+                        <h2><i class="fas fa-gauge-high"></i> Run performance</h2>
                     </div>
                     <div class="card-body">
                         <div id="performance-timeline"></div>
@@ -294,7 +318,7 @@
                 
                 <div class="card">
                     <div class="card-header">
-                        <h2><i class="fas fa-chart-bar"></i> Platform Activity Overview</h2>
+                        <h2><i class="fas fa-chart-bar"></i> Platform activity (30 days)</h2>
                     </div>
                     <div class="card-body">
                         <div id="platform-activity-chart"></div>
@@ -305,7 +329,7 @@
             <!-- System Logs Section -->
             <div class="card">
                 <div class="card-header">
-                    <h2><i class="fas fa-server"></i> System Run Logs</h2>
+                    <h2><i class="fas fa-server"></i> Pipeline run log</h2>
                     <div class="filter-controls">
                         <select id="history-filter">
                             <option value="all">All Runs</option>
@@ -338,6 +362,18 @@
 
     </main>
 
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-stack" aria-label="Built with">
+                <span>Playwright</span><span>Gemini 2.5 Flash</span><span>GitHub Actions</span><span>Vercel</span>
+            </div>
+            <div class="footer-links">
+                <span>Built by Lyor Itzhaki</span>
+                <a href="https://github.com/lyori6/ts-policy-watcher" target="_blank" rel="noopener"><i class="fab fa-github"></i> Source</a>
+            </div>
+        </div>
+    </footer>
+
     <script>
         window.__POLICY_HISTORY_ENABLED__ = true;
     </script>
@@ -348,7 +384,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2><i class="fas fa-history"></i> System Run Log</h2>
-                <span class="close-button">&times;</span>
+                <button type="button" class="close-button" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="run-log-container">Loading log...</div>
@@ -361,7 +397,7 @@
         <div class="modal-content modal-large">
             <div class="modal-header">
                 <h2 id="policy-modal-title"><i class="fas fa-file-text"></i> Policy Summary</h2>
-                <span class="close-button" onclick="closePolicyModal()">&times;</span>
+                <button type="button" class="close-button" onclick="closePolicyModal()" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="policy-modal-content">Loading...</div>
@@ -382,7 +418,7 @@
         <div class="modal-content modal-large">
             <div class="modal-header">
                 <h2 id="policy-history-title"><i class="fas fa-clock"></i> Policy History</h2>
-                <span class="close-button" onclick="closePolicyHistoryModal()">&times;</span>
+                <button type="button" class="close-button" onclick="closePolicyHistoryModal()" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body history-modal-body">
                 <div class="history-version-list">

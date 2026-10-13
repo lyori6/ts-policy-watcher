@@ -24,3 +24,14 @@ snapshots/testing/
 .pytest_cache/
 /tmp/fetch_debug_*
 
+
+# Node / Playwright
+node_modules/
+test-results/
+playwright-report/
+visual_regression_tests/
+
+# Local Python env
+venv/
+.venv/
+.pycache/
