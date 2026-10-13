@@ -32,7 +32,7 @@ import argparse
 import subprocess
 from datetime import datetime, UTC, timedelta
 from pathlib import Path
-import google.generativeai as genai
+from ai_utils import generate, workers_ai_configured, strip_preamble
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 import html2text
 import warnings
@@ -54,7 +54,7 @@ RUN_LOG_FILE = "run_log.json"
 # RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
 
 # AI Prompt Template for weekly summaries
-WEEKLY_PROMPT_TEMPLATE = """As a Trust & Safety analyst, provide a comprehensive weekly summary for a product manager covering policy changes across multiple platforms.
+WEEKLY_PROMPT_TEMPLATE = """You are a Trust & Safety analyst writing a weekly summary for a product manager covering policy changes across multiple platforms.
 
 Week Period: {week_start} to {week_end}
 Run Information: {run_type} run generated on {run_date}
@@ -68,7 +68,8 @@ Please provide:
 3. **Risk Assessment** - Any changes that require immediate attention
 4. **Trends Analysis** - Patterns observed across platforms
 
-Format the response in markdown with clear sections and bullet points."""
+Format the response in markdown with clear sections and bullet points.
+Output rules: start directly with the first section. No preamble or meta text (never "Here's a summary", "As a Trust & Safety analyst"), no overall title restating the task, no closing remarks, and no '---' separators."""
 
 class WeeklyAggregator:
     def __init__(self, manual_run=False, week_ending=None):
@@ -215,17 +216,14 @@ class WeeklyAggregator:
 
     def call_ai_api(self, prompt, max_retries=3):
         """Call Gemini API with improved error handling and fallback to backup key."""
-        if not self.current_api_key:
-            return "Error: No GEMINI_API_KEY configured. Set GEMINI_API_KEY or GEMINI_API_KEY_2 to enable AI summaries."
-        
-        genai.configure(api_key=self.current_api_key)
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        if not self.current_api_key and not workers_ai_configured():
+            return "Error: No AI provider configured. Set CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_TOKEN or GEMINI_API_KEY to enable AI summaries."
         
         for attempt in range(max_retries):
             try:
-                response = model.generate_content(prompt)
-                if response and response.text:
-                    return response.text
+                text = generate(prompt, self.current_api_key)
+                if text:
+                    return strip_preamble(text, strip_title=False)
                 else:
                     raise Exception("Empty response from Gemini API")
                     
@@ -243,13 +241,11 @@ class WeeklyAggregator:
                     print("Switching to backup API key...", file=sys.stderr)
                     self.current_api_key = GEMINI_API_KEY_2
                     self.using_backup_key = True
-                    genai.configure(api_key=self.current_api_key)
-                    
                     try:
-                        response = model.generate_content(prompt)
-                        if response and response.text:
+                        text = generate(prompt, self.current_api_key)
+                        if text:
                             print("Successfully used backup API key", file=sys.stderr)
-                            return response.text
+                            return strip_preamble(text, strip_title=False)
                         else:
                             raise Exception("Empty response from backup API key")
                     except Exception as backup_error:

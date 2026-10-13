@@ -5,7 +5,8 @@ import sys
 import json
 import subprocess
 from datetime import datetime, UTC, timedelta
-import google.generativeai as genai
+from ai_utils import (generate, workers_ai_configured, strip_preamble, parse_matrix,
+                      SUMMARY_PROMPT, MATRIX_PROMPT, NO_PREAMBLE_RULES)
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 import html2text
 import warnings
@@ -20,13 +21,6 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_API_KEY_2 = os.environ.get("GEMINI_API_KEY_2")
 RUN_LOG_FILE = "run_log.json"
 SUMMARIES_FILE = "summaries.json"
-PROMPT_TEMPLATE = """As a Trust & Safety analyst, provide a concise summary for a product manager. {instruction}
-
-Policy content:
-{policy_text}
-
-Provide a direct summary using bullet points:"""
-
 # Track which API key we're currently using
 current_api_key = GEMINI_API_KEY
 using_backup_key = False
@@ -74,48 +68,56 @@ def clean_html(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup.get_text(" ", strip=True)
 
-def get_ai_summary(text_content, is_new_policy):
-    """Generates a summary using the Gemini API with fallback to backup key."""
+def _generate_with_fallback(prompt):
+    """Calls Workers AI, then Gemini with the primary key, switching to the
+    backup Gemini key on quota errors."""
     global current_api_key, using_backup_key
-    
-    if not current_api_key:
-        return "Error: No GEMINI_API_KEY configured."
-    
-    genai.configure(api_key=current_api_key)
-    model = genai.GenerativeModel('gemini-2.5-flash')
-    
-    instruction = (
-        "Analyze this complete policy document and highlight the key aspects." if is_new_policy 
-        else "Identify the specific changes and their impact."
-    )
-    
-    prompt = PROMPT_TEMPLATE.format(instruction=instruction, policy_text=text_content)
-    
+
+    if not current_api_key and not workers_ai_configured():
+        print("ERROR: No AI provider configured (CLOUDFLARE_* or GEMINI_API_KEY).", file=sys.stderr)
+        return None
+
     try:
-        response = model.generate_content(prompt)
-        return response.text
+        return generate(prompt, current_api_key)
     except Exception as e:
         error_str = str(e)
         print(f"ERROR: Gemini API call failed. Reason: {error_str}", file=sys.stderr)
-        
+
         # Check if quota exceeded and we have a backup key
         if "429" in error_str or "quota" in error_str.lower():
             if not using_backup_key and GEMINI_API_KEY_2:
                 print("Quota exceeded on primary key, switching to backup key...", file=sys.stderr)
                 current_api_key = GEMINI_API_KEY_2
                 using_backup_key = True
-                genai.configure(api_key=current_api_key)
-                
                 try:
-                    response = model.generate_content(prompt)
+                    text = generate(prompt, current_api_key)
                     print("Successfully used backup API key", file=sys.stderr)
-                    return response.text
+                    return text
                 except Exception as backup_error:
                     print(f"ERROR: Backup API key also failed: {backup_error}", file=sys.stderr)
                     return None
             else:
                 print("No backup key available or already using backup", file=sys.stderr)
-        
+        return None
+
+def get_ai_summary(text_content, is_new_policy):
+    """Generates a summary using the Gemini API with fallback to backup key."""
+    instruction = (
+        "Analyze this complete policy document and highlight the key aspects." if is_new_policy
+        else "Identify the specific changes and their impact."
+    )
+    prompt = SUMMARY_PROMPT.format(instruction=instruction, rules=NO_PREAMBLE_RULES,
+                                   policy_text=text_content)
+    text = _generate_with_fallback(prompt)
+    return strip_preamble(text) if text else None
+
+def get_policy_matrix(text_content):
+    """Asks Gemini for coverage/features/enforcement fields. Returns dict or None."""
+    try:
+        text = _generate_with_fallback(MATRIX_PROMPT.format(policy_text=text_content))
+        return parse_matrix(text)
+    except Exception as e:
+        print(f"WARNING: matrix generation failed: {e}", file=sys.stderr)
         return None
 
 def is_significant_change(diff_content):
@@ -163,6 +165,9 @@ def is_significant_change(diff_content):
     
     return False, "No significant policy content changes detected"
 
+# Matrix results for new policies, keyed by file path (side channel to keep return type stable)
+LAST_MATRIX = {}
+
 def process_changed_file(file_path, is_new_policy, commit_sha):
     """Processes a single changed file to generate a summary."""
     print(f"\nProcessing: {file_path} {'(new policy)' if is_new_policy else '(existing policy)'}")
@@ -187,7 +192,12 @@ def process_changed_file(file_path, is_new_policy, commit_sha):
             print("Change is too small to summarize. Skipping.")
             return None
 
-        return get_ai_summary(text_to_summarize[:20000], is_new_policy)
+        summary = get_ai_summary(text_to_summarize[:20000], is_new_policy)
+        if summary and is_new_policy:
+            matrix = get_policy_matrix(text_to_summarize[:20000])
+            if matrix:
+                LAST_MATRIX[file_path] = matrix
+        return summary
     except Exception as e:
         print(f"ERROR: Could not process file {file_path}. Reason: {e}", file=sys.stderr)
         return None
@@ -473,6 +483,8 @@ def main():
                             "last_update_summary": "Initial version.",
                             "last_updated": datetime.now(UTC).isoformat().replace('+00:00', 'Z')
                         }
+                        if file_path in LAST_MATRIX:
+                            summaries_data[slug]["matrix"] = LAST_MATRIX[file_path]
                         print(f"Generated initial summary for new policy: {slug}")
                     else:
                         summaries_data[slug]['last_update_summary'] = summary_text

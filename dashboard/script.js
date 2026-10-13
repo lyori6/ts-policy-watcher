@@ -914,9 +914,11 @@ class PolicyWatcherDashboard {
                 const statusText = summaryData.initial_summary ? 'Tracked' : 'Pending';
                 
                 // Extract key info from summary for display
-                const coverage = this.extractCoverageAreas(summaryData.initial_summary);
-                const keyFeatures = this.extractKeyFeatures(summaryData.initial_summary);
-                const enforcement = this.extractEnforcementInfo(summaryData.initial_summary);
+                // Prefer the structured fields Gemini writes; fall back to keyword matching
+                const matrix = summaryData.matrix || {};
+                const coverage = matrix.coverage_areas || this.extractCoverageAreas(summaryData.initial_summary);
+                const keyFeatures = matrix.key_features || this.extractKeyFeatures(summaryData.initial_summary);
+                const enforcement = matrix.enforcement_actions || this.extractEnforcementInfo(summaryData.initial_summary);
                 
                 // Show view button only if we have data
                 const viewButton = summaryData.initial_summary ? 
@@ -1422,7 +1424,7 @@ class PolicyWatcherDashboard {
                             <span>Policy Updates</span>
                         </div>
                         <div class="overview-stat">
-                            <strong>${weekData.changed_policies ? new Set(weekData.changed_policies.map(p => p.policy_key.split('-')[0])).size : 0}</strong>
+                            <strong>${weekData.changed_policies ? new Set(weekData.changed_policies.map(p => this.extractPlatformFromPolicyKey(p.policy_key))).size : 0}</strong>
                             <span>Platforms</span>
                         </div>
                     </div>
@@ -1470,7 +1472,7 @@ class PolicyWatcherDashboard {
                             <small>(${stats.policies} policies)</small>
                         </div>
                         <div class="activity-metrics">
-                            <span class="change-count">${stats.changes} changes</span>
+                            <span class="change-count">${stats.changes} change${stats.changes === 1 ? '' : 's'}</span>
                             <span class="change-rate">${stats.changeRate}% rate</span>
                         </div>
                     </div>
@@ -1486,16 +1488,16 @@ class PolicyWatcherDashboard {
         
         const trendsHtml = `
             <div class="stat-row">
-                <span>Average Run Duration</span>
-                <span>${trends.avgDuration}</span>
+                <span>Last run</span>
+                <span>${trends.lastRunLabel}</span>
             </div>
             <div class="stat-row">
-                <span>Success Rate (30 days)</span>
+                <span>Success rate (last ${this.runData.length} runs)</span>
                 <span>${(trends.successRate * 100).toFixed(1)}%</span>
             </div>
             <div class="stat-row">
-                <span>Changes Today</span>
-                <span>${trends.totalChanges}</span>
+                <span>Changes found in last run</span>
+                <span>${trends.lastRunChanges}</span>
             </div>
         `;
 
@@ -1943,27 +1945,30 @@ class PolicyWatcherDashboard {
             }
         });
         
-        // Calculate actual change frequency from last 30 days of run data
+        // Count unique policies changed per platform over the last 30 days,
+        // using the per-policy commit dates in the weekly summaries
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        
-        const recentRuns = this.runData.filter(run => 
-            new Date(run.timestamp_utc) >= thirtyDaysAgo
-        );
-        
-        // For now, distribute changes evenly since we don't have per-platform breakdown
-        // This would be improved with more detailed logging
-        const totalChanges = recentRuns.reduce((sum, run) => sum + (run.changes_found || 0), 0);
-        const totalPolicies = this.platformData.length || 1;
-        
+
+        const changedByPlatform = {};
+        Object.keys(this.weeklySummariesData || {})
+            .filter(key => !key.startsWith('_'))
+            .forEach(weekKey => {
+                (this.weeklySummariesData[weekKey].changed_policies || []).forEach(change => {
+                    if (new Date(change.commit_date) < thirtyDaysAgo) return;
+                    const platform = this.extractPlatformFromPolicyKey(change.policy_key);
+                    if (!changedByPlatform[platform]) changedByPlatform[platform] = new Set();
+                    changedByPlatform[platform].add(change.policy_key);
+                });
+            });
+
         platforms.forEach(platform => {
             const platformPolicies = stats[platform].policies;
-            // Estimate changes based on platform's share of total policies
-            stats[platform].changes = Math.round((platformPolicies / totalPolicies) * totalChanges);
-            stats[platform].changeRate = platformPolicies > 0 ? 
+            stats[platform].changes = changedByPlatform[platform] ? changedByPlatform[platform].size : 0;
+            stats[platform].changeRate = platformPolicies > 0 ?
                 (stats[platform].changes / platformPolicies * 100).toFixed(1) : 0;
         });
-        
+
         return stats;
     }
 
@@ -1978,10 +1983,14 @@ class PolicyWatcherDashboard {
             
         const successRate = this.calculateSuccessRate();
         
+        const lastRun = this.runData[0];
+
         return {
             avgDuration: '~2 min', // This would need actual timing data
             successRate,
-            totalChanges: recentChanges // Show only recent changes, starting fresh
+            totalChanges: recentChanges, // Show only recent changes, starting fresh
+            lastRunLabel: lastRun ? this.formatRelativeTime(lastRun.timestamp_utc) : 'No runs yet',
+            lastRunChanges: lastRun ? (lastRun.changes_found || 0) : 0
         }
     }
 
@@ -2062,6 +2071,8 @@ class PolicyWatcherDashboard {
             /^Here's a concise summary.*?for a product manager[^:]*:?\s*/im,
             /^As a Trust & Safety analyst,? here is a concise summary.*?for a Product Manager[^:]*:?\s*/im,
             /^concise summary.*?for a product manager[^:]*:?\s*/im,
+            /^As a Trust (?:&|and) Safety analyst,?[^\n]*?:\s*/im,
+            /^Here(?:'s| is) (?:a|the) (?:concise )?summary[^\n]*?:\s*/im,
             
             // Remove highlighting patterns
             /highlighting key changes?[^:]*:?\s*/im,
@@ -2870,7 +2881,8 @@ class PolicyWatcherDashboard {
         // Update changes count
         const changesCountEl = document.getElementById('weekly-changes-count');
         if (changesCountEl) {
-            changesCountEl.textContent = weekData.changes_count || 0;
+            const uniquePolicies = new Set((weekData.changed_policies || []).map(policy => policy.policy_key));
+            changesCountEl.textContent = uniquePolicies.size || weekData.changes_count || 0;
         }
 
         // Update platforms count
@@ -2878,8 +2890,7 @@ class PolicyWatcherDashboard {
         if (platformsCountEl && weekData.changed_policies) {
             const uniquePlatforms = new Set();
             weekData.changed_policies.forEach(policy => {
-                const platform = policy.policy_key.split('-')[0];
-                uniquePlatforms.add(platform);
+                uniquePlatforms.add(this.extractPlatformFromPolicyKey(policy.policy_key));
             });
             platformsCountEl.textContent = uniquePlatforms.size;
         }
