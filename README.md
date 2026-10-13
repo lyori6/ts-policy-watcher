@@ -1,6 +1,6 @@
 # T&S Policy Watcher
 
-Automated competitive intelligence for Trust & Safety teams. The watcher checks 26 community, safety and moderation policy pages across **TikTok, Meta, YouTube, Whatnot and Twitch** every week, detects substantive changes, has Gemini summarize what changed and why it matters, and publishes everything to a live dashboard.
+Automated competitive intelligence for Trust & Safety teams. The watcher checks 26 community, safety and moderation policy pages across **TikTok, Meta, YouTube, Whatnot and Twitch** every week, detects substantive changes, has an LLM (Cloudflare Workers AI, with Gemini as fallback) summarize what changed and why it matters, and publishes everything to a live dashboard.
 
 **Live dashboard:** https://ts-policy-watcher.vercel.app
 
@@ -26,7 +26,7 @@ GitHub Actions (Fridays 15:00 UTC)
   │
   ├─ scripts/health_check.py     pre-flight URL checks (catches 403s, redirects, bot walls)
   ├─ scripts/fetch.py            Playwright/httpx fetch → cleaned HTML snapshots in snapshots/
-  ├─ scripts/diff_and_notify.py  git diff of snapshots → Gemini 2.5 Flash summaries → summaries.json, run_log.json
+  ├─ scripts/diff_and_notify.py  git diff of snapshots → Workers AI / Gemini summaries → summaries.json, run_log.json
   └─ scripts/weekly_aggregator.py  weekly roll-up → weekly_summaries.json
                     │
                     ▼
@@ -57,7 +57,9 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
 
-export GEMINI_API_KEY=...        # summaries
+export CLOUDFLARE_ACCOUNT_ID=... # summaries (Workers AI)
+export CLOUDFLARE_API_TOKEN=...
+export GEMINI_API_KEY=...        # fallback
 export RESEND_API_KEY=...        # optional email digests
 export RECIPIENT_EMAIL=...
 
@@ -96,7 +98,7 @@ More detail: [docs/INDEX.md](docs/INDEX.md).
 
 ## Tech
 
-Python · Playwright · BeautifulSoup · Google Gemini 2.5 Flash · Resend · GitHub Actions · vanilla JS dashboard on Vercel
+Python · Playwright · BeautifulSoup · Cloudflare Workers AI · Google Gemini · Resend · GitHub Actions · vanilla JS dashboard on Vercel
 
 ---
 
