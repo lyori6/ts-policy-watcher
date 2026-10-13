@@ -426,26 +426,11 @@ main {
     padding: 1.25rem 2rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
     flex-wrap: wrap;
     font-size: 0.82rem;
     color: var(--text-3);
-}
-
-.footer-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-}
-
-.footer-stack span {
-    padding: 0.15rem 0.55rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: var(--surface-2);
-    font-size: 0.75rem;
-    color: var(--text-2);
 }
 
 .footer-links {

@@ -3467,7 +3467,7 @@ function exportMatrix() {
     const rows = table.querySelectorAll('tbody tr:not(.platform-section)');
     
     // CSV headers
-    const headers = ['Platform', 'Policy Name', 'Status', 'Coverage Areas', 'Key Features', 'Enforcement Actions', 'Last Updated', 'URL'];
+    const headers = ['Platform', 'Policy Name', 'Status', 'Coverage Areas', 'Key Features', 'Enforcement Actions', 'Last Changed', 'URL'];
     let csvContent = headers.join(',') + '\n';
     
     rows.forEach(row => {
