@@ -75,6 +75,9 @@ def workers_ai_generate(prompt):
     response.raise_for_status()
     data = response.json()
     text = (data.get("result") or {}).get("response")
+    if isinstance(text, (dict, list)):
+        # Workers AI returns JSON output already parsed
+        text = json.dumps(text)
     if not data.get("success", True) or not text:
         raise RuntimeError(f"Workers AI returned no text: {data.get('errors')}")
     return text
