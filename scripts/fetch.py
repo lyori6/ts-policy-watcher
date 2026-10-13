@@ -16,17 +16,20 @@ HISTORY_MANIFEST_FILENAME = "index.json"
 MAX_HISTORY_ENTRIES = 5
 
 # --- Configuration ---
-USER_AGENT = "TrustAndSafety-Policy-Watcher/1.0 (https://github.com/your-repo/ts-policy-watcher; mailto:your-email@example.com)"
+USER_AGENT = "TrustAndSafety-Policy-Watcher/1.0 (+https://github.com/lyori6/ts-policy-watcher)"
 URL_CONFIG_FILE = Path("platform_urls.json")
 FAILURE_LOG_FILE = Path("failures.log")
-RETRY_ATTEMPTS = 2
+RETRY_ATTEMPTS = 3
 RETRY_DELAY_SECONDS = 5
+# Bot protection (e.g. Whatnot's help center) blocks CI runners intermittently;
+# waiting longer before retrying a 403 usually gets through.
+ACCESS_DENIED_RETRY_DELAY_SECONDS = 20
 
 # --- Error Classification ---
 class URLErrorTypes:
     """Classification of URL fetch errors for smart retry logic."""
     BROKEN_LINK = "404_not_found"          # Don't retry - URL is permanently broken
-    ACCESS_DENIED = "403_forbidden"        # Don't retry - Access blocked
+    ACCESS_DENIED = "403_forbidden"        # Retry with a longer delay - often intermittent bot protection
     SERVER_ERROR = "5xx_server_error"      # Retry - Temporary server issue
     NETWORK_TIMEOUT = "timeout"            # Retry - Network connectivity issue
     UNKNOWN = "unknown_error"              # Retry once - Uncertain cause
@@ -48,7 +51,7 @@ def classify_error(exception: Exception) -> str:
 
 def should_retry(error_type: str) -> bool:
     """Determine if error type should be retried."""
-    return error_type in [URLErrorTypes.SERVER_ERROR, URLErrorTypes.NETWORK_TIMEOUT, URLErrorTypes.UNKNOWN]
+    return error_type in [URLErrorTypes.ACCESS_DENIED, URLErrorTypes.SERVER_ERROR, URLErrorTypes.NETWORK_TIMEOUT, URLErrorTypes.UNKNOWN]
 
 def get_snapshot_base_directory():
     """
@@ -615,7 +618,10 @@ def main():
                     errors.append(error_msg)
                     break
                 elif attempt < RETRY_ATTEMPTS - 1:
-                    time.sleep(RETRY_DELAY_SECONDS)
+                    if error_type == URLErrorTypes.ACCESS_DENIED:
+                        time.sleep(ACCESS_DENIED_RETRY_DELAY_SECONDS * (attempt + 1))
+                    else:
+                        time.sleep(RETRY_DELAY_SECONDS)
                 else:
                     failures.append({
                         "url": url, 

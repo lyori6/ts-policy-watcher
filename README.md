@@ -67,6 +67,8 @@ python scripts/diff_and_notify.py
 python scripts/weekly_aggregator.py --manual
 ```
 
+The dashboard's subscribe widget posts to a Vercel function ([`api/subscribe.js`](api/subscribe.js)) that emails the owner through Resend. Set `RESEND_API_KEY` and `RECIPIENT_EMAIL` in the Vercel project for it to work.
+
 The monitored pages live in [`platform_urls.json`](platform_urls.json); add an entry to start tracking a new policy.
 
 ## Tests

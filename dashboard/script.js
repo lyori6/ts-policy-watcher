@@ -3557,78 +3557,58 @@ async function subscribeFromWidget() {
     emailInput.classList.remove('invalid');
     emailInput.classList.add('valid');
     
+    const successHtml = `
+        <div class="widget-header">
+            <div class="widget-title">
+                <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                <h2>You're subscribed!</h2>
+            </div>
+        </div>
+        <p class="widget-subtitle">Thanks! Lyor has been notified and will add you to the weekly policy updates.</p>
+        <div style="text-align: right;">
+            <button class="btn" onclick="minimizeWidget()">Close</button>
+        </div>
+    `;
+
     try {
-        // Send actual email notification
-        const response = await fetch('http://localhost:8081/api/subscribe', {
+        const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: email,
                 source: 'dashboard-widget'
             })
         });
-        
-        if (response.ok) {
-            // Track successful subscription in GTM
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                'event': 'newsletter_subscription_success',
-                'subscription_source': 'widget',
-                'subscription_email_domain': email.split('@')[1] || 'unknown'
-            });
-            
-            // Show success in widget
-            const widgetForm = document.getElementById('widgetForm');
-            widgetForm.innerHTML = `
-                <div class="widget-header">
-                    <div class="widget-title">
-                        <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                        <h2>You're subscribed!</h2>
-                    </div>
-                </div>
-                <p class="widget-subtitle">Thanks! We've messaged Lyor and he'll add you to the updates. You'll get a confirmation once you're added.</p>
-                <div style="text-align: center; margin-top: 1rem;">
-                    <button onclick="minimizeWidget()" style="background: none; border: 1px solid #ddd; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; color: #666;">
-                        Minimize
-                    </button>
-                </div>
-            `;
-        } else {
-            throw new Error('Subscription failed');
+
+        if (!response.ok) {
+            const result = await response.json().catch(() => ({}));
+            throw new Error(result.error || `HTTP ${response.status}`);
         }
-        
-    } catch (error) {
-        console.error('Subscription error:', error);
-        
-        // Since the email might still be sent successfully, show success
-        // The API server runs independently and may work even if fetch fails
-        const widgetForm = document.getElementById('widgetForm');
-        widgetForm.innerHTML = `
-            <div class="widget-header">
-                <div class="widget-title">
-                    <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                    <h2>You're subscribed!</h2>
-                </div>
-            </div>
-            <p class="widget-subtitle">Thanks! We've messaged Lyor and he'll add you to the updates. You'll get a confirmation once you're added.</p>
-            <div style="text-align: center; margin-top: 1rem;">
-                <button onclick="minimizeWidget()" style="background: none; border: 1px solid #ddd; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; color: #666;">
-                    Minimize
-                </button>
-            </div>
-        `;
-        
-        console.log('Newsletter subscription:', email, '- Email notification may have been sent despite API connection issue');
-        
-        // Track subscription event in GTM
+
+        // Track successful subscription in GTM (domain only, for privacy)
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
-            'event': 'newsletter_subscription',
+            'event': 'newsletter_subscription_success',
             'subscription_source': 'widget',
-            'subscription_email_domain': email.split('@')[1] || 'unknown' // domain only for privacy
+            'subscription_email_domain': email.split('@')[1] || 'unknown'
         });
+
+        document.getElementById('widgetForm').innerHTML = successHtml;
+    } catch (error) {
+        console.error('Subscription error:', error);
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'newsletter_subscription_error',
+            'subscription_source': 'widget'
+        });
+
+        subscribeBtn.disabled = false;
+        subscribeBtn.textContent = 'Subscribe';
+        emailInput.classList.remove('valid');
+        showValidation("Couldn't subscribe right now. Please try again in a moment.");
     }
 }
 
