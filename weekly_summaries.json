@@ -8757,5 +8757,36 @@
         "commit_hash": "87dcfc098de9008ee2baeeacf987ae0240c2a7f7"
       }
     ]
+  },
+  "2026-10-10_to_2026-10-16": {
+    "run_metadata": {
+      "run_date": "2026-10-16T21:56:33.673697+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-10-10",
+      "week_end": "2026-10-16",
+      "generated_by": "friday_automation"
+    },
+    "summary": "### Executive Summary\n- **Streamlined Appeal Processes**: Meta has simplified its appeal process by removing non-specific queries and adding clear time windows and support options, ensuring users exhaust internal reviews before external appeals.\n- **Reduced User Confusion**: Meta has consolidated blocking-related content, reducing the number of options and providing more general topics, which may decrease user confusion.\n- **Consistent Formatting and Updates**: Whatnot has updated its community guidelines, ensuring consistent file formatting and reflecting changes in content or structure.\n\n### Platform Highlights\n- **Meta**\n  - **Appeal Process**: Removed specific appeal sections and added a 15-day window for appeals. Introduced Meta AI assistant support for users.\n  - **Blocking People**: Simplified blocking-related content, removed specific questions, and added general topics and AI support options.\n- **Whatnot**\n  - **Community Guidelines**: Updated file formatting and index, indicating changes in content or structure.\n\n### Risk Assessment\n- **Meta Appeal Process**: The removal of direct appeals to the Oversight Board for non-removed content may increase user frustration if they feel their reports are not being addressed. Monitoring user feedback and support tickets is crucial.\n- **Meta Blocking People**: The consolidation of blocking-related content may lead to initial user confusion as they adapt to the new, more streamlined interface. Close monitoring of user interactions and support requests is necessary.\n\n### Trends Analysis\n- **Simplification and Consolidation**: Both Meta and Whatnot have focused on simplifying user interactions by reducing the number of options and consolidating information.\n- **AI Support Integration**: Meta has increasingly integrated AI support options, aiming to provide users with more immediate and efficient assistance.\n- **Consistent File Formatting**: Whatnot's update to file formatting indicates a trend towards maintaining consistency and clarity in platform documentation.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-10-16 18:39:35 +0000",
+        "commit_hash": "882b7d64915bef73fc1dc857e689a89e201dcb29"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-10-16 18:39:35 +0000",
+        "commit_hash": "882b7d64915bef73fc1dc857e689a89e201dcb29"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-16 18:39:35 +0000",
+        "commit_hash": "882b7d64915bef73fc1dc857e689a89e201dcb29"
+      }
+    ]
   }
 }
