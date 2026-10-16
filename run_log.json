@@ -1,5 +1,14 @@
 [
   {
+    "timestamp_utc": "2026-10-16T18:36:02.022995Z",
+    "status": "partial_failure",
+    "pages_checked": 26,
+    "changes_found": 3,
+    "errors": [
+      "Attempt 3/3 FAILED for whatnot-buyer-protection. Error Type: 403_forbidden. Reason: HTTP 403: "
+    ]
+  },
+  {
     "timestamp_utc": "2026-10-09T19:59:42.250793Z",
     "status": "partial_failure",
     "pages_checked": 26,
@@ -185,13 +194,6 @@
     "status": "success",
     "pages_checked": 26,
     "changes_found": 1,
-    "errors": []
-  },
-  {
-    "timestamp_utc": "2026-04-24T16:02:55.041442Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 5,
     "errors": []
   }
 ]
