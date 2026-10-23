@@ -8788,5 +8788,60 @@
         "commit_hash": "882b7d64915bef73fc1dc857e689a89e201dcb29"
       }
     ]
+  },
+  "2026-10-17_to_2026-10-23": {
+    "run_metadata": {
+      "run_date": "2026-10-23T21:53:05.382711+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-10-17",
+      "week_end": "2026-10-23",
+      "generated_by": "friday_automation"
+    },
+    "summary": "### Executive Summary\n- **Policy Clarification and Standardization**: Multiple platforms updated their policies to include clearer language and standardized formatting, improving user understanding and consistency.\n- **Expanded Language Support**: Whatnot added support for Espa\u00f1ol (Espa\u00f1a) and Italiano (Italia), broadening accessibility for international users.\n- **Regulatory Compliance Updates**: Meta and TikTok added links to new regulatory compliance documents, ensuring alignment with global online safety laws.\n\n### Platform Highlights\n- **Meta**\n  - **Appeal Process**: Clarified the appeal process for content reporting, removed redundant information, and standardized formatting.\n  - **Blocking People**: Added links to regulatory compliance documents for Australia, the UK, and Japan, and updated AI terms and copyright year.\n\n- **TikTok**\n  - **Community Guidelines**: Added new sections on commitments and engagement, updated links, and removed outdated separators.\n  - **Footer Update**: Changed the copyright year to 2025.\n\n- **Whatnot**\n  - **Buyer Protection**: Significantly refactored and clarified the Buyer Protection policy, including expanded language support, streamlined structure, and new exclusions.\n  - **Community Guidelines**: Added HTML structure and updated specific guideline content.\n\n- **YouTube**\n  - **Community Guidelines**: Updated navigation, structure, and content to emphasize openness and free expression, added new sections, and updated visual design.\n  - **Harassment Policy**: Updated links, script loading methods, and error handling for improved functionality and maintenance.\n\n### Risk Assessment\n- **Whatnot Buyer Protection**: The new exclusion for \"Turned off signature confirmation\" is a significant risk mitigation measure. Immediate attention is required to ensure users are aware of this change to avoid disputes.\n- **Meta Appeal Process**: The clarification on the appeal process may lead to an increase in appeals to the Oversight Board. Monitoring and support for this process should be prioritized.\n\n### Trends Analysis\n- **Regulatory Compliance**: Multiple platforms are updating their policies to include links to new regulatory compliance documents, indicating a trend towards greater alignment with global online safety laws.\n- **Policy Clarification**: There is a consistent effort across platforms to clarify and standardize policy language, improving user understanding and reducing ambiguity.\n- **Expanded Language Support**: Platforms are increasingly supporting multiple languages, broadening accessibility for international users and improving localized understanding.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      },
+      {
+        "policy_key": "tiktok-community-guidelines",
+        "file_path": "snapshots/production/tiktok-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      },
+      {
+        "policy_key": "whatnot-buyer-protection",
+        "file_path": "snapshots/production/whatnot-buyer-protection/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      },
+      {
+        "policy_key": "youtube-community-guidelines",
+        "file_path": "snapshots/production/youtube-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      },
+      {
+        "policy_key": "youtube-harassment-policy",
+        "file_path": "snapshots/production/youtube-harassment-policy/snapshot.html",
+        "commit_date": "2026-10-23 19:42:24 +0000",
+        "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
+      }
+    ]
   }
 }
