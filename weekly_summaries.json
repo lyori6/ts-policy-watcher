@@ -8843,5 +8843,36 @@
         "commit_hash": "e9a0d6017f61e78ee3051125e8a87677a139160b"
       }
     ]
+  },
+  "2026-10-24_to_2026-10-30": {
+    "run_metadata": {
+      "run_date": "2026-10-30T22:48:48.579061+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-10-24",
+      "week_end": "2026-10-30",
+      "generated_by": "friday_automation"
+    },
+    "summary": "### Executive Summary\n- **Streamlining and Clarity**: Multiple platforms have focused on reducing redundancy and improving document navigation, enhancing user experience.\n- **Regional Policy Updates**: Whatnot introduced a significant policy change affecting the APAC region, specifically for Trading Card Games (TCGs) in Australia and Japan.\n- **Minor Edits and Maintenance**: Several platforms made minor edits and maintenance updates to ensure consistency and accuracy in their guidelines.\n\n### Platform Highlights\n- **Meta Community Guidelines**:\n  - Removed outdated references to the primary source of truth for policies.\n  - Corrected typographical errors that could cause confusion.\n  - Streamlined the document by removing redundant links and sections.\n\n- **Twitch Community Guidelines**:\n  - Added a newline at the end of the file for better compatibility.\n  - Introduced a CSS error message with a refresh option to improve user experience.\n  - Updated the year in the footer and removed duplicate links to enhance maintainability.\n\n- **Whatnot Prohibited Items**:\n  - Introduced a new policy for APAC TCG pre-release requirements, affecting sellers and buyers in Australia and Japan.\n  - Reordered and renamed policies to improve clarity and organization.\n  - Made minor text and formatting updates, including language options and internal asset links.\n\n### Risk Assessment\n- **High Impact**: The new APAC TCG pre-release policy on Whatnot requires immediate attention from product teams to prevent policy violations and ensure compliance starting August 20, 2026.\n- **Moderate Impact**: The typographical error in Meta's Community Guidelines could lead to misinterpretation and should be corrected promptly.\n- **Low Impact**: Other changes are primarily editorial and maintenance-related, with minimal risk of immediate issues.\n\n### Trends Analysis\n- **Document Maintenance**: All platforms have focused on improving the readability and maintainability of their guidelines, indicating a trend towards better document management.\n- **Regional Focus**: Whatnot's introduction of a regional-specific policy highlights a trend towards more localized policy enforcement.\n- **User Experience**: Twitch's addition of a CSS error message with a refresh option shows a trend towards enhancing user experience through immediate problem resolution.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-community-guidelines",
+        "file_path": "snapshots/production/meta-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-30 19:53:35 +0000",
+        "commit_hash": "3a0b7d6b00fbefbdd77bfb59adf199d255fb6beb"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-10-30 19:53:35 +0000",
+        "commit_hash": "3a0b7d6b00fbefbdd77bfb59adf199d255fb6beb"
+      },
+      {
+        "policy_key": "whatnot-prohibited-items",
+        "file_path": "snapshots/production/whatnot-prohibited-items/snapshot.html",
+        "commit_date": "2026-10-30 19:53:35 +0000",
+        "commit_hash": "3a0b7d6b00fbefbdd77bfb59adf199d255fb6beb"
+      }
+    ]
   }
 }
