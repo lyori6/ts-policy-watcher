@@ -54,7 +54,9 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDXP433F"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    
+
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <header>
         <div class="header-content">
             <div class="header-left">
@@ -65,7 +67,7 @@
                 </div>
             </div>
             <div class="header-right">
-                <div class="header-status-bar">
+                <div class="header-status-bar" role="status" aria-live="polite">
                     <div class="status-item">
                         <span class="status-number" id="header-total-policies">-</span>
                         <span class="status-label">Policies Tracked</span>
@@ -80,26 +82,27 @@
     </header>
 
     <!-- Newsletter Chat Widget -->
-    <div class="newsletter-widget visible" id="newsletterWidget">
-        <button class="widget-trigger" onclick="toggleWidget()" id="widgetTrigger" aria-label="Subscribe to policy alerts" title="Subscribe to policy alerts">
+    <aside class="newsletter-widget visible" id="newsletterWidget" aria-label="Policy alert subscription">
+        <button type="button" class="widget-trigger" onclick="toggleWidget()" id="widgetTrigger" aria-label="Subscribe to policy alerts" title="Subscribe to policy alerts" aria-expanded="false" aria-controls="widgetForm">
             <i class="fas fa-envelope-open-text"></i>
         </button>
-        <div class="widget-form" id="widgetForm">
+        <div class="widget-form" id="widgetForm" role="region" aria-labelledby="widgetTitle">
             <div class="widget-header">
                 <div class="widget-title">
                     <i class="fas fa-envelope-open-text"></i>
-                    <h2>Subscribe to alerts</h2>
+                    <h2 id="widgetTitle">Subscribe to alerts</h2>
                 </div>
-                <button class="widget-close" onclick="toggleWidget()" aria-label="Close">
+                <button type="button" class="widget-close" onclick="toggleWidget()" aria-label="Close subscribe form">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <p class="widget-subtitle">Get notified when platform policies change that could impact your business.</p>
+            <p class="widget-subtitle" id="widgetSubtitle">Get notified when platform policies change that could impact your business.</p>
             <div class="widget-input-group">
-                <input type="email" id="widgetEmail" placeholder="your@email.com" required />
-                <button onclick="subscribeFromWidget()" id="widgetSubscribeBtn">Subscribe</button>
+                <label for="widgetEmail" class="sr-only">Email address</label>
+                <input type="email" id="widgetEmail" name="email" placeholder="your@email.com" autocomplete="email" required aria-describedby="widgetSubtitle widgetValidation" />
+                <button type="button" onclick="subscribeFromWidget()" id="widgetSubscribeBtn">Subscribe</button>
             </div>
-            <div class="widget-validation" id="widgetValidation" style="display: none;">
+            <div class="widget-validation" id="widgetValidation" role="alert" style="display: none;">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Please enter a valid email address</span>
             </div>
@@ -108,25 +111,25 @@
                 <span>We will never share your email. Unsubscribe anytime.</span>
             </div>
         </div>
-    </div>
+    </aside>
 
     <nav class="main-nav" aria-label="Dashboard sections">
-        <button class="nav-tab active" data-tab="matrix">
+        <button type="button" class="nav-tab active" data-tab="matrix" aria-controls="matrix" aria-current="true">
             <i class="fas fa-table"></i> Policy Matrix
         </button>
-        <button class="nav-tab" data-tab="weekly">
+        <button type="button" class="nav-tab" data-tab="weekly" aria-controls="weekly">
             <i class="fas fa-calendar-week"></i> Weekly Update
         </button>
-        <button class="nav-tab" data-tab="platforms">
+        <button type="button" class="nav-tab" data-tab="platforms" aria-controls="platforms">
             <i class="fas fa-building"></i> Policy Explorer
         </button>
-        <button class="nav-tab" data-tab="analytics">
+        <button type="button" class="nav-tab" data-tab="analytics" aria-controls="analytics">
             <i class="fas fa-chart-line"></i> Analytics & Logs
         </button>
     </nav>
 
     <!-- Health Alert Banner -->
-    <div class="health-alert-banner" id="health-alert-banner" style="display: none;">
+    <div class="health-alert-banner" id="health-alert-banner" role="status" style="display: none;">
         <div class="alert-content">
             <div class="alert-icon">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -136,14 +139,14 @@
                 <p id="health-alert-text">Some policy URLs are currently inaccessible.</p>
             </div>
             <div class="alert-actions">
-                <button class="alert-dismiss" onclick="dismissHealthAlert()">
+                <button type="button" class="alert-dismiss" onclick="dismissHealthAlert()" aria-label="Dismiss alert">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <!-- Policy Matrix Tab -->
         <section id="matrix" class="tab-content active">
             <div class="section-intro">
@@ -156,7 +159,7 @@
                 <div class="card-header">
                     <h2><i class="fas fa-table"></i> Tracked policies</h2>
                     <div class="matrix-controls">
-                        <button class="export-btn" onclick="exportMatrix()">
+                        <button type="button" class="export-btn" onclick="exportMatrix()">
                             <i class="fas fa-download"></i> Export CSV
                         </button>
                     </div>
@@ -164,16 +167,17 @@
                 <div class="card-body">
                     <div class="matrix-table-container">
                         <table id="policy-matrix-table" class="matrix-table">
+                            <caption class="sr-only">Tracked policies by platform. Platform rows can be collapsed.</caption>
                             <thead>
                                 <tr>
-                                    <th>Platform</th>
-                                    <th>Policy Name</th>
-                                    <th>Status</th>
-                                    <th>Coverage Areas</th>
-                                    <th>Key Features</th>
-                                    <th>Enforcement Actions</th>
-                                    <th>Last Changed</th>
-                                    <th>Actions</th>
+                                    <th scope="col">Platform</th>
+                                    <th scope="col">Policy Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Coverage Areas</th>
+                                    <th scope="col">Key Features</th>
+                                    <th scope="col">Enforcement Actions</th>
+                                    <th scope="col">Last Changed</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="matrix-tbody">
@@ -191,6 +195,7 @@
                 <div class="weekly-header-main">
                     <h2><i class="fas fa-calendar-week"></i> Weekly Policy Summary</h2>
                     <div class="weekly-controls">
+                        <label for="week-selector" class="sr-only">Choose a week</label>
                         <select id="week-selector" class="week-selector">
                             <option value="">Loading weeks...</option>
                         </select>
@@ -207,7 +212,7 @@
                         <h3><i class="fas fa-file-lines"></i> Executive summary</h3>
                     </div>
                     <div class="card-body">
-                        <div id="weekly-summary-content">
+                        <div id="weekly-summary-content" aria-live="polite">
                             <div class="loading-state">
                                 <i class="fas fa-spinner fa-spin"></i>
                                 <p>Loading weekly summary...</p>
@@ -331,6 +336,7 @@
                 <div class="card-header">
                     <h2><i class="fas fa-server"></i> Pipeline run log</h2>
                     <div class="filter-controls">
+                        <label for="history-filter" class="sr-only">Filter pipeline runs</label>
                         <select id="history-filter">
                             <option value="all">All Runs</option>
                             <option value="success">Successful Only</option>
@@ -341,14 +347,15 @@
                 <div class="card-body">
                     <div id="history-table-container" class="history-table-container">
                         <table id="history-table">
+                            <caption class="sr-only">Pipeline run log</caption>
                             <thead>
                                 <tr>
-                                    <th>Timestamp</th>
-                                    <th>Status</th>
-                                    <th>Pages Checked</th>
-                                    <th>Changes Found</th>
-                                    <th>Errors</th>
-                                    <th>Time Ago</th>
+                                    <th scope="col">Timestamp</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Pages Checked</th>
+                                    <th scope="col">Changes Found</th>
+                                    <th scope="col">Errors</th>
+                                    <th scope="col">Time Ago</th>
                                 </tr>
                             </thead>
                             <tbody id="history-tbody">
@@ -366,7 +373,8 @@
         <div class="footer-content">
             <div class="footer-links">
                 <span>Built by Lyor Itzhaki</span>
-                <a href="https://github.com/lyori6/ts-policy-watcher" target="_blank" rel="noopener"><i class="fab fa-github"></i> Source</a>
+                <a href="https://github.com/lyori6/ts-policy-watcher" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> Source<span class="sr-only"> code on GitHub (opens in a new tab)</span></a>
+                <a href="accessibility.html">Accessibility</a>
             </div>
         </div>
     </footer>
@@ -375,12 +383,13 @@
         window.__POLICY_HISTORY_ENABLED__ = true;
     </script>
     <script src="script.js"></script>
+    <script src="a11y.js" defer></script>
 
     <!-- Run Log Modal -->
     <div id="run-log-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="run-log-modal-title" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-history"></i> System Run Log</h2>
+                <h2 id="run-log-modal-title"><i class="fas fa-history" aria-hidden="true"></i> System Run Log</h2>
                 <button type="button" class="close-button" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
@@ -391,7 +400,7 @@
 
     <!-- Policy Summary Modal -->
     <div id="policy-summary-modal" class="modal">
-        <div class="modal-content modal-large">
+        <div class="modal-content modal-large" role="dialog" aria-modal="true" aria-labelledby="policy-modal-title" tabindex="-1">
             <div class="modal-header">
                 <h2 id="policy-modal-title"><i class="fas fa-file-text"></i> Policy Summary</h2>
                 <button type="button" class="close-button" onclick="closePolicyModal()" aria-label="Close">&times;</button>
@@ -399,7 +408,7 @@
             <div class="modal-body">
                 <div id="policy-modal-content">Loading...</div>
                 <div class="modal-actions">
-                    <a id="policy-modal-visit" href="#" target="_blank" class="action-btn primary-btn">
+                    <a id="policy-modal-visit" href="#" target="_blank" rel="noopener" class="action-btn primary-btn">
                         <i class="fas fa-external-link-alt"></i> Visit Policy Page
                     </a>
                     <a id="policy-modal-history" href="#" target="_blank" class="action-btn secondary-btn">
@@ -412,7 +421,7 @@
 
     <!-- Policy History Modal -->
     <div id="policy-history-modal" class="modal">
-        <div class="modal-content modal-large">
+        <div class="modal-content modal-large" role="dialog" aria-modal="true" aria-labelledby="policy-history-title" tabindex="-1">
             <div class="modal-header">
                 <h2 id="policy-history-title"><i class="fas fa-clock"></i> Policy History</h2>
                 <button type="button" class="close-button" onclick="closePolicyHistoryModal()" aria-label="Close">&times;</button>

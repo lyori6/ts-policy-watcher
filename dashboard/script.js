@@ -698,8 +698,8 @@ class PolicyWatcherDashboard {
                                 <span class="update-badge">${lastUpdated}</span>
                             </div>
                         </div>
-                        <a href="${policy.url}" target="_blank" class="policy-link-btn" 
-                           title="Visit ${policy.platform} policy page" onclick="event.stopPropagation();">
+                        <a href="${policy.url}" target="_blank" rel="noopener" class="policy-link-btn" 
+                           title="Visit ${policy.platform} policy page" aria-label="Visit ${policy.name} on ${policy.platform} (opens in a new tab)" onclick="event.stopPropagation();">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -922,7 +922,7 @@ class PolicyWatcherDashboard {
                 
                 // Show view button only if we have data
                 const viewButton = summaryData.initial_summary ? 
-                    `<a href="${policy.url}" target="_blank" class="link-btn">View</a>` : 
+                    `<a href="${policy.url}" target="_blank" rel="noopener" class="link-btn" aria-label="View ${policy.name} on ${platform} (opens in a new tab)">View</a>` : 
                     `<span class="link-btn disabled">N/A</span>`;
 
                 matrixHtml += `
@@ -1411,7 +1411,7 @@ class PolicyWatcherDashboard {
             <div class="week-detail-modal">
                 <div class="modal-header">
                     <h3>Week Details: ${weekKey}</h3>
-                    <button class="close-modal" onclick="this.closest('.week-detail-modal').remove()">&times;</button>
+                    <button type="button" class="close-modal" onclick="this.closest('.week-detail-modal').remove()" aria-label="Close">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="week-overview">
@@ -2454,7 +2454,7 @@ class PolicyWatcherDashboard {
                 <div class="modal-content modal-large">
                     <div class="modal-header">
                         <h2><i class="fas fa-stethoscope"></i> System Diagnostics</h2>
-                        <span class="close-button" onclick="document.getElementById('diagnostic-modal').remove()">&times;</span>
+                        <button type="button" class="close-button" onclick="document.getElementById('diagnostic-modal').remove()" aria-label="Close">&times;</button>
                     </div>
                     <div class="modal-body">
                         <div class="diagnostic-sections">
@@ -2936,8 +2936,9 @@ class PolicyWatcherDashboard {
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n\n/g, '</p><p>')
             .replace(/^(?!<[h1-6]|<hr|<li|<\/li|<p|<\/p)(.+)$/gim, '<p>$1</p>')
-            .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-            .replace(/<\/ul>\s*<ul>/g, '');
+            // Wrap each run of consecutive list items (one per line) in its own list,
+            // so headings and paragraphs never end up inside a <ul>.
+            .replace(/(?:<li>.*<\/li>\s*)+/g, match => `<ul>${match.trim()}</ul>\n`);
     }
 
     displayNoWeeklyData() {
@@ -3281,7 +3282,7 @@ function ensurePolicySummaryModalElements() {
                 <div class="modal-content modal-large">
                     <div class="modal-header">
                         <h2 id="policy-modal-title"><i class="fas fa-file-text"></i> Policy Summary</h2>
-                        <span class="close-button" onclick="closePolicyModal()">&times;</span>
+                        <button type="button" class="close-button" onclick="closePolicyModal()" aria-label="Close">&times;</button>
                     </div>
                     <div class="modal-body">
                         <div id="policy-modal-content">Loading...</div>
@@ -3426,6 +3427,15 @@ function toggleSummary(summaryId) {
         shortSummary.style.display = 'none';
         fullSummary.style.display = 'block';
     }
+    moveFocusToVisibleToggle(isFullVisible ? shortSummary : fullSummary);
+}
+
+// The "Read more" and "Read less" buttons live in different blocks; when one is
+// hidden, keep keyboard focus on the button that replaced it.
+function moveFocusToVisibleToggle(container) {
+    if (!container || !container.contains || document.activeElement === document.body) return;
+    const toggle = container.querySelector('.read-more-btn, .read-more-btn-clean');
+    if (toggle) toggle.focus({ preventScroll: true });
 }
 
 // Global function for dismissing health alerts
@@ -3966,6 +3976,7 @@ function togglePolicySummary(summaryId) {
             shortSummary.style.display = 'none';
             fullSummary.style.display = 'block';
         }
+        moveFocusToVisibleToggle(isExpanded ? shortSummary : fullSummary);
     }
 }
 
@@ -4001,8 +4012,12 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         const modals = document.querySelectorAll('.modal[style*="display: block"], .modal[style="display: block;"]');
         modals.forEach(modal => {
-            if (modal.id === 'diagnostic-modal' || modal.id === 'policy-summary-modal' || modal.id === 'run-log-modal') {
-                modal.remove ? modal.remove() : (modal.style.display = 'none');
+            if (modal.id === 'diagnostic-modal') {
+                modal.remove();
+            } else if (modal.id === 'policy-summary-modal') {
+                closePolicyModal();
+            } else if (modal.id === 'run-log-modal') {
+                modal.style.display = 'none';
             }
         });
     }
