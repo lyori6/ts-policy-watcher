@@ -2153,6 +2153,10 @@ input:focus {
     color: var(--text-3);
 }
 
+.history-entry-button.active .history-entry-meta {
+    color: var(--text-2);
+}
+
 .history-entry-content {
     flex: 1;
     min-width: 0;

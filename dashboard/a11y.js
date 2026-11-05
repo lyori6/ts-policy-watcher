@@ -146,7 +146,7 @@
 
     // ---------- Toggle state ----------
     function syncPressedStates(root) {
-        root.querySelectorAll('.platform-tab, .range-btn').forEach(function (btn) {
+        root.querySelectorAll('.platform-tab, .range-btn, .history-entry-button').forEach(function (btn) {
             setAttr(btn, 'aria-pressed', String(btn.classList.contains('active')));
         });
         root.querySelectorAll('.nav-tab').forEach(function (tab) {
