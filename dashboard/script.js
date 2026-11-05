@@ -2267,7 +2267,8 @@ class PolicyWatcherDashboard {
     
     showDataLoadError(url, errorDetails) {
         // Show a non-intrusive error notification for individual data loading failures
-        const errorId = `error-${Date.now()}`;
+        this.errorCounter = (this.errorCounter || 0) + 1;
+        const errorId = `error-${Date.now()}-${this.errorCounter}`;
         const fileName = url.split('/').pop();
         
         let errorType = 'Data Loading Error';
