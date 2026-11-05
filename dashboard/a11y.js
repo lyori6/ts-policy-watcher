@@ -187,7 +187,7 @@
             svg.setAttribute('focusable', 'false');
             var summary = 'Line chart of unique policy changes per week.';
             if (points.length) {
-                summary += ' ' + points.length + ' weeks shown, from ' + points[0] + ' to ' + points[points.length - 1] + '.';
+                summary += ' ' + points.length + ' weeks shown, from ' + points[0].replace(/_to_/g, ' to ') + ' to ' + points[points.length - 1].replace(/_to_/g, ' to ') + '. A data table follows.';
             }
             svg.setAttribute('aria-label', summary);
             Array.prototype.forEach.call(svg.children, function (child) {
@@ -199,7 +199,7 @@
                 var html = '<caption>Unique policy changes per week</caption><thead><tr><th scope="col">Week</th><th scope="col">Changes</th></tr></thead><tbody>';
                 points.forEach(function (p) {
                     var parts = p.split(':');
-                    var week = parts.shift();
+                    var week = parts.shift().replace(/_to_/g, ' to ');
                     html += '<tr><td>' + week + '</td><td>' + parts.join(':').replace(/changes?/, '').trim() + '</td></tr>';
                 });
                 table.innerHTML = html + '</tbody>';

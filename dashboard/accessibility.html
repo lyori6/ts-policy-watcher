@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility statement · T&amp;S Policy Watcher</title>
+    <meta name="description" content="Accessibility statement for T&S Policy Watcher: the standard we follow, what we have done, known limitations and how to report a problem.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232f5bea'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .statement {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 2.5rem 1.25rem 3rem;
+        }
+        .statement h2 {
+            margin: 2rem 0 0.6rem;
+            font-size: 1.15rem;
+        }
+        .statement p,
+        .statement li {
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+        .statement ul {
+            margin: 0.5rem 0 0 1.25rem;
+            list-style: disc;
+        }
+        .statement li + li {
+            margin-top: 0.35rem;
+        }
+        .statement a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        .statement > p,
+        .statement > ul {
+            margin-bottom: 0.75rem;
+        }
+        .statement .updated {
+            color: var(--text-3);
+            font-size: 0.9rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header>
+        <div class="header-content">
+            <div class="header-left">
+                <div class="brand-text">
+                    <p class="tagline"><a href="/" style="color: inherit;">T&amp;S Policy Watcher</a></p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" tabindex="-1" class="statement">
+        <a class="back-link" href="/">Back to the dashboard</a>
+        <h1>Accessibility statement</h1>
+        <p class="updated">Last updated: November 5, 2026</p>
+
+        <p>T&amp;S Policy Watcher is committed to being usable by everyone, including people who use screen readers, keyboard navigation, screen magnification, voice control or other assistive technology.</p>
+
+        <h2>Standard we follow</h2>
+        <p>We aim to conform to the <a href="https://www.w3.org/TR/WCAG22/">Web Content Accessibility Guidelines (WCAG) 2.2</a> at Level AA. These guidelines are the standard generally used to judge website accessibility under the Americans with Disabilities Act (ADA) and similar laws.</p>
+
+        <h2>What we have done</h2>
+        <ul>
+            <li>Every feature of the dashboard works with a keyboard alone, with a visible focus indicator and a "Skip to main content" link.</li>
+            <li>Buttons, links, form fields and menus have names that screen readers announce, and icons used only for decoration are hidden from assistive technology.</li>
+            <li>Pop-up windows behave as dialogs: focus moves into them, stays inside while they are open, closes with the Escape key and returns to where you were.</li>
+            <li>Data tables have captions and column headers, and the weekly change chart has a text description and an equivalent data table.</li>
+            <li>The page uses headings and landmarks so it can be navigated by section, respects the "reduce motion" setting and can be zoomed to 200% or viewed on a narrow screen without losing content.</li>
+            <li>We test with automated tools (axe-core) and by hand with the keyboard before releasing changes.</li>
+        </ul>
+
+        <h2>Known limitations</h2>
+        <ul>
+            <li>Policy summaries are written automatically by an AI model from the source policy pages. They may contain complex wording, and their structure depends on the source text.</li>
+            <li>Links to TikTok, Meta, YouTube, Whatnot and Twitch policy pages lead to third-party websites that we do not control. Their accessibility is the responsibility of those companies.</li>
+        </ul>
+        <p>If any part of this site is hard for you to use, we want to hear about it and will provide the information in another format on request.</p>
+
+        <h2>Feedback and contact</h2>
+        <p>To report an accessibility problem or ask for information in another format, <a href="https://github.com/lyori6/ts-policy-watcher/issues/new?title=Accessibility%20issue&amp;labels=accessibility">open an accessibility issue on GitHub</a><span class="sr-only"> (opens GitHub)</span>. Please tell us the page, what you were trying to do and the browser or assistive technology you were using. We aim to respond within 5 business days.</p>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <span>Built by Lyor Itzhaki</span>
+                <a href="/">Dashboard</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
