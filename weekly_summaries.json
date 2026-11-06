@@ -8874,5 +8874,60 @@
         "commit_hash": "3a0b7d6b00fbefbdd77bfb59adf199d255fb6beb"
       }
     ]
+  },
+  "2026-10-31_to_2026-11-06": {
+    "run_metadata": {
+      "run_date": "2026-11-06T23:39:49.032820+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-10-31",
+      "week_end": "2026-11-06",
+      "generated_by": "friday_automation"
+    },
+    "summary": "### Executive Summary\n- **Meta Platforms**: Significant updates to the appeal process and blocking functionalities on Meta and Instagram, focusing on clarity and user support.\n- **Twitch**: Enhanced accessibility and navigation with the addition of a preferred language selection and an expanded navigation menu.\n- **Whatnot**: Introduced new enforcement actions and improved policy discoverability, with specific changes impacting APAC TCG sellers and buyers.\n\n### Platform Highlights\n- **Meta**\n  - **Meta Appeal Process**:\n    - Clarified reporting content and appeal eligibility.\n    - Removed redundant sections and consolidated information.\n    - Updated related articles and formatting for consistency.\n  - **Meta Blocking People**:\n    - Simplified navigation by removing redundant sections.\n    - Enhanced user support with Meta AI and personalized support options.\n    - Provided clearer instructions on blocking and unblocking functionalities.\n\n- **Twitch**\n  - **Twitch Community Guidelines**:\n    - Added preferred language selection for enhanced accessibility.\n    - Expanded navigation menu with links to various guidelines and resources.\n    - Updated footer with current year and repeated links for important policies.\n  - **Twitch Monetized Streamer Agreement**:\n    - Added clause specifying streamers' responsibility for complying with local tax laws.\n\n- **Whatnot**\n  - **Whatnot Enforcement Actions**:\n    - Introduced \"Ongoing Investigation Suspension\" enforcement action.\n    - Centralized appeal process to the Account Health dashboard.\n    - Made minor updates to images, typos, and formatting.\n  - **Whatnot How To Report**:\n    - Improved policy discoverability and clarified language.\n    - Added feedback UI and refreshed main image asset.\n    - Clarified English language option.\n  - **Whatnot Prohibited Items**:\n    - Added new policy for APAC TCG pre-release requirements.\n    - Reordered and renamed policies for better organization.\n    - Made minor text and formatting updates.\n\n### Risk Assessment\n- **Meta**: No immediate risks identified. Changes focus on improving user experience and support.\n- **Twitch**: No immediate risks identified. Updates enhance accessibility and navigation.\n- **Whatnot**:\n  - **High Impact**: The new APAC TCG pre-release requirements policy will impact sellers and buyers in Australia and Japan starting August 20, 2026. Product teams need to be aware of the new rules to prevent policy violations.\n  - **Low Impact**: Minor updates to policy names and reordering are unlikely to require immediate attention but should be noted by relevant teams.\n\n### Trends Analysis\n- **User Support Enhancements**: Multiple platforms (Meta, Whatnot) have focused on improving user support and appeal processes, indicating a trend towards better user engagement and satisfaction.\n- **Accessibility Improvements**: Twitch's addition of preferred language selection and Whatnot's localization clarity updates show a trend towards making platforms more accessible to a global audience.\n- **Policy Clarification and Organization**: Both Twitch and Whatnot have made efforts to clarify and organize their policies, suggesting a trend towards better policy management and user understanding.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      },
+      {
+        "policy_key": "whatnot-prohibited-items",
+        "file_path": "snapshots/production/whatnot-prohibited-items/snapshot.html",
+        "commit_date": "2026-11-06 20:43:03 +0000",
+        "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
+      }
+    ]
   }
 }
