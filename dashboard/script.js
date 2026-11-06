@@ -698,8 +698,8 @@ class PolicyWatcherDashboard {
                                 <span class="update-badge">${lastUpdated}</span>
                             </div>
                         </div>
-                        <a href="${policy.url}" target="_blank" class="policy-link-btn" 
-                           title="Visit ${policy.platform} policy page" onclick="event.stopPropagation();">
+                        <a href="${policy.url}" target="_blank" rel="noopener" class="policy-link-btn" 
+                           title="Visit ${policy.platform} policy page" aria-label="Visit ${policy.name} on ${policy.platform} (opens in a new tab)" onclick="event.stopPropagation();">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -922,7 +922,7 @@ class PolicyWatcherDashboard {
                 
                 // Show view button only if we have data
                 const viewButton = summaryData.initial_summary ? 
-                    `<a href="${policy.url}" target="_blank" class="link-btn">View</a>` : 
+                    `<a href="${policy.url}" target="_blank" rel="noopener" class="link-btn" aria-label="View ${policy.name} on ${platform} (opens in a new tab)">View</a>` : 
                     `<span class="link-btn disabled">N/A</span>`;
 
                 matrixHtml += `
@@ -1324,7 +1324,7 @@ class PolicyWatcherDashboard {
                     </span>
                     <span class="col-trend ${trendClass}">${trend}</span>
                     <span class="col-action">
-                        <button class="detail-btn" onclick="window.dashboardInstance.showWeekDetails('${point.weekKey}')">
+                        <button type="button" class="detail-btn" aria-haspopup="dialog" aria-label="View details for week ${point.weekLabel}" onclick="window.dashboardInstance.showWeekDetails('${point.weekKey}')">
                             <i class="fas fa-info-circle"></i> View
                         </button>
                     </span>
@@ -1406,12 +1406,19 @@ class PolicyWatcherDashboard {
             return;
         }
         
+        // Close any week details already open, and remember what opened this one
+        // so focus can go back there when it closes.
+        this.closeWeekDetails({ restoreFocus: false });
+        this.weekDetailOpener = document.activeElement && document.activeElement !== document.body
+            ? document.activeElement
+            : null;
+
         // Create modal content
         const modalContent = `
-            <div class="week-detail-modal">
+            <div class="week-detail-modal" role="dialog" aria-modal="true" aria-labelledby="week-detail-title" tabindex="-1">
                 <div class="modal-header">
-                    <h3>Week Details: ${weekKey}</h3>
-                    <button class="close-modal" onclick="this.closest('.week-detail-modal').remove()">&times;</button>
+                    <h3 id="week-detail-title">Week Details: ${weekKey}</h3>
+                    <button type="button" class="close-modal" onclick="window.dashboardInstance.closeWeekDetails()" aria-label="Close week details">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="week-overview">
@@ -1449,10 +1456,26 @@ class PolicyWatcherDashboard {
         modalOverlay.className = 'modal-overlay';
         modalOverlay.innerHTML = modalContent;
         modalOverlay.onclick = (e) => {
-            if (e.target === modalOverlay) modalOverlay.remove();
+            if (e.target === modalOverlay) this.closeWeekDetails();
         };
         
         document.body.appendChild(modalOverlay);
+        const closeButton = modalOverlay.querySelector('.close-modal');
+        if (closeButton) closeButton.focus();
+    }
+
+    // Single close path for the week details dialog (Close button, Escape and
+    // backdrop click): remove the whole overlay and return focus to the button
+    // that opened it.
+    closeWeekDetails({ restoreFocus = true } = {}) {
+        const overlays = document.querySelectorAll('.modal-overlay');
+        if (!overlays.length) return;
+        overlays.forEach(overlay => overlay.remove());
+        const opener = this.weekDetailOpener;
+        this.weekDetailOpener = null;
+        if (restoreFocus && opener && document.contains(opener)) {
+            opener.focus();
+        }
     }
 
     renderPlatformActivity() {
@@ -2267,7 +2290,8 @@ class PolicyWatcherDashboard {
     
     showDataLoadError(url, errorDetails) {
         // Show a non-intrusive error notification for individual data loading failures
-        const errorId = `error-${Date.now()}`;
+        this.errorCounter = (this.errorCounter || 0) + 1;
+        const errorId = `error-${Date.now()}-${this.errorCounter}`;
         const fileName = url.split('/').pop();
         
         let errorType = 'Data Loading Error';
@@ -2454,7 +2478,7 @@ class PolicyWatcherDashboard {
                 <div class="modal-content modal-large">
                     <div class="modal-header">
                         <h2><i class="fas fa-stethoscope"></i> System Diagnostics</h2>
-                        <span class="close-button" onclick="document.getElementById('diagnostic-modal').remove()">&times;</span>
+                        <button type="button" class="close-button" onclick="document.getElementById('diagnostic-modal').remove()" aria-label="Close">&times;</button>
                     </div>
                     <div class="modal-body">
                         <div class="diagnostic-sections">
@@ -2936,8 +2960,9 @@ class PolicyWatcherDashboard {
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n\n/g, '</p><p>')
             .replace(/^(?!<[h1-6]|<hr|<li|<\/li|<p|<\/p)(.+)$/gim, '<p>$1</p>')
-            .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-            .replace(/<\/ul>\s*<ul>/g, '');
+            // Wrap each run of consecutive list items (one per line) in its own list,
+            // so headings and paragraphs never end up inside a <ul>.
+            .replace(/(?:<li>.*<\/li>\s*)+/g, match => `<ul>${match.trim()}</ul>\n`);
     }
 
     displayNoWeeklyData() {
@@ -3281,7 +3306,7 @@ function ensurePolicySummaryModalElements() {
                 <div class="modal-content modal-large">
                     <div class="modal-header">
                         <h2 id="policy-modal-title"><i class="fas fa-file-text"></i> Policy Summary</h2>
-                        <span class="close-button" onclick="closePolicyModal()">&times;</span>
+                        <button type="button" class="close-button" onclick="closePolicyModal()" aria-label="Close">&times;</button>
                     </div>
                     <div class="modal-body">
                         <div id="policy-modal-content">Loading...</div>
@@ -3426,6 +3451,15 @@ function toggleSummary(summaryId) {
         shortSummary.style.display = 'none';
         fullSummary.style.display = 'block';
     }
+    moveFocusToVisibleToggle(isFullVisible ? shortSummary : fullSummary);
+}
+
+// The "Read more" and "Read less" buttons live in different blocks; when one is
+// hidden, keep keyboard focus on the button that replaced it.
+function moveFocusToVisibleToggle(container) {
+    if (!container || !container.contains || document.activeElement === document.body) return;
+    const toggle = container.querySelector('.read-more-btn, .read-more-btn-clean');
+    if (toggle) toggle.focus({ preventScroll: true });
 }
 
 // Global function for dismissing health alerts
@@ -3532,9 +3566,7 @@ function toggleWidget() {
     const isExpanded = widgetForm.classList.contains('expanded');
     
     if (isExpanded) {
-        widgetForm.classList.remove('expanded');
-        // Remember user minimized it
-        localStorage.setItem('widget-minimized', 'true');
+        closeWidget({ returnFocus: true });
     } else {
         widgetForm.classList.add('expanded');
         localStorage.setItem('widget-minimized', 'false');
@@ -3572,12 +3604,12 @@ async function subscribeFromWidget() {
         <div class="widget-header">
             <div class="widget-title">
                 <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                <h2>You're subscribed!</h2>
+                <h2 id="widgetTitle" tabindex="-1">You're subscribed!</h2>
             </div>
         </div>
         <p class="widget-subtitle">Thanks! Lyor has been notified and will add you to the weekly policy updates.</p>
         <div style="text-align: right;">
-            <button class="btn" onclick="minimizeWidget()">Close</button>
+            <button type="button" class="btn" onclick="minimizeWidget()">Close</button>
         </div>
     `;
 
@@ -3607,6 +3639,11 @@ async function subscribeFromWidget() {
         });
 
         document.getElementById('widgetForm').innerHTML = successHtml;
+        // The focused form was just replaced: announce the result and move
+        // focus to the new heading so keyboard and screen reader users know.
+        announceWidgetStatus("You're subscribed. Lyor has been notified and will add you to the weekly policy updates.");
+        const successHeading = document.getElementById('widgetTitle');
+        if (successHeading) successHeading.focus();
     } catch (error) {
         console.error('Subscription error:', error);
 
@@ -3620,6 +3657,7 @@ async function subscribeFromWidget() {
         subscribeBtn.textContent = 'Subscribe';
         emailInput.classList.remove('valid');
         showValidation("Couldn't subscribe right now. Please try again in a moment.");
+        emailInput.focus();
     }
 }
 
@@ -3657,9 +3695,29 @@ function validateEmailRealTime() {
 }
 
 function minimizeWidget() {
+    closeWidget({ returnFocus: true });
+}
+
+// Close the subscribe panel. When it is closed from inside (Close button,
+// Escape), focus goes back to the envelope button that opened it.
+function closeWidget({ returnFocus = false } = {}) {
     const widgetForm = document.getElementById('widgetForm');
+    const widgetTrigger = document.getElementById('widgetTrigger');
+    if (!widgetForm) return;
+    const focusWasInside = widgetForm.contains(document.activeElement);
     widgetForm.classList.remove('expanded');
     localStorage.setItem('widget-minimized', 'true');
+    if (returnFocus && widgetTrigger && (focusWasInside || document.activeElement === document.body)) {
+        widgetTrigger.focus();
+    }
+}
+
+function announceWidgetStatus(message) {
+    const status = document.getElementById('widgetStatus');
+    if (!status) return;
+    status.textContent = '';
+    // Set on the next frame so screen readers notice the change.
+    window.requestAnimationFrame(() => { status.textContent = message; });
 }
 
 function isValidEmail(email) {
@@ -3702,8 +3760,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (widget && widgetForm && widgetTrigger) {
             if (!widget.contains(e.target) && widgetForm.classList.contains('expanded')) {
-                widgetForm.classList.remove('expanded');
-                localStorage.setItem('widget-minimized', 'true');
+                closeWidget({ returnFocus: false });
             }
         }
     });
@@ -3713,8 +3770,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') {
             const widgetForm = document.getElementById('widgetForm');
             if (widgetForm && widgetForm.classList.contains('expanded')) {
-                widgetForm.classList.remove('expanded');
-                localStorage.setItem('widget-minimized', 'true');
+                closeWidget({ returnFocus: true });
             }
         }
     });
@@ -3966,6 +4022,7 @@ function togglePolicySummary(summaryId) {
             shortSummary.style.display = 'none';
             fullSummary.style.display = 'block';
         }
+        moveFocusToVisibleToggle(isExpanded ? shortSummary : fullSummary);
     }
 }
 
@@ -3999,10 +4056,17 @@ document.addEventListener('keydown', function(event) {
     
     // Escape - Close any open modal
     if (event.key === 'Escape') {
+        if (document.querySelector('.modal-overlay') && window.dashboardInstance) {
+            window.dashboardInstance.closeWeekDetails();
+        }
         const modals = document.querySelectorAll('.modal[style*="display: block"], .modal[style="display: block;"]');
         modals.forEach(modal => {
-            if (modal.id === 'diagnostic-modal' || modal.id === 'policy-summary-modal' || modal.id === 'run-log-modal') {
-                modal.remove ? modal.remove() : (modal.style.display = 'none');
+            if (modal.id === 'diagnostic-modal') {
+                modal.remove();
+            } else if (modal.id === 'policy-summary-modal') {
+                closePolicyModal();
+            } else if (modal.id === 'run-log-modal') {
+                modal.style.display = 'none';
             }
         });
     }
