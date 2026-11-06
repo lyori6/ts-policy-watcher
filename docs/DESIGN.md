@@ -56,7 +56,10 @@ Never use color as the only signal: status badges always carry a text label ("Tr
 | Icon-only controls | Must have `aria-label` (or a `title` that `a11y.js` copies). Decorative `<i class="fa-…">` icons get `aria-hidden="true"`. |
 | New-tab links | `target="_blank" rel="noopener"` and "(opens in a new tab)" in the accessible name. |
 | Toggles | Section and filter buttons expose `aria-pressed`; nav tabs expose `aria-current`; expanders expose `aria-expanded`. |
-| Dialogs | `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing to the title. Focus moves in on open, Tab is trapped, Escape closes, focus returns to the opener. The close button is a `<button aria-label="Close">`. Handled centrally in `a11y.js`. |
+| Dialogs | `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing to the title. Focus moves in on open, Tab is trapped, Escape closes, focus returns to the opener. The close button is a `<button aria-label="Close">`. Every close route (Close button, Escape, backdrop click) must call **one** close function that removes the whole overlay, not just the inner card, and refocuses the opener; see `closeWeekDetails()` and `closePolicyModal()`. `a11y.js` adds trapping and background hiding as a safety net, but the source close function owns cleanup. |
+| Popovers (subscribe panel) | Closing from inside (Close button, Escape) returns focus to the trigger via `closeWidget({ returnFocus: true })`. A click outside closes without moving focus. |
+| Replacing focused content | When an action replaces the element that has focus (for example the subscribe form becoming a success message), move focus to the new heading (`tabindex="-1"`), keep any `aria-labelledby` target id in the new markup, and announce the result in a persistent live region that is never re-rendered (`#widgetStatus`). On an error, keep focus on the field that needs fixing. |
+| Status messages | Use a `role="status"` region that already exists in the page before the message is written; inserting a new live region together with its text is often not announced. |
 | Forms | Every input and select has a `<label>` (use `.sr-only` if it should not be visible). Errors use `role="alert"` and are linked with `aria-describedby`. Email fields use `autocomplete="email"`. |
 | Tables | `<caption>` (can be `.sr-only`) and `<th scope="col">`. |
 | Charts | The SVG gets `role="img"` and a summary `aria-label`, followed by an `.sr-only` data table with the same numbers. |
@@ -84,10 +87,11 @@ Most dashboard markup is built from template strings in `script.js`. `a11y.js` w
 
 ## Accessibility statement
 
-The public statement is [`dashboard/accessibility.html`](../dashboard/accessibility.html), linked from the footer. Update its "Last updated" date and "What we have done" list when accessibility work ships.
+The public statement is [`dashboard/accessibility.html`](../dashboard/accessibility.html), linked from the footer. Update its "Last updated" date and "What we have done" list when accessibility work ships. Only claim what has actually been tested, and keep the testing line (tools, browsers, dates, what has not been tested yet) current. Feedback goes to hello@lyori.com, with GitHub issues as an optional second route.
 
 ## Changelog
 
 | Date | Change |
 |---|---|
+| 2026-11-06 | Second-round fixes from an independent audit: week details dialog closes as a whole with focus returned to its View button; subscribe success is announced and focused; the subscribe panel returns focus to its trigger; scrolling tables are focusable regions; statement lists actual testing and adds hello@lyori.com. |
 | 2026-11-05 | WCAG 2.2 AA pass. Darkened `--success` (`#079455` → `#067647`), `--warning` (`#dc6803` → `#b54708`), `--danger` (`#d92d20` → `#b42318`) and `--text-4` (`#98a2b3` → `#626a7d`) to meet 4.5:1. Added `.sr-only`, `.skip-link`, `.a11y-text-button`, `scroll-padding-top`, `a11y.js` and the accessibility statement page. |

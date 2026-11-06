@@ -66,7 +66,7 @@
     <main id="main-content" tabindex="-1" class="statement">
         <a class="back-link" href="/">Back to the dashboard</a>
         <h1>Accessibility statement</h1>
-        <p class="updated">Last updated: November 5, 2026</p>
+        <p class="updated">Last updated: November 6, 2026</p>
 
         <p>T&amp;S Policy Watcher is committed to being usable by everyone, including people who use screen readers, keyboard navigation, screen magnification, voice control or other assistive technology.</p>
 
@@ -75,12 +75,13 @@
 
         <h2>What we have done</h2>
         <ul>
-            <li>Every feature of the dashboard works with a keyboard alone, with a visible focus indicator and a "Skip to main content" link.</li>
+            <li>The dashboard's tabs, tables, cards, filters, pop-up windows and subscribe form can be used with a keyboard alone, with a visible focus indicator and a "Skip to main content" link. Wide tables can be scrolled with the arrow keys.</li>
             <li>Buttons, links, form fields and menus have names that screen readers announce, and icons used only for decoration are hidden from assistive technology.</li>
-            <li>Pop-up windows behave as dialogs: focus moves into them, stays inside while they are open, closes with the Escape key and returns to where you were.</li>
+            <li>Pop-up windows (policy summaries, version history and week details) behave as dialogs: focus moves into them and stays inside while they are open, and closing with the Close button, the Escape key or a click outside returns focus to the control that opened them. Closing the subscribe panel returns focus to its button.</li>
+            <li>Status messages, such as a confirmed subscription or an email that needs fixing, are announced to screen readers.</li>
             <li>Data tables have captions and column headers, and the weekly change chart has a text description and an equivalent data table.</li>
             <li>The page uses headings and landmarks so it can be navigated by section, respects the "reduce motion" setting and can be zoomed to 200% or viewed on a narrow screen without losing content.</li>
-            <li>We test with automated tools (axe-core) and by hand with the keyboard before releasing changes.</li>
+            <li>Testing in November 2026: automated checks with axe-core on every tab, pop-up window and the subscribe form at desktop and 320px widths, plus keyboard-only walkthroughs in Chromium. An independent review found two pop-up focus problems, which were fixed and retested on November 6, 2026. We have not yet completed a full pass with a native screen reader such as VoiceOver or NVDA.</li>
         </ul>
 
         <h2>Known limitations</h2>
@@ -91,7 +92,7 @@
         <p>If any part of this site is hard for you to use, we want to hear about it and will provide the information in another format on request.</p>
 
         <h2>Feedback and contact</h2>
-        <p>To report an accessibility problem or ask for information in another format, <a href="https://github.com/lyori6/ts-policy-watcher/issues/new?title=Accessibility%20issue&amp;labels=accessibility">open an accessibility issue on GitHub</a><span class="sr-only"> (opens GitHub)</span>. Please tell us the page, what you were trying to do and the browser or assistive technology you were using. We aim to respond within 5 business days.</p>
+        <p>To report an accessibility problem or ask for information in another format, email <a href="mailto:hello@lyori.com?subject=Accessibility%20feedback%3A%20T%26S%20Policy%20Watcher">hello@lyori.com</a>. No account is needed. If you prefer, you can also <a href="https://github.com/lyori6/ts-policy-watcher/issues/new?title=Accessibility%20issue&amp;labels=accessibility">open an accessibility issue on GitHub</a> (needs a GitHub account). Please tell us the page, what you were trying to do and the browser or assistive technology you were using. We aim to respond within 5 business days.</p>
     </main>
 
     <footer class="site-footer">

@@ -211,6 +211,7 @@
     // ---------- Dialogs ----------
     function dialogFor(el) {
         if (el.matches('.modal')) return el.querySelector('.modal-content') || el;
+        if (el.matches('.modal-overlay')) return el.querySelector('[role="dialog"]') || el;
         return el;
     }
 

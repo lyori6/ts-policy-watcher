@@ -1324,7 +1324,7 @@ class PolicyWatcherDashboard {
                     </span>
                     <span class="col-trend ${trendClass}">${trend}</span>
                     <span class="col-action">
-                        <button class="detail-btn" onclick="window.dashboardInstance.showWeekDetails('${point.weekKey}')">
+                        <button type="button" class="detail-btn" aria-haspopup="dialog" aria-label="View details for week ${point.weekLabel}" onclick="window.dashboardInstance.showWeekDetails('${point.weekKey}')">
                             <i class="fas fa-info-circle"></i> View
                         </button>
                     </span>
@@ -1406,12 +1406,19 @@ class PolicyWatcherDashboard {
             return;
         }
         
+        // Close any week details already open, and remember what opened this one
+        // so focus can go back there when it closes.
+        this.closeWeekDetails({ restoreFocus: false });
+        this.weekDetailOpener = document.activeElement && document.activeElement !== document.body
+            ? document.activeElement
+            : null;
+
         // Create modal content
         const modalContent = `
-            <div class="week-detail-modal">
+            <div class="week-detail-modal" role="dialog" aria-modal="true" aria-labelledby="week-detail-title" tabindex="-1">
                 <div class="modal-header">
-                    <h3>Week Details: ${weekKey}</h3>
-                    <button type="button" class="close-modal" onclick="this.closest('.week-detail-modal').remove()" aria-label="Close">&times;</button>
+                    <h3 id="week-detail-title">Week Details: ${weekKey}</h3>
+                    <button type="button" class="close-modal" onclick="window.dashboardInstance.closeWeekDetails()" aria-label="Close week details">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="week-overview">
@@ -1449,10 +1456,26 @@ class PolicyWatcherDashboard {
         modalOverlay.className = 'modal-overlay';
         modalOverlay.innerHTML = modalContent;
         modalOverlay.onclick = (e) => {
-            if (e.target === modalOverlay) modalOverlay.remove();
+            if (e.target === modalOverlay) this.closeWeekDetails();
         };
         
         document.body.appendChild(modalOverlay);
+        const closeButton = modalOverlay.querySelector('.close-modal');
+        if (closeButton) closeButton.focus();
+    }
+
+    // Single close path for the week details dialog (Close button, Escape and
+    // backdrop click): remove the whole overlay and return focus to the button
+    // that opened it.
+    closeWeekDetails({ restoreFocus = true } = {}) {
+        const overlays = document.querySelectorAll('.modal-overlay');
+        if (!overlays.length) return;
+        overlays.forEach(overlay => overlay.remove());
+        const opener = this.weekDetailOpener;
+        this.weekDetailOpener = null;
+        if (restoreFocus && opener && document.contains(opener)) {
+            opener.focus();
+        }
     }
 
     renderPlatformActivity() {
@@ -3543,9 +3566,7 @@ function toggleWidget() {
     const isExpanded = widgetForm.classList.contains('expanded');
     
     if (isExpanded) {
-        widgetForm.classList.remove('expanded');
-        // Remember user minimized it
-        localStorage.setItem('widget-minimized', 'true');
+        closeWidget({ returnFocus: true });
     } else {
         widgetForm.classList.add('expanded');
         localStorage.setItem('widget-minimized', 'false');
@@ -3583,12 +3604,12 @@ async function subscribeFromWidget() {
         <div class="widget-header">
             <div class="widget-title">
                 <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                <h2>You're subscribed!</h2>
+                <h2 id="widgetTitle" tabindex="-1">You're subscribed!</h2>
             </div>
         </div>
         <p class="widget-subtitle">Thanks! Lyor has been notified and will add you to the weekly policy updates.</p>
         <div style="text-align: right;">
-            <button class="btn" onclick="minimizeWidget()">Close</button>
+            <button type="button" class="btn" onclick="minimizeWidget()">Close</button>
         </div>
     `;
 
@@ -3618,6 +3639,11 @@ async function subscribeFromWidget() {
         });
 
         document.getElementById('widgetForm').innerHTML = successHtml;
+        // The focused form was just replaced: announce the result and move
+        // focus to the new heading so keyboard and screen reader users know.
+        announceWidgetStatus("You're subscribed. Lyor has been notified and will add you to the weekly policy updates.");
+        const successHeading = document.getElementById('widgetTitle');
+        if (successHeading) successHeading.focus();
     } catch (error) {
         console.error('Subscription error:', error);
 
@@ -3631,6 +3657,7 @@ async function subscribeFromWidget() {
         subscribeBtn.textContent = 'Subscribe';
         emailInput.classList.remove('valid');
         showValidation("Couldn't subscribe right now. Please try again in a moment.");
+        emailInput.focus();
     }
 }
 
@@ -3668,9 +3695,29 @@ function validateEmailRealTime() {
 }
 
 function minimizeWidget() {
+    closeWidget({ returnFocus: true });
+}
+
+// Close the subscribe panel. When it is closed from inside (Close button,
+// Escape), focus goes back to the envelope button that opened it.
+function closeWidget({ returnFocus = false } = {}) {
     const widgetForm = document.getElementById('widgetForm');
+    const widgetTrigger = document.getElementById('widgetTrigger');
+    if (!widgetForm) return;
+    const focusWasInside = widgetForm.contains(document.activeElement);
     widgetForm.classList.remove('expanded');
     localStorage.setItem('widget-minimized', 'true');
+    if (returnFocus && widgetTrigger && (focusWasInside || document.activeElement === document.body)) {
+        widgetTrigger.focus();
+    }
+}
+
+function announceWidgetStatus(message) {
+    const status = document.getElementById('widgetStatus');
+    if (!status) return;
+    status.textContent = '';
+    // Set on the next frame so screen readers notice the change.
+    window.requestAnimationFrame(() => { status.textContent = message; });
 }
 
 function isValidEmail(email) {
@@ -3713,8 +3760,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (widget && widgetForm && widgetTrigger) {
             if (!widget.contains(e.target) && widgetForm.classList.contains('expanded')) {
-                widgetForm.classList.remove('expanded');
-                localStorage.setItem('widget-minimized', 'true');
+                closeWidget({ returnFocus: false });
             }
         }
     });
@@ -3724,8 +3770,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') {
             const widgetForm = document.getElementById('widgetForm');
             if (widgetForm && widgetForm.classList.contains('expanded')) {
-                widgetForm.classList.remove('expanded');
-                localStorage.setItem('widget-minimized', 'true');
+                closeWidget({ returnFocus: true });
             }
         }
     });
@@ -4011,6 +4056,9 @@ document.addEventListener('keydown', function(event) {
     
     // Escape - Close any open modal
     if (event.key === 'Escape') {
+        if (document.querySelector('.modal-overlay') && window.dashboardInstance) {
+            window.dashboardInstance.closeWeekDetails();
+        }
         const modals = document.querySelectorAll('.modal[style*="display: block"], .modal[style="display: block;"]');
         modals.forEach(modal => {
             if (modal.id === 'diagnostic-modal') {
