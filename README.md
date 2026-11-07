@@ -83,6 +83,8 @@ npm test
 
 Visual-regression baselines were reset with the 2026 redesign; regenerate them with `npm run test:update-snapshots`.
 
+Security checks for the subscribe endpoint run without a browser: `node --test tests/security/subscribe.test.js`. See [docs/SECURITY.md](docs/SECURITY.md) for trust boundaries and abuse limits.
+
 ## Project layout
 
 ```

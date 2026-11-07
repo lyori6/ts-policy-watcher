@@ -94,14 +94,14 @@ jobs:
       # This uses a dedicated action to handle pushing the commits.
       - name: 'Push Changes'
         if: ${{ env.WORKFLOW_BRANCH == 'main' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0, pinned by SHA
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
       - name: 'Push Changes (data-updates)'
         if: ${{ env.WORKFLOW_BRANCH == 'main' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0, pinned by SHA
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: data-updates
@@ -150,14 +150,14 @@ jobs:
 
       - name: 'Push Summary Changes'
         if: ${{ env.WORKFLOW_BRANCH == 'main' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0, pinned by SHA
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
       - name: 'Push Summary Changes (data-updates)'
         if: ${{ env.WORKFLOW_BRANCH == 'main' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0, pinned by SHA
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: data-updates
@@ -208,7 +208,7 @@ jobs:
 
       - name: 'Push Clean Artifacts (data-updates)'
         if: ${{ env.WORKFLOW_BRANCH == 'main' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0, pinned by SHA
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: data-updates

@@ -1,3 +1,11 @@
+// Escapes text so it renders as text when placed in innerHTML.
+// Used for AI summaries and run errors, which come from outside this repo's control.
+function escapeUntrustedHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+}
+
 // Enhanced T&S Policy Watcher Dashboard JavaScript
 
 class PolicyWatcherDashboard {
@@ -1540,7 +1548,7 @@ class PolicyWatcherDashboard {
             <h4>Errors from last run:</h4>
             ${errors.map(err => `
                 <div class="error-item">
-                    <strong>${err.file}:</strong> ${err.error}
+                    <strong>${escapeUntrustedHtml(err.file)}:</strong> ${escapeUntrustedHtml(err.error)}
                 </div>
             `).join('')}
         `;
@@ -2129,6 +2137,10 @@ class PolicyWatcherDashboard {
         
         // Filter out AI-generated filler text
         text = this.filterAIGeneratedText(text);
+
+        // Summaries come from an AI model reading third-party pages, so treat them as
+        // untrusted: escape any HTML before the markdown rules add our own tags.
+        text = escapeUntrustedHtml(text);
         
         // Enhanced markdown rendering for better formatting
         let html = text
@@ -2947,8 +2959,9 @@ class PolicyWatcherDashboard {
     }
 
     markdownToHtml(markdown) {
-        // Basic markdown conversion for weekly summaries
-        return markdown
+        // Basic markdown conversion for weekly summaries.
+        // Escape first: weekly summaries are AI output and must never carry raw HTML.
+        return escapeUntrustedHtml(markdown)
             .replace(/^\s*-{3,}\s*$/gm, '<hr>')
             .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
             .replace(/^### (.*$)/gim, '<h3>$1</h3>')
