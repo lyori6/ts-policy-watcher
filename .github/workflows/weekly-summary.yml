@@ -104,7 +104,7 @@ jobs:
       # Step 7: Push the changes back to the main branch
       - name: 'Push Weekly Summary'
         if: steps.commit.outputs.changes_made == 'true'
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0, pinned by SHA
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main

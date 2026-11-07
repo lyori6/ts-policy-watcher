@@ -9,6 +9,7 @@ Start with the [project README](../README.md) for the overview and setup.
 | [DESIGN.md](DESIGN.md) | Design tokens, interaction patterns and WCAG 2.2 AA accessibility rules |
 | [ARCHITECTURE_DECISIONS.md](ARCHITECTURE_DECISIONS.md) | Key technical decisions and their trade-offs |
 | [TECHNICAL_HANDOFF.md](TECHNICAL_HANDOFF.md) | Deep technical guide: pipeline, data files, debugging |
+| [SECURITY.md](SECURITY.md) | Trust boundaries, abuse limits, secrets handling and the security changelog |
 | [DEVELOPMENT.md](DEVELOPMENT.md) / [DEV_INSTRUCTIONS.md](DEV_INSTRUCTIONS.md) | Branch workflow, preview deployments, local development |
 | [test-files/](test-files/) | Ad-hoc test utilities |
 | [archive/](archive/) | Past implementation plans, feature write-ups and screenshots of earlier UI versions |
