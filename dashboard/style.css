@@ -165,7 +165,7 @@ header {
 
 .header-left {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     min-width: 0;
 }
@@ -1265,12 +1265,27 @@ input:focus {
     position: relative;
     display: flex;
     flex-direction: column;
+    /* Cards in a row share row tracks (header / summary / latest update), so the
+       "Latest update" box starts at the same height across a row. Falls back to
+       the flex column above where subgrid is unsupported. */
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
     cursor: pointer;
     transition: border-color 0.15s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+@supports (grid-template-rows: subgrid) {
+    .policy-card {
+        display: grid;
+        grid-row: span 3;
+        grid-template-rows: subgrid;
+        row-gap: 0;
+    }
+    .policy-card .update-summary {
+        align-self: start;
+    }
 }
 
 .policy-card:hover {
@@ -1376,6 +1391,22 @@ input:focus {
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--warning);
+}
+
+/* Card previews: one compact paragraph, clamped so boxes stay the same size */
+.policy-card .preview-text {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+}
+
+.summary-excerpt .preview-text {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    margin-bottom: 0.25rem;
 }
 
 /* Unused "Block & Moderation" section (renderer currently disabled) */
