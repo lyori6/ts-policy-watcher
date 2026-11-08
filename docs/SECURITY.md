@@ -19,6 +19,10 @@ These counters reset on a cold start and are not shared across instances, so the
 
 Tests: `node --test tests/security/subscribe.test.js`
 
+## Response headers
+
+`vercel.json` sends `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: SAMEORIGIN` and `Content-Security-Policy: frame-ancestors 'self'` on every page, file and API response. Vercel adds HSTS itself. The dashboard is never framed by another site, so `SAMEORIGIN` breaks nothing. There is no script CSP yet: the dashboard uses GTM, GA and Clarity, and a CSP would need report-only testing first.
+
 ## Secrets
 
 - `RESEND_API_KEY` and `RECIPIENT_EMAIL` live in Vercel environment variables and GitHub Actions secrets. Never commit them. Test scripts must read keys from the environment.
@@ -30,5 +34,7 @@ Tests: `node --test tests/security/subscribe.test.js`
 - Third-party actions are pinned to a commit SHA, not a branch. `ad-m/github-push-action` is pinned to v1.3.0 (`881a632`). To update, check the release, then replace the SHA.
 
 ## Changelog
+
+- 2026-11-08: Basic security headers in `vercel.json` (nosniff, Referrer-Policy, no framing by other sites).
 
 - 2026-11-07: Escape AI summary and run-error HTML in the dashboard. Add per-IP, per-address and hourly limits, a JSON-only check and status-only logging to `/api/subscribe`. Pin `ad-m/github-push-action` by SHA. Added this file.
