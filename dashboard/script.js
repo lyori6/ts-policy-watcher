@@ -690,8 +690,8 @@ class PolicyWatcherDashboard {
             
             // Create unique IDs for expandable content
             const summaryId = `policy-summary-${policy.slug}-${index}`;
-            const shortSummary = this.truncateText(summaryData.initial_summary, 80);
-            const hasMore = summaryData.initial_summary && summaryData.initial_summary.length > 80;
+            const shortSummary = this.renderPreview(summaryData.initial_summary, 120);
+            const hasMore = summaryData.initial_summary && summaryData.initial_summary.length > 120;
             
             return `
                 <div class="policy-card" onclick="openPolicyModal('${policy.slug}')" style="cursor: pointer;">
@@ -714,7 +714,7 @@ class PolicyWatcherDashboard {
                     
                     <div class="summary-preview">
                         <div class="summary-excerpt" id="${summaryId}">
-                            ${this.renderMarkdown(shortSummary)}
+                            <p class="preview-text">${shortSummary}</p>
                             ${hasMore ? `<button class="read-more-btn" onclick="event.stopPropagation(); togglePolicySummary('${summaryId}')" type="button"><i class="fas fa-chevron-down"></i> Read more</button>` : ''}
                         </div>
                         ${hasMore ? `<div class="summary-full" id="${summaryId}-full" style="display: none;">
@@ -728,7 +728,7 @@ class PolicyWatcherDashboard {
                             <div class="update-label">
                                 <i class="fas fa-clock"></i> Latest Update
                             </div>
-                            ${this.renderMarkdown(this.truncateText(summaryData.last_update_summary, 150))}
+                            <p class="preview-text">${this.renderPreview(summaryData.last_update_summary, 220)}</p>
                         </div>
                     ` : ''}
                 </div>
@@ -2091,6 +2091,37 @@ class PolicyWatcherDashboard {
     truncateText(text, maxLength) {
         if (!text || text.length <= maxLength) return text || '';
         return text.substring(0, maxLength) + '...';
+    }
+
+    // Compact one-paragraph preview for cards: drops title and label-only lines
+    // (e.g. "**Key Changes:**", "## Summary"), strips list markers, and joins the
+    // rest into plain text so every card preview has the same shape. Escapes HTML,
+    // then re-applies bold only for complete **pairs**.
+    renderPreview(text, maxLength) {
+        if (!text) return '';
+        const lines = this.filterAIGeneratedText(text)
+            .split('\n')
+            .map(line => line.trim())
+            .filter(Boolean);
+        const isLabel = line =>
+            /^#{1,6}\s/.test(line) ||                     // markdown heading
+            /^\*\*[^*]+\*\*:?$/.test(line) ||              // whole line bold (title/label)
+            (/:\**$/.test(line) && line.length < 60);     // short "Label:" line
+        let kept = lines.filter(line => !isLabel(line));
+        if (kept.length === 0) kept = lines;
+        let plain = kept
+            .map(line => line.replace(/^([*+-]|\d+\.)\s+/, '').replace(/^#{1,6}\s+/, ''))
+            .join(' ')
+            .replace(/`/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        if (plain.length > maxLength) {
+            const cut = plain.lastIndexOf(' ', maxLength);
+            plain = plain.slice(0, cut > maxLength * 0.6 ? cut : maxLength).replace(/[\s.,;:]+$/, '') + '...';
+        }
+        return escapeUntrustedHtml(plain)
+            .replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*/g, '');
     }
 
     filterAIGeneratedText(text) {
