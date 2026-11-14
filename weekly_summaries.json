@@ -8929,5 +8929,30 @@
         "commit_hash": "9cfe11ead9cbaea400db187fafff0a91172deecf"
       }
     ]
+  },
+  "2026-11-08_to_2026-11-14": {
+    "run_metadata": {
+      "run_date": "2026-11-14T00:12:33.471511+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-11-08",
+      "week_end": "2026-11-14",
+      "generated_by": "friday_automation"
+    },
+    "summary": "## Executive Summary\n- **Meta Appeal Process**: Simplified and clarified the appeal process, removing redundant information and outdated links.\n- **Twitch Community Guidelines**: Enhanced guidelines to emphasize safety, clarify harmful behaviors, and strengthen enforcement against severe offenses.\n- **Youth Safety**: Both platforms introduced stricter guidelines to protect minors, with Twitch adding specific prohibitions related to fictional characters and age statements.\n\n## Platform Highlights\n### Meta\n- **Meta Appeal Process**:\n  - **Clarification**: Users must go through the review process before appealing to the Oversight Board.\n  - **Redundancy Removal**: Eliminated repeated instructions about requesting a review.\n  - **Outdated Links**: Removed a specific article link related to account appeals in Colombia.\n  - **Copyright Update**: Updated the copyright year to 2023.\n\n### Twitch\n- **Introduction to Safety on Twitch**:\n  - Emphasized community and safety as foundational.\n  - Defined harm to include physical, emotional, social, or financial damage.\n  - Highlighted collaborative safety efforts between Twitch and community members.\n\n- **Self-Destructive Behavior**:\n  - Prohibited selling harmful activities for monetary gain.\n  - Clarified rules on drinking goal streams and dangerous driving.\n\n- **Violence and Threats**:\n  - Reinforced zero-tolerance policy.\n  - Added preemptive suspensions for high-risk individuals.\n\n- **Terrorism and Violent Extremism**:\n  - Clarified prohibition on content supporting terrorism or violent extremism.\n\n- **Adult Sexual Violence**:\n  - Reinforced strict prohibition and immediate suspension.\n\n- **Youth Safety**:\n  - Prohibited depicting fictional anime characters with sexual framing.\n  - Prohibited humor related to sexual content involving minors.\n  - Prohibited stating age below 13 on Twitch.\n\n- **Off-Service Conduct**:\n  - Clarified enforcement against severe offenses committed off Twitch by community members.\n\n## Risk Assessment\n- **Immediate Attention Required**:\n  - **Twitch Self-Destructive Behavior**: The new enforcement notes on selling harmful activities and clarifying rules on dangerous behaviors need close monitoring to ensure effective implementation and enforcement.\n  - **Twitch Youth Safety**: The new prohibitions on depicting fictional characters with sexual framing and humor related to minors require vigilant monitoring to protect young users effectively.\n\n## Trends Analysis\n- **Enhanced Safety Emphasis**: Both Meta and Twitch have focused on strengthening safety guidelines, particularly around youth protection and harmful behaviors.\n- **Clarification and Simplification**: Meta's appeal process changes reflect a trend towards simplifying user interactions and removing redundant information.\n- **Collaborative Safety**: Twitch's emphasis on collaborative safety efforts indicates a growing trend in involving community members in maintaining platform safety.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-11-13 21:18:01 +0000",
+        "commit_hash": "c900837a638b2a925a15a84ac8f4a93cc94f0b5b"
+      },
+      {
+        "policy_key": "twitch-community-guidelines",
+        "file_path": "snapshots/production/twitch-community-guidelines/snapshot.html",
+        "commit_date": "2026-11-13 21:18:01 +0000",
+        "commit_hash": "c900837a638b2a925a15a84ac8f4a93cc94f0b5b"
+      }
+    ]
   }
 }
