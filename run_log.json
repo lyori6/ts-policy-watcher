@@ -1,5 +1,12 @@
 [
   {
+    "timestamp_utc": "2026-11-20T22:06:11.106543Z",
+    "status": "success",
+    "pages_checked": 26,
+    "changes_found": 13,
+    "errors": []
+  },
+  {
     "timestamp_utc": "2026-11-13T21:09:57.568176Z",
     "status": "partial_failure",
     "pages_checked": 26,
@@ -196,12 +203,5 @@
       "Attempt 1/2 FAILED for whatnot-blocking-a-user. Error Type: 403_forbidden. Reason: HTTP 403: ",
       "Attempt 1/2 FAILED for whatnot-enforcement-actions. Error Type: 403_forbidden. Reason: HTTP 403: "
     ]
-  },
-  {
-    "timestamp_utc": "2026-05-29T18:11:15.525719Z",
-    "status": "success",
-    "pages_checked": 26,
-    "changes_found": 4,
-    "errors": []
   }
 ]
