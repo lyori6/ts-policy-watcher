@@ -8954,5 +8954,96 @@
         "commit_hash": "c900837a638b2a925a15a84ac8f4a93cc94f0b5b"
       }
     ]
+  },
+  "2026-11-15_to_2026-11-21": {
+    "run_metadata": {
+      "run_date": "2026-11-21T00:39:04.716076+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-11-15",
+      "week_end": "2026-11-21",
+      "generated_by": "friday_automation"
+    },
+    "summary": "### Executive Summary\n- **Enhanced User Support**: Multiple platforms introduced AI support assistants and improved FAQ sections to streamline user queries and appeals.\n- **Policy Clarity and Transparency**: Significant updates to privacy policies and terms of service across platforms to enhance user trust and compliance with global regulations.\n- **Moderation and Enforcement**: New moderation tools and enforcement actions were implemented, particularly on TikTok and Whatnot, to improve community safety and policy adherence.\n\n### Platform Highlights\n\n**Meta**\n- **Appeal Process**: Added detailed FAQs, clarified the appeal process, and introduced a 15-day time limit for appeals.\n- **Blocking People**: Simplified navigation, introduced AI support, and consolidated redundant sections.\n\n**TikTok**\n- **Live Moderation**: Introduced new moderation settings for comments, audience controls, and viewer management during live streams.\n- **UI Changes**: Updated the UI to include new moderation options and settings.\n\n**Twitch**\n- **DMCA Guidelines**: Added detailed guidelines and updated language support.\n- **Privacy Policy**: Expanded sections on data collection, use, and sharing, and added multiple language options.\n- **Terms of Sale and Service**: Translated documents from Spanish to English, improving clarity for English-speaking users.\n\n**Whatnot**\n- **Buyer Protection**: Expanded language support, streamlined policy structure, and added new protections and exclusions.\n- **Community Guidelines**: Updated HTML structure and specific guideline content.\n- **Enforcement Actions**: Introduced a new enforcement action for ongoing investigations and centralized the appeal process.\n- **Prohibited Items**: Added new policies for APAC TCG pre-release requirements and updated policy names and formatting.\n\n### Risk Assessment\n- **Localization Issues**: The translation of Twitch's Terms of Sale and Terms of Service from Spanish to English may cause confusion for Spanish-speaking users and potential compliance issues in Spanish-speaking regions.\n- **Enforcement Actions**: Whatnot's new enforcement action for ongoing investigations requires clear communication to users to manage expectations and reduce confusion.\n- **Policy Adherence**: TikTok's new moderation settings and Whatnot's new prohibited items policy need to be effectively communicated to users to ensure compliance and prevent violations.\n\n### Trends Analysis\n- **AI Integration**: Increased use of AI support assistants across platforms to provide real-time support and streamline user interactions.\n- **Policy Transparency**: Enhanced transparency in data collection, use, and sharing policies to build user trust and comply with global regulations.\n- **Moderation Tools**: Introduction of new moderation tools and settings to improve community safety and policy adherence, particularly in live streaming environments.\n- **Language Support**: Expansion of language support in policies and guidelines to cater to a global user base and improve accessibility.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "tiktok-live-moderation",
+        "file_path": "snapshots/production/tiktok-live-moderation/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "twitch-dmca-guidelines",
+        "file_path": "snapshots/production/twitch-dmca-guidelines/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "twitch-monetized-streamer-agreement",
+        "file_path": "snapshots/production/twitch-monetized-streamer-agreement/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "twitch-privacy-policy",
+        "file_path": "snapshots/production/twitch-privacy-policy/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "twitch-terms-of-sale",
+        "file_path": "snapshots/production/twitch-terms-of-sale/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "twitch-terms-of-service",
+        "file_path": "snapshots/production/twitch-terms-of-service/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "whatnot-buyer-protection",
+        "file_path": "snapshots/production/whatnot-buyer-protection/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "whatnot-community-guidelines",
+        "file_path": "snapshots/production/whatnot-community-guidelines/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "whatnot-enforcement-actions",
+        "file_path": "snapshots/production/whatnot-enforcement-actions/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      },
+      {
+        "policy_key": "whatnot-prohibited-items",
+        "file_path": "snapshots/production/whatnot-prohibited-items/snapshot.html",
+        "commit_date": "2026-11-20 22:09:11 +0000",
+        "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
+      }
+    ]
   }
 }
