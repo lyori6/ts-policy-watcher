@@ -9045,5 +9045,36 @@
         "commit_hash": "d523cee0aca9beb8f579fea558f562b17ec93f27"
       }
     ]
+  },
+  "2026-11-22_to_2026-11-28": {
+    "run_metadata": {
+      "run_date": "2026-11-28T01:47:03.833906+00:00",
+      "run_type": "scheduled",
+      "week_start": "2026-11-22",
+      "week_end": "2026-11-28",
+      "generated_by": "friday_automation"
+    },
+    "summary": "### Executive Summary\n- **Meta Platforms**: Significant updates to the appeal process and blocking people policies, focusing on streamlining user experience and reducing support load.\n- **Whatnot**: Enhancements to the \"How to Report\" article, prioritizing key Trust & Safety articles and improving user feedback mechanisms.\n- **Policy Clarity**: Across platforms, there is a trend towards simplifying language and improving discoverability of critical policies.\n\n### Platform Highlights\n- **Meta**:\n  - **Appeal Process**:\n    - Added clarification for reporting content and introduced an FAQ section.\n    - Removed duplicate information and unnecessary metadata for a cleaner user experience.\n    - Included AI support assistant details and updated footer information for personalized support.\n  - **Blocking People**:\n    - Simplified the blocking people page by removing detailed instructions and FAQs.\n    - Added a feedback mechanism to gather user sentiment.\n    - Removed AI terms agreement and message typing field to streamline the user experience.\n\n- **Whatnot**:\n  - **How to Report**:\n    - Refocused related articles to prioritize core Trust & Safety articles.\n    - Renamed policy sections for clearer navigation.\n    - Added a feedback UI and refreshed the main image asset.\n    - Clarified the English language option for better localization.\n\n### Risk Assessment\n- **Meta Blocking People**: The removal of detailed instructions and FAQs may increase user confusion and support tickets initially. Monitoring user feedback and support load is crucial.\n- **Whatnot Reporting**: Deprioritizing certain policies in the related articles section may affect the discoverability of these policies. Ensure alternative pathways for users to access these policies.\n\n### Trends Analysis\n- **Simplification and Clarity**: Both Meta and Whatnot are focusing on simplifying language and improving the discoverability of critical policies.\n- **User Feedback Mechanisms**: There is an increased emphasis on gathering user feedback to improve the user experience.\n- **AI Integration**: Meta's inclusion of AI support assistant information indicates a trend towards leveraging AI for real-time issue resolution and support.",
+    "changes_count": 1,
+    "changed_policies": [
+      {
+        "policy_key": "meta-appeal-process",
+        "file_path": "snapshots/production/meta-appeal-process/snapshot.html",
+        "commit_date": "2026-11-27 23:19:17 +0000",
+        "commit_hash": "21804f1e47c1170dfb91833173e38f28a765b4cf"
+      },
+      {
+        "policy_key": "meta-blocking-people",
+        "file_path": "snapshots/production/meta-blocking-people/snapshot.html",
+        "commit_date": "2026-11-27 23:19:17 +0000",
+        "commit_hash": "21804f1e47c1170dfb91833173e38f28a765b4cf"
+      },
+      {
+        "policy_key": "whatnot-how-to-report",
+        "file_path": "snapshots/production/whatnot-how-to-report/snapshot.html",
+        "commit_date": "2026-11-27 23:19:17 +0000",
+        "commit_hash": "21804f1e47c1170dfb91833173e38f28a765b4cf"
+      }
+    ]
   }
 }
